@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.13.8](https://github.com/graasp/graasp-api/compare/v2.13.7...v2.13.8) (2026-03-30)
+
+
+### Bug Fixes
+
+* **deps:** update dependency nodemailer to v8 [security] ([#2102](https://github.com/graasp/graasp-api/issues/2102)) ([91e5a61](https://github.com/graasp/graasp-api/commit/91e5a611b350ca595ebfa06083c902f247179e7f))
+
 ## [2.13.7](https://github.com/graasp/graasp-api/compare/v2.13.6...v2.13.7) (2026-03-11)
 
 
