@@ -8942,7 +8942,7 @@ __metadata:
     mimetics: "npm:1.0.4"
     nock: "npm:13.5.6"
     node-fetch: "npm:2"
-    nodemailer: "npm:8.0.4"
+    nodemailer: "npm:8.0.5"
     nodemon: "npm:3.1.14"
     openai: "npm:6.3.0"
     papaparse: "npm:^5.4.1"
@@ -11702,10 +11702,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nodemailer@npm:8.0.4":
-  version: 8.0.4
-  resolution: "nodemailer@npm:8.0.4"
-  checksum: 10/b396d52b1faf3ee73a6eca1b7febdb8ea16df50d6c41efbf0f1e500e6a42a73cea5e0db9e52d64b34f509ac3dbf4c10fe828de6cb3f66899b493be38b8abe926
+"nodemailer@npm:8.0.5":
+  version: 8.0.5
+  resolution: "nodemailer@npm:8.0.5"
+  checksum: 10/84d44afb0cd20ce02d5e4f0f8465b02aa0af0e11c1b0d40a4e9658d07321655a8ea528533840a38f213a45ca7865ec85f0aed6dc3ac3038d7b2c9405db6cd353
   languageName: node
   linkType: hard
 
