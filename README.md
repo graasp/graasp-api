@@ -171,6 +171,7 @@ H5P_CONTENT_REGION=garage
 H5P_CONTENT_BUCKET=h5p-items
 H5P_CONTENT_ACCESS_KEY_ID=<your bucket key>
 H5P_CONTENT_SECRET_ACCESS_KEY_ID=<your bucket secret>
+H5P_PATH_PREFIX=h5p-content/
 
 
 ### External services configuration
