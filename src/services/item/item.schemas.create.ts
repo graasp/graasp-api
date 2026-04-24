@@ -161,6 +161,8 @@ export const createWithThumbnail = {
   summary: 'Create an item with a thumbnail',
   description: 'Create an item with a thumbnail. The data is sent using a form-data.',
 
-  querystring: Type.Partial(customType.StrictObject({ parentId: customType.UUID() })),
+  querystring: Type.Partial(
+    customType.StrictObject({ parentId: customType.UUID(), previousItemId: customType.UUID() }),
+  ),
   response: { [StatusCodes.OK]: genericItemSchemaRef, '4xx': errorSchemaRef },
 } as const satisfies FastifySchema;

@@ -90,7 +90,7 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
       async (request) => {
         const {
           user,
-          query: { parentId },
+          query: { parentId, previousItemId },
         } = request;
         const member = asDefined(user?.account);
         assertIsMember(member);
@@ -109,6 +109,7 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
             parentId,
             geolocation,
             thumbnail,
+            previousItemId,
           });
           await itemActionService.postPostAction(tsx, request, item);
           return item;
