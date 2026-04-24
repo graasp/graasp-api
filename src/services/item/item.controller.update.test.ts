@@ -730,6 +730,116 @@ describe('Item routes tests', () => {
       expect(response.statusCode).toBe(StatusCodes.OK);
       expect(uploadDoneMock).toHaveBeenCalled();
     });
+
+    it('Post item with thumbnail inside parent', async () => {
+      const {
+        actor,
+        items: [parent],
+      } = await seedFromJson({
+        items: [{ name: 'parent', memberships: [{ account: 'actor', permission: 'admin' }] }],
+      });
+      assertIsDefined(actor);
+      assertIsMemberForTest(actor);
+      mockAuthenticate(actor);
+      const imageStream = fs.createReadStream(path.resolve(__dirname, './test/fixtures/image.png'));
+      const itemName = 'Test Item';
+      const payload = new FormData();
+      payload.append('name', itemName);
+      payload.append('type', 'folder');
+      payload.append('description', '');
+      payload.append('file', imageStream);
+      const response = await app.inject({
+        method: HttpMethod.Post,
+        url: `/api/items/with-thumbnail`,
+        query: {
+          parentId: parent.id,
+        },
+        payload,
+        headers: payload.getHeaders(),
+      });
+
+      const newItem = response.json();
+      expectItem(
+        newItem,
+        FolderItemFactory({
+          parentItem: parent,
+          name: itemName,
+          type: 'folder',
+          description: '',
+          settings: { hasThumbnail: true },
+          lang: parent.lang,
+        }),
+        actor,
+      );
+      expect(response.statusCode).toBe(StatusCodes.OK);
+      expect(uploadDoneMock).toHaveBeenCalled();
+    });
+
+    it('Post item with thumbnail inside parent after first item', async () => {
+      const {
+        actor,
+        items: [parent, firstChild],
+      } = await seedFromJson({
+        items: [
+          {
+            name: 'parent',
+            type: 'folder',
+            memberships: [{ account: 'actor', permission: 'admin' }],
+            children: [
+              {
+                name: 'first',
+                // we need to specify the order as it is not set automatically, without this it returns a wrong ordering
+                order: 20,
+              },
+            ],
+          },
+        ],
+      });
+      assertIsDefined(actor);
+      assertIsMemberForTest(actor);
+      mockAuthenticate(actor);
+      const imageStream = fs.createReadStream(path.resolve(__dirname, './test/fixtures/image.png'));
+      const itemName = 'Test Item';
+      const payload = new FormData();
+      payload.append('name', itemName);
+      payload.append('type', 'folder');
+      payload.append('description', '');
+      payload.append('file', imageStream);
+      const response = await app.inject({
+        method: HttpMethod.Post,
+        url: `/api/items/with-thumbnail`,
+        query: {
+          parentId: parent.id,
+          previousItemId: firstChild.id,
+        },
+        payload,
+        headers: payload.getHeaders(),
+      });
+
+      const newItem = response.json();
+      expectItem(
+        newItem,
+        FolderItemFactory({
+          parentItem: parent,
+          name: itemName,
+          type: 'folder',
+          description: '',
+          settings: { hasThumbnail: true },
+          lang: parent.lang,
+        }),
+        actor,
+      );
+      expect(response.statusCode).toBe(StatusCodes.OK);
+      expect(uploadDoneMock).toHaveBeenCalled();
+
+      // check the children order is correct: first should be first and the new item should be second
+      const childrenResp = await app.inject({
+        method: HttpMethod.Get,
+        url: `/api/items/${parent.id}/children`,
+      });
+      const children = await childrenResp.json();
+      expectItem(newItem, children.at(1));
+    });
   });
 
   describe('PATCH /api/items/:id', () => {
