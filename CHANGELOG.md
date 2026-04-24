@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.13.8](https://github.com/graasp/graasp-api/compare/v2.13.7...v2.13.8) (2026-04-24)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @fastify/static to v9 [security] ([#2109](https://github.com/graasp/graasp-api/issues/2109)) ([839a74b](https://github.com/graasp/graasp-api/commit/839a74b742d3073337a0dee8912a6344d923faf0))
+* **deps:** update dependency nodemailer to v8 [security] ([#2102](https://github.com/graasp/graasp-api/issues/2102)) ([91e5a61](https://github.com/graasp/graasp-api/commit/91e5a611b350ca595ebfa06083c902f247179e7f))
+* **deps:** update dependency nodemailer to v8.0.5 [security] ([#2108](https://github.com/graasp/graasp-api/issues/2108)) ([f911d55](https://github.com/graasp/graasp-api/commit/f911d554b0ffb262c79bdc832e0b510df8b104ad))
+* take into account previousItemId parameter to get correct ordering when creating folder with thumbnail ([#2110](https://github.com/graasp/graasp-api/issues/2110)) ([12bb6b3](https://github.com/graasp/graasp-api/commit/12bb6b3c14eb8b5d18f227279a776180ece6797d))
+
 ## [2.13.7](https://github.com/graasp/graasp-api/compare/v2.13.6...v2.13.7) (2026-03-11)
 
 
