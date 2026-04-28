@@ -1,27 +1,21 @@
 /* source: https://github.com/yjs/y-websocket-server/blob/main/src/utils.js */
 import { captureException } from '@sentry/node';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-expect-error
 import * as encoding from 'lib0/encoding';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-expect-error
 import * as map from 'lib0/map';
 import { WebSocket } from 'ws';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-expect-error
 import * as awarenessProtocol from 'y-protocols/awareness';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-expect-error
 import * as syncProtocol from 'y-protocols/sync';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-expect-error
 import * as Y from 'yjs';
 
 import { FastifyBaseLogger } from 'fastify';
 
 import { db } from '../../../../drizzle/db';
 import { WSDoc } from './WSDoc';
-import { MESSAGE_AWARENESS_CODE, MESSAGE_SYNC_CODE, PING_TIMEOUT } from './constants';
+import {
+  MESSAGE_AWARENESS_CODE,
+  MESSAGE_SYNC_CODE,
+  PING_TIMEOUT,
+} from './constants';
 import { PageItemService } from './page.service';
 
 /**
@@ -42,7 +36,11 @@ class WSSharedDoc extends WSDoc {
     return name + '_shared';
   }
 
-  constructor(pageItemService: PageItemService, name: string, logger: FastifyBaseLogger) {
+  constructor(
+    pageItemService: PageItemService,
+    name: string,
+    logger: FastifyBaseLogger,
+  ) {
     super(pageItemService, name, true, logger);
 
     const awarenessChangeHandler = (
@@ -50,7 +48,11 @@ class WSSharedDoc extends WSDoc {
         added,
         updated,
         removed,
-      }: { added: Array<number>; updated: Array<number>; removed: Array<number> },
+      }: {
+        added: Array<number>;
+        updated: Array<number>;
+        removed: Array<number>;
+      },
       conn: WebSocket | null,
     ) => {
       const changedClients = added.concat(updated, removed);
@@ -115,7 +117,9 @@ class WSSharedDoc extends WSDoc {
         this.pageItemService.storeUpdate(db, pageId, update);
       });
     } catch (e) {
-      this.logger.error(`Page ${pageId}: An error occured while binding the state: ${e}`);
+      this.logger.error(
+        `Page ${pageId}: An error occured while binding the state: ${e}`,
+      );
       // send error to sentry
       captureException(e, { tags: { feature: 'page', pageId: this.name } });
 
@@ -134,14 +138,21 @@ class WSSharedDoc extends WSDoc {
 class WSReadDoc extends WSDoc {
   private SYNC_ORIGIN = 'sync';
 
-  constructor(pageItemService: PageItemService, name: string, logger: FastifyBaseLogger) {
+  constructor(
+    pageItemService: PageItemService,
+    name: string,
+    logger: FastifyBaseLogger,
+  ) {
     super(pageItemService, name, false, logger);
     this.bindState(name);
 
     // send yjs doc updates to all connections
     // only if origin is from shared doc or sync update
     this.on('update', (update: Uint8Array, origin: unknown) => {
-      if (origin === WSSharedDoc.buildOrigin(this.name) || origin === this.SYNC_ORIGIN) {
+      if (
+        origin === WSSharedDoc.buildOrigin(this.name) ||
+        origin === this.SYNC_ORIGIN
+      ) {
         this.broadcastUpdate(update);
       }
     });
@@ -150,9 +161,15 @@ class WSReadDoc extends WSDoc {
   private async bindState(pageId: string) {
     try {
       const persistedYdoc = await this.pageItemService.getById(db, pageId);
-      Y.applyUpdate(this, Y.encodeStateAsUpdate(persistedYdoc), this.SYNC_ORIGIN);
+      Y.applyUpdate(
+        this,
+        Y.encodeStateAsUpdate(persistedYdoc),
+        this.SYNC_ORIGIN,
+      );
     } catch (e) {
-      this.logger.error(`Page ${pageId}: An error occured while binding the state: ${e}`);
+      this.logger.error(
+        `Page ${pageId}: An error occured while binding the state: ${e}`,
+      );
       // send error to sentry
       captureException(e, { tags: { feature: 'page', pageId: this.name } });
       this.conns.forEach((v, conn) => {
@@ -175,7 +192,12 @@ class WSReadDoc extends WSDoc {
  * @param conn websocket connection
  * @param doc yjs document
  */
-function setupPingPong(conn: WebSocket, doc: WSDoc, pageId: string, logger: FastifyBaseLogger) {
+function setupPingPong(
+  conn: WebSocket,
+  doc: WSDoc,
+  pageId: string,
+  logger: FastifyBaseLogger,
+) {
   // Check if connection is still alive
   let pongReceived = true;
   const pingInterval = setInterval(() => {
@@ -249,7 +271,10 @@ export const setupWSConnectionForWriters = (
       encoding.writeVarUint(encoder, MESSAGE_AWARENESS_CODE);
       encoding.writeVarUint8Array(
         encoder,
-        awarenessProtocol.encodeAwarenessUpdate(doc.awareness, Array.from(awarenessStates.keys())),
+        awarenessProtocol.encodeAwarenessUpdate(
+          doc.awareness,
+          Array.from(awarenessStates.keys()),
+        ),
       );
       doc.send(conn, encoding.toUint8Array(encoder));
     }

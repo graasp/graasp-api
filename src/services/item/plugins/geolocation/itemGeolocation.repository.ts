@@ -1,6 +1,3 @@
-// this is an esm module, since we are using commonjs it can have unexpected behavior
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-expect-error esm module
 import { iso1A2Code } from '@rapideditor/country-coder';
 import { SQL, and, between, desc, eq, or } from 'drizzle-orm';
 import fetch from 'node-fetch';
@@ -16,7 +13,11 @@ import {
   tagSearch,
   transformLangToReconfigLang,
 } from '../../../../drizzle/operations';
-import { accountsTable, itemGeolocationsTable, items } from '../../../../drizzle/schema';
+import {
+  accountsTable,
+  itemGeolocationsTable,
+  items,
+} from '../../../../drizzle/schema';
 import type {
   ItemGeolocationRaw,
   ItemGeolocationWithItem,
@@ -27,7 +28,10 @@ import type { MaybeUser } from '../../../../types';
 import { GEOLOCATION_API_HOST, getSearchLang } from '../../../../utils/config';
 import { isMember } from '../../../authentication';
 import { type ItemRaw, resolveItemType } from '../../item';
-import { MissingGeolocationSearchParams, PartialItemGeolocation } from './errors';
+import {
+  MissingGeolocationSearchParams,
+  PartialItemGeolocation,
+} from './errors';
 
 export class ItemGeolocationRepository {
   /**
@@ -136,8 +140,13 @@ export class ItemGeolocationRepository {
       const keywordsString = allKeywords.join(' ');
 
       // gather distinct involved languages, from actor and item
-      const memberLang = actor && isMember(actor) && actor.lang ? actor.lang : DEFAULT_LANG;
-      const langs = ['simple', transformLangToReconfigLang(items.lang), getSearchLang(memberLang)];
+      const memberLang =
+        actor && isMember(actor) && actor.lang ? actor.lang : DEFAULT_LANG;
+      const langs = [
+        'simple',
+        transformLangToReconfigLang(items.lang),
+        getSearchLang(memberLang),
+      ];
 
       andConditions.push(
         or(
@@ -226,7 +235,11 @@ export class ItemGeolocationRepository {
   }
 
   async getAddressFromCoordinates(
-    { lat, lng, lang = DEFAULT_LANG }: Pick<ItemGeolocationRaw, 'lat' | 'lng'> & { lang?: string },
+    {
+      lat,
+      lng,
+      lang = DEFAULT_LANG,
+    }: Pick<ItemGeolocationRaw, 'lat' | 'lng'> & { lang?: string },
     key: string,
   ): Promise<{ addressLabel: string; country: string }> {
     const searchParams = new URLSearchParams({

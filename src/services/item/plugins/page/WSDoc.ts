@@ -1,19 +1,9 @@
 import { captureException } from '@sentry/node';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-expect-error
 import * as decoding from 'lib0/decoding';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-expect-error
 import * as encoding from 'lib0/encoding';
 import { WebSocket } from 'ws';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-expect-error
 import * as awarenessProtocol from 'y-protocols/awareness';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-expect-error
 import * as syncProtocol from 'y-protocols/sync';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-expect-error
 import * as Y from 'yjs';
 
 import { FastifyBaseLogger } from 'fastify';
@@ -67,7 +57,9 @@ export class WSDoc extends Y.Doc {
    * @param conn
    */
   addConnection(conn: WebSocket) {
-    this.logger.info(`Page ${this.name}: add connection to reach ${this.conns.size + 1}`);
+    this.logger.info(
+      `Page ${this.name}: add connection to reach ${this.conns.size + 1}`,
+    );
     this.conns.set(conn, new Set());
     // listen and reply to events
     conn.on('message', (message: ArrayBuffer) => {
@@ -123,7 +115,10 @@ export class WSDoc extends Y.Doc {
    * @param m message
    */
   send(conn: WebSocket, m: Uint8Array) {
-    if (conn.readyState !== wsReadyStateConnecting && conn.readyState !== wsReadyStateOpen) {
+    if (
+      conn.readyState !== wsReadyStateConnecting &&
+      conn.readyState !== wsReadyStateOpen
+    ) {
       this.closeConn(conn);
     }
     try {
@@ -148,7 +143,11 @@ export class WSDoc extends Y.Doc {
     if (this.conns.has(conn)) {
       const controlledIds: Set<number> = this.conns.get(conn)!;
       this.conns.delete(conn);
-      awarenessProtocol.removeAwarenessStates(this.awareness, Array.from(controlledIds), null);
+      awarenessProtocol.removeAwarenessStates(
+        this.awareness,
+        Array.from(controlledIds),
+        null,
+      );
       if (this.conns.size === 0) {
         this.destroy();
       }

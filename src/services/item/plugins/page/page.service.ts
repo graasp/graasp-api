@@ -3,8 +3,6 @@
  */
 import { Readable } from 'stream';
 import { singleton } from 'tsyringe';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-expect-error
 import * as Y from 'yjs';
 
 import { ItemGeolocation } from '@graasp/sdk';
@@ -49,7 +47,10 @@ export class PageItemService {
 
   public async getById(db: DBConnection, itemId: string): Promise<Y.Doc> {
     return db.transaction(async (dbConnection) => {
-      const updates = await this.pageRepository.getUpdates(dbConnection, itemId);
+      const updates = await this.pageRepository.getUpdates(
+        dbConnection,
+        itemId,
+      );
       const ydoc = new Y.Doc();
       ydoc.transact(() => {
         for (const update of updates) {
@@ -57,14 +58,25 @@ export class PageItemService {
         }
       });
       if (updates.length > PREFERRED_TRIM_SIZE) {
-        await this.resetDocumentUpdates(db, itemId, Y.encodeStateAsUpdate(ydoc));
+        await this.resetDocumentUpdates(
+          db,
+          itemId,
+          Y.encodeStateAsUpdate(ydoc),
+        );
       }
       return ydoc;
     });
   }
 
-  public storeUpdate(db: DBConnection, itemId: string, update: Uint8Array): void {
-    db.transaction(async (dbConnection) => await this.saveNewUpdate(dbConnection, itemId, update));
+  public storeUpdate(
+    db: DBConnection,
+    itemId: string,
+    update: Uint8Array,
+  ): void {
+    db.transaction(
+      async (dbConnection) =>
+        await this.saveNewUpdate(dbConnection, itemId, update),
+    );
   }
 
   /**
@@ -73,8 +85,15 @@ export class PageItemService {
    * @param originalId page whose updates will be copied
    * @param copyId id of the page that receive the updates
    */
-  public async copy(dbConnection: DBConnection, originalId: string, copyId: string) {
-    const updates = await this.pageRepository.getUpdates(dbConnection, originalId);
+  public async copy(
+    dbConnection: DBConnection,
+    originalId: string,
+    copyId: string,
+  ) {
+    const updates = await this.pageRepository.getUpdates(
+      dbConnection,
+      originalId,
+    );
     const { update } = this.mergeUpdates(updates);
 
     await this.saveNewUpdate(dbConnection, copyId, update);
@@ -92,20 +111,31 @@ export class PageItemService {
     itemId: string,
     update: Uint8Array,
   ): Promise<number> {
-    const clock = await this.pageRepository.getCurrentUpdateClock(dbConnection, itemId);
+    const clock = await this.pageRepository.getCurrentUpdateClock(
+      dbConnection,
+      itemId,
+    );
     if (clock === -1) {
       // make sure that a state vector is aways written, so we can search for available documents
       const ydoc = new Y.Doc();
       Y.applyUpdate(ydoc, update);
     }
-    await this.pageRepository.createUpdate(dbConnection, itemId, clock + 1, update);
+    await this.pageRepository.createUpdate(
+      dbConnection,
+      itemId,
+      clock + 1,
+      update,
+    );
     return clock + 1;
   }
 
   // NOTE: currently unused function, flushing happens on get when we have the full state of the document
   private flushDocument(db: DBConnection, itemId: string) {
     return db.transaction(async (dbConnection) => {
-      const updates = await this.pageRepository.getUpdates(dbConnection, itemId);
+      const updates = await this.pageRepository.getUpdates(
+        dbConnection,
+        itemId,
+      );
       const { update } = this.mergeUpdates(updates);
       await this.resetDocumentUpdates(dbConnection, itemId, update);
     });
@@ -144,6 +174,9 @@ export class PageItemService {
         Y.applyUpdate(ydoc, update);
       }
     });
-    return { update: Y.encodeStateAsUpdate(ydoc), sv: Y.encodeStateVector(ydoc) };
+    return {
+      update: Y.encodeStateAsUpdate(ydoc),
+      sv: Y.encodeStateVector(ydoc),
+    };
   }
 }
