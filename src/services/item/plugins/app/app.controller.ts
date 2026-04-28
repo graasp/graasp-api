@@ -70,7 +70,6 @@ const plugin: FastifyPluginAsyncTypebox<AppsPluginOptions> = async (fastify, opt
             params: { itemId },
             body,
           } = request;
-
           return appService.getApiAccessToken(db, user?.account, itemId, body);
         },
       );
@@ -128,6 +127,21 @@ const plugin: FastifyPluginAsyncTypebox<AppsPluginOptions> = async (fastify, opt
 
       // register app chatbot plugin
       fastify.register(chatBotPlugin);
+
+      // // add a hook that sets the PNA headers for CORS from public origins in Chrome
+      // fastify.addHook('onSend', async (request, reply, payload) => {
+      //   const headers = request.headers;
+
+      //   // Only for preflight (OPTIONS) and only when browser asked for it
+      //   const isPreflight = request.method === 'OPTIONS';
+      //   const requestsPrivateNetwork = headers['access-control-request-private-network'] === 'true';
+
+      //   reply.header('Access-Control-Allow-Private-Network', 'true');
+      //   reply.header('Access-Control-Allow-Credentials', 'true');
+      //   reply.header('Access-Control-Allow-Origin', 'https://apps.graasp.org');
+
+      //   return payload;
+      // });
     });
   });
 };

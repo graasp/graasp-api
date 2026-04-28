@@ -439,6 +439,7 @@ export class ItemMembershipRepository {
     return result;
   }
 
+  //test this
   /** check member's membership "at" item */
   async getInherited(
     dbConnection: DBConnection,

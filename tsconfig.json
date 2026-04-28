@@ -1,6 +1,10 @@
 {
   "compilerOptions": {
-    "lib": ["es2023", "es6", "esnext.asynciterable"],
+    "lib": [
+      "es2023",
+      "es6",
+      "esnext.asynciterable"
+    ],
     "target": "es6",
     "module": "node16", // TODO: use "preserve" when moving to ESM
     // "strict": true, // TODO: enable
@@ -20,8 +24,14 @@
     // "verbatimModuleSyntax": true, // TODO: enable when we want to move to ESM
     "strictPropertyInitialization": false, // disable because of entities,
     "strict": true,
-    "typeRoots": ["./node_modules/@types", "./src/@types/*"],
+    "typeRoots": [
+      "./node_modules/@types",
+      "./src/@types/*"
+    ],
     "sourceMap": true
   },
-  "include": ["src/**/*", "test"]
+  "include": [
+    "src/**/*",
+    "test"
+  ]
 }

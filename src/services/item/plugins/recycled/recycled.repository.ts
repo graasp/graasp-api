@@ -10,7 +10,6 @@ import { isAncestorOrSelf, isDescendantOrSelf } from '../../../../drizzle/operat
 import {
   itemMembershipsTable,
   itemsRawTable,
-  membersView,
   recycledItemDatasTable,
 } from '../../../../drizzle/schema';
 import type { MemberRaw } from '../../../../drizzle/types';
@@ -84,7 +83,7 @@ export class RecycledItemDataRepository {
       // join with item
       .innerJoin(itemsRawTable, and(eq(itemsRawTable.path, recycledItemDatasTable.itemPath)))
       // return item's creator
-      .leftJoin(membersView, eq(itemsRawTable.creatorId, membersView.id))
+      // .leftJoin(membersView, eq(itemsRawTable.creatorId, membersView.id))
       .as('subquery');
 
     const data = await dbConnection

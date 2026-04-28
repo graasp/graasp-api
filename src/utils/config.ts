@@ -46,6 +46,7 @@ if (!process.env.COOKIE_DOMAIN) {
 
 export const COOKIE_DOMAIN = process.env.COOKIE_DOMAIN;
 export const CORS_ORIGIN_REGEX = process.env.CORS_ORIGIN_REGEX;
+console.log('tuto', CORS_ORIGIN_REGEX);
 
 /**
  * Public url is the url where the server is hosted. Mostly used to set the cookie on the right domain
