@@ -1,16 +1,20 @@
 import { inject, injectWithTransform, singleton } from 'tsyringe';
 
-import { ItemValidationProcess, ItemValidationStatus, ThumbnailSize } from '@graasp/sdk';
+import {
+  ItemValidationProcess,
+  ItemValidationStatus,
+  ThumbnailSize,
+} from '@graasp/sdk';
 
-import { IMAGE_CLASSIFIER_API_DI_KEY } from '../../../../../../di/constants';
+import { IMAGE_CLASSIFIER_API_DI_KEY } from '../../../../../../di/constants.js';
 import {
   ITEM_THUMBNAIL_PREFIX,
   ThumbnailService,
   ThumbnailServiceTransformer,
-} from '../../../../../thumbnail/thumbnail.service';
-import { type ItemRaw } from '../../../../item';
-import { classifyImage } from '../processes/imageClassification';
-import type { ValidationProcessResult, ValidationStrategy } from './types';
+} from '../../../../../thumbnail/thumbnail.service.js';
+import { type ItemRaw } from '../../../../item.js';
+import { classifyImage } from '../processes/imageClassification.js';
+import type { ValidationProcessResult, ValidationStrategy } from './types.js';
 
 @singleton()
 export class ThumbnailValidationStrategy implements ValidationStrategy {
@@ -20,7 +24,11 @@ export class ThumbnailValidationStrategy implements ValidationStrategy {
   public readonly process = ItemValidationProcess.ImageChecking;
 
   constructor(
-    @injectWithTransform(ThumbnailService, ThumbnailServiceTransformer, ITEM_THUMBNAIL_PREFIX)
+    @injectWithTransform(
+      ThumbnailService,
+      ThumbnailServiceTransformer,
+      ITEM_THUMBNAIL_PREFIX,
+    )
     thumbnailService: ThumbnailService,
     @inject(IMAGE_CLASSIFIER_API_DI_KEY) imageClassifierApi: string,
   ) {
@@ -41,7 +49,9 @@ export class ThumbnailValidationStrategy implements ValidationStrategy {
     const classes = await classifyImage(this.imageClassifierApi, url);
     const isSafe = classes.length === 0;
     const result = classes.map((c) => `${c.class}: ${c.score}`).join(' | ');
-    const status = isSafe ? ItemValidationStatus.Success : ItemValidationStatus.Failure;
+    const status = isSafe
+      ? ItemValidationStatus.Success
+      : ItemValidationStatus.Failure;
     return { status, result };
   }
 }

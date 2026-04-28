@@ -4,20 +4,20 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { TagFactory } from '@graasp/sdk';
 
-import { ItemFactory } from '../../../../../test/factories/item.factory';
-import { db } from '../../../../drizzle/db';
-import type { ItemPublishedWithItemWithCreator, TagRaw } from '../../../../drizzle/types';
-import type { MinimalMember } from '../../../../types';
-import { AuthorizedItemService } from '../../../authorizedItem.service';
-import { ItemMembershipRepository } from '../../../itemMembership/membership.repository';
-import { TagRepository } from '../../../tag/tag.repository';
-import { resolveItemType } from '../../item';
-import { ItemRepository } from '../../item.repository';
-import { ItemVisibilityRepository } from '../itemVisibility/itemVisibility.repository';
-import { ItemPublishedRepository } from '../publication/published/itemPublished.repository';
-import { MeiliSearchWrapper } from '../publication/published/plugins/search/meilisearch';
-import { ItemTagRepository } from './itemTag.repository';
-import { ItemTagService } from './itemTag.service';
+import { ItemFactory } from '../../../../../test/factories/item.factory.js';
+import { db } from '../../../../drizzle/db.js';
+import type { ItemPublishedWithItemWithCreator, TagRaw } from '../../../../drizzle/types.js';
+import type { MinimalMember } from '../../../../types.js';
+import { AuthorizedItemService } from '../../../authorizedItem.service.js';
+import { ItemMembershipRepository } from '../../../itemMembership/membership.repository.js';
+import { TagRepository } from '../../../tag/tag.repository.js';
+import { resolveItemType } from '../../item.js';
+import { ItemRepository } from '../../item.repository.js';
+import { ItemVisibilityRepository } from '../itemVisibility/itemVisibility.repository.js';
+import { ItemPublishedRepository } from '../publication/published/itemPublished.repository.js';
+import { MeiliSearchWrapper } from '../publication/published/plugins/search/meilisearch.js';
+import { ItemTagRepository } from './itemTag.repository.js';
+import { ItemTagService } from './itemTag.service.js';
 
 const meilisearchWrapper = {
   indexOne: vi.fn() as MeiliSearchWrapper['indexOne'],

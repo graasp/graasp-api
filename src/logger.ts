@@ -1,20 +1,25 @@
-import { Bindings, LevelWithSilentOrString } from 'pino';
+import type { Bindings, LevelWithSilentOrString } from 'pino';
 import { inject, singleton } from 'tsyringe';
 
 import { type FastifyBaseLogger } from 'fastify';
-import type { ChildLoggerOptions } from 'fastify/types/logger';
+import type { ChildLoggerOptions } from 'fastify/types/logger.js';
 
-import { FASTIFY_LOGGER_DI_KEY } from './di/constants';
+import { FASTIFY_LOGGER_DI_KEY } from './di/constants.js';
 
 @singleton()
 export class BaseLogger implements FastifyBaseLogger {
   level: LevelWithSilentOrString;
 
-  constructor(@inject(FASTIFY_LOGGER_DI_KEY) private logger: FastifyBaseLogger) {
+  constructor(
+    @inject(FASTIFY_LOGGER_DI_KEY) private logger: FastifyBaseLogger,
+  ) {
     this.level = logger.level;
   }
 
-  child(bindings: Bindings, options?: ChildLoggerOptions | undefined): FastifyBaseLogger {
+  child(
+    bindings: Bindings,
+    options?: ChildLoggerOptions | undefined,
+  ): FastifyBaseLogger {
     return this.logger.child(bindings, options);
   }
 

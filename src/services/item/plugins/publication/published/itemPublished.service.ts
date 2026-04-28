@@ -8,31 +8,31 @@ import {
   type UUID,
 } from '@graasp/sdk';
 
-import type { DBConnection } from '../../../../../drizzle/db';
-import type { ItemPublishedRaw } from '../../../../../drizzle/types';
-import { TRANSLATIONS } from '../../../../../langs/constants';
-import { BaseLogger } from '../../../../../logger';
-import { MailBuilder } from '../../../../../plugins/mailer/builder';
-import { MailerService } from '../../../../../plugins/mailer/mailer.service';
-import type { MaybeUser, MinimalMember } from '../../../../../types';
-import HookManager from '../../../../../utils/hook';
-import { isMember } from '../../../../authentication';
-import { filterOutHiddenItems } from '../../../../authorization.utils';
-import { AuthorizedItemService } from '../../../../authorizedItem.service';
-import { ItemMembershipRepository } from '../../../../itemMembership/membership.repository';
-import { MemberRepository } from '../../../../member/member.repository';
-import type { ItemRaw } from '../../../item';
-import { ItemRepository } from '../../../item.repository';
-import { PackedItemService } from '../../../packedItem.dto';
-import { ItemActionService } from '../../action/itemAction.service';
-import { ItemVisibilityRepository } from '../../itemVisibility/itemVisibility.repository';
+import type { DBConnection } from '../../../../../drizzle/db.js';
+import type { ItemPublishedRaw } from '../../../../../drizzle/types.js';
+import { TRANSLATIONS } from '../../../../../langs/constants.js';
+import { BaseLogger } from '../../../../../logger.js';
+import { MailBuilder } from '../../../../../plugins/mailer/builder.js';
+import { MailerService } from '../../../../../plugins/mailer/mailer.service.js';
+import type { MaybeUser, MinimalMember } from '../../../../../types.js';
+import HookManager from '../../../../../utils/hook.js';
+import { isMember } from '../../../../authentication.js';
+import { filterOutHiddenItems } from '../../../../authorization.utils.js';
+import { AuthorizedItemService } from '../../../../authorizedItem.service.js';
+import { ItemMembershipRepository } from '../../../../itemMembership/membership.repository.js';
+import { MemberRepository } from '../../../../member/member.repository.js';
+import type { ItemRaw } from '../../../item.js';
+import { ItemRepository } from '../../../item.repository.js';
+import { PackedItemService } from '../../../packedItem.dto.js';
+import { ItemActionService } from '../../action/itemAction.service.js';
+import { ItemVisibilityRepository } from '../../itemVisibility/itemVisibility.repository.js';
 import {
   ItemIsNotValidated,
   ItemPublicationAlreadyExists,
   ItemTypeNotAllowedToPublish,
-} from './errors';
-import { ItemPublishedRepository } from './itemPublished.repository';
-import { MeiliSearchWrapper } from './plugins/search/meilisearch';
+} from './errors.js';
+import { ItemPublishedRepository } from './itemPublished.repository.js';
+import { MeiliSearchWrapper } from './plugins/search/meilisearch.js';
 
 @singleton()
 export class ItemPublishedService {
@@ -88,12 +88,21 @@ export class ItemPublishedService {
     item: ItemRaw,
   ): Promise<void> {
     // send email to contributors except yourself
-    const memberships = await this.itemMembershipRepository.getForItem(dbConnection, item);
+    const memberships = await this.itemMembershipRepository.getForItem(
+      dbConnection,
+      item,
+    );
     const contributors = memberships
-      .filter(({ permission, account }) => permission === 'admin' && account.id !== actor.id)
+      .filter(
+        ({ permission, account }) =>
+          permission === 'admin' && account.id !== actor.id,
+      )
       .map(({ account }) => account);
 
-    const link = ClientManager.getInstance().getItemLink(Context.Library, item.id);
+    const link = ClientManager.getInstance().getItemLink(
+      Context.Library,
+      item.id,
+    );
 
     for (const member of contributors) {
       if (isMember(member)) {
@@ -111,7 +120,9 @@ export class ItemPublishedService {
           .build();
 
         await this.mailerService.send(mail, member.email).catch((err) => {
-          this.log.warn(`mailerService failed with: ${err.message}. published link: ${link}`);
+          this.log.warn(
+            `mailerService failed with: ${err.message}. published link: ${link}`,
+          );
         });
       }
     }
@@ -134,7 +145,10 @@ export class ItemPublishedService {
     );
 
     // get item published entry
-    const publishedItem = await this.itemPublishedRepository.getForItem(dbConnection, item.path);
+    const publishedItem = await this.itemPublishedRepository.getForItem(
+      dbConnection,
+      item.path,
+    );
 
     if (!publishedItem) {
       return null;
@@ -163,7 +177,10 @@ export class ItemPublishedService {
       permission: 'admin',
     });
 
-    const itemPublished = await this.itemPublishedRepository.getForItem(dbConnection, item.path);
+    const itemPublished = await this.itemPublishedRepository.getForItem(
+      dbConnection,
+      item.path,
+    );
 
     if (itemPublished) {
       return itemPublished;
@@ -174,7 +191,10 @@ export class ItemPublishedService {
     });
   }
 
-  private checkPublicationStatus({ id, type }: ItemRaw, publicationStatus: PublicationStatus) {
+  private checkPublicationStatus(
+    { id, type }: ItemRaw,
+    publicationStatus: PublicationStatus,
+  ) {
     switch (publicationStatus) {
       case PublicationStatus.ReadyToPublish:
         return true;
@@ -227,7 +247,10 @@ export class ItemPublishedService {
     // TODO: check validation is alright
 
     await this.itemPublishedRepository.post(dbConnection, member, item);
-    const published = await this.itemPublishedRepository.getForItem(dbConnection, item.path);
+    const published = await this.itemPublishedRepository.getForItem(
+      dbConnection,
+      item.path,
+    );
     if (published) {
       await this.meilisearchWrapper.indexOne(dbConnection, published);
     }
@@ -238,7 +261,11 @@ export class ItemPublishedService {
     return published;
   }
 
-  async delete(dbConnection: DBConnection, member: MinimalMember, itemId: string) {
+  async delete(
+    dbConnection: DBConnection,
+    member: MinimalMember,
+    itemId: string,
+  ) {
     const item = await this.authorizedItemService.getItemById(dbConnection, {
       accountId: member.id,
       itemId,
@@ -247,7 +274,10 @@ export class ItemPublishedService {
 
     await this.hooks.runPreHooks('delete', member, dbConnection, { item });
 
-    const result = await this.itemPublishedRepository.deleteForItem(dbConnection, item);
+    const result = await this.itemPublishedRepository.deleteForItem(
+      dbConnection,
+      item,
+    );
 
     await this.hooks.runPostHooks('delete', member, dbConnection, { item });
 
@@ -258,7 +288,10 @@ export class ItemPublishedService {
     dbConnection: DBConnection,
     item: { id: ItemRaw['id']; path: ItemRaw['path'] },
   ) {
-    const updatedAt = await this.itemPublishedRepository.touchUpdatedAt(dbConnection, item.path);
+    const updatedAt = await this.itemPublishedRepository.touchUpdatedAt(
+      dbConnection,
+      item.path,
+    );
 
     if (updatedAt) {
       // change value in meilisearch index
@@ -266,14 +299,32 @@ export class ItemPublishedService {
     }
   }
 
-  async getItemsForMember(dbConnection: DBConnection, actor: MaybeUser, memberId: UUID) {
-    const items = await this.itemRepository.getPublishedItemsForMember(dbConnection, memberId);
+  async getItemsForMember(
+    dbConnection: DBConnection,
+    actor: MaybeUser,
+    memberId: UUID,
+  ) {
+    const items = await this.itemRepository.getPublishedItemsForMember(
+      dbConnection,
+      memberId,
+    );
 
-    return this.itemWrapperService.createPackedItems(dbConnection, actor, items);
+    return this.itemWrapperService.createPackedItems(
+      dbConnection,
+      actor,
+      items,
+    );
   }
 
-  async getRecentItems(dbConnection: DBConnection, actor: MaybeUser, limit?: number) {
-    const items = await this.itemPublishedRepository.getRecentItems(dbConnection, limit);
+  async getRecentItems(
+    dbConnection: DBConnection,
+    actor: MaybeUser,
+    limit?: number,
+  ) {
+    const items = await this.itemPublishedRepository.getRecentItems(
+      dbConnection,
+      limit,
+    );
 
     return filterOutHiddenItems(
       dbConnection,

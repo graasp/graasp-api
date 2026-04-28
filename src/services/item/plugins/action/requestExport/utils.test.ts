@@ -1,6 +1,6 @@
 import { ExportActionsFormatting } from '@graasp/sdk';
 
-import { formatData } from './utils';
+import { formatData } from './utils.js';
 
 describe('formatData', () => {
   beforeEach(() => {

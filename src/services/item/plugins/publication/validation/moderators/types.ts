@@ -1,6 +1,6 @@
 import { ItemValidationProcess, ItemValidationStatus } from '@graasp/sdk';
 
-import { type ItemRaw } from '../../../../item';
+import { type ItemRaw } from '../../../../item.js';
 
 export type ValidationProcessResult = {
   status: ItemValidationStatus;

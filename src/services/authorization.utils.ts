@@ -1,13 +1,13 @@
 import { ItemVisibilityType, PermissionLevelCompare } from '@graasp/sdk';
 
-import type { DBConnection } from '../drizzle/db';
-import type { ItemWithCreator } from '../drizzle/types';
-import type { MaybeUser } from '../types';
-import type { ItemRaw } from './item/item';
-import { type PackedItem, PackedItemDTO } from './item/packedItem.dto';
-import { ItemVisibilityRepository } from './item/plugins/itemVisibility/itemVisibility.repository';
-import type { ItemsThumbnails } from './item/plugins/thumbnail/types';
-import { ItemMembershipRepository } from './itemMembership/membership.repository';
+import type { DBConnection } from '../drizzle/db.js';
+import type { ItemWithCreator } from '../drizzle/types.js';
+import type { MaybeUser } from '../types.js';
+import type { ItemRaw } from './item/item.js';
+import { type PackedItem, PackedItemDTO } from './item/packedItem.dto.js';
+import { ItemVisibilityRepository } from './item/plugins/itemVisibility/itemVisibility.repository.js';
+import type { ItemsThumbnails } from './item/plugins/thumbnail/types.js';
+import { ItemMembershipRepository } from './itemMembership/membership.repository.js';
 
 /**
  * Internal filtering function that takes out limited items (eg. hidden children)

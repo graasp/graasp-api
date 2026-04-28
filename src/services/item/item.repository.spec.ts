@@ -7,25 +7,25 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { MAX_ITEM_NAME_LENGTH, MAX_TREE_LEVELS, buildPathFromIds } from '@graasp/sdk';
 
-import { ItemFactory } from '../../../test/factories/item.factory';
-import { buildFile, seedFromJson } from '../../../test/mocks/seed';
-import { db } from '../../drizzle/db';
-import { items, itemsRawTable, publishedItemsTable } from '../../drizzle/schema';
-import { assertIsDefined } from '../../utils/assertions';
+import { ItemFactory } from '../../../test/factories/item.factory.js';
+import { buildFile, seedFromJson } from '../../../test/mocks/seed.js';
+import { db } from '../../drizzle/db.js';
+import { items, itemsRawTable, publishedItemsTable } from '../../drizzle/schema.js';
+import { assertIsDefined } from '../../utils/assertions.js';
 import {
   HierarchyTooDeep,
   InvalidMoveTarget,
   ItemNotFolder,
   ItemNotFound,
   TooManyDescendants,
-} from '../../utils/errors';
-import { assertIsMember, assertIsMemberForTest } from '../authentication';
-import { expectAccount } from '../member/test/fixtures/members';
-import { MemberDTO } from '../member/types';
-import { DEFAULT_ORDER } from './constants';
-import { type FolderItem, type ItemRaw, resolveItemType } from './item';
-import { ItemRepository } from './item.repository';
-import { expectItem, expectManyItems } from './test/fixtures/items.vitest';
+} from '../../utils/errors.js';
+import { assertIsMember, assertIsMemberForTest } from '../authentication.js';
+import { expectAccount } from '../member/test/fixtures/members.js';
+import { MemberDTO } from '../member/types.js';
+import { DEFAULT_ORDER } from './constants.js';
+import { type FolderItem, type ItemRaw, resolveItemType } from './item.js';
+import { ItemRepository } from './item.repository.js';
+import { expectItem, expectManyItems } from './test/fixtures/items.vitest.js';
 
 const alphabeticalOrder = (a: string, b: string) => a.localeCompare(b);
 

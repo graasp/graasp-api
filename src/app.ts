@@ -6,19 +6,19 @@ import fws from '@fastify/websocket';
 import type { FastifyInstance } from 'fastify';
 import fp from 'fastify-plugin';
 
-import { REDIS_CONNECTION } from './config/redis';
-import { registerDependencies } from './di/container';
-import databasePlugin from './plugins/database';
-import metaPlugin from './plugins/meta';
-import swaggerPlugin from './plugins/swagger';
-import { schemaRegisterPlugin } from './plugins/typebox';
-import authPlugin from './services/auth';
-import { plugin as passportPlugin } from './services/auth/plugins/passport';
-import ItemServiceApi from './services/item';
-import { maintenancePlugin } from './services/maintenance/maintenance.controller';
-import MemberServiceApi from './services/member';
-import tagPlugin from './services/tag/tag.controller';
-import websocketsPlugin from './services/websockets/websocket.controller';
+import { REDIS_CONNECTION } from './config/redis.js';
+import { registerDependencies } from './di/container.js';
+import databasePlugin from './plugins/database.js';
+import metaPlugin from './plugins/meta.js';
+import swaggerPlugin from './plugins/swagger.js';
+import { schemaRegisterPlugin } from './plugins/typebox.js';
+import authPlugin from './services/auth/index.js';
+import { plugin as passportPlugin } from './services/auth/plugins/passport/plugin.js';
+import ItemServiceApi from './services/item/index.js';
+import { maintenancePlugin } from './services/maintenance/maintenance.controller.js';
+import MemberServiceApi from './services/member/index.js';
+import tagPlugin from './services/tag/tag.controller.js';
+import websocketsPlugin from './services/websockets/websocket.controller.js';
 
 export default async function registerAppPlugins(instance: FastifyInstance): Promise<void> {
   const { log } = instance;

@@ -1,5 +1,5 @@
-import { DEV, getEnv } from './env';
-import { requiredEnvVar, toBoolean } from './helpers';
+import { DEV, getEnv } from './env.js';
+import { requiredEnvVar, toBoolean } from './helpers.js';
 
 getEnv();
 

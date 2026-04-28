@@ -1,5 +1,5 @@
-import { getEnv } from './env';
-import { requiredEnvVar } from './helpers';
+import { getEnv } from './env.js';
+import { requiredEnvVar } from './helpers.js';
 
 getEnv();
 

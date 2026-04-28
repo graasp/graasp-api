@@ -10,17 +10,17 @@ import build, {
   clearDatabase,
   mockAuthenticate,
   unmockAuthenticate,
-} from '../../../../../test/app';
-import { seedFromJson } from '../../../../../test/mocks/seed';
-import { db } from '../../../../drizzle/db';
-import { assertIsDefined } from '../../../../utils/assertions';
-import { GEOLOCATION_API_HOST, ITEMS_ROUTE_PREFIX } from '../../../../utils/config';
-import { MemberCannotAccess } from '../../../../utils/errors';
-import { assertIsMemberForTest } from '../../../authentication';
-import { resolveItemType } from '../../item';
-import { PackedItemDTO } from '../../packedItem.dto';
-import { expectPackedItem, expectThumbnails } from '../../test/fixtures/items';
-import { PackedItemGeolocation } from './itemGeolocation.service';
+} from '../../../../../test/app.js';
+import { seedFromJson } from '../../../../../test/mocks/seed.js';
+import { db } from '../../../../drizzle/db.js';
+import { assertIsDefined } from '../../../../utils/assertions.js';
+import { GEOLOCATION_API_HOST, ITEMS_ROUTE_PREFIX } from '../../../../utils/config.js';
+import { MemberCannotAccess } from '../../../../utils/errors.js';
+import { assertIsMemberForTest } from '../../../authentication.js';
+import { resolveItemType } from '../../item.js';
+import { PackedItemDTO } from '../../packedItem.dto.js';
+import { expectPackedItem, expectThumbnails } from '../../test/fixtures/items.js';
+import { PackedItemGeolocation } from './itemGeolocation.service.js';
 
 // Mock S3 libraries
 const deleteObjectMock = jest.fn(async () => console.debug('deleteObjectMock'));

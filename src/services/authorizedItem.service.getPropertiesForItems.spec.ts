@@ -2,17 +2,21 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { ItemVisibilityType } from '@graasp/sdk';
 
-import { ItemFactory } from '../../test/factories/item.factory';
-import { ItemVisibilityFactory } from '../../test/factories/itemVisibility.factory';
-import type { DBConnection } from '../drizzle/db';
-import type { ItemMembershipWithItemAndAccount } from '../drizzle/types';
-import { PermissionLevel } from '../types';
-import { MemberCannotAccess, MemberCannotAdminItem, MemberCannotWriteItem } from '../utils/errors';
-import { AuthorizedItemService } from './authorizedItem.service';
-import type { ItemRaw } from './item/item';
-import { ItemRepository } from './item/item.repository';
-import { ItemVisibilityRepository } from './item/plugins/itemVisibility/itemVisibility.repository';
-import { ItemMembershipRepository } from './itemMembership/membership.repository';
+import { ItemFactory } from '../../test/factories/item.factory.js';
+import { ItemVisibilityFactory } from '../../test/factories/itemVisibility.factory.js';
+import type { DBConnection } from '../drizzle/db.js';
+import type { ItemMembershipWithItemAndAccount } from '../drizzle/types.js';
+import { PermissionLevel } from '../types.js';
+import {
+  MemberCannotAccess,
+  MemberCannotAdminItem,
+  MemberCannotWriteItem,
+} from '../utils/errors.js';
+import { AuthorizedItemService } from './authorizedItem.service.js';
+import type { ItemRaw } from './item/item.js';
+import { ItemRepository } from './item/item.repository.js';
+import { ItemVisibilityRepository } from './item/plugins/itemVisibility/itemVisibility.repository.js';
+import { ItemMembershipRepository } from './itemMembership/membership.repository.js';
 
 const MOCK_DB = {} as unknown as DBConnection;
 
@@ -20,7 +24,11 @@ const MEMBER = { id: 'shared', name: 'shared' };
 const ITEM = ItemFactory({ id: 'item' });
 
 const buildSharedMembership = (permission: PermissionLevel, item: ItemRaw = ITEM) =>
-  ({ account: MEMBER, permission, item }) as ItemMembershipWithItemAndAccount;
+  ({
+    account: MEMBER,
+    permission,
+    item,
+  }) as ItemMembershipWithItemAndAccount;
 
 const adminMembership = buildSharedMembership('admin');
 const writeMembership = buildSharedMembership('write');

@@ -2,14 +2,17 @@ import { StatusCodes } from 'http-status-codes';
 
 import type { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox';
 
-import { resolveDependency } from '../../../../di/utils';
-import { db } from '../../../../drizzle/db';
-import { asDefined } from '../../../../utils/assertions';
-import { isAuthenticated, matchOne } from '../../../auth/plugins/passport';
-import { guestAccountRole } from '../../../itemLogin/strategies/guestAccountRole';
-import { validatedMemberAccountRole } from '../../../member/strategies/validatedMemberAccountRole';
-import { create, getFlagTypes } from './itemFlag.schemas';
-import { ItemFlagService } from './itemFlag.service';
+import { resolveDependency } from '../../../../di/utils.js';
+import { db } from '../../../../drizzle/db.js';
+import { asDefined } from '../../../../utils/assertions.js';
+import {
+  isAuthenticated,
+  matchOne,
+} from '../../../auth/plugins/passport/preHandlers.js';
+import { guestAccountRole } from '../../../itemLogin/strategies/guestAccountRole.js';
+import { validatedMemberAccountRole } from '../../../member/strategies/validatedMemberAccountRole.js';
+import { create, getFlagTypes } from './itemFlag.schemas.js';
+import { ItemFlagService } from './itemFlag.service.js';
 
 const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
   const itemFlagService = resolveDependency(ItemFlagService);
@@ -24,7 +27,10 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
     '/:itemId/flags',
     {
       schema: create,
-      preHandler: [isAuthenticated, matchOne(validatedMemberAccountRole, guestAccountRole)],
+      preHandler: [
+        isAuthenticated,
+        matchOne(validatedMemberAccountRole, guestAccountRole),
+      ],
     },
     async ({ user, params: { itemId }, body: { type } }, reply) => {
       const account = asDefined(user?.account);

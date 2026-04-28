@@ -2,32 +2,40 @@ import { StatusCodes } from 'http-status-codes';
 
 import type { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox';
 
-import { resolveDependency } from '../../../../di/utils';
-import { db } from '../../../../drizzle/db';
-import { asDefined } from '../../../../utils/assertions';
-import { isAuthenticated, matchOne, optionalIsAuthenticated } from '../../../auth/plugins/passport';
-import { assertIsMember } from '../../../authentication';
-import { validatedMemberAccountRole } from '../../strategies/validatedMemberAccountRole';
+import { resolveDependency } from '../../../../di/utils.js';
+import { db } from '../../../../drizzle/db.js';
+import { asDefined } from '../../../../utils/assertions.js';
+import {
+  isAuthenticated,
+  matchOne,
+  optionalIsAuthenticated,
+} from '../../../auth/plugins/passport/preHandlers.js';
+import { assertIsMember } from '../../../authentication.js';
+import { validatedMemberAccountRole } from '../../strategies/validatedMemberAccountRole.js';
 import {
   createOwnProfile,
   getOwnProfile,
   getProfileForMember,
   updateOwnProfile,
-} from './memberProfile.schemas';
-import { MemberProfileService } from './memberProfile.service';
+} from './memberProfile.schemas.js';
+import { MemberProfileService } from './memberProfile.service.js';
 
 const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
   const memberProfileService = resolveDependency(MemberProfileService);
 
-  fastify.get('/own', { schema: getOwnProfile, preHandler: isAuthenticated }, async ({ user }) => {
-    const member = asDefined(user?.account);
-    assertIsMember(member);
-    const profile = await memberProfileService.getOwn(db, member);
-    if (!profile) {
-      return null;
-    }
-    return profile;
-  });
+  fastify.get(
+    '/own',
+    { schema: getOwnProfile, preHandler: isAuthenticated },
+    async ({ user }) => {
+      const member = asDefined(user?.account);
+      assertIsMember(member);
+      const profile = await memberProfileService.getOwn(db, member);
+      if (!profile) {
+        return null;
+      }
+      return profile;
+    },
+  );
 
   fastify.get(
     '/:memberId',

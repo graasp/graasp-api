@@ -9,9 +9,9 @@ import { v4 } from 'uuid';
 
 import type { FastifyBaseLogger } from 'fastify';
 
-import { FileItemExtra, getMimetype } from '@graasp/sdk';
+import { type FileItemExtra, getMimetype } from '@graasp/sdk';
 
-import { ItemType } from '../../../../schemas/global';
+import type { ItemType } from '../../../../schemas/global.js';
 import {
   type ItemRaw,
   isAppItem,
@@ -21,8 +21,12 @@ import {
   isFileItem,
   isFolderItem,
   isH5PItem,
-} from '../../item';
-import { APP_URL_PREFIX, TMP_IMPORT_ZIP_FOLDER_PATH, URL_PREFIX } from './constants';
+} from '../../item.js';
+import {
+  APP_URL_PREFIX,
+  TMP_IMPORT_ZIP_FOLDER_PATH,
+  URL_PREFIX,
+} from './constants.js';
 
 export const prepareZip = async (file: Readable, log?: FastifyBaseLogger) => {
   // read and prepare folder for zip and content
@@ -68,7 +72,13 @@ const extractFileName = (itemName: string, extension: string) => {
   return `${fileName}${fullExtension}`;
 };
 
-const extractExtension = ({ name, mimetype }: { name: string; mimetype?: string }): string => {
+const extractExtension = ({
+  name,
+  mimetype,
+}: {
+  name: string;
+  mimetype?: string;
+}): string => {
   // slice to remove . character
   const ext = path.extname(name).slice(1);
   if (!ext && mimetype) {
@@ -88,7 +98,10 @@ export const getFilenameFromItem = (item: ItemRaw): string => {
     case isFileItem(item): {
       // bug: we need to cast because of mismatch with sdk
       const mimetype = getMimetype(item.extra as FileItemExtra);
-      return extractFileName(item.name, extractExtension({ name: item.name, mimetype }));
+      return extractFileName(
+        item.name,
+        extractExtension({ name: item.name, mimetype }),
+      );
     }
     case isFolderItem(item): {
       return extractFileName(item.name, 'zip');

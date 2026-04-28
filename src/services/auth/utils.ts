@@ -2,7 +2,7 @@ import type { FastifyBaseLogger } from 'fastify';
 
 import { ClientManager, Context } from '@graasp/sdk';
 
-import { ALLOWED_ORIGINS } from '../../utils/config';
+import { ALLOWED_ORIGINS } from '../../utils/config.js';
 
 const defaultClientHost = ClientManager.getInstance().getLinkByContext(Context.Home);
 

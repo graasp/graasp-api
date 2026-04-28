@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
 
-import { seedFromJson } from '../../../../../../test/mocks/seed';
-import { db } from '../../../../../drizzle/db';
-import { ItemPublishedRepository } from './itemPublished.repository';
+import { seedFromJson } from '../../../../../../test/mocks/seed.js';
+import { db } from '../../../../../drizzle/db.js';
+import { ItemPublishedRepository } from './itemPublished.repository.js';
 
 const repository = new ItemPublishedRepository();
 

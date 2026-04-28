@@ -12,13 +12,13 @@ import build, {
   clearDatabase,
   mockAuthenticate,
   unmockAuthenticate,
-} from '../../../../../../../test/app';
-import { seedFromJson } from '../../../../../../../test/mocks/seed';
-import { db } from '../../../../../../drizzle/db';
-import { assertIsDefined } from '../../../../../../utils/assertions';
-import { APP_ITEMS_PREFIX } from '../../../../../../utils/config';
-import { assertIsMemberForTest } from '../../../../../authentication';
-import { getAccessToken } from '../../test/fixtures';
+} from '../../../../../../../test/app.js';
+import { seedFromJson } from '../../../../../../../test/mocks/seed.js';
+import { db } from '../../../../../../drizzle/db.js';
+import { assertIsDefined } from '../../../../../../utils/assertions.js';
+import { APP_ITEMS_PREFIX } from '../../../../../../utils/config.js';
+import { assertIsMemberForTest } from '../../../../../authentication.js';
+import { getAccessToken } from '../../test/fixtures.js';
 
 describe('App Actions Tests', () => {
   let app: FastifyInstance;

@@ -2,7 +2,7 @@ import { expect } from 'vitest';
 
 import type { ThumbnailSizeType } from '@graasp/sdk';
 
-import type { ItemsThumbnails } from '../../types';
+import type { ItemsThumbnails } from '../../types.js';
 
 export const constructMockedUrl = ({ size, id }: { size: string; id: string }) =>
   `mocked-url/${id}?${size}`;

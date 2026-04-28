@@ -10,21 +10,21 @@ import build, {
   clearDatabase,
   mockAuthenticate,
   unmockAuthenticate,
-} from '../../../../../test/app';
-import { seedFromJson } from '../../../../../test/mocks/seed';
-import { db } from '../../../../drizzle/db';
-import { assertIsDefined } from '../../../../utils/assertions';
-import { UnauthorizedMember } from '../../../../utils/errors';
-import { ActionRepository } from '../../../action/action.repository';
-import { ActionService } from '../../../action/action.service';
-import { assertIsMember, assertIsMemberForTest } from '../../../authentication';
-import { AuthorizedItemService } from '../../../authorizedItem.service';
-import { ItemMembershipRepository } from '../../../itemMembership/membership.repository';
-import { MemberRepository } from '../../../member/member.repository';
-import { resolveItemType } from '../../item';
-import { ItemActionRepository } from './itemAction.repository';
-import { ItemActionService } from './itemAction.service';
-import { ItemActionType } from './utils';
+} from '../../../../../test/app.js';
+import { seedFromJson } from '../../../../../test/mocks/seed.js';
+import { db } from '../../../../drizzle/db.js';
+import { assertIsDefined } from '../../../../utils/assertions.js';
+import { UnauthorizedMember } from '../../../../utils/errors.js';
+import { ActionRepository } from '../../../action/action.repository.js';
+import { ActionService } from '../../../action/action.service.js';
+import { assertIsMember, assertIsMemberForTest } from '../../../authentication.js';
+import { AuthorizedItemService } from '../../../authorizedItem.service.js';
+import { ItemMembershipRepository } from '../../../itemMembership/membership.repository.js';
+import { MemberRepository } from '../../../member/member.repository.js';
+import { resolveItemType } from '../../item.js';
+import { ItemActionRepository } from './itemAction.repository.js';
+import { ItemActionService } from './itemAction.service.js';
+import { ItemActionType } from './utils.js';
 
 const authorizedItemService = { getItemById: jest.fn() } as unknown as AuthorizedItemService;
 const actionRepository = new ActionRepository();

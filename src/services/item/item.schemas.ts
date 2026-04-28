@@ -9,9 +9,9 @@ import {
   MAX_TARGETS_FOR_MODIFY_REQUEST_W_RESPONSE,
 } from '@graasp/sdk';
 
-import { customType } from '../../plugins/typebox';
-import { errorSchemaRef } from '../../schemas/global';
-import { genericItemSchema, itemCommonSchema, settingsSchema } from './common.schemas';
+import { customType } from '../../plugins/typebox.js';
+import { errorSchemaRef } from '../../schemas/global.js';
+import { genericItemSchema, itemCommonSchema, settingsSchema } from './common.schemas.js';
 
 export const itemUpdateSchema = Type.Partial(
   Type.Composite(

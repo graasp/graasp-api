@@ -5,9 +5,9 @@ import type { FastifySchema } from 'fastify';
 
 import { type UnionOfConst } from '@graasp/sdk';
 
-import { actionRequestExportFormats } from '../../../../drizzle/schema';
-import { customType } from '../../../../plugins/typebox';
-import { errorSchemaRef } from '../../../../schemas/global';
+import { actionRequestExportFormats } from '../../../../drizzle/schema.js';
+import { customType } from '../../../../plugins/typebox.js';
+import { errorSchemaRef } from '../../../../schemas/global.js';
 
 export const View = {
   Builder: 'builder',

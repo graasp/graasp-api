@@ -5,16 +5,20 @@ import type { FastifyInstance } from 'fastify';
 
 import { HttpMethod } from '@graasp/sdk';
 
-import build, { clearDatabase, mockAuthenticate, unmockAuthenticate } from '../../../test/app';
-import { seedFromJson } from '../../../test/mocks/seed';
-import { db } from '../../drizzle/db';
-import { assertIsDefined } from '../../utils/assertions';
-import { ItemNotFound, MemberCannotAccess } from '../../utils/errors';
-import { assertIsMemberForTest } from '../authentication';
-import { H5PItem } from './item';
-import { type PackedItem, PackedItemDTO } from './packedItem.dto';
-import { expectManyPackedItems, expectPackedItem, expectThumbnails } from './test/fixtures/items';
-import { Ordering, SortBy } from './types';
+import build, { clearDatabase, mockAuthenticate, unmockAuthenticate } from '../../../test/app.js';
+import { seedFromJson } from '../../../test/mocks/seed.js';
+import { db } from '../../drizzle/db.js';
+import { assertIsDefined } from '../../utils/assertions.js';
+import { ItemNotFound, MemberCannotAccess } from '../../utils/errors.js';
+import { assertIsMemberForTest } from '../authentication.js';
+import { H5PItem } from './item.js';
+import { type PackedItem, PackedItemDTO } from './packedItem.dto.js';
+import {
+  expectManyPackedItems,
+  expectPackedItem,
+  expectThumbnails,
+} from './test/fixtures/items.js';
+import { Ordering, SortBy } from './types.js';
 
 // Mock S3 libraries
 const deleteObjectMock = jest.fn(async () => console.debug('deleteObjectMock'));

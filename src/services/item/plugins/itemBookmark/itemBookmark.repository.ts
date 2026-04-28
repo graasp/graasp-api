@@ -2,16 +2,20 @@ import { getTableColumns, getViewSelectedFields } from 'drizzle-orm';
 import { and, desc, eq } from 'drizzle-orm/sql';
 import { singleton } from 'tsyringe';
 
-import { type DBConnection } from '../../../../drizzle/db';
-import { itemBookmarksTable, items, membersView } from '../../../../drizzle/schema';
+import { type DBConnection } from '../../../../drizzle/db.js';
+import {
+  itemBookmarksTable,
+  items,
+  membersView,
+} from '../../../../drizzle/schema.js';
 import type {
   ItemBookmarkInsertDTO,
   ItemBookmarkRawWithItemAndAccount,
   ItemBookmarkRawWithItemWithCreator,
-} from '../../../../drizzle/types';
-import { MemberIdentifierNotFound } from '../../../itemLogin/errors';
-import { type ItemRaw, resolveItemType } from '../../item';
-import { DuplicateBookmarkError, ItemBookmarkNotFound } from './errors';
+} from '../../../../drizzle/types.js';
+import { MemberIdentifierNotFound } from '../../../itemLogin/errors.js';
+import { type ItemRaw, resolveItemType } from '../../item.js';
+import { DuplicateBookmarkError, ItemBookmarkNotFound } from './errors.js';
 
 @singleton()
 export class ItemBookmarkRepository {
@@ -116,7 +120,12 @@ export class ItemBookmarkRepository {
   ): Promise<ItemRaw['id']> {
     await dbConnection
       .delete(itemBookmarksTable)
-      .where(and(eq(itemBookmarksTable.itemId, itemId), eq(itemBookmarksTable.memberId, memberId)));
+      .where(
+        and(
+          eq(itemBookmarksTable.itemId, itemId),
+          eq(itemBookmarksTable.memberId, memberId),
+        ),
+      );
 
     return itemId;
   }

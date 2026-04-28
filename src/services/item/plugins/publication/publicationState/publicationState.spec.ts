@@ -2,8 +2,8 @@ import { describe, expect, it } from 'vitest';
 
 import { ItemValidationStatus, PublicationStatus } from '@graasp/sdk';
 
-import { PublicationState } from './publicationState';
-import { ItemMetadataFactory, ItemValidationGroupStatusFactory } from './test/fixtures';
+import { PublicationState } from './publicationState.js';
+import { ItemMetadataFactory, ItemValidationGroupStatusFactory } from './test/fixtures.js';
 
 describe('PublicationState', () => {
   describe('Private item', () => {

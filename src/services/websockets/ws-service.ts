@@ -4,15 +4,15 @@ import type { FastifyBaseLogger } from 'fastify';
 
 import { Websocket as GraaspWS } from '@graasp/sdk';
 
-import type { MaybeUser } from '../../types';
+import type { MaybeUser } from '../../types.js';
+import { AjvMessageSerializer } from './message-serializer.js';
 import {
   createServerErrorResponse,
   createServerSuccessResponse,
   createServerUpdate,
-} from './message';
-import { AjvMessageSerializer } from './message-serializer';
-import { MultiInstanceChannelsBroker } from './multi-instance';
-import { WebSocketChannels } from './ws-channels';
+} from './message.js';
+import { MultiInstanceChannelsBroker } from './multi-instance.js';
+import { WebSocketChannels } from './ws-channels.js';
 
 export interface SubscriptionRequest {
   /**

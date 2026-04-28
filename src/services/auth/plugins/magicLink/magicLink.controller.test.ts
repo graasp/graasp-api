@@ -16,14 +16,14 @@ import {
   type RecaptchaActionType,
 } from '@graasp/sdk';
 
-import build, { MOCK_CAPTCHA, clearDatabase } from '../../../../../test/app';
-import { seedFromJson } from '../../../../../test/mocks/seed';
-import { URL_REGEX } from '../../../../../test/utils';
-import { JWT_SECRET } from '../../../../config/secrets';
-import { resolveDependency } from '../../../../di/utils';
-import { db } from '../../../../drizzle/db';
-import { accountsTable } from '../../../../drizzle/schema';
-import { MailerService } from '../../../../plugins/mailer/mailer.service';
+import build, { MOCK_CAPTCHA, clearDatabase } from '../../../../../test/app.js';
+import { seedFromJson } from '../../../../../test/mocks/seed.js';
+import { URL_REGEX } from '../../../../../test/utils.js';
+import { JWT_SECRET } from '../../../../config/secrets.js';
+import { resolveDependency } from '../../../../di/utils.js';
+import { db } from '../../../../drizzle/db.js';
+import { accountsTable } from '../../../../drizzle/schema.js';
+import { MailerService } from '../../../../plugins/mailer/mailer.service.js';
 
 jest.mock('node-fetch');
 

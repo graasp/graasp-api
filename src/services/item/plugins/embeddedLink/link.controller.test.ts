@@ -12,14 +12,14 @@ import build, {
   clearDatabase,
   mockAuthenticate,
   unmockAuthenticate,
-} from '../../../../../test/app';
-import { seedFromJson } from '../../../../../test/mocks/seed';
-import { db } from '../../../../drizzle/db';
-import { itemsRawTable } from '../../../../drizzle/schema';
-import { assertIsDefined } from '../../../../utils/assertions';
-import { EMBEDDED_LINK_ITEM_IFRAMELY_HREF_ORIGIN } from '../../../../utils/config';
-import { EmbeddedLinkItem } from '../../item';
-import { FETCH_RESULT } from './link.service.test';
+} from '../../../../../test/app.js';
+import { seedFromJson } from '../../../../../test/mocks/seed.js';
+import { db } from '../../../../drizzle/db.js';
+import { itemsRawTable } from '../../../../drizzle/schema.js';
+import { assertIsDefined } from '../../../../utils/assertions.js';
+import { EMBEDDED_LINK_ITEM_IFRAMELY_HREF_ORIGIN } from '../../../../utils/config.js';
+import { EmbeddedLinkItem } from '../../item.js';
+import { FETCH_RESULT } from './link.service.test.js';
 
 const MOCK_URL = 'https://url.com';
 

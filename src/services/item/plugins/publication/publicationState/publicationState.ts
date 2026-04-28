@@ -2,7 +2,7 @@ import groupBy from 'lodash.groupby';
 
 import { ItemValidationStatus, PublicationStatus, PublishableItemTypeChecker } from '@graasp/sdk';
 
-import type { ItemMetadata, ItemValidationGroupStatus, MapByStatus } from './types';
+import type { ItemMetadata, ItemValidationGroupStatus, MapByStatus } from './types.js';
 
 export class PublicationState {
   private readonly item: ItemMetadata;

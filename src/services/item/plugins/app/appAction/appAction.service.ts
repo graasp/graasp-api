@@ -1,15 +1,15 @@
 import { eq } from 'drizzle-orm/sql';
 import { singleton } from 'tsyringe';
 
-import { type DBConnection } from '../../../../../drizzle/db';
-import { appActionsTable } from '../../../../../drizzle/schema';
-import type { AppActionWithItemAndAccount } from '../../../../../drizzle/types';
-import type { AuthenticatedUser } from '../../../../../types';
-import { AuthorizedItemService } from '../../../../authorizedItem.service';
-import type { SingleItemGetFilter } from '../interfaces/request';
-import type { InputAppAction } from './appAction.interface';
-import { AppActionRepository } from './appAction.repository';
-import { AppActionNotAccessible } from './errors';
+import { type DBConnection } from '../../../../../drizzle/db.js';
+import { appActionsTable } from '../../../../../drizzle/schema.js';
+import type { AppActionWithItemAndAccount } from '../../../../../drizzle/types.js';
+import type { AuthenticatedUser } from '../../../../../types.js';
+import { AuthorizedItemService } from '../../../../authorizedItem.service.js';
+import type { SingleItemGetFilter } from '../interfaces/request.js';
+import type { InputAppAction } from './appAction.interface.js';
+import { AppActionRepository } from './appAction.repository.js';
+import { AppActionNotAccessible } from './errors.js';
 
 @singleton()
 export class AppActionService {
@@ -68,10 +68,12 @@ export class AppActionService {
     filters: SingleItemGetFilter,
   ) {
     // posting an app action is allowed to readers
-    const { itemMembership } = await this.authorizedItemService.getPropertiesForItemById(
-      dbConnection,
-      { permission: 'read', accountId: account.id, itemId },
-    );
+    const { itemMembership } =
+      await this.authorizedItemService.getPropertiesForItemById(dbConnection, {
+        permission: 'read',
+        accountId: account.id,
+        itemId,
+      });
     const permission = itemMembership?.permission;
     let { accountId: fMemberId } = filters;
 

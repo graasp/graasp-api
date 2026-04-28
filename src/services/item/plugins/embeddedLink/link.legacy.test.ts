@@ -10,12 +10,12 @@ import build, {
   clearDatabase,
   mockAuthenticate,
   unmockAuthenticate,
-} from '../../../../../test/app';
-import { ItemFactory } from '../../../../../test/factories/item.factory';
-import { seedFromJson } from '../../../../../test/mocks/seed';
-import { db } from '../../../../drizzle/db';
-import { itemsRawTable } from '../../../../drizzle/schema';
-import { assertIsDefined } from '../../../../utils/assertions';
+} from '../../../../../test/app.js';
+import { ItemFactory } from '../../../../../test/factories/item.factory.js';
+import { seedFromJson } from '../../../../../test/mocks/seed.js';
+import { db } from '../../../../drizzle/db.js';
+import { itemsRawTable } from '../../../../drizzle/schema.js';
+import { assertIsDefined } from '../../../../utils/assertions.js';
 
 jest.mock('node-fetch');
 

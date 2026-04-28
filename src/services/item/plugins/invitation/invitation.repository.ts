@@ -1,17 +1,17 @@
 import { and, eq } from 'drizzle-orm/sql';
 import { singleton } from 'tsyringe';
 
-import { type DBConnection } from '../../../../drizzle/db';
-import { isAncestorOrSelf } from '../../../../drizzle/operations';
-import { invitationsTable, items } from '../../../../drizzle/schema';
+import { type DBConnection } from '../../../../drizzle/db.js';
+import { isAncestorOrSelf } from '../../../../drizzle/operations.js';
+import { invitationsTable, items } from '../../../../drizzle/schema.js';
 import type {
   InvitationInsertDTO,
   InvitationRaw,
   InvitationWithItem,
-} from '../../../../drizzle/types';
-import { throwsIfParamIsInvalid } from '../../../../repositories/utils';
-import type { AuthenticatedUser } from '../../../../types';
-import type { ItemRaw } from '../../item';
+} from '../../../../drizzle/types.js';
+import { throwsIfParamIsInvalid } from '../../../../repositories/utils.js';
+import type { AuthenticatedUser } from '../../../../types.js';
+import type { ItemRaw } from '../../item.js';
 
 type ItemPath = ItemRaw['path'];
 type Email = InvitationRaw['email'];
@@ -21,7 +21,10 @@ type Email = InvitationRaw['email'];
  */
 @singleton()
 export class InvitationRepository {
-  async getOne(dbConnection: DBConnection, id: string): Promise<InvitationWithItem | null> {
+  async getOne(
+    dbConnection: DBConnection,
+    id: string,
+  ): Promise<InvitationWithItem | null> {
     throwsIfParamIsInvalid('id', id);
     const entity = await dbConnection
       .select()
@@ -79,7 +82,10 @@ export class InvitationRepository {
     });
   }
 
-  async getManyByEmail(dbConnection: DBConnection, email: Email): Promise<InvitationWithItem[]> {
+  async getManyByEmail(
+    dbConnection: DBConnection,
+    email: Email,
+  ): Promise<InvitationWithItem[]> {
     throwsIfParamIsInvalid('email', email);
     const lowercaseEmail = email.toLowerCase();
 
@@ -118,7 +124,9 @@ export class InvitationRepository {
       .filter(
         (i) =>
           // exclude duplicate item-email combinations that are already invited
-          !existingEntries.find(({ email, item }) => email === i.email && item.path === itemPath),
+          !existingEntries.find(
+            ({ email, item }) => email === i.email && item.path === itemPath,
+          ),
       )
       .map((inv) => ({
         ...inv,
@@ -142,13 +150,23 @@ export class InvitationRepository {
       .returning();
   }
 
-  async deleteManyByEmail(dbConnection: DBConnection, email: Email): Promise<void> {
+  async deleteManyByEmail(
+    dbConnection: DBConnection,
+    email: Email,
+  ): Promise<void> {
     throwsIfParamIsInvalid('email', email);
 
-    await dbConnection.delete(invitationsTable).where(eq(invitationsTable.email, email));
+    await dbConnection
+      .delete(invitationsTable)
+      .where(eq(invitationsTable.email, email));
   }
 
-  async delete(dbConnection: DBConnection, invitationId: string): Promise<void> {
-    await dbConnection.delete(invitationsTable).where(eq(invitationsTable.id, invitationId));
+  async delete(
+    dbConnection: DBConnection,
+    invitationId: string,
+  ): Promise<void> {
+    await dbConnection
+      .delete(invitationsTable)
+      .where(eq(invitationsTable.id, invitationId));
   }
 }

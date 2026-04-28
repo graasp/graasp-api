@@ -7,13 +7,13 @@ import type { FastifyInstance } from 'fastify';
 
 import { HttpMethod } from '@graasp/sdk';
 
-import build, { clearDatabase, mockAuthenticate, unmockAuthenticate } from '../../../test/app';
-import { seedFromJson } from '../../../test/mocks/seed';
-import { resolveDependency } from '../../di/utils';
-import { db } from '../../drizzle/db';
-import { itemMembershipsTable, membershipRequestsTable } from '../../drizzle/schema';
-import { MailerService } from '../../plugins/mailer/mailer.service';
-import { assertIsDefined } from '../../utils/assertions';
+import build, { clearDatabase, mockAuthenticate, unmockAuthenticate } from '../../../test/app.js';
+import { seedFromJson } from '../../../test/mocks/seed.js';
+import { resolveDependency } from '../../di/utils.js';
+import { db } from '../../drizzle/db.js';
+import { itemMembershipsTable, membershipRequestsTable } from '../../drizzle/schema.js';
+import { MailerService } from '../../plugins/mailer/mailer.service.js';
+import { assertIsDefined } from '../../utils/assertions.js';
 import {
   CannotDeleteOnlyAdmin,
   InvalidMembership,
@@ -23,9 +23,9 @@ import {
   MemberCannotAccess,
   MemberCannotAdminItem,
   ModifyExistingMembership,
-} from '../../utils/errors';
-import { assertIsMember } from '../authentication';
-import { expectMembership } from './test/fixtures/memberships';
+} from '../../utils/errors.js';
+import { assertIsMember } from '../authentication.js';
+import { expectMembership } from './test/fixtures/memberships.js';
 
 const getMembershipById = async (id: string) => {
   return await db.query.itemMembershipsTable.findFirst({ where: eq(itemMembershipsTable.id, id) });

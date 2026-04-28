@@ -5,13 +5,13 @@ import { Readable } from 'stream';
 import { singleton } from 'tsyringe';
 import * as Y from 'yjs';
 
-import { ItemGeolocation } from '@graasp/sdk';
+import type { ItemGeolocation } from '@graasp/sdk';
 
-import { DBConnection } from '../../../../drizzle/db';
-import { MinimalMember } from '../../../../types';
-import type { ItemRaw, PageItem } from '../../item';
-import { ItemService } from '../../item.service';
-import { PageRepository } from './page.repository';
+import type { DBConnection } from '../../../../drizzle/db.js';
+import type { MinimalMember } from '../../../../types.js';
+import type { ItemRaw, PageItem } from '../../item.js';
+import { ItemService } from '../../item.service.js';
+import { PageRepository } from './page.repository.js';
 
 export const PREFERRED_TRIM_SIZE = 500;
 

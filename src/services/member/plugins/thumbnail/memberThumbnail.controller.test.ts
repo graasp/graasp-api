@@ -14,11 +14,11 @@ import build, {
   clearDatabase,
   mockAuthenticate,
   unmockAuthenticate,
-} from '../../../../../test/app';
-import { seedFromJson } from '../../../../../test/mocks/seed';
-import { db } from '../../../../drizzle/db';
-import { assertIsDefined } from '../../../../utils/assertions';
-import { UploadFileNotImageError } from './utils/errors';
+} from '../../../../../test/app.js';
+import { seedFromJson } from '../../../../../test/mocks/seed.js';
+import { db } from '../../../../drizzle/db.js';
+import { assertIsDefined } from '../../../../utils/assertions.js';
+import { UploadFileNotImageError } from './utils/errors.js';
 
 const filepath = path.resolve(__dirname, './test/fixtures/image.png');
 const textPath = path.resolve(__dirname, './test/fixtures/emptyFile');

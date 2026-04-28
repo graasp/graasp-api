@@ -2,11 +2,11 @@ import { faker } from '@faker-js/faker';
 import { eq } from 'drizzle-orm';
 import { describe, expect, it } from 'vitest';
 
-import { seedFromJson } from '../../../test/mocks/seed';
-import { db } from '../../drizzle/db';
-import { guestPasswordsTable } from '../../drizzle/schema';
-import { assertIsDefined } from '../../utils/assertions';
-import { GuestPasswordRepository } from './guestPassword.repository';
+import { seedFromJson } from '../../../test/mocks/seed.js';
+import { db } from '../../drizzle/db.js';
+import { guestPasswordsTable } from '../../drizzle/schema.js';
+import { assertIsDefined } from '../../utils/assertions.js';
+import { GuestPasswordRepository } from './guestPassword.repository.js';
 
 const repository = new GuestPasswordRepository();
 

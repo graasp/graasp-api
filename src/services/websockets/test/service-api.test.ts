@@ -11,8 +11,8 @@ import type { FastifyInstance } from 'fastify';
 
 import { Websocket as GraaspWebsocket } from '@graasp/sdk';
 
-import '../../auth/plugins/passport/preHandlers';
-import { createServerInfo } from '../message';
+import '../../auth/plugins/passport/preHandlers.js';
+import { createServerInfo } from '../message.js';
 import {
   PortGenerator,
   type TestConfig,
@@ -23,7 +23,7 @@ import {
   createWsClient,
   createWsClients,
   createWsFastifyInstance,
-} from './test-utils';
+} from './test-utils.js';
 
 const portGen = new PortGenerator(7000);
 jest.mock('../../auth/plugins/passport/preHandlers', () => ({

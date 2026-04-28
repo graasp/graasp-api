@@ -1,15 +1,22 @@
 import { and, eq } from 'drizzle-orm/sql';
 import { singleton } from 'tsyringe';
 
-import { type DBConnection } from '../../../../drizzle/db';
-import { memberProfilesTable } from '../../../../drizzle/schema';
-import { MemberNotFound } from '../../../../utils/errors';
-import { MemberProfileCreationError, MemberProfilePropertiesEmpty } from './errors';
-import type { IMemberProfile } from './types';
+import { type DBConnection } from '../../../../drizzle/db.js';
+import { memberProfilesTable } from '../../../../drizzle/schema.js';
+import { MemberNotFound } from '../../../../utils/errors.js';
+import {
+  MemberProfileCreationError,
+  MemberProfilePropertiesEmpty,
+} from './errors.js';
+import type { IMemberProfile } from './types.js';
 
 @singleton()
 export class MemberProfileRepository {
-  async createOne(dbConnection: DBConnection, memberId: string, payload: Partial<IMemberProfile>) {
+  async createOne(
+    dbConnection: DBConnection,
+    memberId: string,
+    payload: Partial<IMemberProfile>,
+  ) {
     if (Object.values(payload).length === 0) {
       throw new MemberProfilePropertiesEmpty();
     }
@@ -53,30 +60,40 @@ export class MemberProfileRepository {
     if (!memberId) {
       throw new MemberNotFound({ id: memberId });
     }
-    const memberProfile = await dbConnection.query.memberProfilesTable.findFirst({
-      where: eq(memberProfilesTable.memberId, memberId),
-      with: { member: true },
-    });
+    const memberProfile =
+      await dbConnection.query.memberProfilesTable.findFirst({
+        where: eq(memberProfilesTable.memberId, memberId),
+        with: { member: true },
+      });
 
     return memberProfile;
   }
 
-  async getByMemberId(dbConnection: DBConnection, memberId: string, visibility: boolean) {
+  async getByMemberId(
+    dbConnection: DBConnection,
+    memberId: string,
+    visibility: boolean,
+  ) {
     if (!memberId) {
       throw new MemberNotFound({ id: memberId });
     }
-    const memberProfile = await dbConnection.query.memberProfilesTable.findFirst({
-      where: and(
-        eq(memberProfilesTable.memberId, memberId),
-        eq(memberProfilesTable.visibility, visibility),
-      ),
-      with: { member: true },
-    });
+    const memberProfile =
+      await dbConnection.query.memberProfilesTable.findFirst({
+        where: and(
+          eq(memberProfilesTable.memberId, memberId),
+          eq(memberProfilesTable.visibility, visibility),
+        ),
+        with: { member: true },
+      });
 
     return memberProfile;
   }
 
-  async patch(dbConnection: DBConnection, memberId: string, data: Partial<IMemberProfile>) {
+  async patch(
+    dbConnection: DBConnection,
+    memberId: string,
+    data: Partial<IMemberProfile>,
+  ) {
     if (Object.values(data).length === 0) {
       throw new MemberProfilePropertiesEmpty();
     }

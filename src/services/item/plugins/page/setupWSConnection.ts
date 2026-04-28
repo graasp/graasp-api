@@ -7,16 +7,16 @@ import * as awarenessProtocol from 'y-protocols/awareness';
 import * as syncProtocol from 'y-protocols/sync';
 import * as Y from 'yjs';
 
-import { FastifyBaseLogger } from 'fastify';
+import type { FastifyBaseLogger } from 'fastify';
 
-import { db } from '../../../../drizzle/db';
-import { WSDoc } from './WSDoc';
+import { db } from '../../../../drizzle/db.js';
+import { WSDoc } from './WSDoc.js';
 import {
   MESSAGE_AWARENESS_CODE,
   MESSAGE_SYNC_CODE,
   PING_TIMEOUT,
-} from './constants';
-import { PageItemService } from './page.service';
+} from './constants.js';
+import { PageItemService } from './page.service.js';
 
 /**
  * In-memory storage of currently used yjs docs and readonly yjs docs

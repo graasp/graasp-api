@@ -3,25 +3,25 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { AppItemFactory } from '@graasp/sdk';
 
-import { MOCK_LOGGER } from '../../../../../test/app.vitest';
-import { ItemFactory } from '../../../../../test/factories/item.factory';
-import { db } from '../../../../drizzle/db';
-import type { ItemWithCreator } from '../../../../drizzle/types';
-import type { MinimalMember } from '../../../../types';
-import { ItemNotFound } from '../../../../utils/errors';
-import { AuthorizedItemService } from '../../../authorizedItem.service';
-import { ItemMembershipRepository } from '../../../itemMembership/membership.repository';
-import { ThumbnailService } from '../../../thumbnail/thumbnail.service';
-import { WrongItemTypeError } from '../../errors';
-import { ItemRepository } from '../../item.repository';
-import { PackedItemService } from '../../packedItem.dto';
-import { ItemGeolocationRepository } from '../geolocation/itemGeolocation.repository';
-import { ItemVisibilityRepository } from '../itemVisibility/itemVisibility.repository';
-import { ItemPublishedRepository } from '../publication/published/itemPublished.repository';
-import { MeiliSearchWrapper } from '../publication/published/plugins/search/meilisearch';
-import { RecycledBinService } from '../recycled/recycled.service';
-import { ItemThumbnailService } from '../thumbnail/itemThumbnail.service';
-import { FolderItemService } from './folder.service';
+import { MOCK_LOGGER } from '../../../../../test/app.vitest.js';
+import { ItemFactory } from '../../../../../test/factories/item.factory.js';
+import { db } from '../../../../drizzle/db.js';
+import type { ItemWithCreator } from '../../../../drizzle/types.js';
+import type { MinimalMember } from '../../../../types.js';
+import { ItemNotFound } from '../../../../utils/errors.js';
+import { AuthorizedItemService } from '../../../authorizedItem.service.js';
+import { ItemMembershipRepository } from '../../../itemMembership/membership.repository.js';
+import { ThumbnailService } from '../../../thumbnail/thumbnail.service.js';
+import { WrongItemTypeError } from '../../errors.js';
+import { ItemRepository } from '../../item.repository.js';
+import { PackedItemService } from '../../packedItem.dto.js';
+import { ItemGeolocationRepository } from '../geolocation/itemGeolocation.repository.js';
+import { ItemVisibilityRepository } from '../itemVisibility/itemVisibility.repository.js';
+import { ItemPublishedRepository } from '../publication/published/itemPublished.repository.js';
+import { MeiliSearchWrapper } from '../publication/published/plugins/search/meilisearch.js';
+import { RecycledBinService } from '../recycled/recycled.service.js';
+import { ItemThumbnailService } from '../thumbnail/itemThumbnail.service.js';
+import { FolderItemService } from './folder.service.js';
 
 const itemRepository = {
   getOneOrThrow: vi.fn(async () => {

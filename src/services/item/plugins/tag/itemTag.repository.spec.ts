@@ -4,15 +4,15 @@ import { afterAll, describe, expect, it } from 'vitest';
 
 import { FolderItemFactory, TagCategory, type TagCategoryType } from '@graasp/sdk';
 
-import { seedFromJson } from '../../../../../test/mocks/seed';
-import { db } from '../../../../drizzle/db';
-import { itemTagsTable, itemsRawTable, tagsTable } from '../../../../drizzle/schema';
-import type { ItemInsertDTO } from '../../../../drizzle/types';
-import { IllegalArgumentException } from '../../../../repositories/errors';
-import { assertIsDefined } from '../../../../utils/assertions';
-import { TAG_COUNT_MAX_RESULTS } from './constants';
-import { ItemTagAlreadyExists } from './errors';
-import { ItemTagRepository } from './itemTag.repository';
+import { seedFromJson } from '../../../../../test/mocks/seed.js';
+import { db } from '../../../../drizzle/db.js';
+import { itemTagsTable, itemsRawTable, tagsTable } from '../../../../drizzle/schema.js';
+import type { ItemInsertDTO } from '../../../../drizzle/types.js';
+import { IllegalArgumentException } from '../../../../repositories/errors.js';
+import { assertIsDefined } from '../../../../utils/assertions.js';
+import { TAG_COUNT_MAX_RESULTS } from './constants.js';
+import { ItemTagAlreadyExists } from './errors.js';
+import { ItemTagRepository } from './itemTag.repository.js';
 
 const repository = new ItemTagRepository();
 

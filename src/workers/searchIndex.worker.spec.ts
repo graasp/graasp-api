@@ -1,10 +1,10 @@
 import { Queue } from 'bullmq';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { REDIS_CONNECTION } from '../config/redis';
-import { Queues } from './config';
-import { SearchIndexService } from './searchIndex.service';
-import { SearchIndexWorker } from './searchIndex.worker';
+import { REDIS_CONNECTION } from '../config/redis.js';
+import { Queues } from './config.js';
+import { SearchIndexService } from './searchIndex.service.js';
+import { SearchIndexWorker } from './searchIndex.worker.js';
 
 // mock for the SearchIndexService
 const SearchIndexServiceMock = vi.fn();

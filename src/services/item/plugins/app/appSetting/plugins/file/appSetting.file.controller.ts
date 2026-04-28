@@ -1,31 +1,34 @@
 import { fastifyMultipart } from '@fastify/multipart';
 import type { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox';
 
-import { resolveDependency } from '../../../../../../../di/utils';
-import { type DBConnection, db } from '../../../../../../../drizzle/db';
-import { type AppSettingRaw } from '../../../../../../../drizzle/types';
-import type { MaybeUser } from '../../../../../../../types';
-import { asDefined } from '../../../../../../../utils/assertions';
+import { resolveDependency } from '../../../../../../../di/utils.js';
+import { type DBConnection, db } from '../../../../../../../drizzle/db.js';
+import { type AppSettingRaw } from '../../../../../../../drizzle/types.js';
+import type { MaybeUser } from '../../../../../../../types.js';
+import { asDefined } from '../../../../../../../utils/assertions.js';
 import {
   authenticateAppsJWT,
   guestAuthenticateAppsJWT,
-} from '../../../../../../auth/plugins/passport';
+} from '../../../../../../auth/plugins/passport/preHandlers.js';
 import {
   DownloadFileUnexpectedError,
   UploadEmptyFileError,
   UploadFileUnexpectedError,
-} from '../../../../../../file/utils/errors';
-import { DEFAULT_MAX_FILE_SIZE } from '../../../../file/utils/constants';
-import type { AppSettingService } from '../../appSetting.service';
-import { download, upload } from './appSetting.file.schema';
-import AppSettingFileService from './appSetting.file.service';
+} from '../../../../../../file/utils/errors.js';
+import { DEFAULT_MAX_FILE_SIZE } from '../../../../file/utils/constants.js';
+import type { AppSettingService } from '../../appSetting.service.js';
+import { download, upload } from './appSetting.file.schema.js';
+import AppSettingFileService from './appSetting.file.service.js';
 
 export interface GraaspPluginFileOptions {
   maxFileSize?: number; // max size for an uploaded file in bytes
   appSettingService: AppSettingService;
 }
 
-const basePlugin: FastifyPluginAsyncTypebox<GraaspPluginFileOptions> = async (fastify, options) => {
+const basePlugin: FastifyPluginAsyncTypebox<GraaspPluginFileOptions> = async (
+  fastify,
+  options,
+) => {
   const { maxFileSize = DEFAULT_MAX_FILE_SIZE, appSettingService } = options;
 
   const appSettingFileService = resolveDependency(AppSettingFileService);

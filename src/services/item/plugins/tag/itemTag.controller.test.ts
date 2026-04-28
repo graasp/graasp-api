@@ -10,10 +10,10 @@ import build, {
   clearDatabase,
   mockAuthenticate,
   unmockAuthenticate,
-} from '../../../../../test/app';
-import { seedFromJson } from '../../../../../test/mocks/seed';
-import { db } from '../../../../drizzle/db';
-import { assertIsDefined } from '../../../../utils/assertions';
+} from '../../../../../test/app.js';
+import { seedFromJson } from '../../../../../test/mocks/seed.js';
+import { db } from '../../../../drizzle/db.js';
+import { assertIsDefined } from '../../../../utils/assertions.js';
 
 // tag are global in whole database and can collide
 jest.retryTimes(3, { logErrorsBeforeRetry: true });

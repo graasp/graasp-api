@@ -13,14 +13,14 @@ import build, {
   clearDatabase,
   mockAuthenticate,
   unmockAuthenticate,
-} from '../../../../../test/app';
-import { seedFromJson } from '../../../../../test/mocks/seed';
-import { db } from '../../../../drizzle/db';
-import { itemsRawTable } from '../../../../drizzle/schema';
-import { assertIsDefined } from '../../../../utils/assertions';
-import { ITEMS_ROUTE_PREFIX, THUMBNAILS_ROUTE_PREFIX } from '../../../../utils/config';
-import { MemberCannotAccess } from '../../../../utils/errors';
-import { UploadFileNotImageError } from './errors';
+} from '../../../../../test/app.js';
+import { seedFromJson } from '../../../../../test/mocks/seed.js';
+import { db } from '../../../../drizzle/db.js';
+import { itemsRawTable } from '../../../../drizzle/schema.js';
+import { assertIsDefined } from '../../../../utils/assertions.js';
+import { ITEMS_ROUTE_PREFIX, THUMBNAILS_ROUTE_PREFIX } from '../../../../utils/config.js';
+import { MemberCannotAccess } from '../../../../utils/errors.js';
+import { UploadFileNotImageError } from './errors.js';
 
 const filepath = path.resolve(__dirname, './test/fixtures/image.png');
 const textPath = path.resolve(__dirname, './test/fixtures/emptyFile');

@@ -9,25 +9,29 @@ import { StatusCodes } from 'http-status-codes';
 import type { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox';
 import fp from 'fastify-plugin';
 
-import { resolveDependency } from '../../di/utils';
-import { db } from '../../drizzle/db';
-import type { FastifyInstanceTypebox } from '../../plugins/typebox';
-import { asDefined } from '../../utils/assertions';
-import { isAuthenticated, matchOne, optionalIsAuthenticated } from '../auth/plugins/passport';
-import { AuthorizedItemService } from '../authorizedItem.service';
-import { guestAccountRole } from '../itemLogin/strategies/guestAccountRole';
-import { validatedMemberAccountRole } from '../member/strategies/validatedMemberAccountRole';
+import { resolveDependency } from '../../di/utils.js';
+import { db } from '../../drizzle/db.js';
+import type { FastifyInstanceTypebox } from '../../plugins/typebox.js';
+import { asDefined } from '../../utils/assertions.js';
+import {
+  isAuthenticated,
+  matchOne,
+  optionalIsAuthenticated,
+} from '../auth/plugins/passport/preHandlers.js';
+import { AuthorizedItemService } from '../authorizedItem.service.js';
+import { guestAccountRole } from '../itemLogin/strategies/guestAccountRole.js';
+import { validatedMemberAccountRole } from '../member/strategies/validatedMemberAccountRole.js';
 import {
   clearChat,
   createChatMessage,
   deleteMessage,
   getChat,
   patchMessage,
-} from './chatMessage.schemas';
-import { ChatMessageService } from './chatMessage.service';
-import { ActionChatService } from './plugins/action/chatAction.service';
-import mentionPlugin from './plugins/mentions/chatMention.controller';
-import { ItemChatEvent, itemChatTopic } from './ws/events';
+} from './chatMessage.schemas.js';
+import { ChatMessageService } from './chatMessage.service.js';
+import { ActionChatService } from './plugins/action/chatAction.service.js';
+import mentionPlugin from './plugins/mentions/chatMention.controller.js';
+import { ItemChatEvent, itemChatTopic } from './ws/events.js';
 
 /**
  * Type definition for plugin options
@@ -36,7 +40,9 @@ export interface GraaspChatPluginOptions {
   prefix?: string;
 }
 
-const plugin: FastifyPluginAsyncTypebox<GraaspChatPluginOptions> = async (fastify) => {
+const plugin: FastifyPluginAsyncTypebox<GraaspChatPluginOptions> = async (
+  fastify,
+) => {
   await fastify.register(fp(mentionPlugin));
 
   const authorizedItemService = resolveDependency(AuthorizedItemService);
@@ -51,7 +57,10 @@ const plugin: FastifyPluginAsyncTypebox<GraaspChatPluginOptions> = async (fastif
     websockets.register(itemChatTopic, async (req) => {
       const { channel: itemId, member } = req;
       // item must exist with read permission, else exception is thrown
-      await authorizedItemService.assertAccessForItemId(db, { accountId: member?.id, itemId });
+      await authorizedItemService.assertAccessForItemId(db, {
+        accountId: member?.id,
+        itemId,
+      });
     });
 
     fastify.get(
@@ -66,7 +75,10 @@ const plugin: FastifyPluginAsyncTypebox<GraaspChatPluginOptions> = async (fastif
       '/:itemId/chat',
       {
         schema: createChatMessage,
-        preHandler: [isAuthenticated, matchOne(validatedMemberAccountRole, guestAccountRole)],
+        preHandler: [
+          isAuthenticated,
+          matchOne(validatedMemberAccountRole, guestAccountRole),
+        ],
       },
       async (request) => {
         const {
@@ -83,7 +95,11 @@ const plugin: FastifyPluginAsyncTypebox<GraaspChatPluginOptions> = async (fastif
 
         // websocket message
         try {
-          websockets.publish(itemChatTopic, message.itemId, ItemChatEvent('publish', message));
+          websockets.publish(
+            itemChatTopic,
+            message.itemId,
+            ItemChatEvent('publish', message),
+          );
         } catch (e) {
           request.log.error(e);
         }
@@ -100,7 +116,10 @@ const plugin: FastifyPluginAsyncTypebox<GraaspChatPluginOptions> = async (fastif
       '/:itemId/chat/:messageId',
       {
         schema: patchMessage,
-        preHandler: [isAuthenticated, matchOne(validatedMemberAccountRole, guestAccountRole)],
+        preHandler: [
+          isAuthenticated,
+          matchOne(validatedMemberAccountRole, guestAccountRole),
+        ],
       },
       async (request) => {
         const {
@@ -110,14 +129,24 @@ const plugin: FastifyPluginAsyncTypebox<GraaspChatPluginOptions> = async (fastif
         } = request;
         const message = await db.transaction(async (tx) => {
           const member = asDefined(user?.account);
-          const message = await chatService.patchOne(tx, member, itemId, messageId, body);
+          const message = await chatService.patchOne(
+            tx,
+            member,
+            itemId,
+            messageId,
+            body,
+          );
           await actionChatService.postPatchMessageAction(tx, request, message);
           return message;
         });
 
         // websocket message
         try {
-          websockets.publish(itemChatTopic, message.itemId, ItemChatEvent('update', message));
+          websockets.publish(
+            itemChatTopic,
+            message.itemId,
+            ItemChatEvent('update', message),
+          );
         } catch (e) {
           request.log.error(e);
         }
@@ -131,7 +160,10 @@ const plugin: FastifyPluginAsyncTypebox<GraaspChatPluginOptions> = async (fastif
       '/:itemId/chat/:messageId',
       {
         schema: deleteMessage,
-        preHandler: [isAuthenticated, matchOne(validatedMemberAccountRole, guestAccountRole)],
+        preHandler: [
+          isAuthenticated,
+          matchOne(validatedMemberAccountRole, guestAccountRole),
+        ],
       },
       async (request) => {
         const {
@@ -140,14 +172,23 @@ const plugin: FastifyPluginAsyncTypebox<GraaspChatPluginOptions> = async (fastif
         } = request;
         const member = asDefined(user?.account);
         const message = await db.transaction(async (tx) => {
-          const message = await chatService.deleteOne(tx, member, itemId, messageId);
+          const message = await chatService.deleteOne(
+            tx,
+            member,
+            itemId,
+            messageId,
+          );
           await actionChatService.postDeleteMessageAction(tx, request, message);
           return message;
         });
 
         // websocket message
         try {
-          websockets.publish(itemChatTopic, message.itemId, ItemChatEvent('delete', message));
+          websockets.publish(
+            itemChatTopic,
+            message.itemId,
+            ItemChatEvent('delete', message),
+          );
         } catch (e) {
           request.log.error(e);
         }

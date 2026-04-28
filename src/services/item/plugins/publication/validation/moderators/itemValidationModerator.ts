@@ -2,14 +2,14 @@ import { singleton } from 'tsyringe';
 
 import { ItemValidationReviewStatus, ItemValidationStatus } from '@graasp/sdk';
 
-import type { DBConnection } from '../../../../../../drizzle/db';
-import type { ItemValidationGroupRaw } from '../../../../../../drizzle/types';
-import type { ItemRaw } from '../../../../item';
-import { ProcessExecutionError } from '../errors';
-import { ItemValidationRepository } from '../itemValidation.repository';
-import { ItemValidationReviewRepository } from '../itemValidationReview.repository';
-import { StrategyExecutorFactory } from './strategyExecutorFactory';
-import type { StrategyExecutor } from './types';
+import type { DBConnection } from '../../../../../../drizzle/db.js';
+import type { ItemValidationGroupRaw } from '../../../../../../drizzle/types.js';
+import type { ItemRaw } from '../../../../item.js';
+import { ProcessExecutionError } from '../errors.js';
+import { ItemValidationRepository } from '../itemValidation.repository.js';
+import { ItemValidationReviewRepository } from '../itemValidationReview.repository.js';
+import { StrategyExecutorFactory } from './strategyExecutorFactory.js';
+import type { StrategyExecutor } from './types.js';
 
 @singleton()
 export class ItemValidationModerator {
@@ -35,18 +35,20 @@ export class ItemValidationModerator {
     // execute each process on item
     const results = (
       await Promise.all(
-        this.strategyExecutorFactory.createStrategyExecutors(item).map(async (strategyExecutor) => {
-          try {
-            return await this.executeValidationProcess(
-              dbConnection,
-              item,
-              itemValidationGroupId,
-              strategyExecutor,
-            );
-          } catch (error) {
-            throw new ProcessExecutionError(strategyExecutor.process, error);
-          }
-        }),
+        this.strategyExecutorFactory
+          .createStrategyExecutors(item)
+          .map(async (strategyExecutor) => {
+            try {
+              return await this.executeValidationProcess(
+                dbConnection,
+                item,
+                itemValidationGroupId,
+                strategyExecutor,
+              );
+            } catch (error) {
+              throw new ProcessExecutionError(strategyExecutor.process, error);
+            }
+          }),
       )
     ).filter((r): r is ItemValidationStatus => Boolean(r));
 
@@ -99,7 +101,10 @@ export class ItemValidationModerator {
     }
 
     // update item validation
-    await this.itemValidationRepository.patch(dbConnection, itemValidation.id, { result, status });
+    await this.itemValidationRepository.patch(dbConnection, itemValidation.id, {
+      result,
+      status,
+    });
 
     return status;
   }

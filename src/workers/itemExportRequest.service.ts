@@ -6,23 +6,23 @@ import { ZipFile } from 'yazl';
 
 import { type UnionOfConst } from '@graasp/sdk';
 
-import { type DBConnection } from '../drizzle/db';
-import type { MinimalAccount } from '../drizzle/types';
-import { TRANSLATIONS } from '../langs/constants';
-import { BaseLogger } from '../logger';
-import { MailBuilder } from '../plugins/mailer/builder';
-import { MailerService } from '../plugins/mailer/mailer.service';
-import { AuthorizedItemService } from '../services/authorizedItem.service';
-import FileService from '../services/file/file.service';
-import { ItemRaw, isFolderItem } from '../services/item/item';
-import { ItemService } from '../services/item/item.service';
-import { DESCRIPTION_EXTENSION } from '../services/item/plugins/importExport/constants';
-import { UnexpectedExportError } from '../services/item/plugins/importExport/errors';
-import { ItemExportService } from '../services/item/plugins/importExport/itemExport.service';
-import { MemberService } from '../services/member/member.service';
-import { MaybeUser, MinimalMember } from '../types';
-import { TMP_FOLDER } from '../utils/config';
-import { ItemExportRequestRepository } from './itemExportRequest.repository';
+import { type DBConnection } from '../drizzle/db.js';
+import type { MinimalAccount } from '../drizzle/types.js';
+import { TRANSLATIONS } from '../langs/constants.js';
+import { BaseLogger } from '../logger.js';
+import { MailBuilder } from '../plugins/mailer/builder.js';
+import { MailerService } from '../plugins/mailer/mailer.service.js';
+import { AuthorizedItemService } from '../services/authorizedItem.service.js';
+import FileService from '../services/file/file.service.js';
+import { type ItemRaw, isFolderItem } from '../services/item/item.js';
+import { ItemService } from '../services/item/item.service.js';
+import { DESCRIPTION_EXTENSION } from '../services/item/plugins/importExport/constants.js';
+import { UnexpectedExportError } from '../services/item/plugins/importExport/errors.js';
+import { ItemExportService } from '../services/item/plugins/importExport/itemExport.service.js';
+import { MemberService } from '../services/member/member.service.js';
+import type { MaybeUser, MinimalMember } from '../types.js';
+import { TMP_FOLDER } from '../utils/config.js';
+import { ItemExportRequestRepository } from './itemExportRequest.repository.js';
 
 const EXPORT_ITEM_EXPIRATION_DAYS = 7;
 const EXPORT_ITEM_EXPIRATION = 3600 * 24 * EXPORT_ITEM_EXPIRATION_DAYS; // max value: one week
@@ -71,7 +71,11 @@ export class ItemExportRequestService {
    * @param itemId item to be exported
    * @param memberId member that requested the export
    */
-  async exportFolderZipAndSendByEmail(db: DBConnection, itemId: string, memberId: string) {
+  async exportFolderZipAndSendByEmail(
+    db: DBConnection,
+    itemId: string,
+    memberId: string,
+  ) {
     const item = await this.authorizedItemService.getItemById(db, {
       itemId,
       accountId: memberId,
@@ -81,7 +85,13 @@ export class ItemExportRequestService {
     const member = await this.memberService.get(db, memberId);
     const memberInfo = member.toMemberInfo();
     const archive = await this.exportRaw(db, memberInfo, item);
-    await this.uploadAndSendDownloadLink(db, memberInfo, item, archive, ItemExportRequestType.Raw);
+    await this.uploadAndSendDownloadLink(
+      db,
+      memberInfo,
+      item,
+      archive,
+      ItemExportRequestType.Raw,
+    );
   }
 
   /**
@@ -108,12 +118,23 @@ export class ItemExportRequestService {
     type: ItemExportRequestTypeOptions,
   ) {
     // upload zip
-    const filepath = await this.uploadZip(dbConnection, actor, item, archive, type);
+    const filepath = await this.uploadZip(
+      dbConnection,
+      actor,
+      item,
+      archive,
+      type,
+    );
 
     // send email
     const fullMember = await this.memberService.get(dbConnection, actor.id);
     const memberWithEmail = fullMember.toMemberInfo();
-    await this.sendExportRawLinkInMail(memberWithEmail.email, memberWithEmail.lang, filepath, item);
+    await this.sendExportRawLinkInMail(
+      memberWithEmail.email,
+      memberWithEmail.lang,
+      filepath,
+      item,
+    );
   }
 
   /**
@@ -131,11 +152,14 @@ export class ItemExportRequestService {
     archive: ZipFile,
     type: ItemExportRequestTypeOptions,
   ) {
-    const request = await this.itemExportRequestRepository.create(dbConnection, {
-      memberId: actor.id,
-      itemId: item.id,
-      type,
-    });
+    const request = await this.itemExportRequestRepository.create(
+      dbConnection,
+      {
+        memberId: actor.id,
+        itemId: item.id,
+        type,
+      },
+    );
 
     const filepath = this.buildExportPath(request.id);
     const tmpFolder = path.join(TMP_FOLDER, 'item-export');
@@ -194,7 +218,11 @@ export class ItemExportRequestService {
     if (isFolderItem(item)) {
       // append description
       const folderPath = path.join(archiveRootPath, item.name);
-      const children = await this.itemService.getChildren(dbConnection, actor, item.id);
+      const children = await this.itemService.getChildren(
+        dbConnection,
+        actor,
+        item.id,
+      );
       const result = await Promise.all(
         children.map((child) =>
           this.addItemToZip(dbConnection, actor, {
@@ -212,7 +240,11 @@ export class ItemExportRequestService {
     }
 
     // save single item
-    const { stream, name } = await this.itemExportService.fetchItemData(dbConnection, actor, item);
+    const { stream, name } = await this.itemExportService.fetchItemData(
+      dbConnection,
+      actor,
+      item,
+    );
     return archive.addReadStream(stream, path.join(archiveRootPath, name));
   }
 
@@ -221,7 +253,11 @@ export class ItemExportRequestService {
    * @param item The root item
    * @returns A zip file promise
    */
-  private async exportRaw(dbConnection: DBConnection, actor: MinimalMember, item: ItemRaw) {
+  private async exportRaw(
+    dbConnection: DBConnection,
+    actor: MinimalMember,
+    item: ItemRaw,
+  ) {
     // init archive
     const archive = new ZipFile();
     archive.outputStream.on('error', function (err) {

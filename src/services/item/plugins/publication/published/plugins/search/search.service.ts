@@ -3,17 +3,17 @@ import { singleton } from 'tsyringe';
 
 import { TagCategory, type TagCategoryType, type UUID } from '@graasp/sdk';
 
-import type { TagRaw } from '../../../../../../../drizzle/types';
-import { BaseLogger } from '../../../../../../../logger';
+import type { TagRaw } from '../../../../../../../drizzle/types.js';
+import { BaseLogger } from '../../../../../../../logger.js';
 import {
   GET_FEATURED_ITEMS_MAXIMUM,
   GET_MOST_LIKED_ITEMS_MAXIMUM,
   GET_MOST_RECENT_ITEMS_MAXIMUM,
-} from '../../../../../../../utils/config';
-import { ItemService } from '../../../../../item.service';
-import { ItemThumbnailService } from '../../../../thumbnail/itemThumbnail.service';
-import { ItemPublishedService } from '../../itemPublished.service';
-import { MeiliSearchWrapper } from './meilisearch';
+} from '../../../../../../../utils/config.js';
+import { ItemService } from '../../../../../item.service.js';
+import { ItemThumbnailService } from '../../../../thumbnail/itemThumbnail.service.js';
+import { ItemPublishedService } from '../../itemPublished.service.js';
+import { MeiliSearchWrapper } from './meilisearch.js';
 
 type SearchFilters = Partial<{
   query?: string;
@@ -51,7 +51,12 @@ export class SearchService {
   }
 
   // User input needs escaping? Or safe to send to meilisearch? WARNING: search currently done with master key, but search is only exposed endpoint
-  private buildFilters({ tags, langs = [], isPublishedRoot = true, creatorId }: SearchFilters) {
+  private buildFilters({
+    tags,
+    langs = [],
+    isPublishedRoot = true,
+    creatorId,
+  }: SearchFilters) {
     // tags
     const tagCategoryFilters = Object.values(TagCategory).map((c) => {
       // escape quotes used for building the filter
@@ -61,7 +66,9 @@ export class SearchService {
     });
 
     // is published root
-    const isPublishedFilter = isPublishedRoot ? `isPublishedRoot = ${isPublishedRoot}` : '';
+    const isPublishedFilter = isPublishedRoot
+      ? `isPublishedRoot = ${isPublishedRoot}`
+      : '';
 
     // creator id
     const creatorIdFilter = creatorId ? `creator.id = '${creatorId}'` : '';
@@ -82,7 +89,10 @@ export class SearchService {
     return filters;
   }
 
-  async getFeatured(creatorId: string, limit: number = GET_FEATURED_ITEMS_MAXIMUM) {
+  async getFeatured(
+    creatorId: string,
+    limit: number = GET_FEATURED_ITEMS_MAXIMUM,
+  ) {
     return await this.search({
       creatorId,
       hitsPerPage: limit,
@@ -101,8 +111,19 @@ export class SearchService {
     return await this.search({ sort: ['publicationUpdatedAt:desc'], limit });
   }
 
-  async search(body: Omit<MultiSearchQuery, 'filter' | 'indexUid' | 'q'> & SearchFilters) {
-    const { tags, langs, isPublishedRoot, query, creatorId, limit, page, ...q } = body;
+  async search(
+    body: Omit<MultiSearchQuery, 'filter' | 'indexUid' | 'q'> & SearchFilters,
+  ) {
+    const {
+      tags,
+      langs,
+      isPublishedRoot,
+      query,
+      creatorId,
+      limit,
+      page,
+      ...q
+    } = body;
     // should allways use pagination arguments together
     // page + hitsPerPage
     // limit + offset
@@ -134,7 +155,8 @@ export class SearchService {
       ],
     };
 
-    const multiSearchResult = await this.meilisearchClient.search(updatedQueries);
+    const multiSearchResult =
+      await this.meilisearchClient.search(updatedQueries);
     const searchResult = multiSearchResult.results[0];
 
     // add thumbnails to search results
@@ -154,7 +176,10 @@ export class SearchService {
     return searchResult;
   }
 
-  async getFacets(facetName: string, body: SearchFilters & Pick<MultiSearchQuery, 'facets'>) {
+  async getFacets(
+    facetName: string,
+    body: SearchFilters & Pick<MultiSearchQuery, 'facets'>,
+  ) {
     const { langs, isPublishedRoot, query, tags } = body;
     const filters = this.buildFilters({
       tags,
@@ -185,13 +210,16 @@ export class SearchService {
   ) {
     // Update index when itemPublished changes ------------------------------------------
 
-    itemPublishedService.hooks.setPostHook('delete', async (member, db, { item }) => {
-      try {
-        await this.meilisearchClient.deleteOne(db, item);
-      } catch {
-        this.logger.error('Error during indexation, Meilisearch may be down');
-      }
-    });
+    itemPublishedService.hooks.setPostHook(
+      'delete',
+      async (member, db, { item }) => {
+        try {
+          await this.meilisearchClient.deleteOne(db, item);
+        } catch {
+          this.logger.error('Error during indexation, Meilisearch may be down');
+        }
+      },
+    );
 
     //Is the published item deleted automatically when the item is deleted?
   }

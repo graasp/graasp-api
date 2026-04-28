@@ -4,7 +4,7 @@ import fetch from 'node-fetch';
 
 import { DEFAULT_LANG } from '@graasp/sdk';
 
-import { type DBConnection } from '../../../../drizzle/db';
+import { type DBConnection } from '../../../../drizzle/db.js';
 import {
   isAncestorOrSelf,
   isDescendantOrSelf,
@@ -12,26 +12,19 @@ import {
   keywordSearch,
   tagSearch,
   transformLangToReconfigLang,
-} from '../../../../drizzle/operations';
-import {
-  accountsTable,
-  itemGeolocationsTable,
-  items,
-} from '../../../../drizzle/schema';
+} from '../../../../drizzle/operations.js';
+import { accountsTable, itemGeolocationsTable, items } from '../../../../drizzle/schema.js';
 import type {
   ItemGeolocationRaw,
   ItemGeolocationWithItem,
   ItemGeolocationWithItemWithCreator,
   MemberRaw,
-} from '../../../../drizzle/types';
-import type { MaybeUser } from '../../../../types';
-import { GEOLOCATION_API_HOST, getSearchLang } from '../../../../utils/config';
-import { isMember } from '../../../authentication';
-import { type ItemRaw, resolveItemType } from '../../item';
-import {
-  MissingGeolocationSearchParams,
-  PartialItemGeolocation,
-} from './errors';
+} from '../../../../drizzle/types.js';
+import type { MaybeUser } from '../../../../types.js';
+import { GEOLOCATION_API_HOST, getSearchLang } from '../../../../utils/config.js';
+import { isMember } from '../../../authentication.js';
+import { type ItemRaw, resolveItemType } from '../../item.js';
+import { MissingGeolocationSearchParams, PartialItemGeolocation } from './errors.js';
 
 export class ItemGeolocationRepository {
   /**
@@ -140,13 +133,8 @@ export class ItemGeolocationRepository {
       const keywordsString = allKeywords.join(' ');
 
       // gather distinct involved languages, from actor and item
-      const memberLang =
-        actor && isMember(actor) && actor.lang ? actor.lang : DEFAULT_LANG;
-      const langs = [
-        'simple',
-        transformLangToReconfigLang(items.lang),
-        getSearchLang(memberLang),
-      ];
+      const memberLang = actor && isMember(actor) && actor.lang ? actor.lang : DEFAULT_LANG;
+      const langs = ['simple', transformLangToReconfigLang(items.lang), getSearchLang(memberLang)];
 
       andConditions.push(
         or(
@@ -235,11 +223,7 @@ export class ItemGeolocationRepository {
   }
 
   async getAddressFromCoordinates(
-    {
-      lat,
-      lng,
-      lang = DEFAULT_LANG,
-    }: Pick<ItemGeolocationRaw, 'lat' | 'lng'> & { lang?: string },
+    { lat, lng, lang = DEFAULT_LANG }: Pick<ItemGeolocationRaw, 'lat' | 'lng'> & { lang?: string },
     key: string,
   ): Promise<{ addressLabel: string; country: string }> {
     const searchParams = new URLSearchParams({

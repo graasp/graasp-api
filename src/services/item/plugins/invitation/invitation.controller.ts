@@ -4,15 +4,19 @@ import { fastifyMultipart } from '@fastify/multipart';
 import type { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox';
 import fp from 'fastify-plugin';
 
-import { resolveDependency } from '../../../../di/utils';
-import { db } from '../../../../drizzle/db';
-import type { FastifyInstanceTypebox } from '../../../../plugins/typebox';
-import { isNonEmptyArray } from '../../../../types';
-import { asDefined } from '../../../../utils/assertions';
-import { isAuthenticated, matchOne, optionalIsAuthenticated } from '../../../auth/plugins/passport';
-import { assertIsMember } from '../../../authentication';
-import { memberAccountRole } from '../../../member/strategies/memberAccountRole';
-import { validatedMemberAccountRole } from '../../../member/strategies/validatedMemberAccountRole';
+import { resolveDependency } from '../../../../di/utils.js';
+import { db } from '../../../../drizzle/db.js';
+import type { FastifyInstanceTypebox } from '../../../../plugins/typebox.js';
+import { isNonEmptyArray } from '../../../../types.js';
+import { asDefined } from '../../../../utils/assertions.js';
+import {
+  isAuthenticated,
+  matchOne,
+  optionalIsAuthenticated,
+} from '../../../auth/plugins/passport/preHandlers.js';
+import { assertIsMember } from '../../../authentication.js';
+import { memberAccountRole } from '../../../member/strategies/memberAccountRole.js';
+import { validatedMemberAccountRole } from '../../../member/strategies/validatedMemberAccountRole.js';
 import {
   deleteOne,
   getById,
@@ -22,10 +26,13 @@ import {
   inviteFromCSVWithTemplate,
   sendOne,
   updateOne,
-} from './invitation.schema';
-import { InvitationService } from './invitation.service';
-import { MAX_FILE_SIZE } from './utils/constants';
-import { NoFileProvidedForInvitations, NoInvitationReceivedFound } from './utils/errors';
+} from './invitation.schema.js';
+import { InvitationService } from './invitation.service.js';
+import { MAX_FILE_SIZE } from './utils/constants.js';
+import {
+  NoFileProvidedForInvitations,
+  NoInvitationReceivedFound,
+} from './utils/errors.js';
 
 const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
   const invitationService = resolveDependency(InvitationService);
@@ -144,7 +151,12 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
         const { id: itemId } = params;
         await db.transaction(
           async (tx) =>
-            await invitationService.importUsersWithCSV(tx, member, itemId, uploadedFile),
+            await invitationService.importUsersWithCSV(
+              tx,
+              member,
+              itemId,
+              uploadedFile,
+            ),
         );
         reply.status(StatusCodes.NO_CONTENT);
       },

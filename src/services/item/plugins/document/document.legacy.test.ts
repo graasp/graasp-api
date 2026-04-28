@@ -9,12 +9,12 @@ import build, {
   clearDatabase,
   mockAuthenticate,
   unmockAuthenticate,
-} from '../../../../../test/app';
-import { seedFromJson } from '../../../../../test/mocks/seed';
-import { db } from '../../../../drizzle/db';
-import { itemMembershipsTable, itemsRawTable } from '../../../../drizzle/schema';
-import { assertIsDefined } from '../../../../utils/assertions';
-import { expectItem } from '../../test/fixtures/items';
+} from '../../../../../test/app.js';
+import { seedFromJson } from '../../../../../test/mocks/seed.js';
+import { db } from '../../../../drizzle/db.js';
+import { itemMembershipsTable, itemsRawTable } from '../../../../drizzle/schema.js';
+import { assertIsDefined } from '../../../../utils/assertions.js';
+import { expectItem } from '../../test/fixtures/items.js';
 
 const extra = {
   ['document']: {

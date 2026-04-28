@@ -1,4 +1,4 @@
-import type { AppActionRaw, AppDataRaw, AppSettingRaw } from '../../../../../drizzle/types';
+import type { AppActionRaw, AppDataRaw, AppSettingRaw } from '../../../../../drizzle/types.js';
 
 // changes on app entities
 export const appDataTopic = 'app-data';

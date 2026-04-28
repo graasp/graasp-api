@@ -2,15 +2,15 @@ import { singleton } from 'tsyringe';
 
 import { ClientManager, Context } from '@graasp/sdk';
 
-import { type DBConnection } from '../../../../drizzle/db';
-import { TRANSLATIONS } from '../../../../langs/constants';
-import { BaseLogger } from '../../../../logger';
-import { MailBuilder } from '../../../../plugins/mailer/builder';
-import { MailerService } from '../../../../plugins/mailer/mailer.service';
-import { AccountType, type MinimalMember } from '../../../../types';
-import { type ItemRaw } from '../../../item/item';
-import { ItemMembershipRepository } from '../../membership.repository';
-import { MembershipRequestRepository } from './membershipRequest.repository';
+import { type DBConnection } from '../../../../drizzle/db.js';
+import { TRANSLATIONS } from '../../../../langs/constants.js';
+import { BaseLogger } from '../../../../logger.js';
+import { MailBuilder } from '../../../../plugins/mailer/builder.js';
+import { MailerService } from '../../../../plugins/mailer/mailer.service.js';
+import { AccountType, type MinimalMember } from '../../../../types.js';
+import { type ItemRaw } from '../../../item/item.js';
+import { ItemMembershipRepository } from '../../membership.repository.js';
+import { MembershipRequestRepository } from './membershipRequest.repository.js';
 
 @singleton()
 export class MembershipRequestService {
@@ -32,19 +32,37 @@ export class MembershipRequestService {
   }
 
   async getAllByItem(dbConnection: DBConnection, itemId: string) {
-    return await this.membershipRequestRepository.getAllByItem(dbConnection, itemId);
+    return await this.membershipRequestRepository.getAllByItem(
+      dbConnection,
+      itemId,
+    );
   }
 
   async get(dbConnection: DBConnection, memberId: string, itemId: string) {
-    return await this.membershipRequestRepository.get(dbConnection, memberId, itemId);
+    return await this.membershipRequestRepository.get(
+      dbConnection,
+      memberId,
+      itemId,
+    );
   }
 
   async post(dbConnection: DBConnection, memberId: string, itemId: string) {
-    return await this.membershipRequestRepository.post(dbConnection, memberId, itemId);
+    return await this.membershipRequestRepository.post(
+      dbConnection,
+      memberId,
+      itemId,
+    );
   }
 
-  async notifyAdmins(dbConnection: DBConnection, member: MinimalMember, item: ItemRaw) {
-    const admins = await this.itemMembershipRepository.getAdminsForItem(dbConnection, item.path);
+  async notifyAdmins(
+    dbConnection: DBConnection,
+    member: MinimalMember,
+    item: ItemRaw,
+  ) {
+    const admins = await this.itemMembershipRepository.getAdminsForItem(
+      dbConnection,
+      item.path,
+    );
 
     const link = ClientManager.getInstance().getLinkByContext(
       Context.Builder,
@@ -76,12 +94,22 @@ export class MembershipRequestService {
         .build();
 
       this.mailerService.send(mail, admin.email!).catch((err) => {
-        this.log.error(`mailerService failed with ${err.message}. shared link: ${link}`);
+        this.log.error(
+          `mailerService failed with ${err.message}. shared link: ${link}`,
+        );
       });
     }
   }
 
-  async deleteOne(dbConnection: DBConnection, memberId: string, itemId: string) {
-    return await this.membershipRequestRepository.deleteOne(dbConnection, memberId, itemId);
+  async deleteOne(
+    dbConnection: DBConnection,
+    memberId: string,
+    itemId: string,
+  ) {
+    return await this.membershipRequestRepository.deleteOne(
+      dbConnection,
+      memberId,
+      itemId,
+    );
   }
 }

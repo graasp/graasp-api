@@ -3,10 +3,14 @@ import sharp, { type Sharp } from 'sharp';
 import { Readable } from 'stream';
 import { injectable } from 'tsyringe';
 
-import { BaseLogger } from '../../logger';
-import type { AuthenticatedUser } from '../../types';
-import FileService from '../file/file.service';
-import { THUMBNAIL_FORMAT, THUMBNAIL_MIMETYPE, ThumbnailSizeFormat } from './constants';
+import { BaseLogger } from '../../logger.js';
+import type { AuthenticatedUser } from '../../types.js';
+import FileService from '../file/file.service.js';
+import {
+  THUMBNAIL_FORMAT,
+  THUMBNAIL_MIMETYPE,
+  ThumbnailSizeFormat,
+} from './constants.js';
 
 export const AVATAR_THUMBNAIL_PREFIX = 'avatars';
 export const ITEM_THUMBNAIL_PREFIX = 'thumbnails';
@@ -73,16 +77,29 @@ export class ThumbnailService {
     }
   }
 
-  async upload(authenticatedUser: AuthenticatedUser, id: string, file: Readable) {
+  async upload(
+    authenticatedUser: AuthenticatedUser,
+    id: string,
+    file: Readable,
+  ) {
     // pipe incoming file into a sharp instance for further clone
     const image = sharp();
     file.pipe(image);
 
     // prepare pipelines per size
-    const pipelines = Object.entries(ThumbnailSizeFormat).map(([sizeName, width]) => {
-      const transform = image.clone().resize({ width }).toFormat(THUMBNAIL_FORMAT);
-      return { transform, filepath: this.buildFilePath(id, sizeName), sizeName };
-    });
+    const pipelines = Object.entries(ThumbnailSizeFormat).map(
+      ([sizeName, width]) => {
+        const transform = image
+          .clone()
+          .resize({ width })
+          .toFormat(THUMBNAIL_FORMAT);
+        return {
+          transform,
+          filepath: this.buildFilePath(id, sizeName),
+          sizeName,
+        };
+      },
+    );
 
     const listeners = this.attachListeners(image, file);
     try {

@@ -5,20 +5,20 @@ import waitForExpect from 'wait-for-expect';
 
 import type { FastifyInstance } from 'fastify';
 
-import build, { clearDatabase, mockAuthenticate } from '../../../../../../test/app';
-import { seedFromJson } from '../../../../../../test/mocks/seed';
-import { resolveDependency } from '../../../../../di/utils';
-import { db } from '../../../../../drizzle/db';
-import { isDirectChild } from '../../../../../drizzle/operations';
-import { itemsRawTable } from '../../../../../drizzle/schema';
-import { assertIsDefined } from '../../../../../utils/assertions';
-import type { H5PItem } from '../../../item';
-import { HtmlImportError } from '../errors';
-import { H5P_FILE_DOT_EXTENSION } from './constants';
-import { H5PInvalidManifestError } from './errors';
-import { H5PService } from './h5p.service';
-import { H5P_PACKAGES } from './test/fixtures';
-import { injectH5PImport } from './test/helpers';
+import build, { clearDatabase, mockAuthenticate } from '../../../../../../test/app.js';
+import { seedFromJson } from '../../../../../../test/mocks/seed.js';
+import { resolveDependency } from '../../../../../di/utils.js';
+import { db } from '../../../../../drizzle/db.js';
+import { isDirectChild } from '../../../../../drizzle/operations.js';
+import { itemsRawTable } from '../../../../../drizzle/schema.js';
+import { assertIsDefined } from '../../../../../utils/assertions.js';
+import type { H5PItem } from '../../../item.js';
+import { HtmlImportError } from '../errors.js';
+import { H5P_FILE_DOT_EXTENSION } from './constants.js';
+import { H5PInvalidManifestError } from './errors.js';
+import { H5PService } from './h5p.service.js';
+import { H5P_PACKAGES } from './test/fixtures.js';
+import { injectH5PImport } from './test/helpers.js';
 
 const deleteObjectsMock = jest.fn(async () => console.debug('deleteObjects'));
 const copyObjectMock = jest.fn(async () => console.debug('copyObjectMock'));

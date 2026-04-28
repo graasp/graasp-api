@@ -3,9 +3,9 @@ import { StatusCodes } from 'http-status-codes';
 
 import type { FastifySchema } from 'fastify';
 
-import { customType, registerSchemaAsRef } from '../../../../plugins/typebox';
-import { errorSchemaRef } from '../../../../schemas/global';
-import { packedItemSchemaRef } from '../../item.schemas.packed';
+import { customType, registerSchemaAsRef } from '../../../../plugins/typebox.js';
+import { errorSchemaRef } from '../../../../schemas/global.js';
+import { packedItemSchemaRef } from '../../item.schemas.packed.js';
 
 const packedBookmarkSchema = customType.StrictObject(
   {

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { toBoolean } from './helpers';
+import { toBoolean } from './helpers.js';
 
 describe('toBoolean', () => {
   it('undefined value', () => {

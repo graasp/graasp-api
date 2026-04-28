@@ -5,10 +5,13 @@ import type { FastifySchema } from 'fastify';
 
 import { DocumentItemExtraFlavor } from '@graasp/sdk';
 
-import { customType, registerSchemaAsRef } from '../../../../plugins/typebox';
-import { errorSchemaRef } from '../../../../schemas/global';
-import { itemCommonSchema } from '../../common.schemas';
-import { geoCoordinateSchemaRef } from '../geolocation/itemGeolocation.schemas';
+import {
+  customType,
+  registerSchemaAsRef,
+} from '../../../../plugins/typebox.js';
+import { errorSchemaRef } from '../../../../schemas/global.js';
+import { itemCommonSchema } from '../../common.schemas.js';
+import { geoCoordinateSchemaRef } from '../geolocation/geolocation.schema.js';
 
 const documentItemSchema = Type.Composite(
   [
@@ -21,7 +24,9 @@ const documentItemSchema = Type.Composite(
           flavor: Type.Optional(
             Type.Union([
               Type.Enum(DocumentItemExtraFlavor),
-              ...Object.values(DocumentItemExtraFlavor).map((f) => Type.Literal(f.toString())),
+              ...Object.values(DocumentItemExtraFlavor).map((f) =>
+                Type.Literal(f.toString()),
+              ),
             ]),
           ),
           isRaw: Type.Optional(Type.Boolean()),
@@ -45,15 +50,21 @@ export const createDocument = {
   operationId: 'createDocument',
   tags: ['item', 'document'],
   summary: 'Create document',
-  description: 'Create document with given payload. The content will be sanitized.',
+  description:
+    'Create document with given payload. The content will be sanitized.',
 
   querystring: Type.Partial(
-    customType.StrictObject({ parentId: customType.UUID(), previousItemId: customType.UUID() }),
+    customType.StrictObject({
+      parentId: customType.UUID(),
+      previousItemId: customType.UUID(),
+    }),
   ),
   body: Type.Composite(
     [
       Type.Pick(documentItemSchema, ['name']),
-      Type.Partial(Type.Pick(documentItemSchema, ['description', 'lang', 'settings'])),
+      Type.Partial(
+        Type.Pick(documentItemSchema, ['description', 'lang', 'settings']),
+      ),
       customType.StrictObject({
         content: Type.String({ minLength: 1 }),
         flavor: Type.Optional(Type.Union([Type.Enum(DocumentItemExtraFlavor)])),
@@ -80,7 +91,12 @@ export const updateDocument = {
   }),
   body: Type.Partial(
     Type.Composite([
-      Type.Pick(documentItemSchema, ['name', 'description', 'lang', 'settings']),
+      Type.Pick(documentItemSchema, [
+        'name',
+        'description',
+        'lang',
+        'settings',
+      ]),
       customType.StrictObject({
         content: Type.String({ minLength: 1 }),
         flavor: Type.Optional(Type.Union([Type.Enum(DocumentItemExtraFlavor)])),

@@ -1,22 +1,25 @@
 import { fastifyMultipart } from '@fastify/multipart';
 import type { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox';
 
-import { resolveDependency } from '../../../../di/utils';
-import { db } from '../../../../drizzle/db';
-import type { FastifyInstanceTypebox } from '../../../../plugins/typebox';
-import { asDefined } from '../../../../utils/assertions';
-import { isAuthenticated, matchOne } from '../../../auth/plugins/passport';
-import { assertIsMember } from '../../../authentication';
-import { validatedMemberAccountRole } from '../../../member/strategies/validatedMemberAccountRole';
-import { getPostItemPayloadFromFormData } from '../../utils';
-import { ItemActionService } from '../action/itemAction.service';
+import { resolveDependency } from '../../../../di/utils.js';
+import { db } from '../../../../drizzle/db.js';
+import type { FastifyInstanceTypebox } from '../../../../plugins/typebox.js';
+import { asDefined } from '../../../../utils/assertions.js';
+import {
+  isAuthenticated,
+  matchOne,
+} from '../../../auth/plugins/passport/preHandlers.js';
+import { assertIsMember } from '../../../authentication.js';
+import { validatedMemberAccountRole } from '../../../member/strategies/validatedMemberAccountRole.js';
+import { getPostItemPayloadFromFormData } from '../../utils.js';
+import { ItemActionService } from '../action/itemAction.service.js';
 import {
   convertFolderToCapsule,
   createFolder,
   createFolderWithThumbnail,
   updateFolder,
-} from './folder.schemas';
-import { FolderItemService } from './folder.service';
+} from './folder.schemas.js';
+import { FolderItemService } from './folder.service.js';
 
 const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
   const folderItemService = resolveDependency(FolderItemService);

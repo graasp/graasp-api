@@ -2,13 +2,13 @@ import { and, eq, inArray } from 'drizzle-orm/sql';
 
 import type { ResultOf } from '@graasp/sdk';
 
-import type { DBConnection } from '../../../../../drizzle/db';
-import { appActionsTable } from '../../../../../drizzle/schema';
-import type { AppActionWithItemAndAccount } from '../../../../../drizzle/types';
-import { IllegalArgumentException } from '../../../../../repositories/errors';
-import { mapById } from '../../../../utils';
-import type { ManyItemsGetFilter, SingleItemGetFilter } from '../interfaces/request';
-import type { InputAppAction } from './appAction.interface';
+import type { DBConnection } from '../../../../../drizzle/db.js';
+import { appActionsTable } from '../../../../../drizzle/schema.js';
+import type { AppActionWithItemAndAccount } from '../../../../../drizzle/types.js';
+import { IllegalArgumentException } from '../../../../../repositories/errors.js';
+import { mapById } from '../../../../utils.js';
+import type { ManyItemsGetFilter, SingleItemGetFilter } from '../interfaces/request.js';
+import type { InputAppAction } from './appAction.interface.js';
 
 type CreateAppActionBody = {
   appAction: InputAppAction;

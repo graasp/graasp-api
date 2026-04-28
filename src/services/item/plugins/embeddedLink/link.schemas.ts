@@ -3,10 +3,13 @@ import { StatusCodes } from 'http-status-codes';
 
 import type { FastifySchema } from 'fastify';
 
-import { customType, registerSchemaAsRef } from '../../../../plugins/typebox';
-import { errorSchemaRef } from '../../../../schemas/global';
-import { itemCommonSchema, settingsSchema } from '../../common.schemas';
-import { geoCoordinateSchemaRef } from '../geolocation/itemGeolocation.schemas';
+import {
+  customType,
+  registerSchemaAsRef,
+} from '../../../../plugins/typebox.js';
+import { errorSchemaRef } from '../../../../schemas/global.js';
+import { itemCommonSchema, settingsSchema } from '../../common.schemas.js';
+import { geoCoordinateSchemaRef } from '../geolocation/geolocation.schema.js';
 
 const linkSettingsSchema = customType.StrictObject({
   showLinkIframe: Type.Optional(Type.Boolean()),
@@ -35,7 +38,8 @@ const linkItemSchema = Type.Composite(
   ],
   {
     title: 'Embedded Link',
-    description: 'Item of type embedded link, represents a resource to an external website.',
+    description:
+      'Item of type embedded link, represents a resource to an external website.',
   },
 );
 
@@ -51,7 +55,9 @@ export const getLinkMetadata = {
   summary: 'Get metadata information from iframely for given url',
   description: 'Get metadata information from iframely for given url.',
 
-  querystring: customType.StrictObject({ link: Type.String({ format: 'uri-reference' }) }),
+  querystring: customType.StrictObject({
+    link: Type.String({ format: 'uri-reference' }),
+  }),
 
   response: {
     [StatusCodes.OK]: customType.StrictObject({
@@ -73,11 +79,16 @@ export const createLink = {
   description: 'Create link.',
 
   querystring: Type.Partial(
-    customType.StrictObject({ parentId: customType.UUID(), previousItemId: customType.UUID() }),
+    customType.StrictObject({
+      parentId: customType.UUID(),
+      previousItemId: customType.UUID(),
+    }),
   ),
   body: Type.Composite([
     Type.Pick(linkItemSchema, ['name']),
-    Type.Partial(Type.Pick(linkItemSchema, ['description', 'lang', 'settings'])),
+    Type.Partial(
+      Type.Pick(linkItemSchema, ['description', 'lang', 'settings']),
+    ),
 
     // link flat config
     // uri is stricter than uri-reference
@@ -87,7 +98,10 @@ export const createLink = {
       geolocation: Type.Optional(geoCoordinateSchemaRef),
     }),
   ]),
-  response: { [StatusCodes.OK]: embeddedLinkItemSchemaRef, '4xx': errorSchemaRef },
+  response: {
+    [StatusCodes.OK]: embeddedLinkItemSchemaRef,
+    '4xx': errorSchemaRef,
+  },
 } as const satisfies FastifySchema;
 
 export const updateLink = {
@@ -112,5 +126,8 @@ export const updateLink = {
     ),
     { minProperties: 1 },
   ),
-  response: { [StatusCodes.OK]: embeddedLinkItemSchemaRef, '4xx': errorSchemaRef },
+  response: {
+    [StatusCodes.OK]: embeddedLinkItemSchemaRef,
+    '4xx': errorSchemaRef,
+  },
 } as const satisfies FastifySchema;

@@ -2,11 +2,11 @@ import { StatusCodes } from 'http-status-codes';
 
 import type { FastifyInstance } from 'fastify';
 
-import build, { clearDatabase, mockAuthenticate } from '../../../test/app';
-import { seedFromJson } from '../../../test/mocks/seed';
-import { db } from '../../drizzle/db';
-import { assertIsDefined } from '../../utils/assertions';
-import { assertIsMemberForTest } from '../authentication';
+import build, { clearDatabase, mockAuthenticate } from '../../../test/app.js';
+import { seedFromJson } from '../../../test/mocks/seed.js';
+import { db } from '../../drizzle/db.js';
+import { assertIsDefined } from '../../utils/assertions.js';
+import { assertIsMemberForTest } from '../authentication.js';
 
 describe('Item controller', () => {
   let app: FastifyInstance;

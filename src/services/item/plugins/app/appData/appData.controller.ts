@@ -3,22 +3,32 @@ import type { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox';
 
 import { AppDataVisibility } from '@graasp/sdk';
 
-import { resolveDependency } from '../../../../../di/utils';
-import { db } from '../../../../../drizzle/db';
-import type { FastifyInstanceTypebox } from '../../../../../plugins/typebox';
-import { asDefined } from '../../../../../utils/assertions';
-import { authenticateAppsJWT, guestAuthenticateAppsJWT } from '../../../../auth/plugins/passport';
-import { AuthorizedItemService } from '../../../../authorizedItem.service';
+import { resolveDependency } from '../../../../../di/utils.js';
+import { db } from '../../../../../drizzle/db.js';
+import type { FastifyInstanceTypebox } from '../../../../../plugins/typebox.js';
+import { asDefined } from '../../../../../utils/assertions.js';
+import {
+  authenticateAppsJWT,
+  guestAuthenticateAppsJWT,
+} from '../../../../auth/plugins/passport/preHandlers.js';
+import { AuthorizedItemService } from '../../../../authorizedItem.service.js';
 import {
   DownloadFileUnexpectedError,
   UploadEmptyFileError,
   UploadFileUnexpectedError,
-} from '../../../../file/utils/errors';
-import { addMemberInAppData } from '../legacy';
-import { AppDataEvent, appDataTopic } from '../ws/events';
-import { checkItemIsApp } from '../ws/utils';
-import { create, deleteOne, download, getForOne, updateOne, upload } from './appData.schemas';
-import { AppDataService } from './appData.service';
+} from '../../../../file/utils/errors.js';
+import { addMemberInAppData } from '../legacy.js';
+import { AppDataEvent, appDataTopic } from '../ws/events.js';
+import { checkItemIsApp } from '../ws/utils.js';
+import {
+  create,
+  deleteOne,
+  download,
+  getForOne,
+  updateOne,
+  upload,
+} from './appData.schemas.js';
+import { AppDataService } from './appData.service.js';
 
 export const DEFAULT_MAX_FILE_SIZE = 1024 * 1024 * 1024; // 1GB
 
@@ -70,7 +80,11 @@ const appDataPlugin: FastifyPluginAsyncTypebox = async (fastify) => {
 
         const completeAppData = addMemberInAppData(appData);
         if (appData.visibility === AppDataVisibility.Item) {
-          websockets.publish(appDataTopic, itemId, AppDataEvent('post', completeAppData));
+          websockets.publish(
+            appDataTopic,
+            itemId,
+            AppDataEvent('post', completeAppData),
+          );
         }
         return completeAppData;
       },
@@ -83,11 +97,21 @@ const appDataPlugin: FastifyPluginAsyncTypebox = async (fastify) => {
       async ({ user, params: { itemId, id: appDataId }, body }) => {
         const member = asDefined(user?.account);
         const appData = await db.transaction(async (tx) => {
-          return await appDataService.patch(tx, member, itemId, appDataId, body);
+          return await appDataService.patch(
+            tx,
+            member,
+            itemId,
+            appDataId,
+            body,
+          );
         });
         const completeAppData = addMemberInAppData(appData);
         if (appData.visibility === AppDataVisibility.Item) {
-          websockets.publish(appDataTopic, itemId, AppDataEvent('patch', completeAppData));
+          websockets.publish(
+            appDataTopic,
+            itemId,
+            AppDataEvent('patch', completeAppData),
+          );
         }
         return completeAppData;
       },
@@ -100,11 +124,20 @@ const appDataPlugin: FastifyPluginAsyncTypebox = async (fastify) => {
       async ({ user, params: { itemId, id: appDataId } }) => {
         const member = asDefined(user?.account);
         const appData = await db.transaction(async (tx) => {
-          const appData = await appDataService.deleteOne(tx, member, itemId, appDataId);
+          const appData = await appDataService.deleteOne(
+            tx,
+            member,
+            itemId,
+            appDataId,
+          );
           return appData;
         });
         if (appData.visibility === AppDataVisibility.Item) {
-          websockets.publish(appDataTopic, itemId, AppDataEvent('delete', appData));
+          websockets.publish(
+            appDataTopic,
+            itemId,
+            AppDataEvent('delete', appData),
+          );
         }
         return appData.id;
       },
@@ -116,7 +149,12 @@ const appDataPlugin: FastifyPluginAsyncTypebox = async (fastify) => {
       { schema: getForOne, preHandler: authenticateAppsJWT },
       async ({ user, params: { itemId }, query }) => {
         const member = asDefined(user?.account);
-        const appData = await appDataService.getForItem(db, member, itemId, query.type);
+        const appData = await appDataService.getForItem(
+          db,
+          member,
+          itemId,
+          query.type,
+        );
         return appData.map(addMemberInAppData);
       },
     );
@@ -141,7 +179,9 @@ const appDataPlugin: FastifyPluginAsyncTypebox = async (fastify) => {
             if (!file) {
               throw new UploadEmptyFileError();
             }
-            return addMemberInAppData(await appDataService.upload(tx, member, file, app.item));
+            return addMemberInAppData(
+              await appDataService.upload(tx, member, file, app.item),
+            );
           })
           .catch((e) => {
             fastify.log.error(e);
@@ -170,13 +210,15 @@ const appDataPlugin: FastifyPluginAsyncTypebox = async (fastify) => {
         const member = asDefined(user?.account);
         const app = asDefined(user?.app);
 
-        return appDataService.download(db, member, { item: app.item, appDataId }).catch((e) => {
-          fastify.log.error(e);
-          if (e.code) {
-            throw e;
-          }
-          throw new DownloadFileUnexpectedError(e);
-        });
+        return appDataService
+          .download(db, member, { item: app.item, appDataId })
+          .catch((e) => {
+            fastify.log.error(e);
+            if (e.code) {
+              throw e;
+            }
+            throw new DownloadFileUnexpectedError(e);
+          });
       },
     );
   });

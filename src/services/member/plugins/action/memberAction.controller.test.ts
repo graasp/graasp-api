@@ -4,9 +4,9 @@ import type { FastifyInstance } from 'fastify';
 
 import { HttpMethod } from '@graasp/sdk';
 
-import build, { mockAuthenticate } from '../../../../../test/app';
-import { seedFromJson } from '../../../../../test/mocks/seed';
-import { assertIsDefined } from '../../../../utils/assertions';
+import build, { mockAuthenticate } from '../../../../../test/app.js';
+import { seedFromJson } from '../../../../../test/mocks/seed.js';
+import { assertIsDefined } from '../../../../utils/assertions.js';
 
 export const getDateBeforeOrAfterNow = (dateDiff: number) => {
   const date = new Date(); // Today's date

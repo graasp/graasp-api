@@ -5,14 +5,17 @@ import type { FastifyRequest } from 'fastify';
 
 import { ClientManager } from '@graasp/sdk';
 
-import { type DBConnection } from '../../drizzle/db';
-import { BaseLogger } from '../../logger';
-import { AccountType, type MaybeUser } from '../../types';
-import type { ItemRaw } from '../item/item';
-import { View, ViewOptions } from '../item/plugins/action/itemAction.schemas';
-import { MemberRepository } from '../member/member.repository';
-import { ActionRepository } from './action.repository';
-import { getGeolocationIp } from './utils/actions';
+import { type DBConnection } from '../../drizzle/db.js';
+import { BaseLogger } from '../../logger.js';
+import { AccountType, type MaybeUser } from '../../types.js';
+import type { ItemRaw } from '../item/item.js';
+import {
+  View,
+  type ViewOptions,
+} from '../item/plugins/action/itemAction.schemas.js';
+import { MemberRepository } from '../member/member.repository.js';
+import { ActionRepository } from './action.repository.js';
+import { getGeolocationIp } from './utils/actions.js';
 
 @singleton()
 export class ActionService {

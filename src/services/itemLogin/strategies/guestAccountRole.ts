@@ -1,6 +1,6 @@
-import type { RessourceAuthorizationStrategy } from '../../auth/plugins/passport';
-import { isGuest } from '../../authentication';
-import { NotGuest } from '../errors';
+import type { RessourceAuthorizationStrategy } from '../../auth/plugins/passport/preHandlers.js';
+import { isGuest } from '../../authentication.js';
+import { NotGuest } from '../errors.js';
 
 /**
  * Strategy to check if user is a Guest Account.

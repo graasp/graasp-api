@@ -1,21 +1,26 @@
 import { Queue } from 'bullmq';
 import { SQL, count, eq } from 'drizzle-orm';
-import { EnqueuedTask, Index, MeiliSearch, type MultiSearchParams } from 'meilisearch';
+import {
+  EnqueuedTask,
+  Index,
+  MeiliSearch,
+  type MultiSearchParams,
+} from 'meilisearch';
 import { singleton } from 'tsyringe';
 
 import { type IndexItem } from '@graasp/sdk';
 
-import { REDIS_CONNECTION } from '../../../../../../../config/redis';
-import { type DBConnection } from '../../../../../../../drizzle/db';
-import { items } from '../../../../../../../drizzle/schema';
-import type { ItemPublishedWithItemWithCreator } from '../../../../../../../drizzle/types';
-import { BaseLogger } from '../../../../../../../logger';
-import { ItemType } from '../../../../../../../schemas/global';
-import { Queues } from '../../../../../../../workers/config';
-import { ItemRaw, isFolderItem } from '../../../../../item';
-import { ItemRepository } from '../../../../../item.repository';
-import { MeilisearchRepository } from './meilisearch.repository';
-import type { Hit } from './search.schemas';
+import { REDIS_CONNECTION } from '../../../../../../../config/redis.js';
+import { type DBConnection } from '../../../../../../../drizzle/db.js';
+import { items } from '../../../../../../../drizzle/schema.js';
+import type { ItemPublishedWithItemWithCreator } from '../../../../../../../drizzle/types.js';
+import { BaseLogger } from '../../../../../../../logger.js';
+import type { ItemType } from '../../../../../../../schemas/global.js';
+import { Queues } from '../../../../../../../workers/config.js';
+import { type ItemRaw, isFolderItem } from '../../../../../item.js';
+import { ItemRepository } from '../../../../../item.repository.js';
+import { MeilisearchRepository } from './meilisearch.repository.js';
+import type { Hit } from './search.schemas.js';
 
 export const ACTIVE_INDEX = 'itemIndex';
 export const ROTATING_INDEX = 'itemIndex_tmp'; // Used when reindexing
@@ -56,7 +61,9 @@ export class MeiliSearchWrapper {
 
   private async logTaskCompletion(task: EnqueuedTask, itemName: string) {
     try {
-      const finishedTask = await (await this.getIndex()).waitForTask(task.taskUid);
+      const finishedTask = await (
+        await this.getIndex()
+      ).waitForTask(task.taskUid);
       this.logger.info(
         `Meilisearch ${task.type} task completed (${task.status}): item name => ${itemName}. ${
           finishedTask.error ? `Error: ${finishedTask.error}` : ''
@@ -75,7 +82,9 @@ export class MeiliSearchWrapper {
    * We need a Index object to do operations on meilisearch indices, but we get the index with an API call
    * This method wraps getting an Index, and stores it in a local dictionary, so we don't need to call the API again
    */
-  private async getIndex(name: AllowedIndices = ACTIVE_INDEX): Promise<Index<IndexItem>> {
+  private async getIndex(
+    name: AllowedIndices = ACTIVE_INDEX,
+  ): Promise<Index<IndexItem>> {
     if (this.indexDictionary[name]) {
       return this.indexDictionary[name];
     }
@@ -130,7 +139,10 @@ export class MeiliSearchWrapper {
       let documents: IndexItem[] = [];
       for (const { itemPath } of manyItemPublished) {
         documents = documents.concat(
-          await this.meilisearchRepository.getIndexedTree(dbConnection, itemPath),
+          await this.meilisearchRepository.getIndexedTree(
+            dbConnection,
+            itemPath,
+          ),
         );
       }
       const index = await this.getIndex(targetIndex);
@@ -145,7 +157,9 @@ export class MeiliSearchWrapper {
 
       return indexingTask;
     } catch (err) {
-      this.logger.error('There was a problem adding items to meilisearch ' + err);
+      this.logger.error(
+        'There was a problem adding items to meilisearch ' + err,
+      );
       throw err;
     }
   }
@@ -160,10 +174,14 @@ export class MeiliSearchWrapper {
       }
 
       const documentIds = itemsToIndex.map((i) => i.id);
-      const indexingTask = await (await this.getIndex()).deleteDocuments(documentIds);
+      const indexingTask = await (
+        await this.getIndex()
+      ).deleteDocuments(documentIds);
       this.logTaskCompletion(indexingTask, item.name);
     } catch (err) {
-      this.logger.error(`There was a problem adding item ${item.id} to meilisearch: ${err}`);
+      this.logger.error(
+        `There was a problem adding item ${item.id} to meilisearch: ${err}`,
+      );
     }
   }
 

@@ -1,11 +1,11 @@
 import { faker } from '@faker-js/faker';
 import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 
-import { MOCK_LOGGER } from '../../../test/app.vitest';
-import { FILE_SERVICE_URLS_CACHING_DI_KEY } from '../../di/constants';
-import { registerDependencies } from '../../di/container';
-import { resolveDependency } from '../../di/utils';
-import { CachingService } from './service';
+import { MOCK_LOGGER } from '../../../test/app.vitest.js';
+import { FILE_SERVICE_URLS_CACHING_DI_KEY } from '../../di/constants.js';
+import { registerDependencies } from '../../di/container.js';
+import { resolveDependency } from '../../di/utils.js';
+import { CachingService } from './service.js';
 
 describe('CachingService Tests', () => {
   let cache: CachingService;

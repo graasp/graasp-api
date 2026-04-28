@@ -2,15 +2,15 @@ import { fastifyHelmet } from '@fastify/helmet';
 import type { TypeBoxTypeProvider } from '@fastify/type-provider-typebox';
 import { fastify } from 'fastify';
 
-import registerAppPlugins from './app';
-import { bustFileCache } from './bustCache';
-import { DEV, NODE_ENV, PROD } from './config/env';
-import { client } from './drizzle/db';
-import { modifyAjvInstance } from './schemas/ajvFormats';
-import { initSentry } from './sentry';
-import { APP_VERSION, CORS_ORIGIN_REGEX, HOST_LISTEN_ADDRESS, PORT } from './utils/config';
-import { GREETING } from './utils/constants';
-import { queueDashboardPlugin } from './workers/dashboard.controller';
+import registerAppPlugins from './app.js';
+import { bustFileCache } from './bustCache.js';
+import { DEV, NODE_ENV, PROD } from './config/env.js';
+import { client } from './drizzle/db.js';
+import { modifyAjvInstance } from './schemas/ajvFormats.js';
+import { initSentry } from './sentry.js';
+import { APP_VERSION, CORS_ORIGIN_REGEX, HOST_LISTEN_ADDRESS, PORT } from './utils/config.js';
+import { GREETING } from './utils/constants.js';
+import { queueDashboardPlugin } from './workers/dashboard.controller.js';
 
 export const instance = fastify({
   // allows to remove logging of incomming requests

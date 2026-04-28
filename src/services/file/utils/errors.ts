@@ -4,7 +4,7 @@ import { createError } from '@fastify/error';
 
 import { ErrorFactory, FAILURE_MESSAGES } from '@graasp/sdk';
 
-import { PLUGIN_NAME } from './constants';
+import { PLUGIN_NAME } from './constants.js';
 
 export const GraaspFileError = ErrorFactory(PLUGIN_NAME);
 

@@ -3,8 +3,8 @@ import { StatusCodes } from 'http-status-codes';
 
 import type { FastifySchema } from 'fastify';
 
-import { customType } from '../../../../plugins/typebox';
-import { errorSchemaRef } from '../../../../schemas/global';
+import { customType } from '../../../../plugins/typebox.js';
+import { errorSchemaRef } from '../../../../schemas/global.js';
 
 // schema for removing all actions of a member
 export const deleteAllById = {

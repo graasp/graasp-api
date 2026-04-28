@@ -2,14 +2,18 @@ import { StatusCodes } from 'http-status-codes';
 
 import type { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox';
 
-import { resolveDependency } from '../../../../di/utils';
-import { db } from '../../../../drizzle/db';
-import type { FastifyInstanceTypebox } from '../../../../plugins/typebox';
-import { asDefined } from '../../../../utils/assertions';
-import { isAuthenticated, matchOne, optionalIsAuthenticated } from '../../../auth/plugins/passport';
-import { assertIsMember } from '../../../authentication';
-import { validatedMemberAccountRole } from '../../../member/strategies/validatedMemberAccountRole';
-import { ItemService } from '../../item.service';
+import { resolveDependency } from '../../../../di/utils.js';
+import { db } from '../../../../drizzle/db.js';
+import type { FastifyInstanceTypebox } from '../../../../plugins/typebox.js';
+import { asDefined } from '../../../../utils/assertions.js';
+import {
+  isAuthenticated,
+  matchOne,
+  optionalIsAuthenticated,
+} from '../../../auth/plugins/passport/preHandlers.js';
+import { assertIsMember } from '../../../authentication.js';
+import { validatedMemberAccountRole } from '../../../member/strategies/validatedMemberAccountRole.js';
+import { ItemService } from '../../item.service.js';
 import {
   deleteGeolocation,
   geolocationReverse,
@@ -17,8 +21,8 @@ import {
   getByItem,
   getItemsInBox,
   putGeolocation,
-} from './itemGeolocation.schemas';
-import { ItemGeolocationService } from './itemGeolocation.service';
+} from './itemGeolocation.schemas.js';
+import { ItemGeolocationService } from './itemGeolocation.service.js';
 
 const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
   const itemGeolocationService = resolveDependency(ItemGeolocationService);
@@ -33,11 +37,19 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
       },
       async ({ user, params }) => {
         const actor = user?.account;
-        const geoloc = await itemGeolocationService.getByItem(db, actor, params.id);
+        const geoloc = await itemGeolocationService.getByItem(
+          db,
+          actor,
+          params.id,
+        );
 
         if (geoloc) {
           // return packed item of related item (could be parent)
-          const geolocPackedItem = await itemService.getPacked(db, actor, geoloc.item.id);
+          const geolocPackedItem = await itemService.getPacked(
+            db,
+            actor,
+            geoloc.item.id,
+          );
           return { ...geoloc, item: geolocPackedItem };
         }
         return null;
@@ -65,7 +77,12 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
         const member = asDefined(user?.account);
         assertIsMember(member);
         await db.transaction(async (tx) => {
-          await itemGeolocationService.put(tx, member, params.id, body.geolocation);
+          await itemGeolocationService.put(
+            tx,
+            member,
+            params.id,
+            body.geolocation,
+          );
         });
         reply.status(StatusCodes.NO_CONTENT);
       },

@@ -2,7 +2,7 @@ import { Readable } from 'stream';
 import { delay, inject, singleton } from 'tsyringe';
 
 import {
-  H5PItemExtra,
+  type H5PItemExtra,
   ItemVisibilityType,
   MAX_DESCENDANTS_FOR_COPY,
   MAX_DESCENDANTS_FOR_DELETE,
@@ -18,17 +18,22 @@ import {
   getParentFromPath,
 } from '@graasp/sdk';
 
-import { type DBConnection } from '../../drizzle/db';
+import { type DBConnection } from '../../drizzle/db.js';
 import {
   type ItemGeolocationRaw,
   type ItemMembershipRaw,
   type ItemWithCreator,
   type MinimalItemForInsert,
-} from '../../drizzle/types';
-import { BaseLogger } from '../../logger';
-import { ItemType } from '../../schemas/global';
-import type { AuthenticatedUser, MaybeUser, MinimalMember, PermissionLevel } from '../../types';
-import { H5P_INTEGRATION_URL } from '../../utils/config';
+} from '../../drizzle/types.js';
+import { BaseLogger } from '../../logger.js';
+import type { ItemType } from '../../schemas/global.js';
+import type {
+  AuthenticatedUser,
+  MaybeUser,
+  MinimalMember,
+  PermissionLevel,
+} from '../../types.js';
+import { H5P_INTEGRATION_URL } from '../../utils/config.js';
 import {
   CannotReorderRootItem,
   InvalidMembership,
@@ -37,27 +42,35 @@ import {
   TooManyChildren,
   TooManyDescendants,
   UnauthorizedMember,
-} from '../../utils/errors';
-import HookManager from '../../utils/hook';
+} from '../../utils/errors.js';
+import HookManager from '../../utils/hook.js';
 import {
   filterOutItems,
   filterOutPackedDescendants,
   filterOutPackedItems,
-} from '../authorization.utils';
-import { AuthorizedItemService } from '../authorizedItem.service';
-import { ItemMembershipRepository } from '../itemMembership/membership.repository';
-import { ThumbnailService } from '../thumbnail/thumbnail.service';
-import { DEFAULT_ORDER, IS_COPY_REGEX, MAX_COPY_SUFFIX_LENGTH } from './constants';
-import { FolderItem, ItemRaw, isFolderItem } from './item';
-import { ItemRepository } from './item.repository';
-import { type PackedItem, PackedItemDTO, PackedItemService } from './packedItem.dto';
-import { ItemGeolocationRepository } from './plugins/geolocation/itemGeolocation.repository';
-import { ItemVisibilityRepository } from './plugins/itemVisibility/itemVisibility.repository';
-import { ItemPublishedRepository } from './plugins/publication/published/itemPublished.repository';
-import { MeiliSearchWrapper } from './plugins/publication/published/plugins/search/meilisearch';
-import { RecycledBinService } from './plugins/recycled/recycled.service';
-import { ItemThumbnailService } from './plugins/thumbnail/itemThumbnail.service';
-import type { ItemChildrenParams, ItemSearchParams } from './types';
+} from '../authorization.utils.js';
+import { AuthorizedItemService } from '../authorizedItem.service.js';
+import { ItemMembershipRepository } from '../itemMembership/membership.repository.js';
+import { ThumbnailService } from '../thumbnail/thumbnail.service.js';
+import {
+  DEFAULT_ORDER,
+  IS_COPY_REGEX,
+  MAX_COPY_SUFFIX_LENGTH,
+} from './constants.js';
+import { type FolderItem, type ItemRaw, isFolderItem } from './item.js';
+import { ItemRepository } from './item.repository.js';
+import {
+  type PackedItem,
+  PackedItemDTO,
+  PackedItemService,
+} from './packedItem.dto.js';
+import { ItemGeolocationRepository } from './plugins/geolocation/itemGeolocation.repository.js';
+import { ItemVisibilityRepository } from './plugins/itemVisibility/itemVisibility.repository.js';
+import { ItemPublishedRepository } from './plugins/publication/published/itemPublished.repository.js';
+import { MeiliSearchWrapper } from './plugins/publication/published/plugins/search/meilisearch.js';
+import { RecycledBinService } from './plugins/recycled/recycled.service.js';
+import { ItemThumbnailService } from './plugins/thumbnail/itemThumbnail.service.js';
+import type { ItemChildrenParams, ItemSearchParams } from './types.js';
 
 @singleton()
 export class ItemService {
@@ -78,7 +91,10 @@ export class ItemService {
     create: { pre: { item: Partial<ItemRaw> }; post: { item: ItemRaw } };
     update: { pre: { item: ItemRaw }; post: { item: ItemRaw } };
     delete: { pre: { item: ItemRaw }; post: { item: ItemRaw } };
-    copy: { pre: { original: ItemRaw }; post: { original: ItemRaw; copy: MinimalItemForInsert } };
+    copy: {
+      pre: { original: ItemRaw };
+      post: { original: ItemRaw; copy: MinimalItemForInsert };
+    };
     move: {
       pre: {
         /** the item to be moved itself */
@@ -181,9 +197,19 @@ export class ItemService {
 
     // create items
     const itemsToInsert = inputItems.map((i) => i.item);
-    const createdItems = await this.createItems(dbConnection, member, itemsToInsert, parentId);
+    const createdItems = await this.createItems(
+      dbConnection,
+      member,
+      itemsToInsert,
+      parentId,
+    );
 
-    return this.saveGeolocationsAndThumbnails(dbConnection, member, inputItems, createdItems);
+    return this.saveGeolocationsAndThumbnails(
+      dbConnection,
+      member,
+      inputItems,
+      createdItems,
+    );
   }
 
   private async saveGeolocationsAndThumbnails(
@@ -217,10 +243,19 @@ export class ItemService {
     }
 
     // register geolocations
-    await this.saveGeolocations(dbConnection, this.itemGeolocationRepository, geolocations);
+    await this.saveGeolocations(
+      dbConnection,
+      this.itemGeolocationRepository,
+      geolocations,
+    );
 
     // upload thumbnails
-    return this.uploadThumbnails(dbConnection, member, createdItems, thumbnails);
+    return this.uploadThumbnails(
+      dbConnection,
+      member,
+      createdItems,
+      thumbnails,
+    );
   }
 
   /**
@@ -253,7 +288,12 @@ export class ItemService {
         previousItemId,
       );
     } else {
-      createdItems = await this.createItemsAndMemberships(dbConnection, member, items, null);
+      createdItems = await this.createItemsAndMemberships(
+        dbConnection,
+        member,
+        items,
+        null,
+      );
     }
 
     // index the items for search
@@ -274,18 +314,24 @@ export class ItemService {
     parentId: string,
     previousItemId?: string,
   ) {
-    this.log.debug(`verify parent ${parentId} exists and the member has permission over it`);
-    const parentItem = await this.authorizedItemService.getItemById(dbConnection, {
-      accountId: member.id,
-      itemId: parentId,
-      permission: 'write',
-    });
-    const inheritedMembership = await this.itemMembershipRepository.getInherited(
-      dbConnection,
-      parentItem.path,
-      member.id,
-      true,
+    this.log.debug(
+      `verify parent ${parentId} exists and the member has permission over it`,
     );
+    const parentItem = await this.authorizedItemService.getItemById(
+      dbConnection,
+      {
+        accountId: member.id,
+        itemId: parentId,
+        permission: 'write',
+      },
+    );
+    const inheritedMembership =
+      await this.itemMembershipRepository.getInherited(
+        dbConnection,
+        parentItem.path,
+        member.id,
+        true,
+      );
 
     // quick check, necessary for ts
     if (parentItem.type !== 'folder') {
@@ -295,7 +341,10 @@ export class ItemService {
     this.itemRepository.checkHierarchyDepth(parentItem);
 
     // check if there's too many children under the same parent
-    const children = await this.itemRepository.getNonOrderedChildren(dbConnection, parentItem);
+    const children = await this.itemRepository.getNonOrderedChildren(
+      dbConnection,
+      parentItem,
+    );
     if (children.length + items.length > MAX_NUMBER_OF_CHILDREN) {
       throw new TooManyChildren();
     }
@@ -304,7 +353,10 @@ export class ItemService {
     // else define order from given previous item id
     let order: number | null;
     if (!previousItemId) {
-      order = await this.itemRepository.getFirstOrderValue(dbConnection, parentItem.path);
+      order = await this.itemRepository.getFirstOrderValue(
+        dbConnection,
+        parentItem.path,
+      );
     } else {
       order = await this.itemRepository.getNextOrderCount(
         dbConnection,
@@ -347,15 +399,24 @@ export class ItemService {
     parentItem?: FolderItem,
   ) {
     this.log.debug(`create items ${items.map((item) => item.name)}`);
-    const createdItems = await this.itemRepository.addMany(dbConnection, items, member, parentItem);
-    this.log.debug(`items ${items.map((item) => item.name)} are created: ${createdItems}`);
+    const createdItems = await this.itemRepository.addMany(
+      dbConnection,
+      items,
+      member,
+      parentItem,
+    );
+    this.log.debug(
+      `items ${items.map((item) => item.name)} are created: ${createdItems}`,
+    );
 
     // create membership if inherited is less than admin
     if (
       !inheritedMembership ||
       PermissionLevelCompare.lt(inheritedMembership?.permission, 'admin')
     ) {
-      this.log.debug(`create membership for ${createdItems.map((item) => item.id)}`);
+      this.log.debug(
+        `create membership for ${createdItems.map((item) => item.id)}`,
+      );
       const memberships = createdItems.map((item) => {
         return {
           itemPath: item.path,
@@ -383,7 +444,11 @@ export class ItemService {
       Object.keys(geolocations).map(async (itemPath) => {
         const geolocation = geolocations[itemPath];
         if (geolocation) {
-          return itemGeolocationRepository.put(dbConnection, itemPath, geolocations[itemPath]);
+          return itemGeolocationRepository.put(
+            dbConnection,
+            itemPath,
+            geolocations[itemPath],
+          );
         }
       }),
     );
@@ -418,7 +483,10 @@ export class ItemService {
   /**
    * Index items for meilisearch.
    */
-  private async indexItemsForSearch(dbConnection: DBConnection, items: ItemRaw[]) {
+  private async indexItemsForSearch(
+    dbConnection: DBConnection,
+    items: ItemRaw[],
+  ) {
     try {
       // Check if the item is published (or has published parent)
       const publishedInfo = await this.itemPublishedRepository.getForItems(
@@ -431,7 +499,10 @@ export class ItemService {
       }
 
       // update index
-      await this.meilisearchWrapper.index(dbConnection, Object.values(publishedInfo));
+      await this.meilisearchWrapper.index(
+        dbConnection,
+        Object.values(publishedInfo),
+      );
     } catch (e) {
       this.log.error(e);
       this.log.error('Error during indexation, Meilisearch may be down');
@@ -451,15 +522,16 @@ export class ItemService {
     id: string,
     permission: PermissionLevel = 'read',
   ) {
-    const item = await this.itemRepository.getOneWithCreatorOrThrow(dbConnection, id);
-    const { itemMembership, visibilities } = await this.authorizedItemService.getPropertiesForItem(
+    const item = await this.itemRepository.getOneWithCreatorOrThrow(
       dbConnection,
-      {
+      id,
+    );
+    const { itemMembership, visibilities } =
+      await this.authorizedItemService.getPropertiesForItem(dbConnection, {
         item,
         permission,
         accountId: maybeUser?.id,
-      },
-    );
+      });
     const thumbnails = await this.itemThumbnailService.getUrlsByItems([item]);
 
     const packedItem = new PackedItemDTO(
@@ -498,7 +570,12 @@ export class ItemService {
       itemId,
     });
 
-    return this.itemRepository.getFilteredChildren(dbConnection, maybeUser, item, params);
+    return this.itemRepository.getFilteredChildren(
+      dbConnection,
+      maybeUser,
+      item,
+      params,
+    );
   }
 
   async getChildren(
@@ -507,7 +584,12 @@ export class ItemService {
     itemId: string,
     params?: ItemChildrenParams,
   ) {
-    const children = await this._getChildren(dbConnection, actor, itemId, params);
+    const children = await this._getChildren(
+      dbConnection,
+      actor,
+      itemId,
+      params,
+    );
     // TODO optimize?
     return filterOutItems(
       dbConnection,
@@ -526,7 +608,12 @@ export class ItemService {
     itemId: string,
     params?: ItemChildrenParams,
   ) {
-    const children = await this._getChildren(dbConnection, actor, itemId, params);
+    const children = await this._getChildren(
+      dbConnection,
+      actor,
+      itemId,
+      params,
+    );
     const thumbnails = await this.itemThumbnailService.getUrlsByItems(children);
 
     // TODO optimize?
@@ -540,7 +627,9 @@ export class ItemService {
       children,
       thumbnails,
     );
-    return filteredChildren.map((children) => this.transformItemByType(children));
+    return filteredChildren.map((children) =>
+      this.transformItemByType(children),
+    );
   }
 
   async getDescendants(
@@ -560,7 +649,11 @@ export class ItemService {
 
     return {
       item,
-      descendants: await this.itemRepository.getDescendants(dbConnection, item, options),
+      descendants: await this.itemRepository.getDescendants(
+        dbConnection,
+        item,
+        options,
+      ),
     };
   }
 
@@ -570,11 +663,17 @@ export class ItemService {
     itemId: UUID,
     options?: { showHidden?: boolean; types?: ItemType[] },
   ) {
-    const { descendants, item } = await this.getDescendants(dbConnection, actor, itemId, options);
+    const { descendants, item } = await this.getDescendants(
+      dbConnection,
+      actor,
+      itemId,
+      options,
+    );
     if (!descendants.length) {
       return [];
     }
-    const thumbnails = await this.itemThumbnailService.getUrlsByItems(descendants);
+    const thumbnails =
+      await this.itemThumbnailService.getUrlsByItems(descendants);
     return filterOutPackedDescendants(
       dbConnection,
       actor,
@@ -589,13 +688,21 @@ export class ItemService {
     );
   }
 
-  async getParents(dbConnection: DBConnection, maybeUser: MaybeUser, itemId: UUID) {
+  async getParents(
+    dbConnection: DBConnection,
+    maybeUser: MaybeUser,
+    itemId: UUID,
+  ) {
     const item = await this.authorizedItemService.getItemById(dbConnection, {
       accountId: maybeUser?.id,
       itemId,
     });
     const parents = maybeUser
-      ? await this.itemRepository.getParentsForAccount(dbConnection, item, maybeUser)
+      ? await this.itemRepository.getParentsForAccount(
+          dbConnection,
+          item,
+          maybeUser,
+        )
       : await this.itemRepository.getParentsForPublic(dbConnection, item);
 
     return parents;
@@ -613,15 +720,26 @@ export class ItemService {
       itemId,
     });
 
-    await this.hooks.runPreHooks('update', member, dbConnection, { item: item });
+    await this.hooks.runPreHooks('update', member, dbConnection, {
+      item: item,
+    });
 
-    const updated = await this.itemRepository.updateOne(dbConnection, item.id, body);
+    const updated = await this.itemRepository.updateOne(
+      dbConnection,
+      item.id,
+      body,
+    );
 
-    await this.hooks.runPostHooks('update', member, dbConnection, { item: updated });
+    await this.hooks.runPostHooks('update', member, dbConnection, {
+      item: updated,
+    });
 
     try {
       // Check if the item is published (or has published parent)
-      const published = await this.itemPublishedRepository.getForItem(dbConnection, item.path);
+      const published = await this.itemPublishedRepository.getForItem(
+        dbConnection,
+        item.path,
+      );
 
       // update index
       if (published) {
@@ -636,7 +754,11 @@ export class ItemService {
   }
 
   // QUESTION? DELETE BY PATH???
-  async delete(dbConnection: DBConnection, account: MinimalMember, itemId: UUID) {
+  async delete(
+    dbConnection: DBConnection,
+    account: MinimalMember,
+    itemId: UUID,
+  ) {
     const item = await this.authorizedItemService.getItemById(dbConnection, {
       permission: 'admin',
       accountId: account.id,
@@ -647,7 +769,10 @@ export class ItemService {
     // we do not use checkNumberOfDescendants because we use descendants
     let items: ItemRaw[] = [item];
     if (isFolderItem(item)) {
-      const descendants = await this.itemRepository.getDescendants(dbConnection, item);
+      const descendants = await this.itemRepository.getDescendants(
+        dbConnection,
+        item,
+      );
       if (descendants.length > MAX_DESCENDANTS_FOR_DELETE) {
         throw new TooManyDescendants(descendants.length);
       }
@@ -679,12 +804,20 @@ export class ItemService {
   }
 
   // QUESTION? DELETE BY PATH???
-  async deleteMany(dbConnection: DBConnection, actor: MinimalMember, itemIds: string[]) {
+  async deleteMany(
+    dbConnection: DBConnection,
+    actor: MinimalMember,
+    itemIds: string[],
+  ) {
     if (!actor) {
       throw new UnauthorizedMember();
     }
 
-    const items = await this.recycledBinService.getDeletedTreesById(dbConnection, actor, itemIds);
+    const items = await this.recycledBinService.getDeletedTreesById(
+      dbConnection,
+      actor,
+      itemIds,
+    );
     // do not delete too many items at the same time
     if (items.length > MAX_DESCENDANTS_FOR_DELETE) {
       throw new TooManyDescendants(items.length);
@@ -730,12 +863,16 @@ export class ItemService {
 
     if (parentItem) {
       // check how deep (number of levels) the resulting tree will be
-      const levelsToFarthestChild = await this.itemRepository.getNumberOfLevelsToFarthestChild(
-        dbConnection,
-        item,
-      );
+      const levelsToFarthestChild =
+        await this.itemRepository.getNumberOfLevelsToFarthestChild(
+          dbConnection,
+          item,
+        );
       // this function is not a promise!
-      this.itemRepository.checkHierarchyDepth(parentItem, levelsToFarthestChild);
+      this.itemRepository.checkHierarchyDepth(
+        parentItem,
+        levelsToFarthestChild,
+      );
     }
 
     // post hook
@@ -745,7 +882,12 @@ export class ItemService {
       destinationParent: parentItem,
     });
 
-    const destination = await this._move(dbConnection, member, item, parentItem);
+    const destination = await this._move(
+      dbConnection,
+      member,
+      item,
+      parentItem,
+    );
     await this.hooks.runPostHooks('move', member, dbConnection, {
       source: item,
       sourceParentId: getParentFromPath(item.path),
@@ -826,21 +968,29 @@ export class ItemService {
   ) {
     // identify all the necessary adjustments to memberships
     // TODO: maybe this whole 'magic' should happen in a db procedure?
-    const { inserts, deletes } = await this.itemMembershipRepository.moveHousekeeping(
+    const { inserts, deletes } =
+      await this.itemMembershipRepository.moveHousekeeping(
+        dbConnection,
+        item,
+        actor,
+        parentItem,
+      );
+
+    const result = await this.itemRepository.move(
       dbConnection,
       item,
-      actor,
       parentItem,
     );
-
-    const result = await this.itemRepository.move(dbConnection, item, parentItem);
     // adjust memberships to keep the constraints
     if (inserts.length) {
       await this.itemMembershipRepository.addMany(dbConnection, inserts);
     }
 
     if (deletes.length) {
-      await this.itemMembershipRepository.deleteManyByItemPathAndAccount(dbConnection, deletes);
+      await this.itemMembershipRepository.deleteManyByItemPathAndAccount(
+        dbConnection,
+        deletes,
+      );
     }
 
     return result;
@@ -860,12 +1010,16 @@ export class ItemService {
 
     if (parentItem) {
       // check how deep (number of levels) the resulting tree will be
-      const levelsToFarthestChild = await this.itemRepository.getNumberOfLevelsToFarthestChild(
-        dbConnection,
-        item,
-      );
+      const levelsToFarthestChild =
+        await this.itemRepository.getNumberOfLevelsToFarthestChild(
+          dbConnection,
+          item,
+        );
       // this function is not a promise!
-      this.itemRepository.checkHierarchyDepth(parentItem, levelsToFarthestChild);
+      this.itemRepository.checkHierarchyDepth(
+        parentItem,
+        levelsToFarthestChild,
+      );
     }
 
     // check how "big the tree is" below the item
@@ -882,7 +1036,10 @@ export class ItemService {
 
     let items: ItemRaw[] = [item];
     if (isFolderItem(item)) {
-      const descendants = await this.itemRepository.getDescendants(dbConnection, item);
+      const descendants = await this.itemRepository.getDescendants(
+        dbConnection,
+        item,
+      );
       items = [...descendants, item];
     }
 
@@ -898,16 +1055,27 @@ export class ItemService {
       startWith = startWith.substring(0, suffixStart);
     }
 
-    startWith = startWith.substring(0, MAX_ITEM_NAME_LENGTH - MAX_COPY_SUFFIX_LENGTH);
+    startWith = startWith.substring(
+      0,
+      MAX_ITEM_NAME_LENGTH - MAX_COPY_SUFFIX_LENGTH,
+    );
 
     if (parentItem) {
-      siblings = await this.itemRepository.getChildrenNames(dbConnection, parentItem, {
-        startWith,
-      });
+      siblings = await this.itemRepository.getChildrenNames(
+        dbConnection,
+        parentItem,
+        {
+          startWith,
+        },
+      );
     } else {
-      siblings = await this.itemMembershipRepository.getAccessibleItemNames(dbConnection, member, {
-        startWith,
-      });
+      siblings = await this.itemMembershipRepository.getAccessibleItemNames(
+        dbConnection,
+        member,
+        {
+          startWith,
+        },
+      );
     }
 
     const { copyRoot, treeCopyMap } = await this.itemRepository.copy(
@@ -942,9 +1110,13 @@ export class ItemService {
       });
 
       // copy hidden visibility
-      await this.itemVisibilityRepository.copyAll(dbConnection, member, original, copy.path, [
-        ItemVisibilityType.Public,
-      ]);
+      await this.itemVisibilityRepository.copyAll(
+        dbConnection,
+        member,
+        original,
+        copy.path,
+        [ItemVisibilityType.Public],
+      );
 
       // copy geolocation
       await this.itemGeolocationRepository.copy(dbConnection, original, copy);
@@ -957,7 +1129,9 @@ export class ItemService {
             newId: copy.id,
           });
         } catch {
-          this.log.error(`On item copy, thumbnail for ${original.id} could not be found.`);
+          this.log.error(
+            `On item copy, thumbnail for ${original.id} could not be found.`,
+          );
         }
       }
     }
@@ -1027,7 +1201,12 @@ export class ItemService {
 
     const parentPath = buildPathFromIds(...ids.slice(0, -1));
 
-    return this.itemRepository.reorder(dbConnection, item, parentPath, body.previousItemId);
+    return this.itemRepository.reorder(
+      dbConnection,
+      item,
+      parentPath,
+      body.previousItemId,
+    );
   }
 
   /**
@@ -1042,10 +1221,13 @@ export class ItemService {
   ) {
     const parentId = getParentFromPath(item.path);
     if (parentId) {
-      const parentItem = (await this.authorizedItemService.getItemById(dbConnection, {
-        accountId: account.id,
-        itemId: parentId,
-      })) as FolderItem;
+      const parentItem = (await this.authorizedItemService.getItemById(
+        dbConnection,
+        {
+          accountId: account.id,
+          itemId: parentId,
+        },
+      )) as FolderItem;
       await this.itemRepository.rescaleOrder(dbConnection, parentItem);
     }
   }
@@ -1056,7 +1238,10 @@ export class ItemService {
         const { h5p: h5pExtraProperties } = item.extra as H5PItemExtra;
         const integrationUrl = new URL(H5P_INTEGRATION_URL);
         // add the contentId param to the integration
-        integrationUrl.searchParams.set('contentId', h5pExtraProperties.contentId);
+        integrationUrl.searchParams.set(
+          'contentId',
+          h5pExtraProperties.contentId,
+        );
         const newExtra = {
           h5p: {
             ...h5pExtraProperties,

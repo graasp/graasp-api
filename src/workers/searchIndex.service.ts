@@ -4,23 +4,23 @@ import {
   MeiliSearch,
   MeiliSearchApiError,
   MeiliSearchTimeOutError,
-  TypoTolerance,
+  type TypoTolerance,
 } from 'meilisearch';
 import { singleton } from 'tsyringe';
 
-import { IndexItem } from '@graasp/sdk';
+import { type IndexItem } from '@graasp/sdk';
 
-import { db } from '../drizzle/db';
-import { BaseLogger } from '../logger';
-import { ItemPublishedRepository } from '../services/item/plugins/publication/published/itemPublished.repository';
+import { db } from '../drizzle/db.js';
+import { BaseLogger } from '../logger.js';
+import { ItemPublishedRepository } from '../services/item/plugins/publication/published/itemPublished.repository.js';
 import {
   ACTIVE_INDEX,
-  AllowedIndices,
+  type AllowedIndices,
   MeiliSearchWrapper,
   ROTATING_INDEX,
-} from '../services/item/plugins/publication/published/plugins/search/meilisearch';
-import { FILTERABLE_ATTRIBUTES } from '../services/item/plugins/publication/published/plugins/search/search.constants';
-import { TagCategory } from '../services/tag/tag.schemas';
+} from '../services/item/plugins/publication/published/plugins/search/meilisearch.js';
+import { FILTERABLE_ATTRIBUTES } from '../services/item/plugins/publication/published/plugins/search/search.constants.js';
+import { TagCategory } from '../services/tag/tag.schemas.js';
 
 // Make index configuration typesafe
 const SEARCHABLE_ATTRIBUTES: (keyof IndexItem)[] = [
@@ -118,11 +118,12 @@ export class SearchIndexService {
         let total = 0;
         while (currentPage === 1 || (currentPage - 1) * pageSize < total) {
           // Retrieve a page (i.e. 20 items)
-          const [published, totalCount] = await this.itemPublishedRepository.getPaginatedItems(
-            tx,
-            currentPage,
-            pageSize,
-          );
+          const [published, totalCount] =
+            await this.itemPublishedRepository.getPaginatedItems(
+              tx,
+              currentPage,
+              pageSize,
+            );
           this.logger.info(
             `REBUILD INDEX: Page ${currentPage} - ${published.length} items - total count: ${totalCount}`,
           );
@@ -131,24 +132,35 @@ export class SearchIndexService {
           // Index items (1 task per page)
           try {
             // TODO: transform index into a job
-            const task = await this.meilisearchWrapper.index(tx, published, ROTATING_INDEX);
+            const task = await this.meilisearchWrapper.index(
+              tx,
+              published,
+              ROTATING_INDEX,
+            );
             this.logger.info(
               `REBUILD INDEX: Pushing indexing task ${task.taskUid} (page ${currentPage})`,
             );
             tasks.push(task);
           } catch (e) {
-            this.logger.error(`REBUILD INDEX: Error during one rebuild index task: ${e}`);
+            this.logger.error(
+              `REBUILD INDEX: Error during one rebuild index task: ${e}`,
+            );
           }
 
           currentPage++;
         }
-        this.logger.info(`REBUILD INDEX: Waiting for ${tasks.length} tasks to terminate...`);
+        this.logger.info(
+          `REBUILD INDEX: Waiting for ${tasks.length} tasks to terminate...`,
+        );
         // Wait to be sure that everything is indexed
         // We don't use `waitForTasks` directly because we want to be able to handle error
         // for one task and still be able to await other tasks
         for (const taskUid of tasks.map((t) => t.taskUid)) {
           try {
-            await tmpIndex.waitForTask(taskUid, { timeOutMs: 60_000, intervalMs: 1000 });
+            await tmpIndex.waitForTask(taskUid, {
+              timeOutMs: 60_000,
+              intervalMs: 1000,
+            });
           } catch (e) {
             if (e instanceof MeiliSearchTimeOutError) {
               this.logger.info(
@@ -175,19 +187,26 @@ export class SearchIndexService {
     await this.updateFacetSettings(ACTIVE_INDEX);
     await this.updateIndexSettings(ACTIVE_INDEX);
 
-    this.logger.info(`REBUILD INDEX: Index settings and facets configuration successful!`);
+    this.logger.info(
+      `REBUILD INDEX: Index settings and facets configuration successful!`,
+    );
 
     // Retry if the rebuild fail? Or let retry by a Bull task
   }
 
   /* return meilisearch index or create it
    */
-  private async getOrCreateIndex(name: AllowedIndices): Promise<Index<IndexItem>> {
+  private async getOrCreateIndex(
+    name: AllowedIndices,
+  ): Promise<Index<IndexItem>> {
     try {
       const index = await this.meilisearchClient.getIndex(name);
       return index;
     } catch (err) {
-      if (err instanceof MeiliSearchApiError && err.code === 'index_not_found') {
+      if (
+        err instanceof MeiliSearchApiError &&
+        err.code === 'index_not_found'
+      ) {
         const task = await this.meilisearchClient.createIndex(name);
         await this.meilisearchClient.waitForTask(task.taskUid);
 
@@ -220,7 +239,9 @@ export class SearchIndexService {
       // return max 50 values per facet for facet distribution
       // it is interesting to receive a lot of values for listing
       maxValuesPerFacet: 50,
-      sortFacetValuesBy: Object.fromEntries(Object.values(TagCategory).map((c) => [c, 'count'])),
+      sortFacetValuesBy: Object.fromEntries(
+        Object.values(TagCategory).map((c) => [c, 'count']),
+      ),
     });
   }
 }

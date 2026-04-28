@@ -1,12 +1,12 @@
 import { singleton } from 'tsyringe';
 
-import FileService from '../../../../../file/file.service';
-import { type ItemRaw } from '../../../../item';
-import { isImage } from '../utils';
-import { ImageValidationStrategy } from './imageValidationStrategy';
-import { TextValidationStrategy } from './textValidationStrategy';
-import { ThumbnailValidationStrategy } from './thumbnailValidationStrategy';
-import type { StrategyExecutor, ValidationStrategy } from './types';
+import FileService from '../../../../../file/file.service.js';
+import { type ItemRaw } from '../../../../item.js';
+import { isImage } from '../utils.js';
+import { ImageValidationStrategy } from './imageValidationStrategy.js';
+import { TextValidationStrategy } from './textValidationStrategy.js';
+import { ThumbnailValidationStrategy } from './thumbnailValidationStrategy.js';
+import type { StrategyExecutor, ValidationStrategy } from './types.js';
 
 export const buildStrategyExecutor = (
   strategy: ValidationStrategy,
@@ -47,11 +47,15 @@ export class StrategyExecutorFactory {
     ];
 
     if (isImage(item)) {
-      validationStrategies.push(buildStrategyExecutor(this.imageValidationStrategy, item));
+      validationStrategies.push(
+        buildStrategyExecutor(this.imageValidationStrategy, item),
+      );
     }
 
     if (item.settings.hasThumbnail) {
-      validationStrategies.push(buildStrategyExecutor(this.thumbnailValidationStrategy, item));
+      validationStrategies.push(
+        buildStrategyExecutor(this.thumbnailValidationStrategy, item),
+      );
     }
 
     return validationStrategies;

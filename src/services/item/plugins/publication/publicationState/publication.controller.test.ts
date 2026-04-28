@@ -5,11 +5,11 @@ import type { FastifyInstance } from 'fastify';
 
 import { HttpMethod } from '@graasp/sdk';
 
-import build, { clearDatabase, mockAuthenticate } from '../../../../../../test/app';
-import { seedFromJson } from '../../../../../../test/mocks/seed';
-import { db } from '../../../../../drizzle/db';
-import { assertIsDefined } from '../../../../../utils/assertions';
-import { ITEMS_ROUTE_PREFIX } from '../../../../../utils/config';
+import build, { clearDatabase, mockAuthenticate } from '../../../../../../test/app.js';
+import { seedFromJson } from '../../../../../../test/mocks/seed.js';
+import { db } from '../../../../../drizzle/db.js';
+import { assertIsDefined } from '../../../../../utils/assertions.js';
+import { ITEMS_ROUTE_PREFIX } from '../../../../../utils/config.js';
 
 describe('Publication Controller', () => {
   let app: FastifyInstance;

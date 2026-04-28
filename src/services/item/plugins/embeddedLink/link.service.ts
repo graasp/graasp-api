@@ -11,26 +11,30 @@ import {
   type UUID,
 } from '@graasp/sdk';
 
-import { IFRAMELY_API_DI_KEY } from '../../../../di/constants';
-import { type DBConnection } from '../../../../drizzle/db';
-import { BaseLogger } from '../../../../logger';
-import type { MinimalMember } from '../../../../types';
-import { AuthorizedItemService } from '../../../authorizedItem.service';
-import { ItemMembershipRepository } from '../../../itemMembership/membership.repository';
-import { ThumbnailService } from '../../../thumbnail/thumbnail.service';
-import { WrongItemTypeError } from '../../errors';
-import { EmbeddedLinkItem, type ItemRaw, isEmbeddedLinkItem } from '../../item';
-import { ItemRepository } from '../../item.repository';
-import { ItemService } from '../../item.service';
-import { PackedItemService } from '../../packedItem.dto';
-import { ItemGeolocationRepository } from '../geolocation/itemGeolocation.repository';
-import { ItemVisibilityRepository } from '../itemVisibility/itemVisibility.repository';
-import { ItemPublishedRepository } from '../publication/published/itemPublished.repository';
-import { MeiliSearchWrapper } from '../publication/published/plugins/search/meilisearch';
-import { RecycledBinService } from '../recycled/recycled.service';
-import { ItemThumbnailService } from '../thumbnail/itemThumbnail.service';
-import { InvalidUrl } from './errors';
-import { isValidUrl } from './utils';
+import { IFRAMELY_API_DI_KEY } from '../../../../di/constants.js';
+import { type DBConnection } from '../../../../drizzle/db.js';
+import { BaseLogger } from '../../../../logger.js';
+import type { MinimalMember } from '../../../../types.js';
+import { AuthorizedItemService } from '../../../authorizedItem.service.js';
+import { ItemMembershipRepository } from '../../../itemMembership/membership.repository.js';
+import { ThumbnailService } from '../../../thumbnail/thumbnail.service.js';
+import { WrongItemTypeError } from '../../errors.js';
+import {
+  type EmbeddedLinkItem,
+  type ItemRaw,
+  isEmbeddedLinkItem,
+} from '../../item.js';
+import { ItemRepository } from '../../item.repository.js';
+import { ItemService } from '../../item.service.js';
+import { PackedItemService } from '../../packedItem.dto.js';
+import { ItemGeolocationRepository } from '../geolocation/itemGeolocation.repository.js';
+import { ItemVisibilityRepository } from '../itemVisibility/itemVisibility.repository.js';
+import { ItemPublishedRepository } from '../publication/published/itemPublished.repository.js';
+import { MeiliSearchWrapper } from '../publication/published/plugins/search/meilisearch.js';
+import { RecycledBinService } from '../recycled/recycled.service.js';
+import { ItemThumbnailService } from '../thumbnail/itemThumbnail.service.js';
+import { InvalidUrl } from './errors.js';
+import { isValidUrl } from './utils.js';
 
 type IframelyLink = {
   rel: string[];
@@ -115,7 +119,11 @@ export class EmbeddedLinkItemService extends ItemService {
       );
 
       // better clues on how to extract the metadata here: https://iframely.com/docs/links
-      const { meta = {}, html, links = [] } = (await response.json()) as IframelyResponse;
+      const {
+        meta = {},
+        html,
+        links = [],
+      } = (await response.json()) as IframelyResponse;
       const { title, description } = meta;
 
       // does not accept weird unicode characters, non-breaking spaces, tabs, breaking lines
@@ -125,7 +133,9 @@ export class EmbeddedLinkItemService extends ItemService {
         title: title?.trim()?.replaceAll(r, ' '),
         description: description?.trim(),
         html,
-        thumbnails: links.filter(({ rel }) => hasThumbnailRel(rel)).map(({ href }) => href),
+        thumbnails: links
+          .filter(({ rel }) => hasThumbnailRel(rel))
+          .map(({ href }) => href),
         icons: links
           .filter(({ rel }: { rel: string[] }) => hasIconRel(rel))
           .map(({ href }) => href),
@@ -136,7 +146,13 @@ export class EmbeddedLinkItemService extends ItemService {
       captureException(e);
       console.error(e);
       // return empty values to reset fields
-      return { icons: [], thumbnails: [], title: '', html: '', description: '' };
+      return {
+        icons: [],
+        thumbnails: [],
+        title: '',
+        html: '',
+        description: '',
+      };
     }
   }
 
@@ -189,7 +205,10 @@ export class EmbeddedLinkItemService extends ItemService {
     };
   }
 
-  async checkEmbeddingAllowed(url: string, logger?: FastifyBaseLogger): Promise<boolean> {
+  async checkEmbeddingAllowed(
+    url: string,
+    logger?: FastifyBaseLogger,
+  ): Promise<boolean> {
     this.assertUrlIsValid(url);
 
     try {
@@ -228,7 +247,15 @@ export class EmbeddedLinkItemService extends ItemService {
         previousItemId?: ItemRaw['id'];
       },
   ): Promise<EmbeddedLinkItem> {
-    const { name, description, lang, url, showLinkIframe, showLinkButton, ...options } = args;
+    const {
+      name,
+      description,
+      lang,
+      url,
+      showLinkIframe,
+      showLinkButton,
+      ...options
+    } = args;
 
     const embeddedLink = await this.createExtra(url);
 
@@ -247,7 +274,9 @@ export class EmbeddedLinkItemService extends ItemService {
     dbConnection: DBConnection,
     member: MinimalMember,
     itemId: UUID,
-    args: Partial<Pick<ItemRaw, 'name' | 'description' | 'lang' | 'settings'>> & {
+    args: Partial<
+      Pick<ItemRaw, 'name' | 'description' | 'lang' | 'settings'>
+    > & {
       url?: string;
       showLinkIframe?: boolean;
       showLinkButton?: boolean;
@@ -260,7 +289,15 @@ export class EmbeddedLinkItemService extends ItemService {
       throw new WrongItemTypeError(item.type);
     }
 
-    const { name, description, lang, showLinkIframe, showLinkButton, url, settings } = args;
+    const {
+      name,
+      description,
+      lang,
+      showLinkIframe,
+      showLinkButton,
+      url,
+      settings,
+    } = args;
 
     // compute new extra if link is different
     let { embeddedLink } = item.extra;
@@ -279,6 +316,11 @@ export class EmbeddedLinkItemService extends ItemService {
         embeddedLink,
       },
     );
-    return (await super.patch(dbConnection, member, itemId, newItem)) as EmbeddedLinkItem;
+    return (await super.patch(
+      dbConnection,
+      member,
+      itemId,
+      newItem,
+    )) as EmbeddedLinkItem;
   }
 }

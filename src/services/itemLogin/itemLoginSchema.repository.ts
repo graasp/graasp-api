@@ -3,12 +3,15 @@ import { singleton } from 'tsyringe';
 
 import type { UnionOfConst } from '@graasp/sdk';
 
-import type { DBConnection } from '../../drizzle/db';
-import { isAncestorOrSelf } from '../../drizzle/operations';
-import { itemLoginSchemasTable, items } from '../../drizzle/schema';
-import type { ItemLoginSchemaRaw, ItemLoginSchemaWithItem } from '../../drizzle/types';
-import { throwsIfParamIsInvalid } from '../../repositories/utils';
-import { CannotNestItemLoginSchema } from './errors';
+import type { DBConnection } from '../../drizzle/db.js';
+import { isAncestorOrSelf } from '../../drizzle/operations.js';
+import { itemLoginSchemasTable, items } from '../../drizzle/schema.js';
+import type {
+  ItemLoginSchemaRaw,
+  ItemLoginSchemaWithItem,
+} from '../../drizzle/types.js';
+import { throwsIfParamIsInvalid } from '../../repositories/utils.js';
+import { CannotNestItemLoginSchema } from './errors.js';
 
 export const ItemLoginSchemaType = {
   Username: 'username',
@@ -23,7 +26,9 @@ export const ItemLoginSchemaStatus = {
   Disabled: 'disabled', // Guests can't register or log in
   Freeze: 'freeze',
 } as const;
-export type ItemLoginSchemaStatusOptions = UnionOfConst<typeof ItemLoginSchemaStatus>;
+export type ItemLoginSchemaStatusOptions = UnionOfConst<
+  typeof ItemLoginSchemaStatus
+>;
 
 type ItemPath = string;
 type ItemId = string;
@@ -45,7 +50,10 @@ export class ItemLoginSchemaRepository {
       .from(itemLoginSchemasTable)
       .innerJoin(
         items,
-        and(isAncestorOrSelf(itemLoginSchemasTable.itemPath, items.path), eq(items.id, itemId)),
+        and(
+          isAncestorOrSelf(itemLoginSchemasTable.itemPath, items.path),
+          eq(items.id, itemId),
+        ),
       );
     const firstResult = results[0];
     return firstResult;
@@ -65,15 +73,26 @@ export class ItemLoginSchemaRepository {
 
   async addOne(
     dbConnection: DBConnection,
-    { itemPath, type = ItemLoginSchemaType.Username }: CreateItemLoginSchemaBody,
+    {
+      itemPath,
+      type = ItemLoginSchemaType.Username,
+    }: CreateItemLoginSchemaBody,
   ) {
-    const existingItemLoginSchema = await this.getOneByItemPath(dbConnection, itemPath);
+    const existingItemLoginSchema = await this.getOneByItemPath(
+      dbConnection,
+      itemPath,
+    );
     // if item login schema is inherited
-    if (existingItemLoginSchema && existingItemLoginSchema?.itemPath !== itemPath) {
+    if (
+      existingItemLoginSchema &&
+      existingItemLoginSchema?.itemPath !== itemPath
+    ) {
       throw new CannotNestItemLoginSchema(itemPath);
     }
 
-    return await dbConnection.insert(itemLoginSchemasTable).values({ itemPath, type });
+    return await dbConnection
+      .insert(itemLoginSchemasTable)
+      .values({ itemPath, type });
   }
 
   async put(
@@ -93,7 +112,9 @@ export class ItemLoginSchemaRepository {
         .set({ type, status })
         .where(eq(itemLoginSchemasTable.id, itemLoginSchema.id));
     } else {
-      await dbConnection.insert(itemLoginSchemasTable).values({ itemPath, type, status });
+      await dbConnection
+        .insert(itemLoginSchemasTable)
+        .values({ itemPath, type, status });
     }
   }
 
@@ -106,6 +127,8 @@ export class ItemLoginSchemaRepository {
       throw new Error('could not find entity before deletion');
     }
 
-    await dbConnection.delete(itemLoginSchemasTable).where(eq(itemLoginSchemasTable.id, entity.id));
+    await dbConnection
+      .delete(itemLoginSchemasTable)
+      .where(eq(itemLoginSchemasTable.id, entity.id));
   }
 }

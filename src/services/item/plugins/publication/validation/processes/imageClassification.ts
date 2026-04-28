@@ -1,8 +1,8 @@
 import FormData from 'form-data';
 import fetch from 'node-fetch';
 
-import { IMAGE_CLASSIFIER_PREDICTION_THRESHOLD } from '../constants';
-import { FailedImageClassificationRequestError } from '../errors';
+import { IMAGE_CLASSIFIER_PREDICTION_THRESHOLD } from '../constants.js';
+import { FailedImageClassificationRequestError } from '../errors.js';
 
 type ClassPrediction = {
   class: string;

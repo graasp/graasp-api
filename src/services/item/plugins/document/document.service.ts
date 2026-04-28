@@ -1,25 +1,29 @@
 import sanitize from 'sanitize-html';
 import { singleton } from 'tsyringe';
 
-import { type DocumentItemExtraProperties, type ItemGeolocation, type UUID } from '@graasp/sdk';
+import {
+  type DocumentItemExtraProperties,
+  type ItemGeolocation,
+  type UUID,
+} from '@graasp/sdk';
 
-import { type DBConnection } from '../../../../drizzle/db';
-import { BaseLogger } from '../../../../logger';
-import type { MinimalMember } from '../../../../types';
-import { AuthorizedItemService } from '../../../authorizedItem.service';
-import { ItemMembershipRepository } from '../../../itemMembership/membership.repository';
-import { ThumbnailService } from '../../../thumbnail/thumbnail.service';
-import { WrongItemTypeError } from '../../errors';
-import { DocumentItem, type ItemRaw, isDocumentItem } from '../../item';
-import { ItemRepository } from '../../item.repository';
-import { ItemService } from '../../item.service';
-import { PackedItemService } from '../../packedItem.dto';
-import { ItemGeolocationRepository } from '../geolocation/itemGeolocation.repository';
-import { ItemVisibilityRepository } from '../itemVisibility/itemVisibility.repository';
-import { ItemPublishedRepository } from '../publication/published/itemPublished.repository';
-import { MeiliSearchWrapper } from '../publication/published/plugins/search/meilisearch';
-import { RecycledBinService } from '../recycled/recycled.service';
-import { ItemThumbnailService } from '../thumbnail/itemThumbnail.service';
+import { type DBConnection } from '../../../../drizzle/db.js';
+import { BaseLogger } from '../../../../logger.js';
+import type { MinimalMember } from '../../../../types.js';
+import { AuthorizedItemService } from '../../../authorizedItem.service.js';
+import { ItemMembershipRepository } from '../../../itemMembership/membership.repository.js';
+import { ThumbnailService } from '../../../thumbnail/thumbnail.service.js';
+import { WrongItemTypeError } from '../../errors.js';
+import { type DocumentItem, type ItemRaw, isDocumentItem } from '../../item.js';
+import { ItemRepository } from '../../item.repository.js';
+import { ItemService } from '../../item.service.js';
+import { PackedItemService } from '../../packedItem.dto.js';
+import { ItemGeolocationRepository } from '../geolocation/itemGeolocation.repository.js';
+import { ItemVisibilityRepository } from '../itemVisibility/itemVisibility.repository.js';
+import { ItemPublishedRepository } from '../publication/published/itemPublished.repository.js';
+import { MeiliSearchWrapper } from '../publication/published/plugins/search/meilisearch.js';
+import { RecycledBinService } from '../recycled/recycled.service.js';
+import { ItemThumbnailService } from '../thumbnail/itemThumbnail.service.js';
 
 export const PREFIX_DOCUMENT = 'documents';
 
@@ -102,7 +106,8 @@ export class DocumentItemService extends ItemService {
       previousItemId?: ItemRaw['id'];
     } & Partial<DocumentItemExtraProperties>,
   ): Promise<DocumentItem> {
-    const { name, description, lang, content, isRaw, flavor, ...options } = args;
+    const { name, description, lang, content, isRaw, flavor, ...options } =
+      args;
 
     const newItem = this.createDocument(
       { name, description, lang },
@@ -146,6 +151,11 @@ export class DocumentItemService extends ItemService {
         item.extra.document,
       ),
     );
-    return (await this.patch(dbConnection, member, itemId, newItem)) as DocumentItem;
+    return (await this.patch(
+      dbConnection,
+      member,
+      itemId,
+      newItem,
+    )) as DocumentItem;
   }
 }

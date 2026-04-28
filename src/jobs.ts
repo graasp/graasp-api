@@ -1,7 +1,7 @@
 import { type ConnectionOptions, Queue, Worker } from 'bullmq';
 
-import { REDIS_CONNECTION } from './config/redis';
-import { BaseLogger } from './logger';
+import { REDIS_CONNECTION } from './config/redis.js';
+import { BaseLogger } from './logger.js';
 
 const connection: ConnectionOptions = {
   url: REDIS_CONNECTION,

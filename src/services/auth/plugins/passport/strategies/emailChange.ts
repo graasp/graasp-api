@@ -1,13 +1,20 @@
-import { ExtractJwt, Strategy } from 'passport-jwt';
+import { ExtractJwt, Strategy } from 'passport-jose';
 
 import { Authenticator } from '@fastify/passport';
 
-import { EMAIL_CHANGE_JWT_SECRET } from '../../../../../config/secrets';
-import { db } from '../../../../../drizzle/db';
-import { MemberNotFound, UnauthorizedMember, buildError } from '../../../../../utils/errors';
-import { MemberRepository } from '../../../../member/member.repository';
-import { PassportStrategy } from '../strategies';
-import type { CustomStrategyOptions, StrictVerifiedCallback } from '../types';
+import { SECRET_KEY } from '../../../../../crypto/jwt.js';
+import { db } from '../../../../../drizzle/db.js';
+import {
+  MemberNotFound,
+  UnauthorizedMember,
+  buildError,
+} from '../../../../../utils/errors.js';
+import { MemberRepository } from '../../../../member/member.repository.js';
+import { PassportStrategy } from '../strategies.js';
+import type {
+  CustomStrategyOptions,
+  StrictVerifiedCallback,
+} from '../types.js';
 
 export default (
   passport: Authenticator,
@@ -19,17 +26,20 @@ export default (
     new Strategy(
       {
         jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-        secretOrKey: EMAIL_CHANGE_JWT_SECRET,
+        withSecretOrKey: SECRET_KEY,
+        audience: 'change-email',
       },
       async (
-        {
-          uuid,
-          oldEmail,
-          newEmail: newEmailRaw,
-        }: { uuid: string; oldEmail: string; newEmail: string },
+        payload,
+
         done: StrictVerifiedCallback,
       ) => {
         try {
+          const {
+            uuid,
+            oldEmail,
+            newEmail: newEmailRaw,
+          } = payload as { uuid: string; oldEmail: string; newEmail: string };
           const newEmail = newEmailRaw.toLowerCase();
           // We shouldn't fetch the member by email, so we keep track of the actual member.
           const member = await memberRepository.get(db, uuid);
@@ -43,14 +53,18 @@ export default (
           } else {
             // Authentication refused
             return done(
-              options?.propagateError ? new MemberNotFound({ id: uuid }) : new UnauthorizedMember(),
+              options?.propagateError
+                ? new MemberNotFound({ id: uuid })
+                : new UnauthorizedMember(),
               false,
             );
           }
         } catch (error: unknown) {
           // Exception occurred while fetching member
           return done(
-            options?.propagateError ? buildError(error) : new UnauthorizedMember(),
+            options?.propagateError
+              ? buildError(error)
+              : new UnauthorizedMember(),
             false,
           );
         }

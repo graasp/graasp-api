@@ -1,10 +1,10 @@
-import fastifyPassport from '@fastify/passport';
+import { Authenticator } from '@fastify/passport';
 import type { FastifyRequest, RouteGenericInterface } from 'fastify';
 import type { preHandlerHookHandler } from 'fastify/types/hooks';
 import type { RouteShorthandHook } from 'fastify/types/route';
 
-import { InsufficientPermission } from '../../../../utils/errors';
-import { PassportStrategy } from './strategies';
+import { InsufficientPermission } from '../../../../utils/errors.js';
+import { PassportStrategy } from './strategies.js';
 
 /**
  * Passport Authenticate function will accept the authenticaction if at least one of the strategies is successful.
@@ -14,12 +14,13 @@ import { PassportStrategy } from './strategies';
  * So if we want the client to validate a captcha AND being authenticated, we have to use :
  * preHandler: [captchaPreHandler(...), authenticated]
  */
+export const fastifyPassportInstance = new Authenticator();
 
 /**
  * Validate authentication. Allows public authentication, can't fail.
  * Will set the user to `request.user.member` if possible.
  */
-export const optionalIsAuthenticated = fastifyPassport.authenticate(
+export const optionalIsAuthenticated = fastifyPassportInstance.authenticate(
   // PassportStrategy.MobileJwt,
   PassportStrategy.Session,
 ) as RouteShorthandHook<preHandlerHookHandler>;
@@ -28,7 +29,7 @@ export const optionalIsAuthenticated = fastifyPassport.authenticate(
  * Validate authentication.
  * Will set the user to `request.user.member`.
  */
-export const isAuthenticated = fastifyPassport.authenticate(
+export const isAuthenticated = fastifyPassportInstance.authenticate(
   // PassportStrategy.MobileJwt,
   PassportStrategy.StrictSession,
 ) as RouteShorthandHook<preHandlerHookHandler>;
@@ -37,7 +38,7 @@ export const isAuthenticated = fastifyPassport.authenticate(
 /**
  * Classic password authentication to create a session.
  */
-export const authenticatePassword = fastifyPassport.authenticate(
+export const authenticatePassword = fastifyPassportInstance.authenticate(
   PassportStrategy.Password,
 ) as RouteShorthandHook<preHandlerHookHandler>;
 
@@ -45,7 +46,7 @@ export const authenticatePassword = fastifyPassport.authenticate(
 /**
  * JWT authentication for password reset operation.
  */
-export const authenticatePasswordReset = fastifyPassport.authenticate(
+export const authenticatePasswordReset = fastifyPassportInstance.authenticate(
   PassportStrategy.PasswordReset,
   { session: false },
 ) as RouteShorthandHook<preHandlerHookHandler>;
@@ -53,21 +54,24 @@ export const authenticatePasswordReset = fastifyPassport.authenticate(
 /**
  * JWT authentication for email change operation.
  */
-export const authenticateEmailChange = fastifyPassport.authenticate(PassportStrategy.EmailChange, {
-  session: false,
-}) as RouteShorthandHook<preHandlerHookHandler>;
+export const authenticateEmailChange = fastifyPassportInstance.authenticate(
+  PassportStrategy.EmailChange,
+  {
+    session: false,
+  },
+) as RouteShorthandHook<preHandlerHookHandler>;
 
 /**
  * Items app authentication
  */
-export const authenticateAppsJWT = fastifyPassport.authenticate(PassportStrategy.AppsJwt, {
+export const authenticateAppsJWT = fastifyPassportInstance.authenticate(PassportStrategy.AppsJwt, {
   session: false,
 }) as RouteShorthandHook<preHandlerHookHandler>;
 
 /**
  *  Items app authentication. Allows authentication without member, can fail if item is not found.
  */
-export const guestAuthenticateAppsJWT = fastifyPassport.authenticate(
+export const guestAuthenticateAppsJWT = fastifyPassportInstance.authenticate(
   PassportStrategy.OptionalAppsJwt,
   {
     session: false,
@@ -83,8 +87,6 @@ export const guestAuthenticateAppsJWT = fastifyPassport.authenticate(
 export function matchOne<R extends RouteGenericInterface>(
   ...strategies: RessourceAuthorizationStrategy<R>[]
 ): RouteShorthandHook<preHandlerHookHandler> {
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-expect-error
   return async (req: FastifyRequest<R>) => {
     if (!strategies.some((strategy) => strategy.test(req))) {
       // If none of the strategies pass, throw an error.

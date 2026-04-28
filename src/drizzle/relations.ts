@@ -34,7 +34,7 @@ import {
   recycledItemDatasTable,
   shortLinksTable,
   tagsTable,
-} from './schema';
+} from './schema.js';
 
 export const publishedItemsRelations = relations(publishedItemsTable, ({ one }) => ({
   account: one(accountsTable, {

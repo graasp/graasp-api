@@ -6,10 +6,10 @@ import type { MultipartFields, MultipartFile } from '@fastify/multipart';
 
 import { type ItemGeolocation, isChildOf } from '@graasp/sdk';
 
-import { ITEM_TYPES, ItemType } from '../../schemas/global';
-import { NoFileProvided } from '../../utils/errors';
-import { type FolderItem, type ItemRaw, isFolderItem } from './item';
-import { validateGeolocation, validateSettings } from './validation';
+import { ITEM_TYPES, type ItemType } from '../../schemas/global.js';
+import { NoFileProvided } from '../../utils/errors.js';
+import { type FolderItem, type ItemRaw, isFolderItem } from './item.js';
+import { validateGeolocation, validateSettings } from './validation.js';
 
 const itemOrderFn = (a: ItemRaw, b: ItemRaw) => {
   return (a.order ?? 0) - (b.order ?? 0);
@@ -19,7 +19,9 @@ export const sortChildrenForTreeWith = <T extends ItemRaw>(
   descendants: T[],
   parentItem: FolderItem,
 ): T[] => {
-  const directChildren = descendants.filter((child) => isChildOf(child.path, parentItem.path));
+  const directChildren = descendants.filter((child) =>
+    isChildOf(child.path, parentItem.path),
+  );
 
   // order
   directChildren.sort(itemOrderFn);
@@ -108,18 +110,23 @@ export const getPostItemPayloadFromFormData = (
 
   // nested objects that we need to deeply validate
   const settingsRaw = getFieldFromMultipartForm(formData.fields, 'settings');
-  const geolocationRaw = getFieldFromMultipartForm(formData.fields, 'geolocation');
+  const geolocationRaw = getFieldFromMultipartForm(
+    formData.fields,
+    'geolocation',
+  );
   const extraRaw = getFieldFromMultipartForm(formData.fields, 'extra');
 
   // validate nested objects
-  const settings = parseAndValidateField<ItemRaw['settings']>(settingsRaw, validateSettings);
+  const settings = parseAndValidateField<ItemRaw['settings']>(
+    settingsRaw,
+    validateSettings,
+  );
   // const extra = parseAndValidateField<Item['extra']>(extraRaw);
   // TODO: extra is not validated
   const extra = extraRaw ? JSON.parse(extraRaw) : undefined;
-  const geolocation = parseAndValidateField<Pick<ItemGeolocation, 'lat' | 'lng'>>(
-    geolocationRaw,
-    validateGeolocation,
-  );
+  const geolocation = parseAndValidateField<
+    Pick<ItemGeolocation, 'lat' | 'lng'>
+  >(geolocationRaw, validateGeolocation);
 
   if (!formData.file) {
     throw new NoFileProvided();

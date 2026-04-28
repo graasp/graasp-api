@@ -1,14 +1,14 @@
 import { pino } from 'pino';
 import 'reflect-metadata';
 
-import { registerDependencies } from '../di/container';
-import { resolveDependency } from '../di/utils';
-import { CRON_3AM_MONDAY, JobServiceBuilder } from '../jobs';
-import { BaseLogger } from '../logger';
-import { ItemExportRequestService } from './itemExportRequest.service';
-import { ItemExportRequestWorker } from './itemExportRequest.worker';
-import { SearchIndexService } from './searchIndex.service';
-import { SearchIndexWorker } from './searchIndex.worker';
+import { registerDependencies } from '../di/container.js';
+import { resolveDependency } from '../di/utils.js';
+import { CRON_3AM_MONDAY, JobServiceBuilder } from '../jobs.js';
+import { BaseLogger } from '../logger.js';
+import { ItemExportRequestService } from './itemExportRequest.service.js';
+import { ItemExportRequestWorker } from './itemExportRequest.worker.js';
+import { SearchIndexService } from './searchIndex.service.js';
+import { SearchIndexWorker } from './searchIndex.worker.js';
 
 const start = async () => {
   // register tsyringe dependencies

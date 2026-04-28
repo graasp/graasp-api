@@ -10,15 +10,15 @@ import build, {
   clearDatabase,
   mockAuthenticate,
   unmockAuthenticate,
-} from '../../../../../test/app';
-import { seedFromJson } from '../../../../../test/mocks/seed';
-import { resolveDependency } from '../../../../di/utils';
-import { db } from '../../../../drizzle/db';
-import { membershipRequestsTable } from '../../../../drizzle/schema';
-import { MailerService } from '../../../../plugins/mailer/mailer.service';
-import { assertIsDefined } from '../../../../utils/assertions';
-import { assertIsMemberForTest } from '../../../authentication';
-import { type ItemRaw } from '../../../item/item';
+} from '../../../../../test/app.js';
+import { seedFromJson } from '../../../../../test/mocks/seed.js';
+import { resolveDependency } from '../../../../di/utils.js';
+import { db } from '../../../../drizzle/db.js';
+import { membershipRequestsTable } from '../../../../drizzle/schema.js';
+import { MailerService } from '../../../../plugins/mailer/mailer.service.js';
+import { assertIsDefined } from '../../../../utils/assertions.js';
+import { assertIsMemberForTest } from '../../../authentication.js';
+import { type ItemRaw } from '../../../item/item.js';
 
 function expectMemberRequestToBe(
   membershipRequest,

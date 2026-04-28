@@ -1,6 +1,6 @@
 import { vi } from 'vitest';
 
-import { BaseLogger } from '../src/logger';
+import { BaseLogger } from '../src/logger.js';
 
 export const MOCK_LOGGER = {
   error: vi.fn(),

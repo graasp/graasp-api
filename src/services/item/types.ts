@@ -1,6 +1,6 @@
-import type { MinimalAccount } from '../../drizzle/types';
-import { ItemType } from '../../schemas/global';
-import { PermissionLevel } from '../../types';
+import type { MinimalAccount } from '../../drizzle/types.js';
+import type { ItemType } from '../../schemas/global.js';
+import type { PermissionLevel } from '../../types.js';
 
 export enum SortBy {
   ItemType = 'item.type',
@@ -17,7 +17,9 @@ export enum Ordering {
   DESC = 'DESC',
 }
 
-export function orderingToUpperCase(ordering: Ordering): Ordering.ASC | Ordering.DESC {
+export function orderingToUpperCase(
+  ordering: Ordering,
+): Ordering.ASC | Ordering.DESC {
   switch (ordering) {
     case Ordering.asc:
       return Ordering.ASC;

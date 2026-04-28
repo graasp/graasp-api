@@ -1,14 +1,14 @@
 import path from 'path';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { MemberFactory } from '../../../../../../test/factories/member.factory';
-import { BaseLogger } from '../../../../../logger';
-import { StorageService } from '../../../../member/plugins/storage/memberStorage.service';
-import { H5PItem } from '../../../item';
-import { ItemRepository } from '../../../item.repository';
-import { ItemService } from '../../../item.service';
-import { H5P_FILE_DOT_EXTENSION } from './constants';
-import { H5PService } from './h5p.service';
+import { MemberFactory } from '../../../../../../test/factories/member.factory.js';
+import { BaseLogger } from '../../../../../logger.js';
+import { StorageService } from '../../../../member/plugins/storage/memberStorage.service.js';
+import { H5PItem } from '../../../item.js';
+import { ItemRepository } from '../../../item.repository.js';
+import { ItemService } from '../../../item.service.js';
+import { H5P_FILE_DOT_EXTENSION } from './constants.js';
+import { H5PService } from './h5p.service.js';
 
 // lightweight stub for repository
 const mockItemRepository = {

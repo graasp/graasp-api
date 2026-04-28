@@ -4,9 +4,11 @@ import { createError } from '@fastify/error';
 
 import { ErrorFactory, PublishableItemTypeChecker } from '@graasp/sdk';
 
-import { ItemType } from '../../../../../schemas/global';
+import type { ItemType } from '../../../../../schemas/global.js';
 
-export const GraaspPublishedError = ErrorFactory('graasp-plugin-published-item');
+export const GraaspPublishedError = ErrorFactory(
+  'graasp-plugin-published-item',
+);
 
 export const ItemPublishedNotFound = createError(
   'GPPIERR001',

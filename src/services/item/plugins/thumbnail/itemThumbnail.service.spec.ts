@@ -3,15 +3,15 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { ThumbnailSize } from '@graasp/sdk';
 
-import { MOCK_LOGGER } from '../../../../../test/app.vitest';
-import { ItemFactory } from '../../../../../test/factories/item.factory';
-import { db } from '../../../../drizzle/db';
-import { AuthorizedItemService } from '../../../authorizedItem.service';
-import { ThumbnailService } from '../../../thumbnail/thumbnail.service';
-import { resolveItemType } from '../../item';
-import { ItemService } from '../../item.service';
-import { ItemThumbnailService } from './itemThumbnail.service';
-import { constructMockedUrl, expectValidUrls } from './test/fixtures/utils';
+import { MOCK_LOGGER } from '../../../../../test/app.vitest.js';
+import { ItemFactory } from '../../../../../test/factories/item.factory.js';
+import { db } from '../../../../drizzle/db.js';
+import { AuthorizedItemService } from '../../../authorizedItem.service.js';
+import { ThumbnailService } from '../../../thumbnail/thumbnail.service.js';
+import { resolveItemType } from '../../item.js';
+import { ItemService } from '../../item.service.js';
+import { ItemThumbnailService } from './itemThumbnail.service.js';
+import { constructMockedUrl, expectValidUrls } from './test/fixtures/utils.js';
 
 const mockedItemsId = [
   ItemFactory({ settings: { hasThumbnail: true } }),

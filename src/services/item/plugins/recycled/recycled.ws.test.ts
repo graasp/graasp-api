@@ -6,20 +6,20 @@ import type { FastifyInstance } from 'fastify';
 
 import { HttpMethod } from '@graasp/sdk';
 
-import { clearDatabase, mockAuthenticate, unmockAuthenticate } from '../../../../../test/app';
-import { seedFromJson } from '../../../../../test/mocks/seed';
-import { db } from '../../../../drizzle/db';
-import { itemsRawTable } from '../../../../drizzle/schema';
-import { assertIsDefined } from '../../../../utils/assertions';
-import { TestWsClient } from '../../../websockets/test/test-websocket-client';
-import { setupWsApp } from '../../../websockets/test/ws-app';
+import { clearDatabase, mockAuthenticate, unmockAuthenticate } from '../../../../../test/app.js';
+import { seedFromJson } from '../../../../../test/mocks/seed.js';
+import { db } from '../../../../drizzle/db.js';
+import { itemsRawTable } from '../../../../drizzle/schema.js';
+import { assertIsDefined } from '../../../../utils/assertions.js';
+import { TestWsClient } from '../../../websockets/test/test-websocket-client.js';
+import { setupWsApp } from '../../../websockets/test/ws-app.js';
 import {
   type ItemEvent,
   ItemOpFeedbackErrorEvent,
   ItemOpFeedbackEvent,
   memberItemsTopic,
-} from '../../ws/item.events';
-import { RecycledItemDataRepository } from './recycled.repository';
+} from '../../ws/item.events.js';
+import { RecycledItemDataRepository } from './recycled.repository.js';
 
 describe('Recycle websocket hooks', () => {
   let app: FastifyInstance;

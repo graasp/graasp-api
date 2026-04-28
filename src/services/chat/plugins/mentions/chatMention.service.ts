@@ -2,17 +2,17 @@ import { singleton } from 'tsyringe';
 
 import { ClientManager, Context, MentionStatus } from '@graasp/sdk';
 
-import { type DBConnection } from '../../../../drizzle/db';
-import { type ChatMessageRaw } from '../../../../drizzle/types';
-import { TRANSLATIONS } from '../../../../langs/constants';
-import { MailBuilder } from '../../../../plugins/mailer/builder';
-import { MailerService } from '../../../../plugins/mailer/mailer.service';
-import { AccountType, type AuthenticatedUser } from '../../../../types';
-import { AuthorizedItemService } from '../../../authorizedItem.service';
-import type { ItemRaw } from '../../../item/item';
-import { MemberRepository } from '../../../member/member.repository';
-import { MemberCannotAccessMention } from '../../errors';
-import { ChatMentionRepository } from './chatMention.repository';
+import { type DBConnection } from '../../../../drizzle/db.js';
+import { type ChatMessageRaw } from '../../../../drizzle/types.js';
+import { TRANSLATIONS } from '../../../../langs/constants.js';
+import { MailBuilder } from '../../../../plugins/mailer/builder.js';
+import { MailerService } from '../../../../plugins/mailer/mailer.service.js';
+import { AccountType, type AuthenticatedUser } from '../../../../types.js';
+import { AuthorizedItemService } from '../../../authorizedItem.service.js';
+import type { ItemRaw } from '../../../item/item.js';
+import { MemberRepository } from '../../../member/member.repository.js';
+import { MemberCannotAccessMention } from '../../errors.js';
+import { ChatMentionRepository } from './chatMention.repository.js';
 
 @singleton()
 export class MentionService {
@@ -42,9 +42,13 @@ export class MentionService {
     member: { email: string; lang: string };
     creator: { name: string };
   }) {
-    const itemLink = ClientManager.getInstance().getItemLink(Context.Builder, item.id, {
-      chatOpen: true,
-    });
+    const itemLink = ClientManager.getInstance().getItemLink(
+      Context.Builder,
+      item.id,
+      {
+        chatOpen: true,
+      },
+    );
 
     const mail = new MailBuilder({
       subject: {
@@ -102,12 +106,25 @@ export class MentionService {
     return mentions;
   }
 
-  async getForAccount(dbConnection: DBConnection, authenticatedUser: AuthenticatedUser) {
-    return this.chatMentionRepository.getForAccount(dbConnection, authenticatedUser.id);
+  async getForAccount(
+    dbConnection: DBConnection,
+    authenticatedUser: AuthenticatedUser,
+  ) {
+    return this.chatMentionRepository.getForAccount(
+      dbConnection,
+      authenticatedUser.id,
+    );
   }
 
-  async get(dbConnection: DBConnection, authenticatedUser: AuthenticatedUser, mentionId: string) {
-    const mentionContent = await this.chatMentionRepository.get(dbConnection, mentionId);
+  async get(
+    dbConnection: DBConnection,
+    authenticatedUser: AuthenticatedUser,
+    mentionId: string,
+  ) {
+    const mentionContent = await this.chatMentionRepository.get(
+      dbConnection,
+      mentionId,
+    );
 
     if (mentionContent.accountId !== authenticatedUser.id) {
       throw new MemberCannotAccessMention({ id: mentionId });
@@ -139,7 +156,13 @@ export class MentionService {
     return this.chatMentionRepository.deleteOne(dbConnection, mentionId);
   }
 
-  async deleteAll(dbConnection: DBConnection, authenticatedUser: AuthenticatedUser) {
-    await this.chatMentionRepository.deleteAll(dbConnection, authenticatedUser.id);
+  async deleteAll(
+    dbConnection: DBConnection,
+    authenticatedUser: AuthenticatedUser,
+  ) {
+    await this.chatMentionRepository.deleteAll(
+      dbConnection,
+      authenticatedUser.id,
+    );
   }
 }

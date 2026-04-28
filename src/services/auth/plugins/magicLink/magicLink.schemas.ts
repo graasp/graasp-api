@@ -3,9 +3,9 @@ import { StatusCodes } from 'http-status-codes';
 
 import type { FastifySchema } from 'fastify';
 
-import { customType } from '../../../../plugins/typebox';
-import { errorSchemaRef } from '../../../../schemas/global';
-import { SHORT_TOKEN_PARAM } from '../passport';
+import { customType } from '../../../../plugins/typebox.js';
+import { errorSchemaRef } from '../../../../schemas/global.js';
+import { SHORT_TOKEN_PARAM } from '../passport/constants.js';
 
 export const register = {
   operationId: 'register',
@@ -52,7 +52,8 @@ export const auth = {
   operationId: 'authenticate',
   tags: ['authentication'],
   summary: 'Authentication validating the token',
-  description: 'Authenticate to obtain session cookie given provided token and verifier',
+  description:
+    'Authenticate to obtain session cookie given provided token and verifier',
 
   querystring: customType.StrictObject({
     [SHORT_TOKEN_PARAM]: Type.String({ format: 'jwt' }),

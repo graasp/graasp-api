@@ -3,24 +3,11 @@ import { StatusCodes } from 'http-status-codes';
 
 import type { FastifySchema } from 'fastify';
 
-import { customType, registerSchemaAsRef } from '../../../../plugins/typebox';
-import { errorSchemaRef } from '../../../../schemas/global';
-import { genericItemSchemaRef } from '../../common.schemas';
-import { packedItemSchemaRef } from '../../item.schemas.packed';
-
-export const geoCoordinateSchema = customType.StrictObject(
-  {
-    lat: Type.Number(),
-    lng: Type.Number(),
-  },
-  { description: 'Geographic coordinates' },
-);
-
-export const geoCoordinateSchemaRef = registerSchemaAsRef(
-  'geoCoordinate',
-  'Geographic Coordinate',
-  geoCoordinateSchema,
-);
+import { customType } from '../../../../plugins/typebox.js';
+import { errorSchemaRef } from '../../../../schemas/global.js';
+import { genericItemSchemaRef } from '../../common.schemas.js';
+import { packedItemSchemaRef } from '../../item.schemas.packed.js';
+import { geoCoordinateSchema } from './geolocation.schema.js';
 
 const geolocationMinimal = Type.Composite(
   [
@@ -105,7 +92,9 @@ export const getItemsInBox = {
     Type.Composite(
       [
         Type.Pick(getItemsInBoxProps, ['lat1', 'lat2', 'lng1', 'lng2']), // We pick `lat1`, `lat2`, `lng1`, `lng2` to make them required
-        Type.Partial(Type.Omit(getItemsInBoxProps, ['lat1', 'lat2', 'lng1', 'lng2'])), // Other properties are optional
+        Type.Partial(
+          Type.Omit(getItemsInBoxProps, ['lat1', 'lat2', 'lng1', 'lng2']),
+        ), // Other properties are optional
       ],
       {
         additionalProperties: false,

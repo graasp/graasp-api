@@ -4,17 +4,17 @@ import { singleton } from 'tsyringe';
 
 import { ItemValidationStatus, type UUID } from '@graasp/sdk';
 
-import type { DBConnection } from '../../../../../drizzle/db';
-import { BaseLogger } from '../../../../../logger';
-import type { MinimalMember } from '../../../../../types';
-import { TMP_FOLDER } from '../../../../../utils/config';
-import { AuthorizedItemService } from '../../../../authorizedItem.service';
-import { FolderItem, type ItemRaw } from '../../../item';
-import { ItemRepository } from '../../../item.repository';
-import { ItemPublishedService } from '../published/itemPublished.service';
-import { ItemValidationGroupRepository } from './ItemValidationGroup.repository';
-import { ItemValidationModerator } from './moderators/itemValidationModerator';
-import { ValidationQueue } from './validationQueue';
+import type { DBConnection } from '../../../../../drizzle/db.js';
+import { BaseLogger } from '../../../../../logger.js';
+import type { MinimalMember } from '../../../../../types.js';
+import { TMP_FOLDER } from '../../../../../utils/config.js';
+import { AuthorizedItemService } from '../../../../authorizedItem.service.js';
+import type { FolderItem, ItemRaw } from '../../../item.js';
+import { ItemRepository } from '../../../item.repository.js';
+import { ItemPublishedService } from '../published/itemPublished.service.js';
+import { ItemValidationGroupRepository } from './ItemValidationGroup.repository.js';
+import { ItemValidationModerator } from './moderators/itemValidationModerator.js';
+import { ValidationQueue } from './validationQueue.js';
 
 @singleton()
 export class ItemValidationService {
@@ -55,7 +55,10 @@ export class ItemValidationService {
     member: MinimalMember,
     item: ItemRaw,
   ) {
-    const group = await this.itemValidationGroupRepository.getLastForItem(dbConnection, item.id);
+    const group = await this.itemValidationGroupRepository.getLastForItem(
+      dbConnection,
+      item.id,
+    );
 
     // check permissions
     await this.authorizedItemService.assertAccess(dbConnection, {
@@ -67,11 +70,21 @@ export class ItemValidationService {
     return group;
   }
 
-  async post(dbConnection: DBConnection, item: FolderItem, onValidationStarted?: () => void) {
-    const descendants = await this.itemRepository.getDescendants(dbConnection, item);
+  async post(
+    dbConnection: DBConnection,
+    item: FolderItem,
+    onValidationStarted?: () => void,
+  ) {
+    const descendants = await this.itemRepository.getDescendants(
+      dbConnection,
+      item,
+    );
 
     // create record in item-validation
-    const iVG = await this.itemValidationGroupRepository.post(dbConnection, item.id);
+    const iVG = await this.itemValidationGroupRepository.post(
+      dbConnection,
+      item.id,
+    );
 
     // indicates that the item's validation is pending
     await this.validationQueue.addInProgress(item.id);
@@ -89,7 +102,9 @@ export class ItemValidationService {
             currItem,
             iVG.id,
           );
-          return validationResults.every((v) => v === ItemValidationStatus.Success);
+          return validationResults.every(
+            (v) => v === ItemValidationStatus.Success,
+          );
         } catch (e) {
           this.logger.error(e);
         }

@@ -2,16 +2,19 @@ import { StatusCodes } from 'http-status-codes';
 
 import type { FastifyPluginAsync } from 'fastify';
 
-import { resolveDependency } from '../../../../di/utils';
-import { db } from '../../../../drizzle/db';
-import { asDefined } from '../../../../utils/assertions';
-import { MEMBER_EXPORT_DATA_ROUTE_PREFIX } from '../../../../utils/config';
-import { isAuthenticated, matchOne } from '../../../auth/plugins/passport';
-import { assertIsMember } from '../../../authentication';
-import { MemberRepository } from '../../member.repository';
-import { memberAccountRole } from '../../strategies/memberAccountRole';
-import { exportMemberData } from './memberExportData.schemas';
-import { ExportMemberDataService } from './memberExportData.service';
+import { resolveDependency } from '../../../../di/utils.js';
+import { db } from '../../../../drizzle/db.js';
+import { asDefined } from '../../../../utils/assertions.js';
+import { MEMBER_EXPORT_DATA_ROUTE_PREFIX } from '../../../../utils/config.js';
+import {
+  isAuthenticated,
+  matchOne,
+} from '../../../auth/plugins/passport/preHandlers.js';
+import { assertIsMember } from '../../../authentication.js';
+import { MemberRepository } from '../../member.repository.js';
+import { memberAccountRole } from '../../strategies/memberAccountRole.js';
+import { exportMemberData } from './memberExportData.schemas.js';
+import { ExportMemberDataService } from './memberExportData.service.js';
 
 const plugin: FastifyPluginAsync = async (fastify) => {
   const exportMemberDataService = resolveDependency(ExportMemberDataService);
@@ -37,7 +40,10 @@ const plugin: FastifyPluginAsync = async (fastify) => {
 
           // TODO: add in queue
           await db.transaction(async (tx) => {
-            await exportMemberDataService.createArchiveAndSendByEmail(tx, member.toMemberInfo());
+            await exportMemberDataService.createArchiveAndSendByEmail(
+              tx,
+              member.toMemberInfo(),
+            );
           });
         },
       );

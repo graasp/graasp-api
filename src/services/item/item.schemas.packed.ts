@@ -3,22 +3,22 @@ import { StatusCodes } from 'http-status-codes';
 
 import type { FastifySchema } from 'fastify';
 
-import { customType, registerSchemaAsRef } from '../../plugins/typebox';
-import { errorSchemaRef, itemTypeSchemaRef } from '../../schemas/global';
-import { permissionLevelSchemaRef } from '../../types';
-import { nullableMemberSchemaRef } from '../member/member.schemas';
-import { ITEMS_PAGE_SIZE } from './constants';
-import { appItemSchemaRef } from './plugins/app/app.schemas';
-import { documentItemSchemaRef } from './plugins/document/document.schemas';
-import { embeddedLinkItemSchemaRef } from './plugins/embeddedLink/link.schemas';
-import { etherpadItemSchemaRef } from './plugins/etherpad/etherpad.schemas';
-import { fileItemSchemaRef } from './plugins/file/itemFile.schema';
-import { folderItemSchemaRef } from './plugins/folder/folder.schemas';
-import { h5pItemSchemaRef } from './plugins/html/h5p/h5p.schemas';
-import { itemVisibilitySchemaRef } from './plugins/itemVisibility/itemVisibility.schemas';
-import { pageItemSchemaRef } from './plugins/page/page.schemas';
-import { shortcutItemSchemaRef } from './plugins/shortcut/shortcut.schemas';
-import { Ordering, SortBy } from './types';
+import { customType, registerSchemaAsRef } from '../../plugins/typebox.js';
+import { errorSchemaRef, itemTypeSchemaRef } from '../../schemas/global.js';
+import { permissionLevelSchemaRef } from '../../types.js';
+import { nullableMemberSchemaRef } from '../member/member.schemas.js';
+import { ITEMS_PAGE_SIZE } from './constants.js';
+import { appItemSchemaRef } from './plugins/app/app.schemas.js';
+import { documentItemSchemaRef } from './plugins/document/document.schemas.js';
+import { embeddedLinkItemSchemaRef } from './plugins/embeddedLink/link.schemas.js';
+import { etherpadItemSchemaRef } from './plugins/etherpad/etherpad.schemas.js';
+import { fileItemSchemaRef } from './plugins/file/itemFile.schema.js';
+import { folderItemSchemaRef } from './plugins/folder/folder.schemas.js';
+import { h5pItemSchemaRef } from './plugins/html/h5p/h5p.schemas.js';
+import { itemVisibilitySchemaRef } from './plugins/itemVisibility/itemVisibility.schemas.js';
+import { pageItemSchemaRef } from './plugins/page/page.schemas.js';
+import { shortcutItemSchemaRef } from './plugins/shortcut/shortcut.schemas.js';
+import { Ordering, SortBy } from './types.js';
 
 export const itemSchema = Type.Union([
   appItemSchemaRef,

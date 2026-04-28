@@ -12,28 +12,28 @@ import {
   getFileExtension,
 } from '@graasp/sdk';
 
-import { type DBConnection } from '../../../../drizzle/db';
-import { BaseLogger } from '../../../../logger';
-import type { MaybeUser, MinimalMember } from '../../../../types';
-import { AuthorizedItemService } from '../../../authorizedItem.service';
-import FileService from '../../../file/file.service';
-import { UploadEmptyFileError } from '../../../file/utils/errors';
-import { ItemMembershipRepository } from '../../../itemMembership/membership.repository';
-import { StorageService } from '../../../member/plugins/storage/memberStorage.service';
-import { ThumbnailService } from '../../../thumbnail/thumbnail.service';
-import { randomHexOf4 } from '../../../utils';
-import { WrongItemTypeError } from '../../errors';
-import { type ItemRaw } from '../../item';
-import { ItemRepository } from '../../item.repository';
-import { ItemService } from '../../item.service';
-import { PackedItemService } from '../../packedItem.dto';
-import { readPdfContent } from '../../utils';
-import { ItemGeolocationRepository } from '../geolocation/itemGeolocation.repository';
-import { ItemVisibilityRepository } from '../itemVisibility/itemVisibility.repository';
-import { ItemPublishedRepository } from '../publication/published/itemPublished.repository';
-import { MeiliSearchWrapper } from '../publication/published/plugins/search/meilisearch';
-import { RecycledBinService } from '../recycled/recycled.service';
-import { ItemThumbnailService } from '../thumbnail/itemThumbnail.service';
+import { type DBConnection } from '../../../../drizzle/db.js';
+import { BaseLogger } from '../../../../logger.js';
+import type { MaybeUser, MinimalMember } from '../../../../types.js';
+import { AuthorizedItemService } from '../../../authorizedItem.service.js';
+import FileService from '../../../file/file.service.js';
+import { UploadEmptyFileError } from '../../../file/utils/errors.js';
+import { ItemMembershipRepository } from '../../../itemMembership/membership.repository.js';
+import { StorageService } from '../../../member/plugins/storage/memberStorage.service.js';
+import { ThumbnailService } from '../../../thumbnail/thumbnail.service.js';
+import { randomHexOf4 } from '../../../utils.js';
+import { WrongItemTypeError } from '../../errors.js';
+import { type ItemRaw } from '../../item.js';
+import { ItemRepository } from '../../item.repository.js';
+import { ItemService } from '../../item.service.js';
+import { PackedItemService } from '../../packedItem.dto.js';
+import { readPdfContent } from '../../utils.js';
+import { ItemGeolocationRepository } from '../geolocation/itemGeolocation.repository.js';
+import { ItemVisibilityRepository } from '../itemVisibility/itemVisibility.repository.js';
+import { ItemPublishedRepository } from '../publication/published/itemPublished.repository.js';
+import { MeiliSearchWrapper } from '../publication/published/plugins/search/meilisearch.js';
+import { RecycledBinService } from '../recycled/recycled.service.js';
+import { ItemThumbnailService } from '../thumbnail/itemThumbnail.service.js';
 
 @singleton()
 class FileItemService extends ItemService {
@@ -117,7 +117,10 @@ class FileItemService extends ItemService {
       });
 
       // Add thumbnails if the file is an image or a pdf
-      const thumbnail = await this.itemThumbnailService.generateThumbnail(tmpPath, mimetype);
+      const thumbnail = await this.itemThumbnailService.generateThumbnail(
+        tmpPath,
+        mimetype,
+      );
 
       // Create item from file properties
       return await this.createItemFromFileProperties(dbConnection, actor, {
@@ -232,7 +235,11 @@ class FileItemService extends ItemService {
     return result;
   }
 
-  async copyFile(dbConnection: DBConnection, member: MinimalMember, { copy }: { original; copy }) {
+  async copyFile(
+    dbConnection: DBConnection,
+    member: MinimalMember,
+    { copy }: { original; copy },
+  ) {
     const { id, extra } = copy; // full copy with new `id`
     const { path: originalPath, mimetype, name } = extra['file'];
     const newFilePath = this.buildFilePath(getFileExtension(name));

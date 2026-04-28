@@ -2,8 +2,8 @@ import { faker } from '@faker-js/faker';
 import { subMinutes, subMonths } from 'date-fns';
 import geoip from 'geoip-lite';
 
-import type { ActionRaw } from '../../src/drizzle/types';
-import { View } from '../../src/services/item/plugins/action/itemAction.schemas';
+import type { ActionRaw } from '../../src/drizzle/types.js';
+import { View } from '../../src/services/item/plugins/action/itemAction.schemas.js';
 
 export const ActionFactory = (a: Partial<ActionRaw> = {}): ActionRaw => {
   const now = subMinutes(new Date(), 1); // Today's date

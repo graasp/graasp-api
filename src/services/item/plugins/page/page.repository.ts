@@ -1,8 +1,8 @@
 import { and, asc, desc, eq, gte, lt } from 'drizzle-orm/sql';
 import { singleton } from 'tsyringe';
 
-import { DBConnection } from '../../../../drizzle/db';
-import { pageUpdateTable } from '../../../../drizzle/schema';
+import type { DBConnection } from '../../../../drizzle/db.js';
+import { pageUpdateTable } from '../../../../drizzle/schema.js';
 
 @singleton()
 export class PageRepository {
@@ -12,7 +12,9 @@ export class PageRepository {
     clock: number,
     update: Uint8Array,
   ): Promise<void> {
-    await dbConnection.insert(pageUpdateTable).values({ update, clock, itemId });
+    await dbConnection
+      .insert(pageUpdateTable)
+      .values({ update, clock, itemId });
   }
 
   /**
@@ -21,7 +23,10 @@ export class PageRepository {
    * @param itemId
    * @returns latest update clock
    */
-  async getCurrentUpdateClock(dbConnection: DBConnection, itemId: string): Promise<number> {
+  async getCurrentUpdateClock(
+    dbConnection: DBConnection,
+    itemId: string,
+  ): Promise<number> {
     const lastUpdate = await dbConnection.query.pageUpdateTable.findFirst({
       columns: { clock: true },
       where: eq(pageUpdateTable.itemId, itemId),
@@ -33,7 +38,10 @@ export class PageRepository {
   /**
    * Get all document updates for a specific document.
    */
-  async getUpdates(dbConnection: DBConnection, itemId: string): Promise<Uint8Array[]> {
+  async getUpdates(
+    dbConnection: DBConnection,
+    itemId: string,
+  ): Promise<Uint8Array[]> {
     const updateEntries = await dbConnection.query.pageUpdateTable.findMany({
       columns: { update: true },
       where: eq(pageUpdateTable.itemId, itemId),

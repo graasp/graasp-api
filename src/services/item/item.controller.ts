@@ -3,24 +3,44 @@ import { StatusCodes } from 'http-status-codes';
 import { fastifyMultipart } from '@fastify/multipart';
 import type { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox';
 
-import { resolveDependency } from '../../di/utils';
-import { db } from '../../drizzle/db';
-import type { FastifyInstanceTypebox } from '../../plugins/typebox';
-import { asDefined } from '../../utils/assertions';
-import { isAuthenticated, matchOne, optionalIsAuthenticated } from '../auth/plugins/passport';
-import { assertIsMember } from '../authentication';
-import { memberAccountRole } from '../member/strategies/memberAccountRole';
-import { validatedMemberAccountRole } from '../member/strategies/validatedMemberAccountRole';
-import { ITEMS_PAGE_SIZE } from './constants';
-import type { ItemRaw } from './item';
-import { copyMany, deleteMany, getParentItems, moveMany, reorder, updateOne } from './item.schemas';
-import { create, createWithThumbnail } from './item.schemas.create';
-import { getAccessible, getChildren, getDescendantItems, getOne } from './item.schemas.packed';
-import { ItemService } from './item.service';
-import { PackedItemService } from './packedItem.dto';
-import { ItemActionService } from './plugins/action/itemAction.service';
-import { getPostItemPayloadFromFormData } from './utils';
-import { ItemOpFeedbackErrorEvent, ItemOpFeedbackEvent, memberItemsTopic } from './ws/item.events';
+import { resolveDependency } from '../../di/utils.js';
+import { db } from '../../drizzle/db.js';
+import type { FastifyInstanceTypebox } from '../../plugins/typebox.js';
+import { asDefined } from '../../utils/assertions.js';
+import {
+  isAuthenticated,
+  matchOne,
+  optionalIsAuthenticated,
+} from '../auth/plugins/passport/preHandlers.js';
+import { assertIsMember } from '../authentication.js';
+import { memberAccountRole } from '../member/strategies/memberAccountRole.js';
+import { validatedMemberAccountRole } from '../member/strategies/validatedMemberAccountRole.js';
+import { ITEMS_PAGE_SIZE } from './constants.js';
+import type { ItemRaw } from './item.js';
+import { create, createWithThumbnail } from './item.schemas.create.js';
+import {
+  copyMany,
+  deleteMany,
+  getParentItems,
+  moveMany,
+  reorder,
+  updateOne,
+} from './item.schemas.js';
+import {
+  getAccessible,
+  getChildren,
+  getDescendantItems,
+  getOne,
+} from './item.schemas.packed.js';
+import { ItemService } from './item.service.js';
+import { PackedItemService } from './packedItem.dto.js';
+import { ItemActionService } from './plugins/action/itemAction.service.js';
+import { getPostItemPayloadFromFormData } from './utils.js';
+import {
+  ItemOpFeedbackErrorEvent,
+  ItemOpFeedbackEvent,
+  memberItemsTopic,
+} from './ws/item.events.js';
 
 const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
   const { websockets } = fastify;
@@ -160,7 +180,11 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
       );
 
       // remap to discriminated packed items
-      const packedItems = await itemWrapperService.createPackedItems(db, member, result.data);
+      const packedItems = await itemWrapperService.createPackedItems(
+        db,
+        member,
+        result.data,
+      );
       return { ...result, data: packedItems };
     },
   );
@@ -170,10 +194,15 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
     '/:id/children',
     { schema: getChildren, preHandler: optionalIsAuthenticated },
     async ({ user, params: { id }, query: { types, keywords } }) => {
-      const children = await itemService.getPackedChildren(db, user?.account, id, {
-        types,
-        keywords,
-      });
+      const children = await itemService.getPackedChildren(
+        db,
+        user?.account,
+        id,
+        {
+          types,
+          keywords,
+        },
+      );
       return children;
     },
   );
@@ -183,7 +212,12 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
     '/:id/descendants',
     { schema: getDescendantItems, preHandler: optionalIsAuthenticated },
     async ({ user, params: { id }, query }) => {
-      const result = await itemService.getPackedDescendants(db, user?.account, id, query);
+      const result = await itemService.getPackedDescendants(
+        db,
+        user?.account,
+        id,
+        query,
+      );
       return result;
     },
   );
@@ -280,7 +314,11 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
           websockets.publish(
             memberItemsTopic,
             member.id,
-            ItemOpFeedbackEvent('delete', ids, Object.fromEntries(items.map((i) => [i.id, i]))),
+            ItemOpFeedbackEvent(
+              'delete',
+              ids,
+              Object.fromEntries(items.map((i) => [i.id, i])),
+            ),
           );
         })
         .catch((e) => {
@@ -315,8 +353,17 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
 
       await db
         .transaction(async (tsx) => {
-          const results = await itemService.moveMany(tsx, member, ids, parentId);
-          await itemActionService.postManyMoveAction(tsx, request, results.items);
+          const results = await itemService.moveMany(
+            tsx,
+            member,
+            ids,
+            parentId,
+          );
+          await itemActionService.postManyMoveAction(
+            tsx,
+            request,
+            results.items,
+          );
           return results;
         })
         .then(({ items, moved }) => {
@@ -328,7 +375,11 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
         })
         .catch((e) => {
           log.error(e);
-          websockets.publish(memberItemsTopic, member.id, ItemOpFeedbackErrorEvent('move', ids, e));
+          websockets.publish(
+            memberItemsTopic,
+            member.id,
+            ItemOpFeedbackErrorEvent('move', ids, e),
+          );
         });
     },
   );
@@ -367,7 +418,11 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
         })
         .catch((e) => {
           log.error(e);
-          websockets.publish(memberItemsTopic, member.id, ItemOpFeedbackErrorEvent('copy', ids, e));
+          websockets.publish(
+            memberItemsTopic,
+            member.id,
+            ItemOpFeedbackErrorEvent('copy', ids, e),
+          );
         });
     },
   );

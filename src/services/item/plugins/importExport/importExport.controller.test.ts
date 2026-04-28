@@ -16,21 +16,21 @@ import build, {
   clearDatabase,
   mockAuthenticate,
   unmockAuthenticate,
-} from '../../../../../test/app';
-import { ItemFactory } from '../../../../../test/factories/item.factory';
-import { seedFromJson } from '../../../../../test/mocks/seed';
-import { REDIS_CONNECTION } from '../../../../config/redis';
-import { db } from '../../../../drizzle/db';
-import { isDescendantOrSelf, isDirectChild } from '../../../../drizzle/operations';
-import { appSettingsTable, itemsRawTable } from '../../../../drizzle/schema';
-import { assertIsDefined } from '../../../../utils/assertions';
-import { ITEMS_ROUTE_PREFIX, THUMBNAILS_ROUTE_PREFIX } from '../../../../utils/config';
-import { Queues } from '../../../../workers/config';
-import { LocalFileRepository } from '../../../file/repositories/local';
-import { GRAASP_MANIFEST_FILENAME } from './constants';
-import { GraaspExportItem } from './import.service';
-import * as ARCHIVE_CONTENT from './test/fixtures/archive';
-import { prepareZip } from './utils';
+} from '../../../../../test/app.js';
+import { ItemFactory } from '../../../../../test/factories/item.factory.js';
+import { seedFromJson } from '../../../../../test/mocks/seed.js';
+import { REDIS_CONNECTION } from '../../../../config/redis.js';
+import { db } from '../../../../drizzle/db.js';
+import { isDescendantOrSelf, isDirectChild } from '../../../../drizzle/operations.js';
+import { appSettingsTable, itemsRawTable } from '../../../../drizzle/schema.js';
+import { assertIsDefined } from '../../../../utils/assertions.js';
+import { ITEMS_ROUTE_PREFIX, THUMBNAILS_ROUTE_PREFIX } from '../../../../utils/config.js';
+import { Queues } from '../../../../workers/config.js';
+import { LocalFileRepository } from '../../../file/repositories/local.js';
+import { GRAASP_MANIFEST_FILENAME } from './constants.js';
+import { GraaspExportItem } from './import.service.js';
+import * as ARCHIVE_CONTENT from './test/fixtures/archive.js';
+import { prepareZip } from './utils.js';
 
 // note: some tests are flacky
 jest.retryTimes(3, { logErrorsBeforeRetry: true });

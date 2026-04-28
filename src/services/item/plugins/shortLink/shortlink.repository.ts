@@ -7,22 +7,22 @@ import {
   type UpdateShortLink,
 } from '@graasp/sdk';
 
-import { type DBConnection } from '../../../../drizzle/db';
-import { DUPLICATE_ERROR_CODE } from '../../../../drizzle/errorCodes';
-import { shortLinksTable } from '../../../../drizzle/schema';
+import { type DBConnection } from '../../../../drizzle/db.js';
+import { DUPLICATE_ERROR_CODE } from '../../../../drizzle/errorCodes.js';
+import { shortLinksTable } from '../../../../drizzle/schema.js';
 import type {
   ShortLinkInsertDTO,
   ShortLinkRaw,
   ShortLinkWithItem,
-} from '../../../../drizzle/types';
-import { UpdateException } from '../../../../repositories/errors';
-import { throwsIfParamIsInvalid } from '../../../../repositories/utils';
-import { assertIsError } from '../../../../utils/assertions';
+} from '../../../../drizzle/types.js';
+import { UpdateException } from '../../../../repositories/errors.js';
+import { throwsIfParamIsInvalid } from '../../../../repositories/utils.js';
+import { assertIsError } from '../../../../utils/assertions.js';
 import {
   ShortLinkDuplication,
   ShortLinkLimitExceed,
   ShortLinkNotFound,
-} from '../../../../utils/errors';
+} from '../../../../utils/errors.js';
 
 type CreateShortLinkBody = CreateShortLink;
 type UpdateShortLinkBody = UpdateShortLink;

@@ -16,7 +16,7 @@ import {
   getIdsFromPath,
 } from '@graasp/sdk';
 
-import { db } from '../../src/drizzle/db';
+import { db } from '../../src/drizzle/db.js';
 import {
   accountsTable,
   actionRequestExportsTable,
@@ -47,7 +47,7 @@ import {
   recycledItemDatasTable,
   shortLinksTable,
   tagsTable,
-} from '../../src/drizzle/schema';
+} from '../../src/drizzle/schema.js';
 import type {
   AccountRaw,
   ActionRaw,
@@ -76,15 +76,15 @@ import type {
   MembershipRequestRaw,
   ShortLinkRaw,
   TagRaw,
-} from '../../src/drizzle/types';
-import { encryptPassword } from '../../src/services/auth/plugins/password/utils';
-import type { ItemRaw } from '../../src/services/item/item';
-import { PermissionLevel } from '../../src/types';
-import { APPS_PUBLISHER_ID } from '../../src/utils/config';
-import { ActionFactory } from '../factories/action.factory';
-import { ItemFactory } from '../factories/item.factory';
-import { GuestFactory, MemberFactory } from '../factories/member.factory';
-import { MemberProfileFactory } from '../factories/memberProfile.factory';
+} from '../../src/drizzle/types.js';
+import { encryptPassword } from '../../src/services/auth/plugins/password/utils.js';
+import type { ItemRaw } from '../../src/services/item/item.js';
+import { PermissionLevel } from '../../src/types.js';
+import { APPS_PUBLISHER_ID } from '../../src/utils/config.js';
+import { ActionFactory } from '../factories/action.factory.js';
+import { ItemFactory } from '../factories/item.factory.js';
+import { GuestFactory, MemberFactory } from '../factories/member.factory.js';
+import { MemberProfileFactory } from '../factories/memberProfile.factory.js';
 
 const ACTOR_STRING = 'actor';
 export type SeedActor = Partial<AccountRaw> & {

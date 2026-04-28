@@ -2,26 +2,26 @@ import { StatusCodes } from 'http-status-codes';
 
 import type { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox';
 
-import { resolveDependency } from '../../../../../di/utils';
-import { db } from '../../../../../drizzle/db';
-import { asDefined } from '../../../../../utils/assertions';
+import { resolveDependency } from '../../../../../di/utils.js';
+import { db } from '../../../../../drizzle/db.js';
+import { asDefined } from '../../../../../utils/assertions.js';
 import {
   isAuthenticated,
   matchOne,
   optionalIsAuthenticated,
-} from '../../../../auth/plugins/passport';
-import { assertIsMember } from '../../../../authentication';
-import { AuthorizedItemService } from '../../../../authorizedItem.service';
-import { validatedMemberAccountRole } from '../../../../member/strategies/validatedMemberAccountRole';
-import { PublicationService } from '../publicationState/publication.service';
+} from '../../../../auth/plugins/passport/preHandlers.js';
+import { assertIsMember } from '../../../../authentication.js';
+import { AuthorizedItemService } from '../../../../authorizedItem.service.js';
+import { validatedMemberAccountRole } from '../../../../member/strategies/validatedMemberAccountRole.js';
+import { PublicationService } from '../publicationState/publication.service.js';
 import {
   getCollectionsForMember,
   getInformations,
   publishItem,
   unpublishItem,
-} from './itemPublished.schemas';
-import { ItemPublishedService } from './itemPublished.service';
-import graaspSearchPlugin from './plugins/search/search.controller';
+} from './itemPublished.schemas.js';
+import { ItemPublishedService } from './itemPublished.service.js';
+import graaspSearchPlugin from './plugins/search/search.controller.js';
 
 const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
   const itemPublishedService = resolveDependency(ItemPublishedService);
@@ -37,7 +37,11 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
       preHandler: optionalIsAuthenticated,
     },
     async ({ user, params: { memberId } }) => {
-      return itemPublishedService.getItemsForMember(db, user?.account, memberId);
+      return itemPublishedService.getItemsForMember(
+        db,
+        user?.account,
+        memberId,
+      );
     },
   );
 
@@ -48,7 +52,11 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
       schema: getInformations,
     },
     async ({ params, user }) => {
-      const info = await itemPublishedService.get(db, user?.account, params.itemId);
+      const info = await itemPublishedService.get(
+        db,
+        user?.account,
+        params.itemId,
+      );
       return info;
     },
   );
@@ -69,7 +77,11 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
           permission: 'admin',
         });
 
-        const status = await publicationService.computeStateForItem(tx, member, item.id);
+        const status = await publicationService.computeStateForItem(
+          tx,
+          member,
+          item.id,
+        );
 
         await itemPublishedService.post(tx, member, item, status);
       });

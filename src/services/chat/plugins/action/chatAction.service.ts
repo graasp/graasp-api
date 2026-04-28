@@ -4,9 +4,9 @@ import type { FastifyRequest } from 'fastify';
 
 import { Context, type UUID } from '@graasp/sdk';
 
-import { type DBConnection } from '../../../../drizzle/db';
-import type { ChatMessageRaw } from '../../../../drizzle/types';
-import { ActionService } from '../../../action/action.service';
+import { type DBConnection } from '../../../../drizzle/db.js';
+import type { ChatMessageRaw } from '../../../../drizzle/types.js';
+import { ActionService } from '../../../action/action.service.js';
 
 enum ChatActionType {
   Create = 'chat_create',
@@ -39,7 +39,9 @@ export class ActionChatService {
       // view: ??
     };
 
-    await this.actionService.postMany(dbConnection, user?.account, request, [action]);
+    await this.actionService.postMany(dbConnection, user?.account, request, [
+      action,
+    ]);
   }
 
   async postPatchMessageAction(
@@ -58,7 +60,9 @@ export class ActionChatService {
       // FIX: add view from which the action was created
       // view: ??
     };
-    await this.actionService.postMany(dbConnection, user?.account, request, [action]);
+    await this.actionService.postMany(dbConnection, user?.account, request, [
+      action,
+    ]);
   }
 
   async postDeleteMessageAction(
@@ -74,16 +78,24 @@ export class ActionChatService {
       // FIX: add view from which the action was created
       // view: ??
     };
-    await this.actionService.postMany(dbConnection, user?.account, request, [action]);
+    await this.actionService.postMany(dbConnection, user?.account, request, [
+      action,
+    ]);
   }
 
-  async postClearMessageAction(dbConnection: DBConnection, request: FastifyRequest, itemId: UUID) {
+  async postClearMessageAction(
+    dbConnection: DBConnection,
+    request: FastifyRequest,
+    itemId: UUID,
+  ) {
     const { user } = request;
     const action = {
       type: ChatActionType.Clear,
       extra: JSON.stringify({ itemId }),
       view: Context.Builder,
     };
-    await this.actionService.postMany(dbConnection, user?.account, request, [action]);
+    await this.actionService.postMany(dbConnection, user?.account, request, [
+      action,
+    ]);
   }
 }

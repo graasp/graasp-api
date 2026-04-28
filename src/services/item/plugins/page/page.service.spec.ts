@@ -1,16 +1,14 @@
 import { eq } from 'drizzle-orm/sql';
 import { describe, expect, it } from 'vitest';
 import waitForExpect from 'wait-for-expect';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-expect-error
 import { Doc, encodeStateAsUpdate, encodeStateVector } from 'yjs';
 
-import { seedFromJson } from '../../../../../test/mocks/seed';
-import { db } from '../../../../drizzle/db';
-import { pageUpdateTable } from '../../../../drizzle/schema';
-import { ItemService } from '../../item.service';
-import { PageRepository } from './page.repository';
-import { PageItemService } from './page.service';
+import { seedFromJson } from '../../../../../test/mocks/seed.js';
+import { db } from '../../../../drizzle/db.js';
+import { pageUpdateTable } from '../../../../drizzle/schema.js';
+import { ItemService } from '../../item.service.js';
+import { PageRepository } from './page.repository.js';
+import { PageItemService } from './page.service.js';
 
 const itemService = {} as ItemService;
 const pageRepository = new PageRepository();
@@ -82,7 +80,9 @@ describe('PageItemService', () => {
         // expect doc to have all updates
         const initDoc = await pageItemService.getById(db, item.id);
         expect(initDoc).toBeDefined();
-        expect(Buffer.from(encodeStateAsUpdate(initDoc))).toEqual(Buffer.from(docState));
+        expect(Buffer.from(encodeStateAsUpdate(initDoc))).toEqual(
+          Buffer.from(docState),
+        );
 
         // db should contain less updates
         const updates = await db.query.pageUpdateTable.findMany({

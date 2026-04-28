@@ -4,25 +4,33 @@ import type { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox';
 
 import { MembershipRequestStatus } from '@graasp/sdk';
 
-import { resolveDependency } from '../../../../di/utils';
-import { db } from '../../../../drizzle/db';
-import { asDefined } from '../../../../utils/assertions';
-import { ItemNotFound } from '../../../../utils/errors';
-import { isAuthenticated, matchOne } from '../../../auth/plugins/passport';
-import { assertIsMember } from '../../../authentication';
-import { AuthorizedItemService } from '../../../authorizedItem.service';
-import { ItemRepository } from '../../../item/item.repository';
-import { ItemLoginSchemaExists } from '../../../itemLogin/errors';
-import { ItemLoginService } from '../../../itemLogin/itemLogin.service';
-import { validatedMemberAccountRole } from '../../../member/strategies/validatedMemberAccountRole';
-import { ItemMembershipService } from '../../membership.service';
+import { resolveDependency } from '../../../../di/utils.js';
+import { db } from '../../../../drizzle/db.js';
+import { asDefined } from '../../../../utils/assertions.js';
+import { ItemNotFound } from '../../../../utils/errors.js';
+import {
+  isAuthenticated,
+  matchOne,
+} from '../../../auth/plugins/passport/preHandlers.js';
+import { assertIsMember } from '../../../authentication.js';
+import { AuthorizedItemService } from '../../../authorizedItem.service.js';
+import { ItemRepository } from '../../../item/item.repository.js';
+import { ItemLoginSchemaExists } from '../../../itemLogin/errors.js';
+import { ItemLoginService } from '../../../itemLogin/itemLogin.service.js';
+import { validatedMemberAccountRole } from '../../../member/strategies/validatedMemberAccountRole.js';
+import { ItemMembershipService } from '../../membership.service.js';
 import {
   ItemMembershipAlreadyExists,
   MembershipRequestAlreadyExists,
   MembershipRequestNotFound,
-} from './error';
-import { createOne, deleteOne, getAllByItem, getOwn } from './membershipRequest.schemas';
-import { MembershipRequestService } from './membershipRequest.service';
+} from './error.js';
+import {
+  createOne,
+  deleteOne,
+  getAllByItem,
+  getOwn,
+} from './membershipRequest.schemas.js';
+import { MembershipRequestService } from './membershipRequest.service.js';
 
 const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
   const membershipRequestService = resolveDependency(MembershipRequestService);
@@ -49,7 +57,10 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
           permission: 'admin',
         });
 
-        const requests = await membershipRequestService.getAllByItem(tx, itemId);
+        const requests = await membershipRequestService.getAllByItem(
+          tx,
+          itemId,
+        );
         reply.send(requests);
       });
     },
@@ -66,7 +77,11 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
       const { itemId } = params;
 
       await db.transaction(async (tx) => {
-        const membershipRequest = await membershipRequestService.get(tx, member.id, itemId);
+        const membershipRequest = await membershipRequestService.get(
+          tx,
+          member.id,
+          itemId,
+        );
         if (membershipRequest) {
           return reply.send({ status: MembershipRequestStatus.Pending });
         }
@@ -104,13 +119,20 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
       const { itemId } = params;
 
       await db.transaction(async (tx) => {
-        const membershipRequest = await membershipRequestService.get(tx, member.id, itemId);
+        const membershipRequest = await membershipRequestService.get(
+          tx,
+          member.id,
+          itemId,
+        );
         if (membershipRequest) {
           throw new MembershipRequestAlreadyExists();
         }
         const item = await itemRepository.getOneOrThrow(tx, itemId);
 
-        const itemLoginSchema = await itemLoginService.getByItemPath(tx, item.path);
+        const itemLoginSchema = await itemLoginService.getByItemPath(
+          tx,
+          item.path,
+        );
         if (itemLoginSchema) {
           throw new ItemLoginSchemaExists();
         }
@@ -151,7 +173,11 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
           permission: 'admin',
         });
 
-        const result = await membershipRequestService.deleteOne(tx, memberId, itemId);
+        const result = await membershipRequestService.deleteOne(
+          tx,
+          memberId,
+          itemId,
+        );
 
         // throw if the operation didn't delete anything
         if (!result) {

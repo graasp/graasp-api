@@ -2,13 +2,20 @@ import { and, arrayContains, count, desc, eq, sql } from 'drizzle-orm/sql';
 
 import type { AuthTokenSubject } from '@graasp/sdk';
 
-import { type DBConnection } from '../../../../drizzle/db';
-import { appsTable, items, publishersTable } from '../../../../drizzle/schema';
-import type { AppRaw } from '../../../../drizzle/types';
-import { InvalidApplicationOrigin } from './errors';
+import { type DBConnection } from '../../../../drizzle/db.js';
+import {
+  appsTable,
+  items,
+  publishersTable,
+} from '../../../../drizzle/schema.js';
+import type { AppRaw } from '../../../../drizzle/types.js';
+import { InvalidApplicationOrigin } from './errors.js';
 
 export class AppRepository {
-  async getAll(dbConnection: DBConnection, publisherId: string): Promise<AppRaw[]> {
+  async getAll(
+    dbConnection: DBConnection,
+    publisherId: string,
+  ): Promise<AppRaw[]> {
     return await dbConnection.query.appsTable.findMany({
       where: eq(appsTable.publisherId, publisherId),
     });
@@ -19,7 +26,11 @@ export class AppRepository {
     memberId: string,
   ): Promise<{ url: string; name: string; count: number }[]> {
     const data = await dbConnection
-      .select({ url: appsTable.url, name: appsTable.name, count: count(items.id) })
+      .select({
+        url: appsTable.url,
+        name: appsTable.name,
+        count: count(items.id),
+      })
       .from(appsTable)
       .innerJoin(
         items,

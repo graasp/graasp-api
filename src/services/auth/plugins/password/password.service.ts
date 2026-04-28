@@ -1,34 +1,34 @@
 import { Redis } from 'ioredis';
-import { type SignOptions, sign } from 'jsonwebtoken';
 import { singleton } from 'tsyringe';
 import { v4 as uuid } from 'uuid';
 
 import { ClientManager, Context } from '@graasp/sdk';
 
-import {
-  JWT_SECRET,
-  PASSWORD_RESET_JWT_EXPIRATION_IN_MINUTES,
-  PASSWORD_RESET_JWT_SECRET,
-} from '../../../../config/secrets';
-import { type DBConnection } from '../../../../drizzle/db';
-import { TRANSLATIONS } from '../../../../langs/constants';
-import { BaseLogger } from '../../../../logger';
-import { MailBuilder } from '../../../../plugins/mailer/builder';
-import { MailerService } from '../../../../plugins/mailer/mailer.service';
-import type { AuthenticatedUser, MemberInfo } from '../../../../types';
+import { PASSWORD_RESET_JWT_EXPIRATION_IN_MINUTES } from '../../../../config/secrets.js';
+import { signAccessToken } from '../../../../crypto/jwt.js';
+import { type DBConnection } from '../../../../drizzle/db.js';
+import { TRANSLATIONS } from '../../../../langs/constants.js';
+import { BaseLogger } from '../../../../logger.js';
+import { MailBuilder } from '../../../../plugins/mailer/builder.js';
+import { MailerService } from '../../../../plugins/mailer/mailer.service.js';
+import type { AuthenticatedUser, MemberInfo } from '../../../../types.js';
 import {
   BadCredentials,
   EmptyCurrentPassword,
   InvalidPassword,
   MemberNotSignedUp,
   MemberWithoutPassword,
-} from '../../../../utils/errors';
-import { MemberRepository } from '../../../member/member.repository';
-import { MemberDTO } from '../../../member/types';
-import { SHORT_TOKEN_PARAM } from '../passport';
-import { PasswordConflict } from './errors';
-import { MemberPasswordRepository } from './password.repository';
-import { comparePasswords, encryptPassword, verifyCurrentPassword } from './utils';
+} from '../../../../utils/errors.js';
+import { MemberRepository } from '../../../member/member.repository.js';
+import { MemberDTO } from '../../../member/types.js';
+import { SHORT_TOKEN_PARAM } from '../passport/constants.js';
+import { PasswordConflict } from './errors.js';
+import { MemberPasswordRepository } from './password.repository.js';
+import {
+  comparePasswords,
+  encryptPassword,
+  verifyCurrentPassword,
+} from './utils.js';
 
 const REDIS_PREFIX = 'reset-password:';
 
@@ -69,11 +69,9 @@ export class MemberPasswordService {
    * @param expiration The expiration time of the token.
    * @returns A promise to be resolved with the generated token.
    */
-  generateToken(data: { sub: string; challenge?: string }, expiration: SignOptions['expiresIn']) {
-    return sign(data, JWT_SECRET, {
-      expiresIn: expiration,
-    });
-  }
+  // generateToken(data: { sub: string; challenge?: string }, expiration: string) {
+  //   return signAccessToken(data as Record<string, unknown>, "" expiration);
+  // }
 
   async post(
     dbConnection: DBConnection,
@@ -113,7 +111,10 @@ export class MemberPasswordService {
     // Check if password can be updated
     // member has a password, we must check if passwords match before updating
     if (memberPassword) {
-      const verified = await verifyCurrentPassword(memberPassword.password, currentPassword);
+      const verified = await verifyCurrentPassword(
+        memberPassword.password,
+        currentPassword,
+      );
       // throw error if password verification fails
       if (!verified) {
         // this should be validated by the schema, but we do it again here.
@@ -124,7 +125,11 @@ export class MemberPasswordService {
       }
     }
     // apply password change
-    await this.memberPasswordRepository.put(dbConnection, authenticatedUser.id, newPassword);
+    await this.memberPasswordRepository.put(
+      dbConnection,
+      authenticatedUser.id,
+      newPassword,
+    );
   }
 
   /**
@@ -136,7 +141,11 @@ export class MemberPasswordService {
    * @param uuid The Password Reset Request UUID associated to the member that wants to reset the password.
    * @returns void
    */
-  async applyReset(dbConnection: DBConnection, password: string, uuid: string): Promise<void> {
+  async applyReset(
+    dbConnection: DBConnection,
+    password: string,
+    uuid: string,
+  ): Promise<void> {
     const id = await this.redis.get(this.buildRedisKey(uuid));
     if (!id) {
       return;
@@ -164,14 +173,19 @@ export class MemberPasswordService {
     if (!member) {
       return;
     }
-    const password = await this.memberPasswordRepository.getForMemberId(dbConnection, member.id);
+    const password = await this.memberPasswordRepository.getForMemberId(
+      dbConnection,
+      member.id,
+    );
     if (!password) {
       return;
     }
     const payload = { uuid: uuid() };
-    const token = sign(payload, PASSWORD_RESET_JWT_SECRET, {
-      expiresIn: `${PASSWORD_RESET_JWT_EXPIRATION_IN_MINUTES}m`,
-    });
+    const token = await signAccessToken(
+      payload,
+      'password-reset',
+      `${PASSWORD_RESET_JWT_EXPIRATION_IN_MINUTES}m`,
+    );
     this.redis.setex(
       this.buildRedisKey(payload.uuid),
       PASSWORD_RESET_JWT_EXPIRATION_IN_MINUTES * 60,
@@ -211,7 +225,9 @@ export class MemberPasswordService {
     this.mailerService
       .send(mail, email)
       .catch((err) =>
-        this.log.warn(`mailerService failed with: ${err.message}. link: ${destinationUrl}`),
+        this.log.warn(
+          `mailerService failed with: ${err.message}. link: ${destinationUrl}`,
+        ),
       );
   }
 
@@ -230,7 +246,10 @@ export class MemberPasswordService {
    * @param uuid The Password Reset Request UUID
    * @returns The member associated to the UUID. Otherwise, undefined if we couldn't find the member.
    */
-  async getMemberByPasswordResetUuid(dbConnection: DBConnection, uuid: string): Promise<MemberDTO> {
+  async getMemberByPasswordResetUuid(
+    dbConnection: DBConnection,
+    uuid: string,
+  ): Promise<MemberDTO> {
     const id = await this.redis.get(this.buildRedisKey(uuid));
     if (!id) {
       throw new Error('Id not found');
@@ -274,8 +293,14 @@ export class MemberPasswordService {
     throw new BadCredentials();
   }
 
-  async hasPassword(dbConnection: DBConnection, memberId: string): Promise<boolean> {
-    const password = await this.memberPasswordRepository.getForMemberId(dbConnection, memberId);
+  async hasPassword(
+    dbConnection: DBConnection,
+    memberId: string,
+  ): Promise<boolean> {
+    const password = await this.memberPasswordRepository.getForMemberId(
+      dbConnection,
+      memberId,
+    );
     return Boolean(password);
   }
 }

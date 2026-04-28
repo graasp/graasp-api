@@ -6,17 +6,21 @@ import type { FastifyInstance } from 'fastify';
 
 import { HttpMethod } from '@graasp/sdk';
 
-import build, { clearDatabase, mockAuthenticate, unmockAuthenticate } from '../../../test/app';
-import { seedFromJson } from '../../../test/mocks/seed';
-import { resolveDependency } from '../../di/utils';
-import { db } from '../../drizzle/db';
-import { chatMentionsTable, chatMessagesTable } from '../../drizzle/schema';
-import type { ChatMessageRaw } from '../../drizzle/types';
-import { MailerService } from '../../plugins/mailer/mailer.service';
-import { assertIsDefined } from '../../utils/assertions';
-import { ITEMS_ROUTE_PREFIX } from '../../utils/config';
-import { ItemNotFound, MemberCannotAccess } from '../../utils/errors';
-import { ChatMessageNotFound, MemberCannotDeleteMessage, MemberCannotEditMessage } from './errors';
+import build, { clearDatabase, mockAuthenticate, unmockAuthenticate } from '../../../test/app.js';
+import { seedFromJson } from '../../../test/mocks/seed.js';
+import { resolveDependency } from '../../di/utils.js';
+import { db } from '../../drizzle/db.js';
+import { chatMentionsTable, chatMessagesTable } from '../../drizzle/schema.js';
+import type { ChatMessageRaw } from '../../drizzle/types.js';
+import { MailerService } from '../../plugins/mailer/mailer.service.js';
+import { assertIsDefined } from '../../utils/assertions.js';
+import { ITEMS_ROUTE_PREFIX } from '../../utils/config.js';
+import { ItemNotFound, MemberCannotAccess } from '../../utils/errors.js';
+import {
+  ChatMessageNotFound,
+  MemberCannotDeleteMessage,
+  MemberCannotEditMessage,
+} from './errors.js';
 
 const getMessagesByItemId = async (itemId: string) =>
   await db.query.chatMessagesTable.findMany({

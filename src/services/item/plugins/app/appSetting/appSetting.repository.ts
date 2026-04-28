@@ -1,10 +1,10 @@
 import { and, eq } from 'drizzle-orm';
 
-import { type DBConnection } from '../../../../../drizzle/db';
-import { appSettingsTable } from '../../../../../drizzle/schema';
-import type { AppSettingInsertDTO, AppSettingRaw } from '../../../../../drizzle/types';
-import { ItemNotFound } from '../../../../../utils/errors';
-import { AppSettingNotFound, PreventUpdateAppSettingFile } from './errors';
+import { type DBConnection } from '../../../../../drizzle/db.js';
+import { appSettingsTable } from '../../../../../drizzle/schema.js';
+import type { AppSettingInsertDTO, AppSettingRaw } from '../../../../../drizzle/types.js';
+import { ItemNotFound } from '../../../../../utils/errors.js';
+import { AppSettingNotFound, PreventUpdateAppSettingFile } from './errors.js';
 
 type UpdateAppSettingBody = Partial<AppSettingRaw>;
 

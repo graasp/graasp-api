@@ -1,24 +1,24 @@
 import { singleton } from 'tsyringe';
 
-import { UUID } from '@graasp/sdk';
+import type { UUID } from '@graasp/sdk';
 
-import { type DBConnection } from '../../../../drizzle/db';
-import { BaseLogger } from '../../../../logger';
-import type { MinimalMember } from '../../../../types';
-import { ItemNotFolder } from '../../../../utils/errors';
-import { AuthorizedItemService } from '../../../authorizedItem.service';
-import { ItemMembershipRepository } from '../../../itemMembership/membership.repository';
-import { ThumbnailService } from '../../../thumbnail/thumbnail.service';
-import type { CapsuleItem, FolderItem, ItemRaw } from '../../item';
-import { ItemRepository } from '../../item.repository';
-import { ItemService } from '../../item.service';
-import { PackedItemService } from '../../packedItem.dto';
-import { ItemGeolocationRepository } from '../geolocation/itemGeolocation.repository';
-import { ItemVisibilityRepository } from '../itemVisibility/itemVisibility.repository';
-import { ItemPublishedRepository } from '../publication/published/itemPublished.repository';
-import { MeiliSearchWrapper } from '../publication/published/plugins/search/meilisearch';
-import { RecycledBinService } from '../recycled/recycled.service';
-import { ItemThumbnailService } from '../thumbnail/itemThumbnail.service';
+import { type DBConnection } from '../../../../drizzle/db.js';
+import { BaseLogger } from '../../../../logger.js';
+import type { MinimalMember } from '../../../../types.js';
+import { ItemNotFolder } from '../../../../utils/errors.js';
+import { AuthorizedItemService } from '../../../authorizedItem.service.js';
+import { ItemMembershipRepository } from '../../../itemMembership/membership.repository.js';
+import { ThumbnailService } from '../../../thumbnail/thumbnail.service.js';
+import type { CapsuleItem, FolderItem, ItemRaw } from '../../item.js';
+import { ItemRepository } from '../../item.repository.js';
+import { ItemService } from '../../item.service.js';
+import { PackedItemService } from '../../packedItem.dto.js';
+import { ItemGeolocationRepository } from '../geolocation/itemGeolocation.repository.js';
+import { ItemVisibilityRepository } from '../itemVisibility/itemVisibility.repository.js';
+import { ItemPublishedRepository } from '../publication/published/itemPublished.repository.js';
+import { MeiliSearchWrapper } from '../publication/published/plugins/search/meilisearch.js';
+import { RecycledBinService } from '../recycled/recycled.service.js';
+import { ItemThumbnailService } from '../thumbnail/itemThumbnail.service.js';
 
 @singleton()
 export class CapsuleItemService extends ItemService {
@@ -56,14 +56,19 @@ export class CapsuleItemService extends ItemService {
     dbConnection: DBConnection,
     member: MinimalMember,
     args: {
-      item: Partial<Pick<ItemRaw, 'description' | 'settings' | 'lang'>> & Pick<ItemRaw, 'name'>;
+      item: Partial<Pick<ItemRaw, 'description' | 'settings' | 'lang'>> &
+        Pick<ItemRaw, 'name'>;
       parentId?: string;
       previousItemId?: ItemRaw['id'];
     },
   ): Promise<CapsuleItem> {
     return (await super.post(dbConnection, member, {
       ...args,
-      item: { ...args.item, type: 'folder', extra: { folder: { isCapsule: true } } },
+      item: {
+        ...args.item,
+        type: 'folder',
+        extra: { folder: { isCapsule: true } },
+      },
     })) as CapsuleItem;
   }
 

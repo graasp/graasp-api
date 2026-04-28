@@ -1,19 +1,18 @@
-import { sign } from 'jsonwebtoken';
 import { singleton } from 'tsyringe';
 
 import {
-  JWT_SECRET,
   LOGIN_TOKEN_EXPIRATION_IN_MINUTES,
   REGISTER_TOKEN_EXPIRATION_IN_MINUTES,
-} from '../../config/secrets';
-import { TRANSLATIONS } from '../../langs/constants';
-import { BaseLogger } from '../../logger';
-import { MailBuilder } from '../../plugins/mailer/builder';
-import { MailerService } from '../../plugins/mailer/mailer.service';
-import type { MemberInfo } from '../../types';
-import { PUBLIC_URL } from '../../utils/config';
-import { SHORT_TOKEN_PARAM } from './plugins/passport';
-import { getRedirectionLink } from './utils';
+} from '../../config/secrets.js';
+import { signAccessToken } from '../../crypto/jwt.js';
+import { TRANSLATIONS } from '../../langs/constants.js';
+import { BaseLogger } from '../../logger.js';
+import { MailBuilder } from '../../plugins/mailer/builder.js';
+import { MailerService } from '../../plugins/mailer/mailer.service.js';
+import type { MemberInfo } from '../../types.js';
+import { PUBLIC_URL } from '../../utils/config.js';
+import { SHORT_TOKEN_PARAM } from './plugins/passport/constants.js';
+import { getRedirectionLink } from './utils.js';
 
 @singleton()
 export class AuthService {
@@ -32,9 +31,11 @@ export class AuthService {
     const { challenge, url } = options;
 
     // generate token with member info and expiration
-    const token = sign({ sub: member.id, challenge, emailValidation: true }, JWT_SECRET, {
-      expiresIn: `${REGISTER_TOKEN_EXPIRATION_IN_MINUTES}m`,
-    });
+    const token = await signAccessToken(
+      { sub: member.id, challenge, emailValidation: true },
+      'register',
+      `${REGISTER_TOKEN_EXPIRATION_IN_MINUTES}m`,
+    );
 
     const redirectionUrl = getRedirectionLink(this.log, url);
     const domain = PUBLIC_URL;
@@ -57,7 +58,11 @@ export class AuthService {
     // don't wait for mailerService's response; log error and link if it fails.
     this.mailerService
       .send(mail, member.email)
-      .catch((err) => this.log.warn(`mailerService failed with ${err.message}. link: ${link}`));
+      .catch((err) =>
+        this.log.warn(
+          `mailerService failed with ${err.message}. link: ${link}`,
+        ),
+      );
   }
 
   public async generateLoginLinkAndEmailIt(
@@ -67,9 +72,11 @@ export class AuthService {
     const { challenge, url } = options;
 
     // generate token with member info and expiration
-    const token = sign({ sub: member.id, challenge, emailValidation: true }, JWT_SECRET, {
-      expiresIn: `${LOGIN_TOKEN_EXPIRATION_IN_MINUTES}m`,
-    });
+    const token = await signAccessToken(
+      { sub: member.id, challenge, emailValidation: true },
+      'login',
+      `${LOGIN_TOKEN_EXPIRATION_IN_MINUTES}m`,
+    );
 
     const redirectionUrl = getRedirectionLink(this.log, url);
     const domain = PUBLIC_URL;
@@ -90,6 +97,8 @@ export class AuthService {
     // don't wait for mailerService's response; log error and link if it fails.
     this.mailerService
       .send(mail, member.email)
-      .catch((err) => this.log.warn(`mailerService failed: ${err.message}. link: ${link}`));
+      .catch((err) =>
+        this.log.warn(`mailerService failed: ${err.message}. link: ${link}`),
+      );
   }
 }

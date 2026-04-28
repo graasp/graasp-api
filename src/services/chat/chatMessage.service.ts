@@ -1,11 +1,15 @@
 import { singleton } from 'tsyringe';
 
-import { type DBConnection } from '../../drizzle/db';
-import type { AuthenticatedUser, MaybeUser } from '../../types';
-import { AuthorizedItemService } from '../authorizedItem.service';
-import { ChatMessageRepository } from './chatMessage.repository';
-import { ChatMessageNotFound, MemberCannotDeleteMessage, MemberCannotEditMessage } from './errors';
-import { MentionService } from './plugins/mentions/chatMention.service';
+import { type DBConnection } from '../../drizzle/db.js';
+import type { AuthenticatedUser, MaybeUser } from '../../types.js';
+import { AuthorizedItemService } from '../authorizedItem.service.js';
+import { ChatMessageRepository } from './chatMessage.repository.js';
+import {
+  ChatMessageNotFound,
+  MemberCannotDeleteMessage,
+  MemberCannotEditMessage,
+} from './errors.js';
+import { MentionService } from './plugins/mentions/chatMention.service.js';
 
 @singleton()
 export class ChatMessageService {
@@ -23,7 +27,11 @@ export class ChatMessageService {
     this.authorizedItemService = authorizedItemService;
   }
 
-  async getForItem(dbConnection: DBConnection, maybeUser: MaybeUser, itemId: string) {
+  async getForItem(
+    dbConnection: DBConnection,
+    maybeUser: MaybeUser,
+    itemId: string,
+  ) {
     // check permission
     await this.authorizedItemService.assertAccessForItemId(dbConnection, {
       accountId: maybeUser?.id,
@@ -80,7 +88,10 @@ export class ChatMessageService {
     });
 
     // check right to make sure that the user is editing his own message
-    const messageContent = await this.chatMessageRepository.getOne(dbConnection, messageId);
+    const messageContent = await this.chatMessageRepository.getOne(
+      dbConnection,
+      messageId,
+    );
 
     if (!messageContent) {
       throw new ChatMessageNotFound(messageId);
@@ -90,12 +101,19 @@ export class ChatMessageService {
       throw new MemberCannotEditMessage(messageId);
     }
 
-    const updatedMessage = await this.chatMessageRepository.updateOne(dbConnection, messageId, {
-      itemId,
-      ...message,
-    });
+    const updatedMessage = await this.chatMessageRepository.updateOne(
+      dbConnection,
+      messageId,
+      {
+        itemId,
+        ...message,
+      },
+    );
     // assumes update can only be done by the author of the message
-    const updatedMessageWithCreator = { ...updatedMessage, creator: authenticatedUser };
+    const updatedMessageWithCreator = {
+      ...updatedMessage,
+      creator: authenticatedUser,
+    };
 
     return updatedMessageWithCreator;
   }
@@ -112,7 +130,10 @@ export class ChatMessageService {
       itemId,
     });
 
-    const messageContent = await this.chatMessageRepository.getOne(dbConnection, messageId);
+    const messageContent = await this.chatMessageRepository.getOne(
+      dbConnection,
+      messageId,
+    );
     if (!messageContent) {
       throw new ChatMessageNotFound(messageId);
     }
@@ -126,7 +147,11 @@ export class ChatMessageService {
     return messageContent;
   }
 
-  async clear(dbConnection: DBConnection, authenticatedUser: AuthenticatedUser, itemId: string) {
+  async clear(
+    dbConnection: DBConnection,
+    authenticatedUser: AuthenticatedUser,
+    itemId: string,
+  ) {
     // check rights for accessing the chat and sufficient right to clear the conversation
     // user should be an admin of the item
     await this.authorizedItemService.assertAccessForItemId(dbConnection, {

@@ -9,14 +9,14 @@ import build, {
   clearDatabase,
   mockAuthenticate,
   unmockAuthenticate,
-} from '../../../../../test/app';
-import { seedFromJson } from '../../../../../test/mocks/seed';
-import { SHORT_LINK_BASE_URL } from '../../../../config/hosts';
-import { db } from '../../../../drizzle/db';
-import { shortLinksTable } from '../../../../drizzle/schema';
-import { assertIsDefined } from '../../../../utils/assertions';
-import { ShortLinkDuplication, ShortLinkLimitExceed } from '../../../../utils/errors';
-import { ItemPublishedNotFound } from '../publication/published/errors';
+} from '../../../../../test/app.js';
+import { seedFromJson } from '../../../../../test/mocks/seed.js';
+import { SHORT_LINK_BASE_URL } from '../../../../config/hosts.js';
+import { db } from '../../../../drizzle/db.js';
+import { shortLinksTable } from '../../../../drizzle/schema.js';
+import { assertIsDefined } from '../../../../utils/assertions.js';
+import { ShortLinkDuplication, ShortLinkLimitExceed } from '../../../../utils/errors.js';
+import { ItemPublishedNotFound } from '../publication/published/errors.js';
 import {
   getRedirection,
   injectDelete,
@@ -25,7 +25,7 @@ import {
   injectGetAvailable,
   injectPatch,
   injectPost,
-} from './test/fixtures';
+} from './test/fixtures.js';
 
 function expectException(response, ex) {
   expect(response.json().code).toBe(ex.code);

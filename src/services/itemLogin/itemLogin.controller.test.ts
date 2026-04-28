@@ -6,15 +6,15 @@ import type { FastifyInstance } from 'fastify';
 
 import { HttpMethod, ItemLoginSchemaStatus, ItemLoginSchemaType } from '@graasp/sdk';
 
-import build, { clearDatabase, mockAuthenticate, unmockAuthenticate } from '../../../test/app';
-import { seedFromJson } from '../../../test/mocks/seed';
-import { db } from '../../drizzle/db';
-import { guestsView, itemLoginSchemasTable, itemMembershipsTable } from '../../drizzle/schema';
-import { assertIsDefined } from '../../utils/assertions';
-import { ITEMS_ROUTE_PREFIX } from '../../utils/config';
-import { MemberCannotAdminItem } from '../../utils/errors';
-import { assertIsMemberForTest } from '../authentication';
-import { CannotNestItemLoginSchema, ValidMemberSession } from './errors';
+import build, { clearDatabase, mockAuthenticate, unmockAuthenticate } from '../../../test/app.js';
+import { seedFromJson } from '../../../test/mocks/seed.js';
+import { db } from '../../drizzle/db.js';
+import { guestsView, itemLoginSchemasTable, itemMembershipsTable } from '../../drizzle/schema.js';
+import { assertIsDefined } from '../../utils/assertions.js';
+import { ITEMS_ROUTE_PREFIX } from '../../utils/config.js';
+import { MemberCannotAdminItem } from '../../utils/errors.js';
+import { assertIsMemberForTest } from '../authentication.js';
+import { CannotNestItemLoginSchema, ValidMemberSession } from './errors.js';
 
 const getGuest = async ({
   name,

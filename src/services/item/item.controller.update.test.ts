@@ -19,13 +19,17 @@ import {
   MAX_TREE_LEVELS,
 } from '@graasp/sdk';
 
-import build, { clearDatabase, mockAuthenticate, unmockAuthenticate } from '../../../test/app';
-import { MULTIPLE_ITEMS_LOADING_TIME } from '../../../test/constants';
-import { type SeedActor, seedFromJson } from '../../../test/mocks/seed';
-import { db } from '../../drizzle/db';
-import { isDirectChild } from '../../drizzle/operations';
-import { itemGeolocationsTable, itemMembershipsTable, itemsRawTable } from '../../drizzle/schema';
-import { assertIsDefined } from '../../utils/assertions';
+import build, { clearDatabase, mockAuthenticate, unmockAuthenticate } from '../../../test/app.js';
+import { MULTIPLE_ITEMS_LOADING_TIME } from '../../../test/constants.js';
+import { type SeedActor, seedFromJson } from '../../../test/mocks/seed.js';
+import { db } from '../../drizzle/db.js';
+import { isDirectChild } from '../../drizzle/operations.js';
+import {
+  itemGeolocationsTable,
+  itemMembershipsTable,
+  itemsRawTable,
+} from '../../drizzle/schema.js';
+import { assertIsDefined } from '../../utils/assertions.js';
 import {
   HierarchyTooDeep,
   ItemNotFolder,
@@ -33,13 +37,13 @@ import {
   MemberCannotAccess,
   MemberCannotWriteItem,
   TooManyChildren,
-} from '../../utils/errors';
-import { assertIsMemberForTest } from '../authentication';
-import { WebsocketService } from '../websockets/ws-service';
-import { ItemService } from './item.service';
-import { ItemActionService } from './plugins/action/itemAction.service';
-import { expectItem } from './test/fixtures/items';
-import { getItemWithDepth } from './test/utils';
+} from '../../utils/errors.js';
+import { assertIsMemberForTest } from '../authentication.js';
+import { WebsocketService } from '../websockets/ws-service.js';
+import { ItemService } from './item.service.js';
+import { ItemActionService } from './plugins/action/itemAction.service.js';
+import { expectItem } from './test/fixtures/items.js';
+import { getItemWithDepth } from './test/utils.js';
 
 const getItemOrder = async (item: { id: string }) => {
   const val = await db.query.itemsRawTable.findFirst({

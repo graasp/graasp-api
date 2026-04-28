@@ -3,23 +3,23 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { AppItemFactory, FolderItemFactory } from '@graasp/sdk';
 
-import { MOCK_LOGGER } from '../../../../../test/app.vitest';
-import { MemberFactory } from '../../../../../test/factories/member.factory';
-import { db } from '../../../../drizzle/db';
-import { AuthorizedItemService } from '../../../authorizedItem.service';
-import { ItemMembershipRepository } from '../../../itemMembership/membership.repository';
-import { ThumbnailService } from '../../../thumbnail/thumbnail.service';
-import { AppItem, type ItemRaw } from '../../item';
-import { ItemRepository } from '../../item.repository';
-import { ItemService } from '../../item.service';
-import { PackedItemService } from '../../packedItem.dto';
-import { ItemGeolocationRepository } from '../geolocation/itemGeolocation.repository';
-import { ItemVisibilityRepository } from '../itemVisibility/itemVisibility.repository';
-import { ItemPublishedRepository } from '../publication/published/itemPublished.repository';
-import { MeiliSearchWrapper } from '../publication/published/plugins/search/meilisearch';
-import { RecycledBinService } from '../recycled/recycled.service';
-import { ItemThumbnailService } from '../thumbnail/itemThumbnail.service';
-import { AppItemService } from './appItemService';
+import { MOCK_LOGGER } from '../../../../../test/app.vitest.js';
+import { MemberFactory } from '../../../../../test/factories/member.factory.js';
+import { db } from '../../../../drizzle/db.js';
+import { AuthorizedItemService } from '../../../authorizedItem.service.js';
+import { ItemMembershipRepository } from '../../../itemMembership/membership.repository.js';
+import { ThumbnailService } from '../../../thumbnail/thumbnail.service.js';
+import { AppItem, type ItemRaw } from '../../item.js';
+import { ItemRepository } from '../../item.repository.js';
+import { ItemService } from '../../item.service.js';
+import { PackedItemService } from '../../packedItem.dto.js';
+import { ItemGeolocationRepository } from '../geolocation/itemGeolocation.repository.js';
+import { ItemVisibilityRepository } from '../itemVisibility/itemVisibility.repository.js';
+import { ItemPublishedRepository } from '../publication/published/itemPublished.repository.js';
+import { MeiliSearchWrapper } from '../publication/published/plugins/search/meilisearch.js';
+import { RecycledBinService } from '../recycled/recycled.service.js';
+import { ItemThumbnailService } from '../thumbnail/itemThumbnail.service.js';
+import { AppItemService } from './appItemService.js';
 
 const itemRepository = {
   getOneOrThrow: async () => {

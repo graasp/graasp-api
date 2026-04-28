@@ -1,10 +1,10 @@
 import { PassThrough } from 'node:stream';
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 
-import { MOCK_LOGGER } from '../../../test/app.vitest';
-import { AccountType } from '../../types';
-import { THUMBNAIL_MIMETYPE, ThumbnailSizeFormat } from './constants';
-import { ThumbnailService } from './thumbnail.service';
+import { MOCK_LOGGER } from '../../../test/app.vitest.js';
+import { AccountType } from '../../types.js';
+import { THUMBNAIL_MIMETYPE, ThumbnailSizeFormat } from './constants.js';
+import { ThumbnailService } from './thumbnail.service.js';
 
 const MockedFileService = vi.fn(function () {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment

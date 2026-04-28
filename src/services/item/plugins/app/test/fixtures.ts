@@ -2,7 +2,7 @@ import type { FastifyInstance } from 'fastify';
 
 import { HttpMethod } from '@graasp/sdk';
 
-import { APP_ITEMS_PREFIX } from '../../../../../utils/config';
+import { APP_ITEMS_PREFIX } from '../../../../../utils/config.js';
 
 export const getAccessToken = async (
   app: FastifyInstance,

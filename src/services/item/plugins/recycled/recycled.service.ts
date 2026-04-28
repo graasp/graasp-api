@@ -2,14 +2,14 @@ import { singleton } from 'tsyringe';
 
 import { type Paginated, type Pagination } from '@graasp/sdk';
 
-import { type DBConnection } from '../../../../drizzle/db';
-import type { MinimalMember } from '../../../../types';
-import { ItemNotFound } from '../../../../utils/errors';
-import HookManager from '../../../../utils/hook';
-import { AuthorizedItemService } from '../../../authorizedItem.service';
-import { type ItemRaw, isFolderItem } from '../../item';
-import { ItemRepository } from '../../item.repository';
-import { RecycledItemDataRepository } from './recycled.repository';
+import { type DBConnection } from '../../../../drizzle/db.js';
+import type { MinimalMember } from '../../../../types.js';
+import { ItemNotFound } from '../../../../utils/errors.js';
+import HookManager from '../../../../utils/hook.js';
+import { AuthorizedItemService } from '../../../authorizedItem.service.js';
+import { type ItemRaw, isFolderItem } from '../../item.js';
+import { ItemRepository } from '../../item.repository.js';
+import { RecycledItemDataRepository } from './recycled.repository.js';
 
 @singleton()
 export class RecycledBinService {
@@ -43,7 +43,11 @@ export class RecycledBinService {
     member: MinimalMember,
     pagination: Pagination,
   ): Promise<Paginated<ItemRaw>> {
-    return await this.recycledItemRepository.getOwnRecycledItems(dbConnection, member, pagination);
+    return await this.recycledItemRepository.getOwnRecycledItems(
+      dbConnection,
+      member,
+      pagination,
+    );
   }
 
   async getDeletedTreesById(
@@ -52,14 +56,25 @@ export class RecycledBinService {
     ids: ItemRaw['id'][],
   ) {
     // validate permission on parents
-    await this.recycledItemRepository.assertAdminAccessForItemIds(dbConnection, member.id, ids);
+    await this.recycledItemRepository.assertAdminAccessForItemIds(
+      dbConnection,
+      member.id,
+      ids,
+    );
 
-    const items = await this.recycledItemRepository.getDeletedTreesById(dbConnection, ids);
+    const items = await this.recycledItemRepository.getDeletedTreesById(
+      dbConnection,
+      ids,
+    );
 
     return items;
   }
 
-  async recycleMany(dbConnection: DBConnection, member: MinimalMember, itemIds: string[]) {
+  async recycleMany(
+    dbConnection: DBConnection,
+    member: MinimalMember,
+    itemIds: string[],
+  ) {
     const items = await this.itemRepository.getMany(dbConnection, itemIds);
 
     // if item is already deleted, it will throw not found here
@@ -73,7 +88,10 @@ export class RecycledBinService {
 
     let allDescendants: ItemRaw[] = [];
     for (const item of items) {
-      await this.hooks.runPreHooks('recycle', member, dbConnection, { item, isRecycledRoot: true });
+      await this.hooks.runPreHooks('recycle', member, dbConnection, {
+        item,
+        isRecycledRoot: true,
+      });
       if (isFolderItem(item)) {
         allDescendants = allDescendants.concat(
           await this.itemRepository.getDescendants(dbConnection, item),
@@ -87,14 +105,17 @@ export class RecycledBinService {
       });
     }
 
-    const softDeletedItems = await this.itemRepository.softRemove(dbConnection, [
-      ...allDescendants,
-      ...items,
-    ]);
+    const softDeletedItems = await this.itemRepository.softRemove(
+      dbConnection,
+      [...allDescendants, ...items],
+    );
     await this.recycledItemRepository.addMany(dbConnection, items, member);
 
     for (const d of allDescendants) {
-      this.hooks.runPostHooks('recycle', member, dbConnection, { item: d, isRecycledRoot: false });
+      this.hooks.runPostHooks('recycle', member, dbConnection, {
+        item: d,
+        isRecycledRoot: false,
+      });
     }
     for (const item of items) {
       await this.hooks.runPostHooks('recycle', member, dbConnection, {
@@ -106,8 +127,15 @@ export class RecycledBinService {
     return softDeletedItems;
   }
 
-  async restoreMany(dbConnection: DBConnection, member: MinimalMember, itemIds: string[]) {
-    const items = await this.recycledItemRepository.getManyDeletedItemsById(dbConnection, itemIds);
+  async restoreMany(
+    dbConnection: DBConnection,
+    member: MinimalMember,
+    itemIds: string[],
+  ) {
+    const items = await this.recycledItemRepository.getManyDeletedItemsById(
+      dbConnection,
+      itemIds,
+    );
 
     // throw if one provided id does not have a corresponding item
     if (items.length !== itemIds.length) {
@@ -125,12 +153,16 @@ export class RecycledBinService {
 
     let allDescendants: ItemRaw[] = [];
     for (const item of items) {
-      await this.hooks.runPreHooks('restore', member, dbConnection, { item, isRestoredRoot: true });
+      await this.hooks.runPreHooks('restore', member, dbConnection, {
+        item,
+        isRestoredRoot: true,
+      });
       if (isFolderItem(item)) {
-        const descendants = await this.recycledItemRepository.getDeletedDescendants(
-          dbConnection,
-          item,
-        );
+        const descendants =
+          await this.recycledItemRepository.getDeletedDescendants(
+            dbConnection,
+            item,
+          );
         for (const d of descendants) {
           await this.hooks.runPreHooks('restore', member, dbConnection, {
             item: d,

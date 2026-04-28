@@ -1,4 +1,4 @@
-import { seedFromJson } from './seed';
+import { seedFromJson } from './seed.js';
 
 describe('Seed', () => {
   it('Does not create an account', async () => {

@@ -1,6 +1,6 @@
 import { compare, hash } from 'bcrypt';
 
-import { PasswordNotDefined } from './errors';
+import { PasswordNotDefined } from './errors.js';
 
 export async function verifyCurrentPassword(savedPassword: string, password: string) {
   /* verified: stores the output of bcrypt.compare().

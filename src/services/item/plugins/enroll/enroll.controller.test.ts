@@ -10,18 +10,18 @@ import build, {
   clearDatabase,
   mockAuthenticate,
   unmockAuthenticate,
-} from '../../../../../test/app';
-import { seedFromJson } from '../../../../../test/mocks/seed';
-import { db } from '../../../../drizzle/db';
-import { itemMembershipsTable } from '../../../../drizzle/schema';
-import type { ItemMembershipWithItemAndAccountAndCreator } from '../../../../drizzle/types';
-import { assertIsDefined } from '../../../../utils/assertions';
-import { assertIsMember } from '../../../authentication';
+} from '../../../../../test/app.js';
+import { seedFromJson } from '../../../../../test/mocks/seed.js';
+import { db } from '../../../../drizzle/db.js';
+import { itemMembershipsTable } from '../../../../drizzle/schema.js';
+import type { ItemMembershipWithItemAndAccountAndCreator } from '../../../../drizzle/types.js';
+import { assertIsDefined } from '../../../../utils/assertions.js';
+import { assertIsMember } from '../../../authentication.js';
 import {
   CannotEnrollFrozenItemLoginSchema,
   CannotEnrollItemWithoutItemLoginSchema,
-} from '../../../itemLogin/errors';
-import { expectMembership } from '../../../itemMembership/test/fixtures/memberships';
+} from '../../../itemLogin/errors.js';
+import { expectMembership } from '../../../itemMembership/test/fixtures/memberships.js';
 
 describe('Enroll', () => {
   let app: FastifyInstance;

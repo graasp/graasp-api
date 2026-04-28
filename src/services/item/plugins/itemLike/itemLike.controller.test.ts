@@ -10,18 +10,18 @@ import build, {
   clearDatabase,
   mockAuthenticate,
   unmockAuthenticate,
-} from '../../../../../test/app';
-import { seedFromJson } from '../../../../../test/mocks/seed';
-import { db } from '../../../../drizzle/db';
-import { itemLikesTable } from '../../../../drizzle/schema';
-import type { ItemLikeRaw } from '../../../../drizzle/types';
-import type { MinimalMember } from '../../../../types';
-import { assertIsDefined } from '../../../../utils/assertions';
-import { MemberCannotAccess } from '../../../../utils/errors';
-import { assertIsMember } from '../../../authentication';
-import { type PackedItem, PackedItemDTO } from '../../packedItem.dto';
-import { expectManyPackedItems } from '../../test/fixtures/items';
-import { ItemLikeNotFound } from './itemLike.errors';
+} from '../../../../../test/app.js';
+import { seedFromJson } from '../../../../../test/mocks/seed.js';
+import { db } from '../../../../drizzle/db.js';
+import { itemLikesTable } from '../../../../drizzle/schema.js';
+import type { ItemLikeRaw } from '../../../../drizzle/types.js';
+import type { MinimalMember } from '../../../../types.js';
+import { assertIsDefined } from '../../../../utils/assertions.js';
+import { MemberCannotAccess } from '../../../../utils/errors.js';
+import { assertIsMember } from '../../../authentication.js';
+import { type PackedItem, PackedItemDTO } from '../../packedItem.dto.js';
+import { expectManyPackedItems } from '../../test/fixtures/items.js';
+import { ItemLikeNotFound } from './itemLike.errors.js';
 
 export const expectItemLike = (
   newLike: ItemLikeRaw | undefined,

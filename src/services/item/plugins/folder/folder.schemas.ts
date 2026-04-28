@@ -3,10 +3,13 @@ import { StatusCodes } from 'http-status-codes';
 
 import type { FastifySchema } from 'fastify';
 
-import { customType, registerSchemaAsRef } from '../../../../plugins/typebox';
-import { errorSchemaRef } from '../../../../schemas/global';
-import { itemCommonSchema } from '../../common.schemas';
-import { geoCoordinateSchemaRef } from '../geolocation/itemGeolocation.schemas';
+import {
+  customType,
+  registerSchemaAsRef,
+} from '../../../../plugins/typebox.js';
+import { errorSchemaRef } from '../../../../schemas/global.js';
+import { itemCommonSchema } from '../../common.schemas.js';
+import { geoCoordinateSchemaRef } from '../geolocation/geolocation.schema.js';
 
 export const folderSchema = Type.Composite([
   itemCommonSchema,
@@ -16,18 +19,25 @@ export const folderSchema = Type.Composite([
       extra: customType.StrictObject({
         folder: customType.StrictObject({
           isCapsule: Type.Optional(Type.Boolean()),
-          childrenOrder: Type.Optional(Type.Array(customType.UUID(), { deprecated: true })),
+          childrenOrder: Type.Optional(
+            Type.Array(customType.UUID(), { deprecated: true }),
+          ),
         }),
       }),
     },
     {
       title: 'Folder',
-      description: 'Item of type folder, can contain other items and maintain an order.',
+      description:
+        'Item of type folder, can contain other items and maintain an order.',
     },
   ),
 ]);
 
-export const folderItemSchemaRef = registerSchemaAsRef('folderItem', 'Folder Item', folderSchema);
+export const folderItemSchemaRef = registerSchemaAsRef(
+  'folderItem',
+  'Folder Item',
+  folderSchema,
+);
 
 export const createFolder = {
   operationId: 'createFolder',
@@ -36,7 +46,10 @@ export const createFolder = {
   description: 'Create folder.',
 
   querystring: Type.Partial(
-    customType.StrictObject({ parentId: customType.UUID(), previousItemId: customType.UUID() }),
+    customType.StrictObject({
+      parentId: customType.UUID(),
+      previousItemId: customType.UUID(),
+    }),
   ),
   body: Type.Composite([
     Type.Pick(folderSchema, ['name']),
@@ -52,9 +65,12 @@ export const createFolderWithThumbnail = {
   operationId: 'createFolderWithThumbnail',
   tags: ['item', 'thumbnail'],
   summary: 'Create a folder with a thumbnail',
-  description: 'Create a folder with a thumbnail. The data is sent using a form-data.',
+  description:
+    'Create a folder with a thumbnail. The data is sent using a form-data.',
 
-  querystring: Type.Partial(customType.StrictObject({ parentId: customType.UUID() })),
+  querystring: Type.Partial(
+    customType.StrictObject({ parentId: customType.UUID() }),
+  ),
   response: { [StatusCodes.OK]: folderSchema, '4xx': errorSchemaRef },
 } as const satisfies FastifySchema;
 
@@ -67,9 +83,12 @@ export const updateFolder = {
   params: customType.StrictObject({
     id: customType.UUID(),
   }),
-  body: Type.Partial(Type.Pick(folderSchema, ['name', 'description', 'lang', 'settings']), {
-    minProperties: 1,
-  }),
+  body: Type.Partial(
+    Type.Pick(folderSchema, ['name', 'description', 'lang', 'settings']),
+    {
+      minProperties: 1,
+    },
+  ),
   response: { [StatusCodes.OK]: folderSchema, '4xx': errorSchemaRef },
 } as const satisfies FastifySchema;
 

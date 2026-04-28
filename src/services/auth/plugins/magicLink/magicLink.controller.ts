@@ -1,25 +1,30 @@
 import { StatusCodes } from 'http-status-codes';
 
-import fastifyPassport from '@fastify/passport';
 import type { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox';
 import type { PassportUser, preHandlerHookHandler } from 'fastify';
 import type { RouteShorthandHook } from 'fastify/types/route';
 
-import { ClientManager, Context, DEFAULT_LANG, RecaptchaAction } from '@graasp/sdk';
+import {
+  ClientManager,
+  Context,
+  DEFAULT_LANG,
+  RecaptchaAction,
+} from '@graasp/sdk';
 
-import { resolveDependency } from '../../../../di/utils';
-import { db } from '../../../../drizzle/db';
-import { asDefined } from '../../../../utils/assertions';
-import { MemberAlreadySignedUp } from '../../../../utils/errors';
-import { isMember } from '../../../authentication';
-import { InvitationService } from '../../../item/plugins/invitation/invitation.service';
-import { MemberService } from '../../../member/member.service';
-import { getRedirectionLink } from '../../utils';
-import captchaPreHandler from '../captcha/captcha';
-import { PassportStrategy } from '../passport/strategies';
-import type { PassportInfo } from '../passport/types';
-import { auth, login, register, signOut } from './magicLink.schemas';
-import { MagicLinkService } from './magicLink.service';
+import { resolveDependency } from '../../../../di/utils.js';
+import { db } from '../../../../drizzle/db.js';
+import { asDefined } from '../../../../utils/assertions.js';
+import { MemberAlreadySignedUp } from '../../../../utils/errors.js';
+import { isMember } from '../../../authentication.js';
+import { InvitationService } from '../../../item/plugins/invitation/invitation.service.js';
+import { MemberService } from '../../../member/member.service.js';
+import { getRedirectionLink } from '../../utils.js';
+import captchaPreHandler from '../captcha/captcha.js';
+import { fastifyPassportInstance } from '../passport/preHandlers.js';
+import { PassportStrategy } from '../passport/strategies.js';
+import type { PassportInfo } from '../passport/types.js';
+import { auth, login, register, signOut } from './magicLink.schemas.js';
+import { MagicLinkService } from './magicLink.service.js';
 
 const ERROR_SEARCH_PARAM = 'error';
 
@@ -80,11 +85,17 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
     '/auth',
     {
       schema: auth,
-      preHandler: fastifyPassport.authenticate(
+      preHandler: fastifyPassportInstance.authenticate(
         PassportStrategy.WebMagicLink,
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        async (request, reply, err, user?: PassportUser, info?: PassportInfo) => {
+        async (
+          request,
+          reply,
+          err,
+          user?: PassportUser,
+          info?: PassportInfo,
+        ) => {
           // This function is called after the strategy has been executed.
           // It is necessary, so we match the behavior of the original implementation.
           if (!user || err) {
@@ -113,11 +124,18 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
         log,
       } = request;
       const member = asDefined(user?.account);
-      const redirectionLink = getRedirectionLink(log, url ? decodeURIComponent(url) : undefined);
+      const redirectionLink = getRedirectionLink(
+        log,
+        url ? decodeURIComponent(url) : undefined,
+      );
       await db.transaction(async (tx) => {
         await memberService.refreshLastAuthenticatedAt(tx, member.id);
         // on auth, if the user used the email sign in, its account gets validated
-        if (authInfo?.emailValidation && isMember(member) && !member.isValidated) {
+        if (
+          authInfo?.emailValidation &&
+          isMember(member) &&
+          !member.isValidated
+        ) {
           await memberService.validate(tx, member.id);
         }
       });

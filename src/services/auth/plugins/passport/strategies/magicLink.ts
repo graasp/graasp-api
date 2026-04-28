@@ -1,34 +1,61 @@
-import { ExtractJwt, Strategy } from 'passport-jwt';
+import { Strategy } from 'passport-jose';
 
 import { Authenticator } from '@fastify/passport';
 
-import { db } from '../../../../../drizzle/db';
-import { MemberNotFound, UnauthorizedMember } from '../../../../../utils/errors';
-import { MemberRepository } from '../../../../member/member.repository';
-import { PassportStrategy } from '../strategies';
-import type { CustomStrategyOptions, StrictVerifiedCallback } from '../types';
+import { SECRET_KEY } from '../../../../../crypto/jwt.js';
+import { db } from '../../../../../drizzle/db.js';
+import {
+  MemberNotFound,
+  UnauthorizedMember,
+} from '../../../../../utils/errors.js';
+import { MemberRepository } from '../../../../member/member.repository.js';
+import { PassportStrategy } from '../strategies.js';
+import type {
+  CustomStrategyOptions,
+  StrictVerifiedCallback,
+} from '../types.js';
+
+const queryParamExtractor =
+  (queryParameter: string) =>
+  (req: any): string | null => {
+    let token = null;
+    if (req && req.query) {
+      token = req.query[queryParameter];
+    }
+    return token;
+  };
 
 export default (
   passport: Authenticator,
   memberRepository: MemberRepository,
   strategy: PassportStrategy,
   tokenQueryParameter: string,
-  jwtSecret: string,
+  audience: string,
   options?: CustomStrategyOptions,
 ) => {
   passport.use(
     strategy,
     new Strategy(
       {
-        jwtFromRequest: ExtractJwt.fromUrlQueryParameter(tokenQueryParameter),
-        secretOrKey: jwtSecret,
+        jwtFromRequest: queryParamExtractor(tokenQueryParameter),
+        withSecretOrKey: SECRET_KEY,
+        audience,
       },
-      async ({ sub, emailValidation }, done: StrictVerifiedCallback) => {
+      async (payload, done: StrictVerifiedCallback) => {
         try {
-          const member = await memberRepository.get(db, sub);
+          const { sub, emailValidation } = payload as {
+            sub: string;
+            emailValidation?: boolean;
+          };
+
+          const member = await memberRepository.get(db, sub!);
           if (member) {
             // Token has been validated
-            return done(null, { account: member.toMaybeUser() }, { emailValidation });
+            return done(
+              null,
+              { account: member.toMaybeUser() },
+              { emailValidation },
+            );
           } else {
             // Authentication refused
             return done(
@@ -38,7 +65,10 @@ export default (
           }
         } catch (err) {
           // Exception occurred while fetching member
-          return done(options?.propagateError ? (err as Error) : new UnauthorizedMember(), false);
+          return done(
+            options?.propagateError ? (err as Error) : new UnauthorizedMember(),
+            false,
+          );
         }
       },
     ),

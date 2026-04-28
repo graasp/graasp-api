@@ -1,12 +1,12 @@
 import { v4 } from 'uuid';
 import { describe, expect, it } from 'vitest';
 
-import { seedFromJson } from '../../../../../test/mocks/seed';
-import { db } from '../../../../drizzle/db';
-import { itemBookmarksTable } from '../../../../drizzle/schema';
-import { assertIsDefined } from '../../../../utils/assertions';
-import { DuplicateBookmarkError, ItemBookmarkNotFound } from './errors';
-import { ItemBookmarkRepository } from './itemBookmark.repository';
+import { seedFromJson } from '../../../../../test/mocks/seed.js';
+import { db } from '../../../../drizzle/db.js';
+import { itemBookmarksTable } from '../../../../drizzle/schema.js';
+import { assertIsDefined } from '../../../../utils/assertions.js';
+import { DuplicateBookmarkError, ItemBookmarkNotFound } from './errors.js';
+import { ItemBookmarkRepository } from './itemBookmark.repository.js';
 
 const repository = new ItemBookmarkRepository();
 

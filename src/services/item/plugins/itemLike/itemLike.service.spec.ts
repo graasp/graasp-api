@@ -1,18 +1,18 @@
 import { v4 } from 'uuid';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { ItemFactory } from '../../../../../test/factories/item.factory';
-import { db } from '../../../../drizzle/db';
-import type { ItemLikeRaw, ItemPublishedWithItemWithCreator } from '../../../../drizzle/types';
-import type { MinimalMember } from '../../../../types';
-import { AuthorizedItemService } from '../../../authorizedItem.service';
-import { ItemMembershipRepository } from '../../../itemMembership/membership.repository';
-import { resolveItemType } from '../../item';
-import { ItemVisibilityRepository } from '../itemVisibility/itemVisibility.repository';
-import { ItemPublishedRepository } from '../publication/published/itemPublished.repository';
-import { MeiliSearchWrapper } from '../publication/published/plugins/search/meilisearch';
-import { ItemLikeRepository } from './itemLike.repository';
-import { ItemLikeService } from './itemLike.service';
+import { ItemFactory } from '../../../../../test/factories/item.factory.js';
+import { db } from '../../../../drizzle/db.js';
+import type { ItemLikeRaw, ItemPublishedWithItemWithCreator } from '../../../../drizzle/types.js';
+import type { MinimalMember } from '../../../../types.js';
+import { AuthorizedItemService } from '../../../authorizedItem.service.js';
+import { ItemMembershipRepository } from '../../../itemMembership/membership.repository.js';
+import { resolveItemType } from '../../item.js';
+import { ItemVisibilityRepository } from '../itemVisibility/itemVisibility.repository.js';
+import { ItemPublishedRepository } from '../publication/published/itemPublished.repository.js';
+import { MeiliSearchWrapper } from '../publication/published/plugins/search/meilisearch.js';
+import { ItemLikeRepository } from './itemLike.repository.js';
+import { ItemLikeService } from './itemLike.service.js';
 
 const authorizedItemService = {
   getItemById: vi.fn() as AuthorizedItemService['getItemById'],

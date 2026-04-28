@@ -3,11 +3,14 @@ import { StatusCodes } from 'http-status-codes';
 
 import type { FastifySchema } from 'fastify';
 
-import { customType, registerSchemaAsRef } from '../../../../plugins/typebox';
-import { errorSchemaRef } from '../../../../schemas/global';
-import { accountSchemaRef } from '../../../account/account.schemas';
-import { itemCommonSchema } from '../../common.schemas';
-import { geoCoordinateSchemaRef } from '../geolocation/itemGeolocation.schemas';
+import {
+  customType,
+  registerSchemaAsRef,
+} from '../../../../plugins/typebox.js';
+import { errorSchemaRef } from '../../../../schemas/global.js';
+import { accountSchemaRef } from '../../../account/account.schemas.js';
+import { itemCommonSchema } from '../../common.schemas.js';
+import { geoCoordinateSchemaRef } from '../geolocation/geolocation.schema.js';
 
 const appItemSchema = Type.Composite(
   [
@@ -17,7 +20,9 @@ const appItemSchema = Type.Composite(
       extra: customType.StrictObject({
         app: customType.StrictObject({
           url: Type.String({ format: 'uri' }),
-          settings: Type.Optional(Type.Object({}, { additionalProperties: true })),
+          settings: Type.Optional(
+            Type.Object({}, { additionalProperties: true }),
+          ),
         }),
       }),
     }),
@@ -29,7 +34,11 @@ const appItemSchema = Type.Composite(
   },
 );
 
-export const appItemSchemaRef = registerSchemaAsRef('appItem', 'App Item', appItemSchema);
+export const appItemSchemaRef = registerSchemaAsRef(
+  'appItem',
+  'App Item',
+  appItemSchema,
+);
 
 export const generateToken = {
   operationId: 'generateAppToken',
@@ -126,7 +135,10 @@ export const createApp = {
   description: 'Create app.',
 
   querystring: Type.Partial(
-    customType.StrictObject({ parentId: customType.UUID(), previousItemId: customType.UUID() }),
+    customType.StrictObject({
+      parentId: customType.UUID(),
+      previousItemId: customType.UUID(),
+    }),
   ),
   body: Type.Composite([
     Type.Pick(appItemSchema, ['name']),
@@ -150,7 +162,9 @@ export const updateApp = {
     id: customType.UUID(),
   }),
   body: Type.Partial(
-    Type.Composite([Type.Pick(appItemSchema, ['name', 'description', 'lang', 'settings'])]),
+    Type.Composite([
+      Type.Pick(appItemSchema, ['name', 'description', 'lang', 'settings']),
+    ]),
     { minProperties: 1 },
   ),
   response: { [StatusCodes.OK]: appItemSchema, '4xx': errorSchemaRef },

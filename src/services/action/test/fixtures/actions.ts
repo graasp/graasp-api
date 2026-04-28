@@ -1,14 +1,14 @@
 import { eq } from 'drizzle-orm';
 import { expect } from 'vitest';
 
-import { type DBConnection } from '../../../../drizzle/db';
-import { actionsTable } from '../../../../drizzle/schema';
+import { type DBConnection } from '../../../../drizzle/db.js';
+import { actionsTable } from '../../../../drizzle/schema.js';
 import type {
   ActionRaw,
   ActionWithItem,
   ActionWithItemAndAccount,
   MinimalAccount,
-} from '../../../../drizzle/types';
+} from '../../../../drizzle/types.js';
 
 type ActionToTest = ActionRaw | ActionWithItem | ActionWithItemAndAccount;
 

@@ -3,18 +3,18 @@ import { v4 } from 'uuid';
 import Etherpad from '@graasp/etherpad-api';
 import { EtherpadItemFactory, EtherpadPermission, FolderItemFactory } from '@graasp/sdk';
 
-import { MOCK_LOGGER } from '../../../../../test/app';
-import { resolveDependency } from '../../../../di/utils';
-import { db } from '../../../../drizzle/db';
-import type { MinimalMember } from '../../../../types';
-import { AuthorizedItemService } from '../../../authorizedItem.service';
-import { ItemMembershipRepository } from '../../../itemMembership/membership.repository';
-import { EtherpadItem } from '../../item';
-import { ItemRepository } from '../../item.repository';
-import { ItemService } from '../../item.service';
-import { EtherpadItemService } from './etherpad.service';
-import { EtherpadServiceConfig } from './serviceConfig';
-import type { PadNameFactory } from './types';
+import { MOCK_LOGGER } from '../../../../../test/app.js';
+import { resolveDependency } from '../../../../di/utils.js';
+import { db } from '../../../../drizzle/db.js';
+import type { MinimalMember } from '../../../../types.js';
+import { AuthorizedItemService } from '../../../authorizedItem.service.js';
+import { ItemMembershipRepository } from '../../../itemMembership/membership.repository.js';
+import { EtherpadItem } from '../../item.js';
+import { ItemRepository } from '../../item.repository.js';
+import { ItemService } from '../../item.service.js';
+import { EtherpadItemService } from './etherpad.service.js';
+import { EtherpadServiceConfig } from './serviceConfig.js';
+import type { PadNameFactory } from './types.js';
 
 jest.mock('node-fetch');
 

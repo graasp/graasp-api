@@ -4,8 +4,11 @@ import { singleton } from 'tsyringe';
 
 import { type UUID } from '@graasp/sdk';
 
-import { type DBConnection } from '../../../../../drizzle/db';
-import { isAncestorOrSelf, isDescendantOrSelf } from '../../../../../drizzle/operations';
+import { type DBConnection } from '../../../../../drizzle/db.js';
+import {
+  isAncestorOrSelf,
+  isDescendantOrSelf,
+} from '../../../../../drizzle/operations.js';
 import {
   accountsTable,
   actionRequestExportsTable,
@@ -15,7 +18,7 @@ import {
   chatMessagesTable,
   itemMembershipsTable,
   itemsRawTable,
-} from '../../../../../drizzle/schema';
+} from '../../../../../drizzle/schema.js';
 import {
   type ActionRequestExportFormat,
   type ActionRequestExportRaw,
@@ -25,10 +28,10 @@ import {
   type ChatMessageRaw,
   type ItemMembershipRaw,
   type MinimalAccount,
-} from '../../../../../drizzle/types';
-import { IllegalArgumentException } from '../../../../../repositories/errors';
-import { DEFAULT_REQUEST_EXPORT_INTERVAL } from '../../../../action/constants';
-import type { ItemRaw } from '../../../item';
+} from '../../../../../drizzle/types.js';
+import { IllegalArgumentException } from '../../../../../repositories/errors.js';
+import { DEFAULT_REQUEST_EXPORT_INTERVAL } from '../../../../action/constants.js';
+import type { ItemRaw } from '../../../item.js';
 
 @singleton()
 export class ActionRequestExportRepository {
@@ -80,7 +83,9 @@ export class ActionRequestExportRepository {
       format: ActionRequestExportFormat;
     },
   ): Promise<ActionRequestExportRaw | undefined> {
-    const lowerLimitDate = new Date(Date.now() - DEFAULT_REQUEST_EXPORT_INTERVAL);
+    const lowerLimitDate = new Date(
+      Date.now() - DEFAULT_REQUEST_EXPORT_INTERVAL,
+    );
     return await dbConnection.query.actionRequestExportsTable.findFirst({
       where: and(
         eq(actionRequestExportsTable.memberId, memberId),
@@ -104,7 +109,10 @@ export class ActionRequestExportRepository {
     return await dbConnection
       .selectDistinct({ id: accountsTable.id, name: accountsTable.name })
       .from(itemMembershipsTable)
-      .innerJoin(accountsTable, eq(accountsTable.id, itemMembershipsTable.accountId))
+      .innerJoin(
+        accountsTable,
+        eq(accountsTable.id, itemMembershipsTable.accountId),
+      )
       .where(
         and(
           isDescendantOrSelf(itemMembershipsTable.itemPath, itemPath),
@@ -119,7 +127,10 @@ export class ActionRequestExportRepository {
    * @param itemPath
    * @returns all items in the tree
    */
-  public async getItemTree(dbConnection: DBConnection, itemPath: string): Promise<ItemRaw[]> {
+  public async getItemTree(
+    dbConnection: DBConnection,
+    itemPath: string,
+  ): Promise<ItemRaw[]> {
     return await dbConnection
       .select()
       .from(itemsRawTable)
@@ -182,7 +193,12 @@ export class ActionRequestExportRepository {
     const appItemsTable = dbConnection
       .select()
       .from(itemsRawTable)
-      .where(and(eq(itemsRawTable.type, 'app'), isDescendantOrSelf(itemsRawTable.path, itemPath)))
+      .where(
+        and(
+          eq(itemsRawTable.type, 'app'),
+          isDescendantOrSelf(itemsRawTable.path, itemPath),
+        ),
+      )
       .as('app_items');
 
     return await dbConnection
@@ -205,7 +221,12 @@ export class ActionRequestExportRepository {
     const appItemsTable = dbConnection
       .select()
       .from(itemsRawTable)
-      .where(and(eq(itemsRawTable.type, 'app'), isDescendantOrSelf(itemsRawTable.path, itemPath)))
+      .where(
+        and(
+          eq(itemsRawTable.type, 'app'),
+          isDescendantOrSelf(itemsRawTable.path, itemPath),
+        ),
+      )
       .as('app_items');
 
     return await dbConnection
@@ -228,7 +249,12 @@ export class ActionRequestExportRepository {
     const appItemsTable = dbConnection
       .select()
       .from(itemsRawTable)
-      .where(and(eq(itemsRawTable.type, 'app'), isDescendantOrSelf(itemsRawTable.path, itemPath)))
+      .where(
+        and(
+          eq(itemsRawTable.type, 'app'),
+          isDescendantOrSelf(itemsRawTable.path, itemPath),
+        ),
+      )
       .as('app_items');
 
     return await dbConnection

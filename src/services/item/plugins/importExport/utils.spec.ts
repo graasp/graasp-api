@@ -9,8 +9,8 @@ import {
   LinkItemFactory,
 } from '@graasp/sdk';
 
-import { type ItemRaw } from '../../item';
-import { getFilenameFromItem } from './utils';
+import { type ItemRaw } from '../../item.js';
+import { getFilenameFromItem } from './utils.js';
 
 describe('File name', () => {
   it('get file name from local file item', () => {

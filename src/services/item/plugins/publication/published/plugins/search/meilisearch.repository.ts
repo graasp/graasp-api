@@ -3,8 +3,11 @@ import { singleton } from 'tsyringe';
 
 import { type IndexItem, ItemVisibilityType } from '@graasp/sdk';
 
-import { DBConnection } from '../../../../../../../drizzle/db';
-import { isAncestorOrSelf, isDescendantOrSelf } from '../../../../../../../drizzle/operations';
+import type { DBConnection } from '../../../../../../../drizzle/db.js';
+import {
+  isAncestorOrSelf,
+  isDescendantOrSelf,
+} from '../../../../../../../drizzle/operations.js';
 import {
   accountsTable,
   itemLikesTable,
@@ -13,16 +16,19 @@ import {
   items,
   publishedItemsTable,
   tagsTable,
-} from '../../../../../../../drizzle/schema';
-import { TagCategory } from '../../../../../../tag/tag.schemas';
-import type { ItemRaw } from '../../../../../item';
-import { stripHtml } from '../../../validation/utils';
+} from '../../../../../../../drizzle/schema.js';
+import { TagCategory } from '../../../../../../tag/tag.schemas.js';
+import type { ItemRaw } from '../../../../../item.js';
+import { stripHtml } from '../../../validation/utils.js';
 
 @singleton()
 export class MeilisearchRepository {
   constructor() {}
 
-  public async getIndexedTree(db: DBConnection, itemPath: ItemRaw['path']): Promise<IndexItem[]> {
+  public async getIndexedTree(
+    db: DBConnection,
+    itemPath: ItemRaw['path'],
+  ): Promise<IndexItem[]> {
     // Define CTE "tree" with descendants and self of given item that are not hidden
     const tree = db.$with('tree').as(
       db
@@ -46,7 +52,12 @@ export class MeilisearchRepository {
             eq(itemVisibilitiesTable.type, ItemVisibilityType.Hidden),
           ),
         )
-        .where(and(isDescendantOrSelf(items.path, itemPath), isNull(itemVisibilitiesTable.id))),
+        .where(
+          and(
+            isDescendantOrSelf(items.path, itemPath),
+            isNull(itemVisibilitiesTable.id),
+          ),
+        ),
     );
 
     // Define "tags" CTE with filtered aggregation for each tag category
@@ -119,7 +130,10 @@ export class MeilisearchRepository {
         likes: sql<number>`COALESCE(${likesCte.count},0)::int`,
       })
       .from(tree)
-      .innerJoin(publishedItemsTable, isAncestorOrSelf(publishedItemsTable.itemPath, tree.path))
+      .innerJoin(
+        publishedItemsTable,
+        isAncestorOrSelf(publishedItemsTable.itemPath, tree.path),
+      )
       .leftJoin(accountsTable, eq(accountsTable.id, tree.creatorId))
       .leftJoin(tagsCte, eq(tagsCte.itemId, tree.id))
       .leftJoin(likesCte, eq(likesCte.itemId, tree.id));

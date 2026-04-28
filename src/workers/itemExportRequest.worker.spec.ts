@@ -2,10 +2,10 @@ import { Queue } from 'bullmq';
 import { v4 } from 'uuid';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { REDIS_CONNECTION } from '../config/redis';
-import { Queues } from './config';
-import { ItemExportRequestService } from './itemExportRequest.service';
-import { ItemExportRequestWorker } from './itemExportRequest.worker';
+import { REDIS_CONNECTION } from '../config/redis.js';
+import { Queues } from './config.js';
+import { ItemExportRequestService } from './itemExportRequest.service.js';
+import { ItemExportRequestWorker } from './itemExportRequest.worker.js';
 
 // mock for the ItemExportRequestService
 const ItemExportRequestServiceMock = vi.fn();

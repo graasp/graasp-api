@@ -1,5 +1,5 @@
-import fs, { existsSync } from 'fs';
-import { createReadStream, exists } from 'fs-extra';
+import fs, { createReadStream, existsSync } from 'fs';
+import { pathExists } from 'fs-extra/esm';
 import { readFile } from 'fs/promises';
 import mimetics from 'mimetics';
 import path from 'path';
@@ -7,21 +7,27 @@ import sanitize from 'sanitize-html';
 import { Readable } from 'stream';
 import { singleton } from 'tsyringe';
 
-import { type DocumentItemExtraProperties, type ItemSettings } from '@graasp/sdk';
+import {
+  type DocumentItemExtraProperties,
+  type ItemSettings,
+} from '@graasp/sdk';
 
-import { type DBConnection } from '../../../../drizzle/db';
-import type { AppSettingInsertDTO, AppSettingRaw } from '../../../../drizzle/types';
-import { BaseLogger } from '../../../../logger';
-import { ItemType } from '../../../../schemas/global';
-import type { MinimalMember } from '../../../../types';
-import { AuthorizedItemService } from '../../../authorizedItem.service';
-import { UploadEmptyFileError } from '../../../file/utils/errors';
-import { type ItemRaw, isFolderItem } from '../../item';
-import { ItemService } from '../../item.service';
-import { AppSettingRepository } from '../app/appSetting/appSetting.repository';
-import FileItemService from '../file/itemFile.service';
-import { H5PService } from '../html/h5p/h5p.service';
-import { ItemThumbnailService } from '../thumbnail/itemThumbnail.service';
+import { type DBConnection } from '../../../../drizzle/db.js';
+import type {
+  AppSettingInsertDTO,
+  AppSettingRaw,
+} from '../../../../drizzle/types.js';
+import { BaseLogger } from '../../../../logger.js';
+import type { ItemType } from '../../../../schemas/global.js';
+import type { MinimalMember } from '../../../../types.js';
+import { AuthorizedItemService } from '../../../authorizedItem.service.js';
+import { UploadEmptyFileError } from '../../../file/utils/errors.js';
+import { type ItemRaw, isFolderItem } from '../../item.js';
+import { ItemService } from '../../item.service.js';
+import { AppSettingRepository } from '../app/appSetting/appSetting.repository.js';
+import FileItemService from '../file/itemFile.service.js';
+import { H5PService } from '../html/h5p/h5p.service.js';
+import { ItemThumbnailService } from '../thumbnail/itemThumbnail.service.js';
 import {
   DESCRIPTION_EXTENSION,
   GRAASP_DOCUMENT_EXTENSION,
@@ -30,10 +36,10 @@ import {
   LINK_EXTENSION,
   TXT_EXTENSION,
   URL_PREFIX,
-} from './constants';
-import { GraaspExportInvalidFileError } from './errors';
-import { ItemExportService } from './itemExport.service';
-import { generateThumbnailFilename } from './utils';
+} from './constants.js';
+import { GraaspExportInvalidFileError } from './errors.js';
+import { ItemExportService } from './itemExport.service.js';
+import { generateThumbnailFilename } from './utils.js';
 
 /**
  * Defines the properties of an individual item in the graasp export format.
@@ -131,7 +137,9 @@ export class ImportService {
     if (stats.isDirectory()) {
       // element has no extension -> folder
 
-      const description = await this._getDescriptionForFilepath(path.join(filepath, filename));
+      const description = await this._getDescriptionForFilepath(
+        path.join(filepath, filename),
+      );
 
       this.log.debug(`create folder from '${filename}'`);
       return this.itemService.post(dbConnection, actor, {
@@ -163,7 +171,9 @@ export class ImportService {
         const url = link.slice(URL_PREFIX.length);
 
         // get if app in content -> url is either a link or an app
-        const type = linkType.includes('1') ? ('app' as const) : ('embeddedLink' as const);
+        const type = linkType.includes('1')
+          ? ('app' as const)
+          : ('embeddedLink' as const);
         if (type === 'app') {
           const newItem = {
             name,
@@ -220,18 +230,24 @@ export class ImportService {
       // normal files
       default: {
         // TODO: replace by file-type library once we are in ESM
-        const fileTypeAnalysis = await mimetics.parseAsync(fs.readFileSync(filepath));
+        const fileTypeAnalysis = await mimetics.parseAsync(
+          fs.readFileSync(filepath),
+        );
         const mimetype = fileTypeAnalysis?.mime ?? 'text/plain';
 
         // upload file
         const file = fs.createReadStream(filepath);
-        const item = await this.fileItemService.uploadFileAndCreateItem(dbConnection, actor, {
-          filename,
-          mimetype,
-          description,
-          stream: file,
-          parentId,
-        });
+        const item = await this.fileItemService.uploadFileAndCreateItem(
+          dbConnection,
+          actor,
+          {
+            filename,
+            mimetype,
+            description,
+            stream: file,
+            parentId,
+          },
+        );
 
         return item;
       }
@@ -256,7 +272,11 @@ export class ImportService {
 
     const items = JSON.parse(graaspManifestFile) as GraaspExportItem[];
 
-    return this.importManifestItems(dbConnection, actor, { items, folderPath, parentId });
+    return this.importManifestItems(dbConnection, actor, {
+      items,
+      folderPath,
+      parentId,
+    });
   }
 
   private async importManifestItems(
@@ -273,7 +293,9 @@ export class ImportService {
     // Sanitize the items and add the thumbnails, if any
     const augmentedItems = await Promise.all(
       items.map(async (item) => {
-        const sanitizedDescription = item.description ? sanitize(item.description) : null;
+        const sanitizedDescription = item.description
+          ? sanitize(item.description)
+          : null;
         let extra;
 
         // Sanitize the document content
@@ -282,7 +304,9 @@ export class ImportService {
             throw new GraaspExportInvalidFileError();
           }
 
-          const documentExtraProps = item.extra['document'] as DocumentItemExtraProperties;
+          const documentExtraProps = item.extra[
+            'document'
+          ] as DocumentItemExtraProperties;
           const content = documentExtraProps.content;
           const sanitizedContent = sanitize(content);
           extra = { ['document']: { content: sanitizedContent } };
@@ -290,8 +314,11 @@ export class ImportService {
 
         // Find and upload the thumbnail
         let thumbnail: Readable | undefined = undefined;
-        const itemThumbnailPath = path.join(folderPath, generateThumbnailFilename(item.id));
-        if (await exists(itemThumbnailPath)) {
+        const itemThumbnailPath = path.join(
+          folderPath,
+          generateThumbnailFilename(item.id),
+        );
+        if (await pathExists(itemThumbnailPath)) {
           thumbnail = createReadStream(itemThumbnailPath);
         }
 
@@ -321,18 +348,26 @@ export class ImportService {
           }
 
           const pathToGraaspFile = path.join(folderPath, item.id);
-          const fileItemProperties = await this.fileItemService.uploadFile(dbConnection, actor, {
-            filename: item.name,
-            filepath: pathToGraaspFile,
-            mimetype: item.mimetype,
-          });
+          const fileItemProperties = await this.fileItemService.uploadFile(
+            dbConnection,
+            actor,
+            {
+              filename: item.name,
+              filepath: pathToGraaspFile,
+              mimetype: item.mimetype,
+            },
+          );
 
           extra = {
             ['file']: fileItemProperties,
           };
         }
 
-        const augmentedItem = { ...item, description: sanitizedDescription, extra };
+        const augmentedItem = {
+          ...item,
+          description: sanitizedDescription,
+          extra,
+        };
 
         return { item: augmentedItem, thumbnail };
       }),
@@ -380,22 +415,29 @@ export class ImportService {
         }
 
         return arr.concat(
-          settings.reduce<Omit<AppSettingInsertDTO[], 'id'>>((arr, appSetting) => {
-            // ignore app setting file
-            if (appSetting.data['file']) {
-              return arr;
-            }
+          settings.reduce<Omit<AppSettingInsertDTO[], 'id'>>(
+            (arr, appSetting) => {
+              // ignore app setting file
+              if (appSetting.data['file']) {
+                return arr;
+              }
 
-            // Remove the id property from the imported app settings as a precaution. Remove this condition as soon as the id is stripped directly in the post function.
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-expect-error
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            const { id, creatorId, itemId, ...appSettingData } = appSetting;
+              // Remove the id property from the imported app settings as a precaution. Remove this condition as soon as the id is stripped directly in the post function.
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-expect-error
+              // eslint-disable-next-line @typescript-eslint/no-unused-vars
+              const { id, creatorId, itemId, ...appSettingData } = appSetting;
 
-            return arr.concat([
-              { creatorId: actor.id, itemId: uploadedItem.id, ...appSettingData },
-            ]);
-          }, []),
+              return arr.concat([
+                {
+                  creatorId: actor.id,
+                  itemId: uploadedItem.id,
+                  ...appSettingData,
+                },
+              ]);
+            },
+            [],
+          ),
         );
       },
       [],
@@ -492,7 +534,10 @@ export class ImportService {
         throw new Error('The graasp import needs a parent item');
       }
 
-      await this.importGraaspFile(dbConnection, actor, { parentId, folderPath });
+      await this.importGraaspFile(dbConnection, actor, {
+        parentId,
+        folderPath,
+      });
     } else {
       await this.importFiles(dbConnection, actor, { parentId, folderPath });
     }

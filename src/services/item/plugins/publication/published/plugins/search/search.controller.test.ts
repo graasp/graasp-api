@@ -12,14 +12,14 @@ import build, {
   clearDatabase,
   mockAuthenticate,
   unmockAuthenticate,
-} from '../../../../../../../../test/app';
-import { seedFromJson } from '../../../../../../../../test/mocks/seed';
-import { db } from '../../../../../../../drizzle/db';
-import { itemsRawTable } from '../../../../../../../drizzle/schema';
-import { assertIsDefined } from '../../../../../../../utils/assertions';
-import { GRAASPER_CREATOR_ID, ITEMS_ROUTE_PREFIX } from '../../../../../../../utils/config';
-import { type ItemRaw } from '../../../../../item';
-import { MeiliSearchWrapper } from './meilisearch';
+} from '../../../../../../../../test/app.js';
+import { seedFromJson } from '../../../../../../../../test/mocks/seed.js';
+import { db } from '../../../../../../../drizzle/db.js';
+import { itemsRawTable } from '../../../../../../../drizzle/schema.js';
+import { assertIsDefined } from '../../../../../../../utils/assertions.js';
+import { GRAASPER_CREATOR_ID, ITEMS_ROUTE_PREFIX } from '../../../../../../../utils/config.js';
+import { type ItemRaw } from '../../../../../item.js';
+import { MeiliSearchWrapper } from './meilisearch.js';
 
 jest.mock('./meilisearch');
 

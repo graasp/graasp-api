@@ -2,13 +2,13 @@ import { inject, singleton } from 'tsyringe';
 
 import { ItemValidationProcess, ItemValidationStatus } from '@graasp/sdk';
 
-import { IMAGE_CLASSIFIER_API_DI_KEY } from '../../../../../../di/constants';
-import FileService from '../../../../../file/file.service';
-import { type ItemRaw } from '../../../../item';
-import { InvalidFileItemError } from '../errors';
-import { classifyImage } from '../processes/imageClassification';
-import { isImage } from '../utils';
-import type { ValidationProcessResult, ValidationStrategy } from './types';
+import { IMAGE_CLASSIFIER_API_DI_KEY } from '../../../../../../di/constants.js';
+import FileService from '../../../../../file/file.service.js';
+import type { ItemRaw } from '../../../../item.js';
+import { InvalidFileItemError } from '../errors.js';
+import { classifyImage } from '../processes/imageClassification.js';
+import { isImage } from '../utils.js';
+import type { ValidationProcessResult, ValidationStrategy } from './types.js';
 
 @singleton()
 export class ImageValidationStrategy implements ValidationStrategy {
@@ -44,7 +44,9 @@ export class ImageValidationStrategy implements ValidationStrategy {
     const classes = await classifyImage(this.imageClassifierApi, url);
     const isSafe = classes.length === 0;
     const result = classes.map((c) => `${c.class}: ${c.score}`).join(' | ');
-    const status = isSafe ? ItemValidationStatus.Success : ItemValidationStatus.Failure;
+    const status = isSafe
+      ? ItemValidationStatus.Success
+      : ItemValidationStatus.Failure;
     return { status, result };
   }
 }

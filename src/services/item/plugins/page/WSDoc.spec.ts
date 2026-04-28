@@ -1,8 +1,8 @@
 import { describe, expect, it, vi } from 'vitest';
 import { WebSocket } from 'ws';
 
-import { MOCK_LOGGER } from '../../../../../test/app.vitest';
-import { WSDoc } from './WSDoc';
+import { MOCK_LOGGER } from '../../../../../test/app.vitest.js';
+import { WSDoc } from './WSDoc.js';
 
 const conn1 = {
   on: vi.fn(),

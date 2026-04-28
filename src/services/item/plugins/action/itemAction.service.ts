@@ -3,24 +3,27 @@ import { singleton } from 'tsyringe';
 
 import type { FastifyRequest } from 'fastify';
 
-import { type DBConnection } from '../../../../drizzle/db';
-import { actionsTable } from '../../../../drizzle/schema';
-import type { ActionWithItem } from '../../../../drizzle/types';
-import type { AuthenticatedUser, MaybeUser } from '../../../../types';
-import { UnauthorizedMember } from '../../../../utils/errors';
-import { ActionRepository } from '../../../action/action.repository';
-import { ActionService } from '../../../action/action.service';
+import { type DBConnection } from '../../../../drizzle/db.js';
+import { actionsTable } from '../../../../drizzle/schema.js';
+import type { ActionWithItem } from '../../../../drizzle/types.js';
+import type { AuthenticatedUser, MaybeUser } from '../../../../types.js';
+import { UnauthorizedMember } from '../../../../utils/errors.js';
+import { ActionRepository } from '../../../action/action.repository.js';
+import { ActionService } from '../../../action/action.service.js';
 import {
   DEFAULT_ACTIONS_SAMPLE_SIZE,
   MAX_ACTIONS_SAMPLE_SIZE,
   MIN_ACTIONS_SAMPLE_SIZE,
-} from '../../../action/constants';
-import { AuthorizedItemService } from '../../../authorizedItem.service';
-import { ItemMembershipRepository } from '../../../itemMembership/membership.repository';
-import type { ItemRaw } from '../../item';
-import { type ActionDateFilters, ItemActionRepository } from './itemAction.repository';
-import { View, type ViewOptions } from './itemAction.schemas';
-import { ItemActionType } from './utils';
+} from '../../../action/constants.js';
+import { AuthorizedItemService } from '../../../authorizedItem.service.js';
+import { ItemMembershipRepository } from '../../../itemMembership/membership.repository.js';
+import type { ItemRaw } from '../../item.js';
+import {
+  type ActionDateFilters,
+  ItemActionRepository,
+} from './itemAction.repository.js';
+import { View, type ViewOptions } from './itemAction.schemas.js';
+import { ItemActionType } from './utils.js';
 
 @singleton()
 export class ItemActionService {
@@ -50,7 +53,8 @@ export class ItemActionService {
     itemId: string,
     filters: { view?: ViewOptions; sampleSize?: number } = {},
   ): Promise<ActionWithItem[]> {
-    const { view = View.Builder, sampleSize = DEFAULT_ACTIONS_SAMPLE_SIZE } = filters;
+    const { view = View.Builder, sampleSize = DEFAULT_ACTIONS_SAMPLE_SIZE } =
+      filters;
 
     // prevent access from unautorized members
     if (!account) {
@@ -66,7 +70,12 @@ export class ItemActionService {
 
     // check permission
     const permission = (
-      await this.itemMembershipRepository.getInherited(dbConnection, item.path, account.id, true)
+      await this.itemMembershipRepository.getInherited(
+        dbConnection,
+        item.path,
+        account.id,
+        true,
+      )
     )?.permission;
 
     // Check validity of the requestSampleSize parameter (it is a number between min and max constants)
@@ -74,7 +83,10 @@ export class ItemActionService {
     if (sampleSize) {
       // If it is an integer, return the value bounded between min and max
       if (Number.isInteger(sampleSize)) {
-        size = Math.min(Math.max(sampleSize, MIN_ACTIONS_SAMPLE_SIZE), MAX_ACTIONS_SAMPLE_SIZE);
+        size = Math.min(
+          Math.max(sampleSize, MIN_ACTIONS_SAMPLE_SIZE),
+          MAX_ACTIONS_SAMPLE_SIZE,
+        );
         // If it is not valid, set the default value
       } else {
         size = DEFAULT_ACTIONS_SAMPLE_SIZE;
@@ -89,24 +101,36 @@ export class ItemActionService {
     });
   }
 
-  async postPostAction(dbConnection: DBConnection, request: FastifyRequest, item: ItemRaw) {
+  async postPostAction(
+    dbConnection: DBConnection,
+    request: FastifyRequest,
+    item: ItemRaw,
+  ) {
     const { user } = request;
     const action = {
       item,
       type: ItemActionType.Create,
       extra: { itemId: item.id },
     };
-    await this.actionService.postMany(dbConnection, user?.account, request, [action]);
+    await this.actionService.postMany(dbConnection, user?.account, request, [
+      action,
+    ]);
   }
 
-  async postPatchAction(dbConnection: DBConnection, request: FastifyRequest, item: ItemRaw) {
+  async postPatchAction(
+    dbConnection: DBConnection,
+    request: FastifyRequest,
+    item: ItemRaw,
+  ) {
     const { user } = request;
     const action = {
       item,
       type: ItemActionType.Update,
       extra: { itemId: item.id, body: request.body },
     };
-    await this.actionService.postMany(dbConnection, user?.account, request, [action]);
+    await this.actionService.postMany(dbConnection, user?.account, request, [
+      action,
+    ]);
   }
 
   async postManyDeleteAction(
@@ -120,30 +144,56 @@ export class ItemActionService {
       type: ItemActionType.Delete,
       extra: { itemId: item.id },
     }));
-    await this.actionService.postMany(dbConnection, user?.account, request, actions);
+    await this.actionService.postMany(
+      dbConnection,
+      user?.account,
+      request,
+      actions,
+    );
   }
 
-  async postManyMoveAction(dbConnection: DBConnection, request: FastifyRequest, items: ItemRaw[]) {
+  async postManyMoveAction(
+    dbConnection: DBConnection,
+    request: FastifyRequest,
+    items: ItemRaw[],
+  ) {
     const { user } = request;
     const actions = items.map((item) => ({
       item,
       type: ItemActionType.Move,
       extra: { itemId: item.id, body: request.body },
     }));
-    await this.actionService.postMany(dbConnection, user?.account, request, actions);
+    await this.actionService.postMany(
+      dbConnection,
+      user?.account,
+      request,
+      actions,
+    );
   }
 
-  async postManyCopyAction(dbConnection: DBConnection, request: FastifyRequest, items: ItemRaw[]) {
+  async postManyCopyAction(
+    dbConnection: DBConnection,
+    request: FastifyRequest,
+    items: ItemRaw[],
+  ) {
     const { user } = request;
     const actions = items.map((item) => ({
       item,
       type: ItemActionType.Copy,
       extra: { itemId: item.id, body: request.body },
     }));
-    await this.actionService.postMany(dbConnection, user?.account, request, actions);
+    await this.actionService.postMany(
+      dbConnection,
+      user?.account,
+      request,
+      actions,
+    );
   }
 
-  async getTotalViewsCountForItemId(dbConnection: DBConnection, itemId: ItemRaw['id']) {
+  async getTotalViewsCountForItemId(
+    dbConnection: DBConnection,
+    itemId: ItemRaw['id'],
+  ) {
     const res = await dbConnection
       .select({ count: count() })
       .from(actionsTable)
@@ -168,7 +218,12 @@ export class ItemActionService {
       itemId,
     });
 
-    return this.itemActionRepository.getActionsByHour(dbConnection, item.path, maybeUser, params);
+    return this.itemActionRepository.getActionsByHour(
+      dbConnection,
+      item.path,
+      maybeUser,
+      params,
+    );
   }
 
   async getActionsByDay(
@@ -182,7 +237,12 @@ export class ItemActionService {
       itemId,
     });
 
-    return this.itemActionRepository.getActionsByDay(dbConnection, item.path, maybeUser, params);
+    return this.itemActionRepository.getActionsByDay(
+      dbConnection,
+      item.path,
+      maybeUser,
+      params,
+    );
   }
 
   async getActionsByWeekday(

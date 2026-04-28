@@ -5,21 +5,25 @@ import type { FastifyInstance } from 'fastify';
 
 import { HttpMethod, type ItemOpFeedbackEvent as ItemOpFeedbackEventType } from '@graasp/sdk';
 
-import { clearDatabase, mockAuthenticate, unmockAuthenticate } from '../../../../../../../test/app';
-import { seedFromJson } from '../../../../../../../test/mocks/seed';
-import { db } from '../../../../../../drizzle/db';
-import { assertIsDefined } from '../../../../../../utils/assertions';
-import { ITEMS_ROUTE_PREFIX } from '../../../../../../utils/config';
-import { TestWsClient } from '../../../../../websockets/test/test-websocket-client';
-import { setupWsApp } from '../../../../../websockets/test/ws-app';
-import { type ItemRaw } from '../../../../item';
+import {
+  clearDatabase,
+  mockAuthenticate,
+  unmockAuthenticate,
+} from '../../../../../../../test/app.js';
+import { seedFromJson } from '../../../../../../../test/mocks/seed.js';
+import { db } from '../../../../../../drizzle/db.js';
+import { assertIsDefined } from '../../../../../../utils/assertions.js';
+import { ITEMS_ROUTE_PREFIX } from '../../../../../../utils/config.js';
+import { TestWsClient } from '../../../../../websockets/test/test-websocket-client.js';
+import { setupWsApp } from '../../../../../websockets/test/ws-app.js';
+import { type ItemRaw } from '../../../../item.js';
 import {
   ItemOpFeedbackErrorEvent,
   ItemOpFeedbackEvent,
   memberItemsTopic,
-} from '../../../../ws/item.events';
-import { expectValidateFeedbackOp } from '../../../action/test/utils';
-import { ItemValidationGroupRepository } from '../ItemValidationGroup.repository';
+} from '../../../../ws/item.events.js';
+import { expectValidateFeedbackOp } from '../../../action/test/utils.js';
+import { ItemValidationGroupRepository } from '../ItemValidationGroup.repository.js';
 
 describe('asynchronous feedback', () => {
   let app: FastifyInstance;

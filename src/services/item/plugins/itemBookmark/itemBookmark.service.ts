@@ -1,14 +1,14 @@
 import { singleton } from 'tsyringe';
 
-import { type DBConnection } from '../../../../drizzle/db';
-import type { ItemBookmarkRaw } from '../../../../drizzle/types';
-import type { MinimalMember } from '../../../../types';
-import { filterOutPackedItems } from '../../../authorization.utils';
-import { AuthorizedItemService } from '../../../authorizedItem.service';
-import { ItemMembershipRepository } from '../../../itemMembership/membership.repository';
-import type { PackedItem } from '../../packedItem.dto';
-import { ItemVisibilityRepository } from '../itemVisibility/itemVisibility.repository';
-import { ItemBookmarkRepository } from './itemBookmark.repository';
+import { type DBConnection } from '../../../../drizzle/db.js';
+import type { ItemBookmarkRaw } from '../../../../drizzle/types.js';
+import type { MinimalMember } from '../../../../types.js';
+import { filterOutPackedItems } from '../../../authorization.utils.js';
+import { AuthorizedItemService } from '../../../authorizedItem.service.js';
+import { ItemMembershipRepository } from '../../../itemMembership/membership.repository.js';
+import type { PackedItem } from '../../packedItem.dto.js';
+import { ItemVisibilityRepository } from '../itemVisibility/itemVisibility.repository.js';
+import { ItemBookmarkRepository } from './itemBookmark.repository.js';
 
 type PackedBookmarkedItem = ItemBookmarkRaw & { item: PackedItem };
 
@@ -31,7 +31,10 @@ export class BookmarkService {
     this.itemVisibilityRepository = itemVisibilityRepository;
   }
 
-  async getOwn(dbConnection: DBConnection, member: MinimalMember): Promise<PackedBookmarkedItem[]> {
+  async getOwn(
+    dbConnection: DBConnection,
+    member: MinimalMember,
+  ): Promise<PackedBookmarkedItem[]> {
     const bookmarks = await this.itemBookmarkRepository.getBookmarksForMember(
       dbConnection,
       member.id,
@@ -60,7 +63,11 @@ export class BookmarkService {
     });
   }
 
-  async post(dbConnection: DBConnection, member: MinimalMember, itemId: string) {
+  async post(
+    dbConnection: DBConnection,
+    member: MinimalMember,
+    itemId: string,
+  ) {
     // get and check permissions
     const item = await this.authorizedItemService.getItemById(dbConnection, {
       accountId: member.id,
@@ -70,7 +77,15 @@ export class BookmarkService {
     await this.itemBookmarkRepository.post(dbConnection, item.id, member.id);
   }
 
-  async delete(dbConnection: DBConnection, member: MinimalMember, itemId: string) {
-    return this.itemBookmarkRepository.deleteOne(dbConnection, itemId, member.id);
+  async delete(
+    dbConnection: DBConnection,
+    member: MinimalMember,
+    itemId: string,
+  ) {
+    return this.itemBookmarkRepository.deleteOne(
+      dbConnection,
+      itemId,
+      member.id,
+    );
   }
 }

@@ -4,16 +4,16 @@ import { assert, describe, expect, it } from 'vitest';
 
 import { EmailFrequency } from '@graasp/sdk';
 
-import { MemberFactory } from '../../../test/factories/member.factory';
-import { seedFromJson } from '../../../test/mocks/seed';
-import { db } from '../../drizzle/db';
-import { accountsTable } from '../../drizzle/schema';
-import type { MemberRaw } from '../../drizzle/types';
-import { assertIsDefined } from '../../utils/assertions';
-import { MemberNotFound } from '../../utils/errors';
-import { MemberRepository } from './member.repository';
-import { expectMember } from './test/fixtures/members';
-import { MemberDTO } from './types';
+import { MemberFactory } from '../../../test/factories/member.factory.js';
+import { seedFromJson } from '../../../test/mocks/seed.js';
+import { db } from '../../drizzle/db.js';
+import { accountsTable } from '../../drizzle/schema.js';
+import type { MemberRaw } from '../../drizzle/types.js';
+import { assertIsDefined } from '../../utils/assertions.js';
+import { MemberNotFound } from '../../utils/errors.js';
+import { MemberRepository } from './member.repository.js';
+import { expectMember } from './test/fixtures/members.js';
+import { MemberDTO } from './types.js';
 
 const memberRepository = new MemberRepository();
 

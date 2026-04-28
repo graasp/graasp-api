@@ -3,9 +3,9 @@ import { StatusCodes } from 'http-status-codes';
 
 import type { FastifySchema } from 'fastify';
 
-import { customType } from '../../../../plugins/typebox';
-import { errorSchemaRef } from '../../../../schemas/global';
-import { folderSchema } from '../folder/folder.schemas';
+import { customType } from '../../../../plugins/typebox.js';
+import { errorSchemaRef } from '../../../../schemas/global.js';
+import { folderSchema } from '../folder/folder.schemas.js';
 
 // For now a capsule is a folder with one different setting
 const capsuleSchema = folderSchema;

@@ -12,14 +12,14 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { type IndexItem } from '@graasp/sdk';
 
-import { MOCK_LOGGER } from '../../../../../../../../test/app.vitest';
-import { ItemFactory } from '../../../../../../../../test/factories/item.factory';
-import { type DBConnection } from '../../../../../../../drizzle/db';
-import type { ItemPublishedWithItemWithCreator } from '../../../../../../../drizzle/types';
-import { ItemRepository } from '../../../../../item.repository';
-import { ItemPublishedRepository } from '../../itemPublished.repository';
-import { ACTIVE_INDEX, MeiliSearchWrapper } from './meilisearch';
-import { MeilisearchRepository } from './meilisearch.repository';
+import { MOCK_LOGGER } from '../../../../../../../../test/app.vitest.js';
+import { ItemFactory } from '../../../../../../../../test/factories/item.factory.js';
+import { type DBConnection } from '../../../../../../../drizzle/db.js';
+import type { ItemPublishedWithItemWithCreator } from '../../../../../../../drizzle/types.js';
+import { ItemRepository } from '../../../../../item.repository.js';
+import { ItemPublishedRepository } from '../../itemPublished.repository.js';
+import { ACTIVE_INDEX, MeiliSearchWrapper } from './meilisearch.js';
+import { MeilisearchRepository } from './meilisearch.repository.js';
 
 const mockItemPublished = ({
   id,

@@ -2,10 +2,10 @@ import { singleton } from 'tsyringe';
 
 import type { UUID } from '@graasp/sdk';
 
-import { type DBConnection } from '../../../../drizzle/db';
-import type { MinimalMember } from '../../../../types';
-import { MemberProfileRepository } from './memberProfile.repository';
-import type { IMemberProfile } from './types';
+import { type DBConnection } from '../../../../drizzle/db.js';
+import type { MinimalMember } from '../../../../types.js';
+import { MemberProfileRepository } from './memberProfile.repository.js';
+import type { IMemberProfile } from './types.js';
 
 @singleton()
 export class MemberProfileService {
@@ -15,8 +15,16 @@ export class MemberProfileService {
     this.memberProfileRepository = memberProfileRepository;
   }
 
-  async post(dbConnection: DBConnection, member: MinimalMember, data: Partial<IMemberProfile>) {
-    const profile = await this.memberProfileRepository.createOne(dbConnection, member.id, data);
+  async post(
+    dbConnection: DBConnection,
+    member: MinimalMember,
+    data: Partial<IMemberProfile>,
+  ) {
+    const profile = await this.memberProfileRepository.createOne(
+      dbConnection,
+      member.id,
+      data,
+    );
 
     return profile;
   }
@@ -35,11 +43,22 @@ export class MemberProfileService {
   }
 
   async getOwn(dbConnection: DBConnection, member: MinimalMember) {
-    const memberProfile = await this.memberProfileRepository.getOwn(dbConnection, member.id);
+    const memberProfile = await this.memberProfileRepository.getOwn(
+      dbConnection,
+      member.id,
+    );
     return memberProfile;
   }
 
-  async patch(dbConnection: DBConnection, member: MinimalMember, data: Partial<IMemberProfile>) {
-    return await this.memberProfileRepository.patch(dbConnection, member.id, data);
+  async patch(
+    dbConnection: DBConnection,
+    member: MinimalMember,
+    data: Partial<IMemberProfile>,
+  ) {
+    return await this.memberProfileRepository.patch(
+      dbConnection,
+      member.id,
+      data,
+    );
   }
 }

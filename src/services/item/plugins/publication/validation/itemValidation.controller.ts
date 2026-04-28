@@ -4,23 +4,29 @@ import type { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox';
 
 import { PublicationStatus } from '@graasp/sdk';
 
-import { resolveDependency } from '../../../../../di/utils';
-import { db } from '../../../../../drizzle/db';
-import { asDefined } from '../../../../../utils/assertions';
-import { isAuthenticated, matchOne } from '../../../../auth/plugins/passport';
-import { assertIsMember } from '../../../../authentication';
-import { AuthorizedItemService } from '../../../../authorizedItem.service';
-import { memberAccountRole } from '../../../../member/strategies/memberAccountRole';
-import { validatedMemberAccountRole } from '../../../../member/strategies/validatedMemberAccountRole';
+import { resolveDependency } from '../../../../../di/utils.js';
+import { db } from '../../../../../drizzle/db.js';
+import { asDefined } from '../../../../../utils/assertions.js';
+import {
+  isAuthenticated,
+  matchOne,
+} from '../../../../auth/plugins/passport/preHandlers.js';
+import { assertIsMember } from '../../../../authentication.js';
+import { AuthorizedItemService } from '../../../../authorizedItem.service.js';
+import { memberAccountRole } from '../../../../member/strategies/memberAccountRole.js';
+import { validatedMemberAccountRole } from '../../../../member/strategies/validatedMemberAccountRole.js';
 import {
   ItemOpFeedbackErrorEvent,
   ItemOpFeedbackEvent,
   memberItemsTopic,
-} from '../../../ws/item.events';
-import { FolderItemService } from '../../folder/folder.service';
-import { ItemPublishedService } from '../published/itemPublished.service';
-import { getLatestItemValidationGroup, validateItem } from './itemValidation.schemas';
-import { ItemValidationService } from './itemValidation.service';
+} from '../../../ws/item.events.js';
+import { FolderItemService } from '../../folder/folder.service.js';
+import { ItemPublishedService } from '../published/itemPublished.service.js';
+import {
+  getLatestItemValidationGroup,
+  validateItem,
+} from './itemValidation.schemas.js';
+import { ItemValidationService } from './itemValidation.service.js';
 
 const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
   const { websockets } = fastify;
@@ -45,7 +51,11 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
         itemId,
         permission: 'admin',
       });
-      return await validationService.getLastItemValidationGroupForItem(db, member, item);
+      return await validationService.getLastItemValidationGroupForItem(
+        db,
+        member,
+        item,
+      );
     },
   );
 
@@ -72,7 +82,12 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
         .transaction(async (tx) => {
           // get item and check permission
           // only folder items are allowed as root for validation
-          const item = await folderItemService.getFolder(tx, member, itemId, 'admin');
+          const item = await folderItemService.getFolder(
+            tx,
+            member,
+            itemId,
+            'admin',
+          );
 
           const notifyOnValidationChanges = () => {
             websockets.publish(

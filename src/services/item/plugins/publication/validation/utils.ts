@@ -1,12 +1,13 @@
 import path from 'path';
 import striptags from 'striptags';
 
-import { FileItemExtra, MimeTypes, getMimetype } from '@graasp/sdk';
+import { type FileItemExtra, MimeTypes, getMimetype } from '@graasp/sdk';
 
-import { TMP_FOLDER } from '../../../../../utils/config';
-import { FileItem, type ItemRaw, isFileItem } from '../../../item';
+import { TMP_FOLDER } from '../../../../../utils/config.js';
+import { type FileItem, type ItemRaw, isFileItem } from '../../../item.js';
 
-export const stripHtml = (str?: string | null): string => (str ? striptags(str) : '');
+export const stripHtml = (str?: string | null): string =>
+  str ? striptags(str) : '';
 
 export const buildStoragePath = (itemId: string): string =>
   path.join(TMP_FOLDER, 'validations', itemId);

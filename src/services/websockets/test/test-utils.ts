@@ -11,11 +11,11 @@ import fp from 'fastify-plugin';
 
 import { Websocket as GraaspWebsocket } from '@graasp/sdk';
 
-import { REDIS_CONNECTION } from '../../../config/redis';
-import { AjvMessageSerializer } from '../message-serializer';
-import graaspWebSockets, { type WebsocketsPluginOptions } from '../websocket.controller';
-import { WebSocketChannels } from '../ws-channels';
-import { mockSessionPreHandler } from './mocks';
+import { REDIS_CONNECTION } from '../../../config/redis.js';
+import { AjvMessageSerializer } from '../message-serializer.js';
+import graaspWebSockets, { type WebsocketsPluginOptions } from '../websocket.controller.js';
+import { WebSocketChannels } from '../ws-channels.js';
+import { mockSessionPreHandler } from './mocks.js';
 
 const clientSerdes = { serialize: JSON.stringify, parse: JSON.parse };
 const serverSerdes = new AjvMessageSerializer();

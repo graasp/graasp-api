@@ -2,13 +2,16 @@ import { StatusCodes } from 'http-status-codes';
 
 import type { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox';
 
-import { resolveDependency } from '../../../../di/utils';
-import { db } from '../../../../drizzle/db';
-import type { FastifyInstanceTypebox } from '../../../../plugins/typebox';
-import { asDefined } from '../../../../utils/assertions';
-import { isAuthenticated, matchOne } from '../../../auth/plugins/passport';
-import { assertIsMember } from '../../../authentication';
-import { validatedMemberAccountRole } from '../../../member/strategies/validatedMemberAccountRole';
+import { resolveDependency } from '../../../../di/utils.js';
+import { db } from '../../../../drizzle/db.js';
+import type { FastifyInstanceTypebox } from '../../../../plugins/typebox.js';
+import { asDefined } from '../../../../utils/assertions.js';
+import {
+  isAuthenticated,
+  matchOne,
+} from '../../../auth/plugins/passport/preHandlers.js';
+import { assertIsMember } from '../../../authentication.js';
+import { validatedMemberAccountRole } from '../../../member/strategies/validatedMemberAccountRole.js';
 import {
   createShortLink,
   deleteShortLink,
@@ -16,27 +19,38 @@ import {
   getAvailable,
   getRedirection,
   updateShortLink,
-} from './shortlink.schemas';
-import { SHORT_LINKS_LIST_ROUTE, ShortLinkService } from './shortlink.service';
+} from './shortlink.schemas.js';
+import {
+  SHORT_LINKS_LIST_ROUTE,
+  ShortLinkService,
+} from './shortlink.service.js';
 
 const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
   const shortLinkService = resolveDependency(ShortLinkService);
 
   fastify.register(async function (fastify: FastifyInstanceTypebox) {
     // No need to be logged for the redirection
-    fastify.get('/:alias', { schema: getRedirection }, async ({ params: { alias } }, reply) => {
-      const path = await shortLinkService.getRedirection(db, alias);
-      reply.code(StatusCodes.MOVED_TEMPORARILY).redirect(path);
-    });
+    fastify.get(
+      '/:alias',
+      { schema: getRedirection },
+      async ({ params: { alias } }, reply) => {
+        const path = await shortLinkService.getRedirection(db, alias);
+        reply.code(StatusCodes.MOVED_TEMPORARILY).redirect(path);
+      },
+    );
 
-    fastify.get('/available/:alias', { schema: getAvailable }, async ({ params: { alias } }) => {
-      try {
-        await shortLinkService.getOne(db, alias);
-        return { available: false };
-      } catch (_e) {
-        return { available: true };
-      }
-    });
+    fastify.get(
+      '/available/:alias',
+      { schema: getAvailable },
+      async ({ params: { alias } }) => {
+        try {
+          await shortLinkService.getOne(db, alias);
+          return { available: false };
+        } catch (_e) {
+          return { available: true };
+        }
+      },
+    );
 
     // Only the admin can manage a short link of this resource
     await fastify.register(async (fastify: FastifyInstanceTypebox) => {
@@ -91,7 +105,12 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
           const member = asDefined(user?.account);
           assertIsMember(member);
           return db.transaction(async (tx) => {
-            const updatedLink = await shortLinkService.update(tx, member, alias, shortLink);
+            const updatedLink = await shortLinkService.update(
+              tx,
+              member,
+              alias,
+              shortLink,
+            );
             return updatedLink;
           });
         },

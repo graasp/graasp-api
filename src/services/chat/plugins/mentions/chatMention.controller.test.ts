@@ -10,15 +10,15 @@ import build, {
   clearDatabase,
   mockAuthenticate,
   unmockAuthenticate,
-} from '../../../../../test/app';
-import { seedFromJson } from '../../../../../test/mocks/seed';
-import { db } from '../../../../drizzle/db';
-import { chatMentionsTable } from '../../../../drizzle/schema';
-import type { AccountRaw, ChatMentionRaw, ChatMessageRaw } from '../../../../drizzle/types';
-import type { MinimalMember } from '../../../../types';
-import { assertIsDefined } from '../../../../utils/assertions';
-import { ITEMS_ROUTE_PREFIX } from '../../../../utils/config';
-import { MemberCannotAccessMention } from '../../errors';
+} from '../../../../../test/app.js';
+import { seedFromJson } from '../../../../../test/mocks/seed.js';
+import { db } from '../../../../drizzle/db.js';
+import { chatMentionsTable } from '../../../../drizzle/schema.js';
+import type { AccountRaw, ChatMentionRaw, ChatMessageRaw } from '../../../../drizzle/types.js';
+import type { MinimalMember } from '../../../../types.js';
+import { assertIsDefined } from '../../../../utils/assertions.js';
+import { ITEMS_ROUTE_PREFIX } from '../../../../utils/config.js';
+import { MemberCannotAccessMention } from '../../errors.js';
 
 // create item, chat messages from another member and members
 // as well as mentions of actor

@@ -15,15 +15,19 @@ import {
   RecaptchaAction,
 } from '@graasp/sdk';
 
-import build, { MOCK_CAPTCHA, clearDatabase, unmockAuthenticate } from '../../../../../test/app';
-import { seedFromJson } from '../../../../../test/mocks/seed';
-import { mockCaptchaValidation } from '../../../../../test/utils';
-import { resolveDependency } from '../../../../di/utils';
-import { db } from '../../../../drizzle/db';
-import { accountsTable, invitationsTable, itemMembershipsTable } from '../../../../drizzle/schema';
-import type { MemberRaw } from '../../../../drizzle/types';
-import { MailerService } from '../../../../plugins/mailer/mailer.service';
-import { assertIsDefined } from '../../../../utils/assertions';
+import build, { MOCK_CAPTCHA, clearDatabase, unmockAuthenticate } from '../../../../../test/app.js';
+import { seedFromJson } from '../../../../../test/mocks/seed.js';
+import { mockCaptchaValidation } from '../../../../../test/utils.js';
+import { resolveDependency } from '../../../../di/utils.js';
+import { db } from '../../../../drizzle/db.js';
+import {
+  accountsTable,
+  invitationsTable,
+  itemMembershipsTable,
+} from '../../../../drizzle/schema.js';
+import type { MemberRaw } from '../../../../drizzle/types.js';
+import { MailerService } from '../../../../plugins/mailer/mailer.service.js';
+import { assertIsDefined } from '../../../../utils/assertions.js';
 
 jest.mock('node-fetch');
 (fetch as jest.MockedFunction<typeof fetch>).mockImplementation(async () => {

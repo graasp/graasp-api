@@ -1,14 +1,14 @@
 import { singleton } from 'tsyringe';
 
-import { type DBConnection } from '../../../../drizzle/db';
-import type { MaybeUser, MinimalMember } from '../../../../types';
-import { filterOutPackedItems } from '../../../authorization.utils';
-import { AuthorizedItemService } from '../../../authorizedItem.service';
-import { ItemMembershipRepository } from '../../../itemMembership/membership.repository';
-import { ItemVisibilityRepository } from '../itemVisibility/itemVisibility.repository';
-import { ItemPublishedRepository } from '../publication/published/itemPublished.repository';
-import { MeiliSearchWrapper } from '../publication/published/plugins/search/meilisearch';
-import { ItemLikeRepository } from './itemLike.repository';
+import { type DBConnection } from '../../../../drizzle/db.js';
+import type { MaybeUser, MinimalMember } from '../../../../types.js';
+import { filterOutPackedItems } from '../../../authorization.utils.js';
+import { AuthorizedItemService } from '../../../authorizedItem.service.js';
+import { ItemMembershipRepository } from '../../../itemMembership/membership.repository.js';
+import { ItemVisibilityRepository } from '../itemVisibility/itemVisibility.repository.js';
+import { ItemPublishedRepository } from '../publication/published/itemPublished.repository.js';
+import { MeiliSearchWrapper } from '../publication/published/plugins/search/meilisearch.js';
+import { ItemLikeRepository } from './itemLike.repository.js';
 
 @singleton()
 export class ItemLikeService {
@@ -37,7 +37,10 @@ export class ItemLikeService {
 
   async getForMember(dbConnection: DBConnection, member: MinimalMember) {
     // only own items
-    const likes = await this.itemLikeRepository.getByCreator(dbConnection, member.id);
+    const likes = await this.itemLikeRepository.getByCreator(
+      dbConnection,
+      member.id,
+    );
     // filter out items user might not have access to
     // and packed item
     const filteredItems = await filterOutPackedItems(
@@ -55,7 +58,11 @@ export class ItemLikeService {
     });
   }
 
-  async getForItem(dbConnection: DBConnection, maybeUser: MaybeUser, itemId: string) {
+  async getForItem(
+    dbConnection: DBConnection,
+    maybeUser: MaybeUser,
+    itemId: string,
+  ) {
     await this.authorizedItemService.assertAccessForItemId(dbConnection, {
       accountId: maybeUser?.id,
       itemId,
@@ -64,7 +71,11 @@ export class ItemLikeService {
     return this.itemLikeRepository.getByItemId(dbConnection, itemId);
   }
 
-  async removeOne(dbConnection: DBConnection, member: MinimalMember, itemId: string) {
+  async removeOne(
+    dbConnection: DBConnection,
+    member: MinimalMember,
+    itemId: string,
+  ) {
     // QUESTION: allow public to be liked?
     const item = await this.authorizedItemService.getItemById(dbConnection, {
       accountId: member.id,
@@ -78,16 +89,26 @@ export class ItemLikeService {
     );
 
     // update index if item is published
-    const publishedItem = await this.itemPublishedRepository.getForItem(dbConnection, item.path);
+    const publishedItem = await this.itemPublishedRepository.getForItem(
+      dbConnection,
+      item.path,
+    );
     if (publishedItem) {
-      const likes = await this.itemLikeRepository.getCountByItemId(dbConnection, item.id);
+      const likes = await this.itemLikeRepository.getCountByItemId(
+        dbConnection,
+        item.id,
+      );
       await this.meilisearchClient.updateItem(item.id, { likes });
     }
 
     return result;
   }
 
-  async post(dbConnection: DBConnection, member: MinimalMember, itemId: string) {
+  async post(
+    dbConnection: DBConnection,
+    member: MinimalMember,
+    itemId: string,
+  ) {
     // QUESTION: allow public to be liked?
     const item = await this.authorizedItemService.getItemById(dbConnection, {
       accountId: member.id,
@@ -99,9 +120,15 @@ export class ItemLikeService {
     });
 
     // update index if item is published
-    const publishedItem = await this.itemPublishedRepository.getForItem(dbConnection, item.path);
+    const publishedItem = await this.itemPublishedRepository.getForItem(
+      dbConnection,
+      item.path,
+    );
     if (publishedItem) {
-      const likes = await this.itemLikeRepository.getCountByItemId(dbConnection, item.id);
+      const likes = await this.itemLikeRepository.getCountByItemId(
+        dbConnection,
+        item.id,
+      );
       await this.meilisearchClient.updateItem(item.id, { likes });
     }
 

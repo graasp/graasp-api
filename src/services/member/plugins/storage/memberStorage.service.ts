@@ -2,11 +2,11 @@ import { singleton } from 'tsyringe';
 
 import type { MemberStorage, Pagination } from '@graasp/sdk';
 
-import { type DBConnection } from '../../../../drizzle/db';
-import type { MinimalMember } from '../../../../types';
-import { ItemRepository } from '../../../item/item.repository';
-import { DEFAULT_MAX_STORAGE } from '../../../item/plugins/file/utils/constants';
-import { StorageExceeded } from '../../../item/plugins/file/utils/errors';
+import { type DBConnection } from '../../../../drizzle/db.js';
+import type { MinimalMember } from '../../../../types.js';
+import { ItemRepository } from '../../../item/item.repository.js';
+import { DEFAULT_MAX_STORAGE } from '../../../item/plugins/file/utils/constants.js';
+import { StorageExceeded } from '../../../item/plugins/file/utils/errors.js';
 
 @singleton()
 export class StorageService {
@@ -26,7 +26,10 @@ export class StorageService {
     member: MinimalMember,
   ): Promise<MemberStorage> {
     return {
-      current: await this.itemRepository.getItemSumSize(dbConnection, member?.id),
+      current: await this.itemRepository.getItemSumSize(
+        dbConnection,
+        member?.id,
+      ),
       maximum: await this.getMaximumStorageSize(),
     };
   }
@@ -47,10 +50,17 @@ export class StorageService {
   // check the user has enough storage to create a new item given its size
   // get the complete storage
   // todo: include more item types
-  async checkRemainingStorage(dbConnection: DBConnection, member: MinimalMember, size: number = 0) {
+  async checkRemainingStorage(
+    dbConnection: DBConnection,
+    member: MinimalMember,
+    size: number = 0,
+  ) {
     const { id: memberId } = member;
 
-    const currentStorage = await this.itemRepository.getItemSumSize(dbConnection, memberId);
+    const currentStorage = await this.itemRepository.getItemSumSize(
+      dbConnection,
+      memberId,
+    );
 
     const maxStorage = await this.getMaximumStorageSize();
     if (currentStorage + size > maxStorage) {

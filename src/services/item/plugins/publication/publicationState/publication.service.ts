@@ -2,16 +2,16 @@ import { singleton } from 'tsyringe';
 
 import { ItemVisibilityType } from '@graasp/sdk';
 
-import type { DBConnection } from '../../../../../drizzle/db';
-import type { AuthenticatedUser } from '../../../../../types';
-import { AuthorizedItemService } from '../../../../authorizedItem.service';
-import { ItemRepository } from '../../../item.repository';
-import { PackedItemDTO } from '../../../packedItem.dto';
-import { ItemVisibilityRepository } from '../../itemVisibility/itemVisibility.repository';
-import { ItemPublishedRepository } from '../published/itemPublished.repository';
-import { ItemValidationGroupRepository } from '../validation/ItemValidationGroup.repository';
-import { ValidationQueue } from '../validation/validationQueue';
-import { PublicationState } from './publicationState';
+import type { DBConnection } from '../../../../../drizzle/db.js';
+import type { AuthenticatedUser } from '../../../../../types.js';
+import { AuthorizedItemService } from '../../../../authorizedItem.service.js';
+import { ItemRepository } from '../../../item.repository.js';
+import { PackedItemDTO } from '../../../packedItem.dto.js';
+import { ItemVisibilityRepository } from '../../itemVisibility/itemVisibility.repository.js';
+import { ItemPublishedRepository } from '../published/itemPublished.repository.js';
+import { ItemValidationGroupRepository } from '../validation/ItemValidationGroup.repository.js';
+import { ValidationQueue } from '../validation/validationQueue.js';
+import { PublicationState } from './publicationState.js';
 
 @singleton()
 export class PublicationService {
@@ -43,7 +43,10 @@ export class PublicationService {
     member: AuthenticatedUser,
     itemId: string,
   ) {
-    const item = await this.itemRepository.getOneWithCreatorOrThrow(dbConnection, itemId);
+    const item = await this.itemRepository.getOneWithCreatorOrThrow(
+      dbConnection,
+      itemId,
+    );
     await this.authorizedItemService.assertAccess(dbConnection, {
       accountId: member.id,
       item,
@@ -62,10 +65,16 @@ export class PublicationService {
       undefined,
       publicVisibility ? [publicVisibility] : [],
     ).packed();
-    const validationGroup = await this.validationRepository.getLastForItem(dbConnection, itemId);
+    const validationGroup = await this.validationRepository.getLastForItem(
+      dbConnection,
+      itemId,
+    );
     const publishedEntry =
-      (await this.publishedRepository.getForItem(dbConnection, item.path)) ?? undefined;
-    const isValidationInProgress = await this.validationQueue.isInProgress(item.path);
+      (await this.publishedRepository.getForItem(dbConnection, item.path)) ??
+      undefined;
+    const isValidationInProgress = await this.validationQueue.isInProgress(
+      item.path,
+    );
 
     return new PublicationState(packedItem, {
       isValidationInProgress,

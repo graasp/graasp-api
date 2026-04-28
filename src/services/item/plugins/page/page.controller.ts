@@ -2,19 +2,26 @@ import { StatusCodes } from 'http-status-codes';
 
 import type { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox';
 
-import { resolveDependency } from '../../../../di/utils';
-import { db } from '../../../../drizzle/db';
-import { asDefined } from '../../../../utils/assertions';
-import { isAuthenticated, matchOne, optionalIsAuthenticated } from '../../../auth/plugins/passport';
-import { assertIsMember } from '../../../authentication';
-import { AuthorizedItemService } from '../../../authorizedItem.service';
-import { validatedMemberAccountRole } from '../../../member/strategies/validatedMemberAccountRole';
-import { WrongItemTypeError } from '../../errors';
-import { isPageItem } from '../../item';
-import { ItemService } from '../../item.service';
-import { createPage, pageWebsocketsSchema } from './page.schemas';
-import { PageItemService } from './page.service';
-import { setupWSConnectionForRead, setupWSConnectionForWriters } from './setupWSConnection';
+import { resolveDependency } from '../../../../di/utils.js';
+import { db } from '../../../../drizzle/db.js';
+import { asDefined } from '../../../../utils/assertions.js';
+import {
+  isAuthenticated,
+  matchOne,
+  optionalIsAuthenticated,
+} from '../../../auth/plugins/passport/preHandlers.js';
+import { assertIsMember } from '../../../authentication.js';
+import { AuthorizedItemService } from '../../../authorizedItem.service.js';
+import { validatedMemberAccountRole } from '../../../member/strategies/validatedMemberAccountRole.js';
+import { WrongItemTypeError } from '../../errors.js';
+import { isPageItem } from '../../item.js';
+import { ItemService } from '../../item.service.js';
+import { createPage, pageWebsocketsSchema } from './page.schemas.js';
+import { PageItemService } from './page.service.js';
+import {
+  setupWSConnectionForRead,
+  setupWSConnectionForWriters,
+} from './setupWSConnection.js';
 
 export const pageItemPlugin: FastifyPluginAsyncTypebox = async (fastify) => {
   const itemService = resolveDependency(ItemService);
@@ -22,11 +29,14 @@ export const pageItemPlugin: FastifyPluginAsyncTypebox = async (fastify) => {
   const authorizedItemService = resolveDependency(AuthorizedItemService);
 
   // register post copy handler to copy the updates for page
-  itemService.hooks.setPostHook('copy', async (_actor, thisDb, { original: item, copy }) => {
-    if (isPageItem(item)) {
-      await pageItemService.copy(thisDb, item.id, copy.id);
-    }
-  });
+  itemService.hooks.setPostHook(
+    'copy',
+    async (_actor, thisDb, { original: item, copy }) => {
+      if (isPageItem(item)) {
+        await pageItemService.copy(thisDb, item.id, copy.id);
+      }
+    },
+  );
 
   fastify.post(
     '/pages',
@@ -79,7 +89,12 @@ export const pageItemPlugin: FastifyPluginAsyncTypebox = async (fastify) => {
     },
     async (client, req) => {
       client.on('error', fastify.log.error);
-      setupWSConnectionForRead(client, req.params.id, pageItemService, fastify.log);
+      setupWSConnectionForRead(
+        client,
+        req.params.id,
+        pageItemService,
+        fastify.log,
+      );
     },
   );
 
@@ -109,7 +124,12 @@ export const pageItemPlugin: FastifyPluginAsyncTypebox = async (fastify) => {
     },
     async (client, req) => {
       client.on('error', fastify.log.error);
-      setupWSConnectionForWriters(client, req.params.id, pageItemService, fastify.log);
+      setupWSConnectionForWriters(
+        client,
+        req.params.id,
+        pageItemService,
+        fastify.log,
+      );
     },
   );
 };

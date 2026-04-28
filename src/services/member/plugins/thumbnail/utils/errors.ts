@@ -2,7 +2,7 @@ import { StatusCodes } from 'http-status-codes';
 
 import { ErrorFactory, FAILURE_MESSAGES } from '@graasp/sdk';
 
-import { PLUGIN_NAME } from '../../../../thumbnail/constants';
+import { PLUGIN_NAME } from '../../../../thumbnail/constants.js';
 
 const ThumbnailError = ErrorFactory(PLUGIN_NAME);
 
