@@ -36,7 +36,9 @@ export const mockCaptchaValidation = (action: RecaptchaActionType) => {
   });
 };
 
-const AUTH_CLIENT_HOST = ClientManager.getInstance().getURLByContext(Context.Auth);
+const AUTH_CLIENT_HOST = ClientManager.getInstance().getURLByContext(
+  Context.Auth,
+);
 
 describe('Auth routes tests', () => {
   let app: FastifyInstance;
@@ -132,7 +134,9 @@ describe('Auth routes tests', () => {
       });
 
       // ensure the message is `member not signed up`
-      expect(response.json().message).toEqual(FAILURE_MESSAGES.MEMBER_NOT_SIGNED_UP);
+      expect(response.json().message).toEqual(
+        FAILURE_MESSAGES.MEMBER_NOT_SIGNED_UP,
+      );
       expect(response.statusCode).toEqual(StatusCodes.NOT_FOUND);
     });
   });
@@ -186,7 +190,7 @@ describe('Auth routes tests', () => {
       });
       expect(response.statusCode).toEqual(StatusCodes.SEE_OTHER);
       const url = AUTH_CLIENT_HOST;
-      url.searchParams.set('error', 'true');
+      url.searchParams.set('error', 'MEMBER_NOT_FOUND');
       expect(response.headers.location).toEqual(url.toString());
     });
 
@@ -198,7 +202,7 @@ describe('Auth routes tests', () => {
       });
       expect(response.statusCode).toEqual(StatusCodes.SEE_OTHER);
       const url = AUTH_CLIENT_HOST;
-      url.searchParams.set('error', 'true');
+      url.searchParams.set('error', 'MEMBER_NOT_FOUND');
       expect(response.headers.location).toEqual(url.toString());
     });
 
@@ -215,7 +219,7 @@ describe('Auth routes tests', () => {
 
       expect(response.statusCode).toEqual(StatusCodes.SEE_OTHER);
       const url = AUTH_CLIENT_HOST;
-      url.searchParams.set('error', 'true');
+      url.searchParams.set('error', 'TOKEN_EXPIRED');
       expect(response.headers.location).toEqual(url.toString());
     });
   });
@@ -233,7 +237,10 @@ describe('Auth routes tests', () => {
   describe('Complete Authentication Process', () => {
     it('MagicLink', async () => {
       mockCaptchaValidation(RecaptchaAction.SignUp);
-      const mockSendEmail = jest.spyOn(resolveDependency(MailerService), 'sendRaw');
+      const mockSendEmail = jest.spyOn(
+        resolveDependency(MailerService),
+        'sendRaw',
+      );
 
       const name = faker.internet.username().toLowerCase();
       const email = faker.internet.email().toLowerCase();
@@ -252,7 +259,9 @@ describe('Auth routes tests', () => {
       expect(memberBefore?.isValidated).toBeFalsy();
 
       expect(mockSendEmail).toHaveBeenCalledTimes(1);
-      const fetchedURL = new URL(mockSendEmail.mock.calls[0][2].match(URL_REGEX)![1]);
+      const fetchedURL = new URL(
+        mockSendEmail.mock.calls[0][2].match(URL_REGEX)![1],
+      );
       const authURL = fetchedURL.toString();
       const responseAuth = await app.inject({
         method: HttpMethod.Get,
