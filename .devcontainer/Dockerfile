@@ -16,10 +16,13 @@ RUN if [ "$USER_GID" != "1000" ] || [ "$USER_UID" != "1000" ]; then \
 # RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
 #     && apt-get -y install --no-install-recommends <your-package-list-here>
 
-# install GNUPG to allow signing commits with GPG signature
-RUN apt-get update && apt-get install gnupg2 -y
-# install psql to connect to the database
-RUN apt-get update && apt-get install postgresql-client -y
+RUN apt-get update \
+  && apt-get install -y --no-install-recommends \
+  # install psql to connect to the database
+  postgresql-client \
+  # install GNUPG to allow signing commits with GPG signature
+  gnupg2 \
+  && rm -rf /var/lib/apt/lists/*
 
 # [Optional] Uncomment if you want to install an additional version of node using nvm
 # ARG EXTRA_NODE_VERSION=10
