@@ -4,12 +4,7 @@ import fastifyPassport from '@fastify/passport';
 import type { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox';
 import type { PassportUser } from 'fastify';
 
-import {
-  ClientManager,
-  Context,
-  DEFAULT_LANG,
-  RecaptchaAction,
-} from '@graasp/sdk';
+import { ClientManager, Context, DEFAULT_LANG, RecaptchaAction } from '@graasp/sdk';
 
 import { resolveDependency } from '../../../../di/utils';
 import { db } from '../../../../drizzle/db';
@@ -88,20 +83,12 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
         PassportStrategy.WebMagicLink,
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        async (
-          request,
-          reply,
-          err,
-          user?: PassportUser,
-          info?: PassportInfo,
-        ) => {
+        async (request, reply, err, user?: PassportUser, info?: PassportInfo) => {
           // This function is called after the strategy has been executed.
           // It is necessary, so we match the behavior of the original implementation.
           if (!user || err) {
             // Authentication failed
-            const target = ClientManager.getInstance().getURLByContext(
-              Context.Auth,
-            );
+            const target = ClientManager.getInstance().getURLByContext(Context.Auth);
             if (err) {
               target.searchParams.set(ERROR_SEARCH_PARAM, err.message);
             } else if (!user) {
@@ -125,18 +112,11 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
         log,
       } = request;
       const member = asDefined(user?.account);
-      const redirectionLink = getRedirectionLink(
-        log,
-        url ? decodeURIComponent(url) : undefined,
-      );
+      const redirectionLink = getRedirectionLink(log, url ? decodeURIComponent(url) : undefined);
       await db.transaction(async (tx) => {
         await memberService.refreshLastAuthenticatedAt(tx, member.id);
         // on auth, if the user used the email sign in, its account gets validated
-        if (
-          authInfo?.emailValidation &&
-          isMember(member) &&
-          !member.isValidated
-        ) {
+        if (authInfo?.emailValidation && isMember(member) && !member.isValidated) {
           await memberService.validate(tx, member.id);
         }
       });
