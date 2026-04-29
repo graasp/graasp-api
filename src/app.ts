@@ -20,7 +20,7 @@ import MemberServiceApi from './services/member';
 import tagPlugin from './services/tag/tag.controller';
 import websocketsPlugin from './services/websockets/websocket.controller';
 
-export default async function (instance: FastifyInstance): Promise<void> {
+export default async function registerAppPlugins(instance: FastifyInstance): Promise<void> {
   const { log } = instance;
 
   await instance.register(fws, {

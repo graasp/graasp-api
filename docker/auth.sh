@@ -6,6 +6,7 @@ function show_help() {
     echo "Arguments:"
     echo "  ECR_URI      URI of the ECR in AWS, example: public.ecr.aws/qzuer78 or a private ECR XXXXXXXX.dkr.ecr.region.amazonaws.com/repo."
     echo "  REGION       REGION of the ECR in AWS, example: eu-central-1"
+    return 0
 }
 
 # Check if no arguments are provided
