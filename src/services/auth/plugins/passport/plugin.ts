@@ -7,7 +7,6 @@ import type {
 
 import { PROD, STAGING } from '../../../../config/env.js';
 import {
-  JWT_SECRET,
   MAX_SECURE_SESSION_EXPIRATION_IN_SECONDS,
   SECURE_SESSION_EXPIRATION_IN_SECONDS,
   SECURE_SESSION_SECRET_KEY,
@@ -71,7 +70,7 @@ export const plugin: FastifyPluginAsync = async (fastify: FastifyInstance) => {
     memberRepository,
     PassportStrategy.WebMagicLink,
     SHORT_TOKEN_PARAM,
-    JWT_SECRET,
+    'login',
     { propagateError: true },
   );
 
