@@ -44,7 +44,7 @@ describe('MemberRepository', () => {
       await memberRepository.deleteOne(db, member.id);
 
       await expect(async () => await memberRepository.get(db, member.id)).rejects.toThrow(
-        new MemberNotFound({ id: member.id }),
+        new MemberNotFound(),
       );
     });
     it('silent error if member does not exist', async () => {
@@ -63,14 +63,12 @@ describe('MemberRepository', () => {
     });
 
     it('throw for undefined id', async () => {
-      expect(memberRepository.get(db, undefined!)).rejects.toThrow(
-        new MemberNotFound({ id: undefined }),
-      );
+      expect(memberRepository.get(db, undefined!)).rejects.toThrow(new MemberNotFound());
     });
 
     it('throw for member does not exist', async () => {
       const id = v4();
-      expect(memberRepository.get(db, id)).rejects.toThrow(new MemberNotFound({ id }));
+      expect(memberRepository.get(db, id)).rejects.toThrow(new MemberNotFound());
     });
   });
 
