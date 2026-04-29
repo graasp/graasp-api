@@ -21,7 +21,6 @@ import { auth, login, register, signOut } from './magicLink.schemas';
 import { MagicLinkService } from './magicLink.service';
 
 const ERROR_SEARCH_PARAM = 'error';
-const ERROR_SEARCH_PARAM_HAS_ERROR = 'true';
 
 const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
   const memberService = resolveDependency(MemberService);
@@ -90,7 +89,13 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
           if (!user || err) {
             // Authentication failed
             const target = ClientManager.getInstance().getURLByContext(Context.Auth);
-            target.searchParams.set(ERROR_SEARCH_PARAM, ERROR_SEARCH_PARAM_HAS_ERROR);
+            if (err) {
+              target.searchParams.set(ERROR_SEARCH_PARAM, err.message);
+            } else if (!user) {
+              target.searchParams.set(ERROR_SEARCH_PARAM, 'TOKEN_EXPIRED');
+            } else {
+              target.searchParams.set(ERROR_SEARCH_PARAM, 'UNEXPECTED_ERROR');
+            }
             reply.redirect(target.toString(), StatusCodes.SEE_OTHER);
           } else {
             request.logIn(user, { session: true });
