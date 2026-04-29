@@ -14,6 +14,7 @@ function show_help() {
     echo "Arguments:"
     echo "  ECR_URI      URI of the ECR in AWS, example: public.ecr.aws/qzuer78 or a private ECR XXXXXXXX.dkr.ecr.region.amazonaws.com/repo."
     echo "  VERSION      The version that is deployed, should be a semantic version i.e v1.45.8"
+    return 0
 }
 
 # Check if no arguments are provided
