@@ -25,11 +25,15 @@ runs:
         aws-region: ${{ inputs.aws-region }}
 
     - name: Auth to the ECR
-      run: bash ./docker/auth.sh ${{ inputs.aws-ecr-uri }} ${{ inputs.aws-region }}
+      env:
+        AWS_ECR_URI: ${{ inputs.aws-ecr-uri }}
+        AWS_REGION: ${{ inputs.aws-region }}
+      run: bash ./docker/auth.sh $AWS_ECR_URI $AWS_REGION
       shell: bash
 
     - name: Build and push the images
       env:
         TAG: ${{ inputs.tag }}
-      run: bash ./docker/build.sh ${{ inputs.aws-ecr-uri }} $TAG
+        AWS_ECR_URI: ${{ inputs.aws-ecr-uri }}
+      run: bash ./docker/build.sh $AWS_ECR_URI $TAG
       shell: bash
