@@ -186,7 +186,7 @@ describe('Auth routes tests', () => {
       });
       expect(response.statusCode).toEqual(StatusCodes.SEE_OTHER);
       const url = AUTH_CLIENT_HOST;
-      url.searchParams.set('error', 'true');
+      url.searchParams.set('error', 'MEMBER_NOT_FOUND');
       expect(response.headers.location).toEqual(url.toString());
     });
 
@@ -198,7 +198,7 @@ describe('Auth routes tests', () => {
       });
       expect(response.statusCode).toEqual(StatusCodes.SEE_OTHER);
       const url = AUTH_CLIENT_HOST;
-      url.searchParams.set('error', 'true');
+      url.searchParams.set('error', 'MEMBER_NOT_FOUND');
       expect(response.headers.location).toEqual(url.toString());
     });
 
@@ -215,7 +215,7 @@ describe('Auth routes tests', () => {
 
       expect(response.statusCode).toEqual(StatusCodes.SEE_OTHER);
       const url = AUTH_CLIENT_HOST;
-      url.searchParams.set('error', 'true');
+      url.searchParams.set('error', 'TOKEN_EXPIRED');
       expect(response.headers.location).toEqual(url.toString());
     });
   });

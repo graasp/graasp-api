@@ -23,12 +23,12 @@ export class MemberRepository {
     // additional check that id is not null
     // o/w empty parameter to findOneBy return the first entry
     if (!id) {
-      throw new MemberNotFound({ id });
+      throw new MemberNotFound();
     }
     const m = await dbConnection.select().from(membersView).where(eq(membersView.id, id));
 
     if (!m.length) {
-      throw new MemberNotFound({ id });
+      throw new MemberNotFound();
     }
     return new MemberDTO(m[0]);
   }
@@ -177,7 +177,9 @@ export class MemberRepository {
   ): Promise<void> {
     await dbConnection
       .update(accountsTable)
-      .set({ marketingEmailsSubscribedAt: shouldSubscribe ? new Date().toISOString() : null })
+      .set({
+        marketingEmailsSubscribedAt: shouldSubscribe ? new Date().toISOString() : null,
+      })
       .where(eq(accountsTable.id, memberId));
   }
 }
