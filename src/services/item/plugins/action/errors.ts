@@ -6,7 +6,8 @@ import { createError } from '@fastify/error';
  * Errors thrown by the action item plugin
  */
 
-export const CannotPostAction = createError('GIAERR003',
+export const CannotPostAction = createError(
+  'GIAERR003',
   'Cannot post action',
- StatusCodes.FORBIDDEN,
+  StatusCodes.FORBIDDEN,
 );

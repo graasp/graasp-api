@@ -2,7 +2,6 @@ import { StatusCodes } from 'http-status-codes';
 
 import { createError } from '@fastify/error';
 
- 
 export const ItemLikeNotFound = createError(
   'GPILERR001',
   'Item Like not found',

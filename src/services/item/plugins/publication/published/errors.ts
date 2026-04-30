@@ -2,8 +2,6 @@ import { StatusCodes } from 'http-status-codes';
 
 import { createError } from '@fastify/error';
 
-
-
 export const ItemPublishedNotFound = createError(
   'GPPIERR001',
   'Published Item Entry not found',

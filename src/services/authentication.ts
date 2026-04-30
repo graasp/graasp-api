@@ -1,7 +1,9 @@
 import { StatusCodes } from 'http-status-codes';
 
 import { createError } from '@fastify/error';
+
 import { FAILURE_MESSAGES } from '@graasp/sdk';
+
 import type { AccountRaw, MemberRaw } from '../drizzle/types';
 import {
   AccountType,
@@ -21,13 +23,11 @@ export function isGuest(account: AuthenticatedUser | AccountRaw): account is Min
   return account.type === AccountType.Guest;
 }
 
-
 export const AssertNotMember = createError(
   'AGMERR003',
   FAILURE_MESSAGES.NOT_A_MEMBER,
   StatusCodes.INTERNAL_SERVER_ERROR,
 );
-
 
 export function assertIsMember<Err extends Error, Args extends unknown[]>(
   account: AuthenticatedUser | AccountRaw,
