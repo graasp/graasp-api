@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.13.8](https://github.com/graasp/graasp-api/compare/v2.13.7...v2.13.8) (2026-05-04)
+
+
+### Bug Fixes
+
+* add error messages on unsuccessful login attempt ([#2113](https://github.com/graasp/graasp-api/issues/2113)) ([7d4a93d](https://github.com/graasp/graasp-api/commit/7d4a93de6ee36ffb04764310cca584976544517f))
+* **deps:** update dependency @fastify/static to v9 [security] ([#2109](https://github.com/graasp/graasp-api/issues/2109)) ([839a74b](https://github.com/graasp/graasp-api/commit/839a74b742d3073337a0dee8912a6344d923faf0))
+* **deps:** update dependency @graasp/sdk to v5.18.1 ([#2105](https://github.com/graasp/graasp-api/issues/2105)) ([0565ccd](https://github.com/graasp/graasp-api/commit/0565ccd4fc25d0c452faf1809f5d139bb9f2f5c0))
+* **deps:** update dependency fastify to v5.8.5 [security] ([#2095](https://github.com/graasp/graasp-api/issues/2095)) ([315b042](https://github.com/graasp/graasp-api/commit/315b0420185356eaa0761a07b68afd167fcb20c6))
+* **deps:** update dependency nodemailer to v8 [security] ([#2102](https://github.com/graasp/graasp-api/issues/2102)) ([91e5a61](https://github.com/graasp/graasp-api/commit/91e5a611b350ca595ebfa06083c902f247179e7f))
+* **deps:** update dependency nodemailer to v8.0.5 [security] ([#2108](https://github.com/graasp/graasp-api/issues/2108)) ([f911d55](https://github.com/graasp/graasp-api/commit/f911d554b0ffb262c79bdc832e0b510df8b104ad))
+* merge package installation instructions in devcontainer dockerfile ([#2116](https://github.com/graasp/graasp-api/issues/2116)) ([8e4ea39](https://github.com/graasp/graasp-api/commit/8e4ea3910d6c3908a2fbae92a634c763b00b2012))
+* small sonar issues ([#2115](https://github.com/graasp/graasp-api/issues/2115)) ([56e5b67](https://github.com/graasp/graasp-api/commit/56e5b6720075cac081b8f3e8369e8e235eadcd9e))
+* sonar security issues related to input injection ([#2114](https://github.com/graasp/graasp-api/issues/2114)) ([3033a72](https://github.com/graasp/graasp-api/commit/3033a72610c2ee299769b9158c61ce8aaf1962ba))
+* take into account previousItemId parameter to get correct ordering when creating folder with thumbnail ([#2110](https://github.com/graasp/graasp-api/issues/2110)) ([12bb6b3](https://github.com/graasp/graasp-api/commit/12bb6b3c14eb8b5d18f227279a776180ece6797d))
+* upgrade yarn to fix deployment issues ([#2117](https://github.com/graasp/graasp-api/issues/2117)) ([ae5938e](https://github.com/graasp/graasp-api/commit/ae5938e9839c5a3fa344fe2ee7d65c9d53c3e121))
+
 ## [2.13.7](https://github.com/graasp/graasp-api/compare/v2.13.6...v2.13.7) (2026-03-11)
 
 
