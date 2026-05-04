@@ -4,10 +4,10 @@ import { readFile } from 'fs/promises';
 import path from 'path';
 import { safeParse } from 'secure-json-parse';
 
-import type { HtmlValidator } from '../../validator';
-import { H5PInvalidManifestError } from '../errors';
-import { h5pManifestSchema } from '../h5p.schemas';
-import { H5P } from './h5p';
+import type { HtmlValidator } from '../../validator.js';
+import { H5PInvalidManifestError } from '../errors.js';
+import { h5pManifestSchema } from '../h5p.schemas.js';
+import { H5P } from './h5p.js';
 
 const ajv = new Ajv({ allowUnionTypes: true });
 

@@ -1,9 +1,9 @@
 import { ItemValidationProcess, ItemValidationStatus } from '@graasp/sdk';
 
-import { type ItemRaw } from '../../../../item';
-import { detectFieldNameWithBadWords } from '../processes/badWordsDetection';
-import { stripHtml } from '../utils';
-import type { ValidationProcessResult, ValidationStrategy } from './types';
+import { type ItemRaw } from '../../../../item.js';
+import { detectFieldNameWithBadWords } from '../processes/badWordsDetection.js';
+import { stripHtml } from '../utils.js';
+import type { ValidationProcessResult, ValidationStrategy } from './types.js';
 
 export class TextValidationStrategy implements ValidationStrategy {
   public readonly process = ItemValidationProcess.BadWordsDetection;

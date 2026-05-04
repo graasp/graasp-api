@@ -9,16 +9,16 @@ import {
   type UpdateShortLink,
 } from '@graasp/sdk';
 
-import { SHORT_LINK_BASE_URL } from '../../../../config/hosts';
-import { type DBConnection } from '../../../../drizzle/db';
-import { ShortLinkRaw } from '../../../../drizzle/types';
-import type { AuthenticatedUser, MinimalMember } from '../../../../types';
-import { ITEMS_ROUTE_PREFIX } from '../../../../utils/config';
-import { UnauthorizedMember } from '../../../../utils/errors';
-import { AuthorizedItemService } from '../../../authorizedItem.service';
-import { ItemPublishedNotFound } from '../publication/published/errors';
-import { ItemPublishedService } from '../publication/published/itemPublished.service';
-import { ShortLinkRepository } from './shortlink.repository';
+import { SHORT_LINK_BASE_URL } from '../../../../config/hosts.js';
+import { type DBConnection } from '../../../../drizzle/db.js';
+import type { ShortLinkRaw } from '../../../../drizzle/types.js';
+import type { AuthenticatedUser, MinimalMember } from '../../../../types.js';
+import { ITEMS_ROUTE_PREFIX } from '../../../../utils/config.js';
+import { UnauthorizedMember } from '../../../../utils/errors.js';
+import { AuthorizedItemService } from '../../../authorizedItem.service.js';
+import { ItemPublishedNotFound } from '../publication/published/errors.js';
+import { ItemPublishedService } from '../publication/published/itemPublished.service.js';
+import { ShortLinkRepository } from './shortlink.repository.js';
 
 export const SHORT_LINKS_ROUTE_PREFIX = '/short-links';
 export const SHORT_LINKS_LIST_ROUTE = '/list';

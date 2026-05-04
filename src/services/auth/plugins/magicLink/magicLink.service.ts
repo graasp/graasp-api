@@ -2,14 +2,14 @@ import { singleton } from 'tsyringe';
 
 import { ActionTriggers } from '@graasp/sdk';
 
-import { type DBConnection } from '../../../../drizzle/db';
-import { BaseLogger } from '../../../../logger';
-import type { MemberInfo } from '../../../../types';
-import { MemberNotSignedUp } from '../../../../utils/errors';
-import { ActionRepository } from '../../../action/action.repository';
-import { View } from '../../../item/plugins/action/itemAction.schemas';
-import { MemberRepository } from '../../../member/member.repository';
-import { AuthService } from '../../auth.service';
+import { type DBConnection } from '../../../../drizzle/db.js';
+import { BaseLogger } from '../../../../logger.js';
+import type { MemberInfo } from '../../../../types.js';
+import { MemberNotSignedUp } from '../../../../utils/errors.js';
+import { ActionRepository } from '../../../action/action.repository.js';
+import { View } from '../../../item/plugins/action/itemAction.schemas.js';
+import { MemberRepository } from '../../../member/member.repository.js';
+import { AuthService } from '../../auth.service.js';
 
 @singleton()
 export class MagicLinkService {

@@ -1,6 +1,6 @@
-import { unparse } from 'papaparse';
+import Papaparse from 'papaparse';
 
-import { type ActionRequestExportFormat } from '../../../../../drizzle/types';
+import { type ActionRequestExportFormat } from '../../../../../drizzle/types.js';
 
 type RecursiveObject = { [key: string]: string | number | RecursiveObject };
 type ReturnObject = { [key: string]: string | number };
@@ -25,7 +25,9 @@ export const formatData = <T extends object>(
     case 'csv': {
       if (Array.isArray(data)) {
         const newData = data.map((obj) => flattenObject(obj as RecursiveObject));
-        const csv = unparse(newData, {
+        // the package is ill-configured, so at runtime it is safer to use the default export instead of the named as the named export is not available
+        // eslint-disable-next-line import/no-named-as-default-member
+        const csv = Papaparse.unparse(newData, {
           header: true,
           delimiter: ',',
         });

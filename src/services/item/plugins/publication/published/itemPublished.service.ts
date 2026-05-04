@@ -8,31 +8,31 @@ import {
   type UUID,
 } from '@graasp/sdk';
 
-import type { DBConnection } from '../../../../../drizzle/db';
-import type { ItemPublishedRaw } from '../../../../../drizzle/types';
-import { TRANSLATIONS } from '../../../../../langs/constants';
-import { BaseLogger } from '../../../../../logger';
-import { MailBuilder } from '../../../../../plugins/mailer/builder';
-import { MailerService } from '../../../../../plugins/mailer/mailer.service';
-import type { MaybeUser, MinimalMember } from '../../../../../types';
-import HookManager from '../../../../../utils/hook';
-import { isMember } from '../../../../authentication';
-import { filterOutHiddenItems } from '../../../../authorization.utils';
-import { AuthorizedItemService } from '../../../../authorizedItem.service';
-import { ItemMembershipRepository } from '../../../../itemMembership/membership.repository';
-import { MemberRepository } from '../../../../member/member.repository';
-import type { ItemRaw } from '../../../item';
-import { ItemRepository } from '../../../item.repository';
-import { PackedItemService } from '../../../packedItem.dto';
-import { ItemActionService } from '../../action/itemAction.service';
-import { ItemVisibilityRepository } from '../../itemVisibility/itemVisibility.repository';
+import type { DBConnection } from '../../../../../drizzle/db.js';
+import type { ItemPublishedRaw } from '../../../../../drizzle/types.js';
+import { TRANSLATIONS } from '../../../../../langs/constants.js';
+import { BaseLogger } from '../../../../../logger.js';
+import { MailBuilder } from '../../../../../plugins/mailer/builder.js';
+import { MailerService } from '../../../../../plugins/mailer/mailer.service.js';
+import type { MaybeUser, MinimalMember } from '../../../../../types.js';
+import HookManager from '../../../../../utils/hook.js';
+import { isMember } from '../../../../authentication.js';
+import { filterOutHiddenItems } from '../../../../authorization.utils.js';
+import { AuthorizedItemService } from '../../../../authorizedItem.service.js';
+import { ItemMembershipRepository } from '../../../../itemMembership/membership.repository.js';
+import { MemberRepository } from '../../../../member/member.repository.js';
+import type { ItemRaw } from '../../../item.js';
+import { ItemRepository } from '../../../item.repository.js';
+import { PackedItemService } from '../../../packedItem.dto.js';
+import { ItemActionService } from '../../action/itemAction.service.js';
+import { ItemVisibilityRepository } from '../../itemVisibility/itemVisibility.repository.js';
 import {
   ItemIsNotValidated,
   ItemPublicationAlreadyExists,
   ItemTypeNotAllowedToPublish,
-} from './errors';
-import { ItemPublishedRepository } from './itemPublished.repository';
-import { MeiliSearchWrapper } from './plugins/search/meilisearch';
+} from './errors.js';
+import { ItemPublishedRepository } from './itemPublished.repository.js';
+import { MeiliSearchWrapper } from './plugins/search/meilisearch.js';
 
 @singleton()
 export class ItemPublishedService {

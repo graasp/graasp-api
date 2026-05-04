@@ -3,16 +3,16 @@ import { describe, expect, it } from 'vitest';
 
 import { Context } from '@graasp/sdk';
 
-import { ActionFactory } from '../../../test/factories/action.factory';
-import { type SeedActor, seedFromJson } from '../../../test/mocks/seed';
-import { db } from '../../drizzle/db';
-import { actionsTable } from '../../drizzle/schema';
-import { assertIsDefined } from '../../utils/assertions';
-import { assertIsMemberForTest } from '../authentication';
-import { getPreviousMonthFromNow } from '../member/plugins/action/memberAction.service';
-import { ActionRepository } from './action.repository';
-import { DEFAULT_ACTIONS_SAMPLE_SIZE } from './constants';
-import { expectActions } from './test/fixtures/actions';
+import { ActionFactory } from '../../../test/factories/action.factory.js';
+import { type SeedActor, seedFromJson } from '../../../test/mocks/seed.js';
+import { db } from '../../drizzle/db.js';
+import { actionsTable } from '../../drizzle/schema.js';
+import { assertIsDefined } from '../../utils/assertions.js';
+import { assertIsMemberForTest } from '../authentication.js';
+import { getPreviousMonthFromNow } from '../member/plugins/action/memberAction.service.js';
+import { ActionRepository } from './action.repository.js';
+import { DEFAULT_ACTIONS_SAMPLE_SIZE } from './constants.js';
+import { expectActions } from './test/fixtures/actions.js';
 
 const actionRepository = new ActionRepository();
 

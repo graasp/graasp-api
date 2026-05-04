@@ -1,12 +1,12 @@
 import { Readable } from 'stream';
 
-import type { MinimalAccount } from '../../drizzle/types';
-import { BaseLogger } from '../../logger';
-import type { MaybeUser, MinimalMember } from '../../types';
-import { CachingService } from '../caching/service';
-import type { LocalFileConfiguration, S3FileConfiguration } from './interfaces/configuration';
-import type { FileRepository } from './interfaces/fileRepository';
-import { sanitizeDocument, sanitizeHtml } from './sanitize';
+import type { MinimalAccount } from '../../drizzle/types.js';
+import { BaseLogger } from '../../logger.js';
+import type { MaybeUser, MinimalMember } from '../../types.js';
+import { CachingService } from '../caching/service.js';
+import type { LocalFileConfiguration, S3FileConfiguration } from './interfaces/configuration.js';
+import type { FileRepository } from './interfaces/fileRepository.js';
+import { sanitizeDocument, sanitizeHtml } from './sanitize.js';
 import {
   CopyFileInvalidPathError,
   CopyFolderInvalidPathError,
@@ -15,7 +15,7 @@ import {
   DownloadFileInvalidParameterError,
   UploadFileInvalidParameterError,
   UploadFileUnexpectedError,
-} from './utils/errors';
+} from './utils/errors.js';
 
 export type FileServiceConfig = {
   s3?: S3FileConfiguration;

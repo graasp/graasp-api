@@ -3,24 +3,39 @@ import { StatusCodes } from 'http-status-codes';
 import { fastifyMultipart } from '@fastify/multipart';
 import type { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox';
 
-import { resolveDependency } from '../../di/utils';
-import { db } from '../../drizzle/db';
-import type { FastifyInstanceTypebox } from '../../plugins/typebox';
-import { asDefined } from '../../utils/assertions';
-import { isAuthenticated, matchOne, optionalIsAuthenticated } from '../auth/plugins/passport';
-import { assertIsMember } from '../authentication';
-import { memberAccountRole } from '../member/strategies/memberAccountRole';
-import { validatedMemberAccountRole } from '../member/strategies/validatedMemberAccountRole';
-import { ITEMS_PAGE_SIZE } from './constants';
-import type { ItemRaw } from './item';
-import { copyMany, deleteMany, getParentItems, moveMany, reorder, updateOne } from './item.schemas';
-import { create, createWithThumbnail } from './item.schemas.create';
-import { getAccessible, getChildren, getDescendantItems, getOne } from './item.schemas.packed';
-import { ItemService } from './item.service';
-import { PackedItemService } from './packedItem.dto';
-import { ItemActionService } from './plugins/action/itemAction.service';
-import { getPostItemPayloadFromFormData } from './utils';
-import { ItemOpFeedbackErrorEvent, ItemOpFeedbackEvent, memberItemsTopic } from './ws/item.events';
+import { resolveDependency } from '../../di/utils.js';
+import { db } from '../../drizzle/db.js';
+import type { FastifyInstanceTypebox } from '../../plugins/typebox.js';
+import { asDefined } from '../../utils/assertions.js';
+import {
+  isAuthenticated,
+  matchOne,
+  optionalIsAuthenticated,
+} from '../auth/plugins/passport/preHandlers.js';
+import { assertIsMember } from '../authentication.js';
+import { memberAccountRole } from '../member/strategies/memberAccountRole.js';
+import { validatedMemberAccountRole } from '../member/strategies/validatedMemberAccountRole.js';
+import { ITEMS_PAGE_SIZE } from './constants.js';
+import type { ItemRaw } from './item.js';
+import { create, createWithThumbnail } from './item.schemas.create.js';
+import {
+  copyMany,
+  deleteMany,
+  getParentItems,
+  moveMany,
+  reorder,
+  updateOne,
+} from './item.schemas.js';
+import { getAccessible, getChildren, getDescendantItems, getOne } from './item.schemas.packed.js';
+import { ItemService } from './item.service.js';
+import { PackedItemService } from './packedItem.dto.js';
+import { ItemActionService } from './plugins/action/itemAction.service.js';
+import { getPostItemPayloadFromFormData } from './utils.js';
+import {
+  ItemOpFeedbackErrorEvent,
+  ItemOpFeedbackEvent,
+  memberItemsTopic,
+} from './ws/item.events.js';
 
 const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
   const { websockets } = fastify;

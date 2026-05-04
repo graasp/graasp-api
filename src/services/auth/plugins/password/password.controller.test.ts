@@ -4,7 +4,6 @@ import { compareAsc } from 'date-fns';
 import { eq } from 'drizzle-orm';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 import { Redis } from 'ioredis';
-import { sign } from 'jsonwebtoken';
 import nock from 'nock';
 import waitForExpect from 'wait-for-expect';
 
@@ -17,18 +16,19 @@ import build, {
   clearDatabase,
   mockAuthenticate,
   unmockAuthenticate,
-} from '../../../../../test/app';
-import { seedFromJson } from '../../../../../test/mocks/seed';
-import { TOKEN_REGEX, mockCaptchaValidationOnce } from '../../../../../test/utils';
-import { REDIS_CONNECTION } from '../../../../config/redis';
-import { PASSWORD_RESET_JWT_EXPIRATION_IN_MINUTES } from '../../../../config/secrets';
-import { resolveDependency } from '../../../../di/utils';
-import { db } from '../../../../drizzle/db';
-import { accountsTable, memberPasswordsTable } from '../../../../drizzle/schema';
-import type { MemberRaw } from '../../../../drizzle/types';
-import { MailerService } from '../../../../plugins/mailer/mailer.service';
-import { assertIsDefined } from '../../../../utils/assertions';
-import { assertIsMember, assertIsMemberForTest } from '../../../authentication';
+} from '../../../../../test/app.js';
+import { seedFromJson } from '../../../../../test/mocks/seed.js';
+import { TOKEN_REGEX, mockCaptchaValidationOnce } from '../../../../../test/utils.js';
+import { REDIS_CONNECTION } from '../../../../config/redis.js';
+import { PASSWORD_RESET_JWT_EXPIRATION_IN_MINUTES } from '../../../../config/secrets.js';
+import { signAccessToken } from '../../../../crypto/jwt.js';
+import { resolveDependency } from '../../../../di/utils.js';
+import { db } from '../../../../drizzle/db.js';
+import { accountsTable, memberPasswordsTable } from '../../../../drizzle/schema.js';
+import type { MemberRaw } from '../../../../drizzle/types.js';
+import { MailerService } from '../../../../plugins/mailer/mailer.service.js';
+import { assertIsDefined } from '../../../../utils/assertions.js';
+import { assertIsMember, assertIsMemberForTest } from '../../../authentication.js';
 
 async function login(
   app: FastifyInstance,
@@ -420,7 +420,7 @@ describe('Password', () => {
               password: newPassword,
             },
             headers: {
-              Authorization: `Bearer ${sign({}, 'invalid-token')}`,
+              Authorization: `Bearer ${await signAccessToken({}, 'invalid-token', '1m')}`,
             },
           });
           expect(response.statusCode).toBe(StatusCodes.UNAUTHORIZED);

@@ -1,4 +1,4 @@
-import { UnexpectedError } from './errors';
+import { UnexpectedError } from './errors.js';
 
 export type Nullable<T> = T | null | undefined;
 

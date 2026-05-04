@@ -7,28 +7,28 @@ import {
   type UUID,
 } from '@graasp/sdk';
 
-import type { DBConnection } from '../../drizzle/db';
-import type { MinimalAccount } from '../../drizzle/types';
-import type { MaybeUser } from '../../types';
-import { asDefined, assertIsDefined } from '../../utils/assertions';
-import { InvalidPassword } from '../../utils/errors';
-import { verifyCurrentPassword } from '../auth/plugins/password/utils';
-import type { ItemRaw } from '../item/item';
-import { ItemRepository } from '../item/item.repository';
-import { ItemVisibilityRepository } from '../item/plugins/itemVisibility/itemVisibility.repository';
-import { ItemMembershipRepository } from '../itemMembership/membership.repository';
+import type { DBConnection } from '../../drizzle/db.js';
+import type { MinimalAccount } from '../../drizzle/types.js';
+import type { MaybeUser } from '../../types.js';
+import { asDefined, assertIsDefined } from '../../utils/assertions.js';
+import { InvalidPassword } from '../../utils/errors.js';
+import { verifyCurrentPassword } from '../auth/plugins/password/utils.js';
+import type { ItemRaw } from '../item/item.js';
+import { ItemRepository } from '../item/item.repository.js';
+import { ItemVisibilityRepository } from '../item/plugins/itemVisibility/itemVisibility.repository.js';
+import { ItemMembershipRepository } from '../itemMembership/membership.repository.js';
 import {
   CannotRegisterOnFrozenItemLoginSchema,
   ItemLoginSchemaNotFound,
   MissingCredentialsForLoginSchema,
-} from './errors';
-import { GuestRepository } from './guest.repository';
-import { GuestPasswordRepository } from './guestPassword.repository';
+} from './errors.js';
+import { GuestRepository } from './guest.repository.js';
+import { GuestPasswordRepository } from './guestPassword.repository.js';
 import {
   ItemLoginSchemaRepository,
   type ItemSchemaTypeOptions,
-} from './itemLoginSchema.repository';
-import { loginSchemaRequiresPassword } from './utils';
+} from './itemLoginSchema.repository.js';
+import { loginSchemaRequiresPassword } from './utils.js';
 
 interface ItemLoginMemberCredentials {
   username?: string;

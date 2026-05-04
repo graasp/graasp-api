@@ -1,7 +1,7 @@
 import type {
   ItemMembershipRaw,
   ItemMembershipWithItemAndAccountAndCreator,
-} from '../../../../drizzle/types';
+} from '../../../../drizzle/types.js';
 
 export const expectMembership = (
   newMembership:

@@ -6,16 +6,16 @@ import type { FastifyBaseLogger, FastifySchema } from 'fastify';
 
 import type { UnionOfConst } from '@graasp/sdk';
 
-import { resolveDependency } from '../di/utils';
-import { db } from '../drizzle/db';
-import { SearchService } from '../services/item/plugins/publication/published/plugins/search/search.service';
-import { assertIsError } from '../utils/assertions';
+import { resolveDependency } from '../di/utils.js';
+import { db } from '../drizzle/db.js';
+import { SearchService } from '../services/item/plugins/publication/published/plugins/search/search.service.js';
+import { assertIsError } from '../utils/assertions.js';
 import {
   APP_VERSION,
   BUILD_TIMESTAMP,
   EMBEDDED_LINK_ITEM_IFRAMELY_HREF_ORIGIN,
   ETHERPAD_URL,
-} from '../utils/config';
+} from '../utils/config.js';
 
 const Status = {
   Healthy: 'healthy',

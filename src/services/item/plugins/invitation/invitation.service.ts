@@ -3,27 +3,32 @@ import { singleton } from 'tsyringe';
 
 import type { MultipartFile } from '@fastify/multipart';
 
-import { type DBConnection } from '../../../../drizzle/db';
+import { type DBConnection } from '../../../../drizzle/db.js';
 import type {
   InvitationInsertDTO,
   InvitationRaw,
   InvitationWithItem,
   ItemMembershipRaw,
-} from '../../../../drizzle/types';
-import { TRANSLATIONS } from '../../../../langs/constants';
-import { BaseLogger } from '../../../../logger';
-import { MailBuilder } from '../../../../plugins/mailer/builder';
-import { MailerService } from '../../../../plugins/mailer/mailer.service';
-import type { AuthenticatedUser, MaybeUser, MinimalMember, NonEmptyArray } from '../../../../types';
-import { AuthorizedItemService } from '../../../authorizedItem.service';
-import { ItemMembershipRepository } from '../../../itemMembership/membership.repository';
-import { ItemMembershipService } from '../../../itemMembership/membership.service';
-import { MemberService } from '../../../member/member.service';
-import { MemberDTO } from '../../../member/types';
-import { ItemRaw, isFolderItem } from '../../item';
-import { ItemService } from '../../item.service';
-import { InvitationRepository } from './invitation.repository';
-import { EMAIL_COLUMN_NAME, GROUP_COL_NAME, buildInvitationLink } from './utils/constants';
+} from '../../../../drizzle/types.js';
+import { TRANSLATIONS } from '../../../../langs/constants.js';
+import { BaseLogger } from '../../../../logger.js';
+import { MailBuilder } from '../../../../plugins/mailer/builder.js';
+import { MailerService } from '../../../../plugins/mailer/mailer.service.js';
+import type {
+  AuthenticatedUser,
+  MaybeUser,
+  MinimalMember,
+  NonEmptyArray,
+} from '../../../../types.js';
+import { AuthorizedItemService } from '../../../authorizedItem.service.js';
+import { ItemMembershipRepository } from '../../../itemMembership/membership.repository.js';
+import { ItemMembershipService } from '../../../itemMembership/membership.service.js';
+import { MemberService } from '../../../member/member.service.js';
+import { MemberDTO } from '../../../member/types.js';
+import { type ItemRaw, isFolderItem } from '../../item.js';
+import { ItemService } from '../../item.service.js';
+import { InvitationRepository } from './invitation.repository.js';
+import { EMAIL_COLUMN_NAME, GROUP_COL_NAME, buildInvitationLink } from './utils/constants.js';
 import {
   CantCreateStructureInNoFolderItem,
   InvitationNotFound,
@@ -33,8 +38,8 @@ import {
   MissingGroupInRowError,
   NoDataInFile,
   TemplateItemDoesNotExist,
-} from './utils/errors';
-import { type CSVInvite, parseCSV, verifyCSVFileFormat } from './utils/utils';
+} from './utils/errors.js';
+import { type CSVInvite, parseCSV, verifyCSVFileFormat } from './utils/utils.js';
 
 @singleton()
 export class InvitationService {

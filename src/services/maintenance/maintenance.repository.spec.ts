@@ -1,10 +1,10 @@
 import { add, sub } from 'date-fns';
 import { afterEach, describe, expect, it } from 'vitest';
 
-import { db } from '../../drizzle/db';
-import { maintenanceTable } from '../../drizzle/schema';
-import { assertIsDefined } from '../../utils/assertions';
-import { MaintenanceRepository } from './maintenance.repository';
+import { db } from '../../drizzle/db.js';
+import { maintenanceTable } from '../../drizzle/schema.js';
+import { assertIsDefined } from '../../utils/assertions.js';
+import { MaintenanceRepository } from './maintenance.repository.js';
 
 const repository = new MaintenanceRepository();
 

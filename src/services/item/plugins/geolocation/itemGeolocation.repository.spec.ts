@@ -2,17 +2,17 @@ import { faker } from '@faker-js/faker';
 import { eq } from 'drizzle-orm/sql';
 import { describe, expect, it } from 'vitest';
 
-import { buildFile, seedFromJson } from '../../../../../test/mocks/seed';
-import { db } from '../../../../drizzle/db';
-import { itemGeolocationsTable } from '../../../../drizzle/schema';
-import type { MinimalMember } from '../../../../types';
-import { assertIsDefined } from '../../../../utils/assertions';
-import { assertIsMemberForTest } from '../../../authentication';
-import { TagCategory } from '../../../tag/tag.schemas';
-import { type ItemRaw, resolveItemType } from '../../item';
-import { MissingGeolocationSearchParams } from './errors';
-import { ItemGeolocationRepository } from './itemGeolocation.repository';
-import { expectItemGeolocations } from './test/utils';
+import { buildFile, seedFromJson } from '../../../../../test/mocks/seed.js';
+import { db } from '../../../../drizzle/db.js';
+import { itemGeolocationsTable } from '../../../../drizzle/schema.js';
+import type { MinimalMember } from '../../../../types.js';
+import { assertIsDefined } from '../../../../utils/assertions.js';
+import { assertIsMemberForTest } from '../../../authentication.js';
+import { TagCategory } from '../../../tag/tag.schemas.js';
+import { type ItemRaw, resolveItemType } from '../../item.js';
+import { MissingGeolocationSearchParams } from './errors.js';
+import { ItemGeolocationRepository } from './itemGeolocation.repository.js';
+import { expectItemGeolocations } from './test/utils.js';
 
 const repository = new ItemGeolocationRepository();
 

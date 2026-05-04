@@ -2,29 +2,29 @@ import { add, isBefore } from 'date-fns';
 import { inject, singleton } from 'tsyringe';
 import { v4 } from 'uuid';
 
-import Etherpad, { type AuthorSession } from '@graasp/etherpad-api';
+import { type AuthorSession, Etherpad } from '@graasp/etherpad-api';
 import {
   type EtherpadItemExtra,
   EtherpadPermission,
   type EtherpadPermissionType,
 } from '@graasp/sdk';
 
-import { ETHERPAD_NAME_FACTORY_DI_KEY } from '../../../../di/constants';
-import { type DBConnection } from '../../../../drizzle/db';
-import type { MinimalAccount } from '../../../../drizzle/types';
-import { BaseLogger } from '../../../../logger';
-import type { AuthenticatedUser, MaybeUser, MinimalMember } from '../../../../types';
-import { MemberCannotWriteItem } from '../../../../utils/errors';
-import { AuthorizedItemService } from '../../../authorizedItem.service';
-import { ItemMembershipRepository } from '../../../itemMembership/membership.repository';
-import { WrongItemTypeError } from '../../errors';
-import { EtherpadItem, ItemRaw, isEtherpadItem } from '../../item';
-import { ItemRepository } from '../../item.repository';
-import { ItemService } from '../../item.service';
-import { MAX_SESSIONS_IN_COOKIE, PLUGIN_NAME } from './constants';
-import { EtherpadServerError, ItemMissingExtraError } from './errors';
-import { EtherpadServiceConfig } from './serviceConfig';
-import { type PadNameFactory } from './types';
+import { ETHERPAD_NAME_FACTORY_DI_KEY } from '../../../../di/constants.js';
+import { type DBConnection } from '../../../../drizzle/db.js';
+import type { MinimalAccount } from '../../../../drizzle/types.js';
+import { BaseLogger } from '../../../../logger.js';
+import type { AuthenticatedUser, MaybeUser, MinimalMember } from '../../../../types.js';
+import { MemberCannotWriteItem } from '../../../../utils/errors.js';
+import { AuthorizedItemService } from '../../../authorizedItem.service.js';
+import { ItemMembershipRepository } from '../../../itemMembership/membership.repository.js';
+import { WrongItemTypeError } from '../../errors.js';
+import { type EtherpadItem, type ItemRaw, isEtherpadItem } from '../../item.js';
+import { ItemRepository } from '../../item.repository.js';
+import { ItemService } from '../../item.service.js';
+import { MAX_SESSIONS_IN_COOKIE, PLUGIN_NAME } from './constants.js';
+import { EtherpadServerError, ItemMissingExtraError } from './errors.js';
+import { EtherpadServiceConfig } from './serviceConfig.js';
+import { type PadNameFactory } from './types.js';
 
 export class RandomPadNameFactory implements PadNameFactory {
   public getName() {

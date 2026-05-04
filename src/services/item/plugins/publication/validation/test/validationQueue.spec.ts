@@ -1,11 +1,11 @@
 import Redis from 'ioredis';
 import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 
-import { MOCK_LOGGER } from '../../../../../../../test/app.vitest';
-import { registerDependencies } from '../../../../../../di/container';
-import { resolveDependency } from '../../../../../../di/utils';
-import { ItemValidationAlreadyExist } from '../errors';
-import { ValidationQueue } from '../validationQueue';
+import { MOCK_LOGGER } from '../../../../../../../test/app.vitest.js';
+import { registerDependencies } from '../../../../../../di/container.js';
+import { resolveDependency } from '../../../../../../di/utils.js';
+import { ItemValidationAlreadyExist } from '../errors.js';
+import { ValidationQueue } from '../validationQueue.js';
 
 describe('Validation Queue Tests', () => {
   let validationQueue: ValidationQueue;

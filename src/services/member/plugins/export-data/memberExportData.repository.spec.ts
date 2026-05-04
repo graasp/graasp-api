@@ -1,9 +1,9 @@
 import { afterEach, describe, it, vi } from 'vitest';
 
-import { seedFromJson } from '../../../../../test/mocks/seed';
-import { db } from '../../../../drizzle/db';
-import { assertIsDefined } from '../../../../utils/assertions';
-import { ExportDataRepository } from './memberExportData.repository';
+import { seedFromJson } from '../../../../../test/mocks/seed.js';
+import { db } from '../../../../drizzle/db.js';
+import { assertIsDefined } from '../../../../utils/assertions.js';
+import { ExportDataRepository } from './memberExportData.repository.js';
 import {
   actionSchema,
   appActionSchema,
@@ -15,8 +15,8 @@ import {
   itemSchema,
   messageMentionSchema,
   messageSchema,
-} from './memberExportData.schemas';
-import { expectNoLeaksAndEquality } from './test/fixtures';
+} from './memberExportData.schemas.js';
+import { expectNoLeaksAndEquality } from './test/fixtures.js';
 
 /**
  * The repository tests ensure that no unwanted columns are leaked during the export.

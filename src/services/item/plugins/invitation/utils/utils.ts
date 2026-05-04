@@ -1,10 +1,10 @@
 import { Readable } from 'node:stream';
-import { parse } from 'papaparse';
+import Papaparse from 'papaparse';
 
 import type { MultipartFile } from '@fastify/multipart';
 
-import type { PermissionLevel } from '../../../../../types';
-import { CSV_MIMETYPE, EMAIL_COLUMN_NAME } from './constants';
+import type { PermissionLevel } from '../../../../../types.js';
+import { CSV_MIMETYPE, EMAIL_COLUMN_NAME } from './constants.js';
 
 export type CSVInvite = {
   email: string;
@@ -15,7 +15,9 @@ export type CSVInvite = {
 
 export const parseCSV = (stream: Readable): Promise<{ rows: CSVInvite[]; header: string[] }> => {
   return new Promise((resolve, reject) => {
-    parse<CSVInvite>(stream, {
+    // the package is ill-configured, so at runtime it is safer to use the default export instead of the named as the named export is not available
+    // eslint-disable-next-line import/no-named-as-default-member
+    Papaparse.parse<CSVInvite>(stream, {
       // get the headers from the file
       header: true,
       // do not try to convert the values to other types (everything will be a string)

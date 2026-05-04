@@ -2,16 +2,20 @@ import { StatusCodes } from 'http-status-codes';
 
 import type { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox';
 
-import { resolveDependency } from '../../di/utils';
-import { db } from '../../drizzle/db';
-import type { FastifyInstanceTypebox } from '../../plugins/typebox';
-import { asDefined } from '../../utils/assertions';
-import { isAuthenticated, matchOne, optionalIsAuthenticated } from '../auth/plugins/passport';
-import { validatedMemberAccountRole } from '../member/strategies/validatedMemberAccountRole';
-import { create, deleteOne, getItemMembershipsForItem, updateOne } from './membership.schemas';
-import { ItemMembershipService } from './membership.service';
-import MembershipRequestAPI from './plugins/MembershipRequest/membershipRequest.controller';
-import { membershipWsHooks } from './ws/hooks';
+import { resolveDependency } from '../../di/utils.js';
+import { db } from '../../drizzle/db.js';
+import type { FastifyInstanceTypebox } from '../../plugins/typebox.js';
+import { asDefined } from '../../utils/assertions.js';
+import {
+  isAuthenticated,
+  matchOne,
+  optionalIsAuthenticated,
+} from '../auth/plugins/passport/preHandlers.js';
+import { validatedMemberAccountRole } from '../member/strategies/validatedMemberAccountRole.js';
+import { create, deleteOne, getItemMembershipsForItem, updateOne } from './membership.schemas.js';
+import { ItemMembershipService } from './membership.service.js';
+import MembershipRequestAPI from './plugins/MembershipRequest/membershipRequest.controller.js';
+import { membershipWsHooks } from './ws/hooks.js';
 
 export const itemMembershipsController: FastifyPluginAsyncTypebox = async (fastify) => {
   const itemMembershipService = resolveDependency(ItemMembershipService);
@@ -29,7 +33,10 @@ export const itemMembershipsController: FastifyPluginAsyncTypebox = async (fasti
       // returns empty for item not found
       fastify.get(
         '',
-        { schema: getItemMembershipsForItem, preHandler: optionalIsAuthenticated },
+        {
+          schema: getItemMembershipsForItem,
+          preHandler: optionalIsAuthenticated,
+        },
         async ({ user, params: { itemId } }) => {
           return itemMembershipService.getForItem(db, user?.account, itemId);
         },

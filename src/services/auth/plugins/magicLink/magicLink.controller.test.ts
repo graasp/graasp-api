@@ -1,7 +1,6 @@
 import { faker } from '@faker-js/faker';
 import { eq } from 'drizzle-orm/sql';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
-import { sign } from 'jsonwebtoken';
 import fetch from 'node-fetch';
 import { v4 } from 'uuid';
 
@@ -16,14 +15,14 @@ import {
   type RecaptchaActionType,
 } from '@graasp/sdk';
 
-import build, { MOCK_CAPTCHA, clearDatabase } from '../../../../../test/app';
-import { seedFromJson } from '../../../../../test/mocks/seed';
-import { URL_REGEX } from '../../../../../test/utils';
-import { JWT_SECRET } from '../../../../config/secrets';
-import { resolveDependency } from '../../../../di/utils';
-import { db } from '../../../../drizzle/db';
-import { accountsTable } from '../../../../drizzle/schema';
-import { MailerService } from '../../../../plugins/mailer/mailer.service';
+import build, { MOCK_CAPTCHA, clearDatabase } from '../../../../../test/app.js';
+import { seedFromJson } from '../../../../../test/mocks/seed.js';
+import { URL_REGEX } from '../../../../../test/utils.js';
+import { signAccessToken } from '../../../../crypto/jwt.js';
+import { resolveDependency } from '../../../../di/utils.js';
+import { db } from '../../../../drizzle/db.js';
+import { accountsTable } from '../../../../drizzle/schema.js';
+import { MailerService } from '../../../../plugins/mailer/mailer.service.js';
 
 jest.mock('node-fetch');
 
@@ -143,7 +142,7 @@ describe('Auth routes tests', () => {
         members: [member],
       } = await seedFromJson({ members: [{ isValidated: false }] });
 
-      const t = sign({ sub: member.id }, JWT_SECRET);
+      const t = await signAccessToken({ sub: member.id }, 'login', '1m');
       const response = await app.inject({
         method: HttpMethod.Get,
         url: `/api/auth?t=${t}`,
@@ -163,7 +162,7 @@ describe('Auth routes tests', () => {
         members: [member],
       } = await seedFromJson({ members: [{ isValidated: false }] });
 
-      const t = sign({ sub: member.id, emailValidation: true }, JWT_SECRET);
+      const t = await signAccessToken({ sub: member.id, emailValidation: true }, 'login', '1m');
       const response = await app.inject({
         method: HttpMethod.Get,
         url: `/api/auth?t=${t}`,
@@ -179,7 +178,7 @@ describe('Auth routes tests', () => {
     });
 
     it('Fail if token contains undefined memberId', async () => {
-      const t = sign({ sub: undefined }, JWT_SECRET);
+      const t = await signAccessToken({ sub: undefined }, 'login', '1m');
       const response = await app.inject({
         method: HttpMethod.Get,
         url: `/api/auth?t=${t}`,
@@ -191,7 +190,7 @@ describe('Auth routes tests', () => {
     });
 
     it('Fail if token contains unknown member id', async () => {
-      const t = sign({ sub: v4() }, JWT_SECRET);
+      const t = await signAccessToken({ sub: v4() }, 'login', '1m');
       const response = await app.inject({
         method: HttpMethod.Get,
         url: `/api/auth?t=${t}`,
@@ -207,7 +206,7 @@ describe('Auth routes tests', () => {
         members: [member],
       } = await seedFromJson({ members: [{}] });
 
-      const t = sign({ sub: member.id }, 'secret');
+      const t = await signAccessToken({ sub: member.id }, 'login', '1m');
       const response = await app.inject({
         method: HttpMethod.Get,
         url: `/api/auth?t=${t}`,

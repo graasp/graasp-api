@@ -1,17 +1,17 @@
 import { and, count, desc, eq, inArray, sql } from 'drizzle-orm';
 import { singleton } from 'tsyringe';
 
-import type { DBConnection } from '../../../../../drizzle/db';
-import { isAncestorOrSelf } from '../../../../../drizzle/operations';
-import { items, membersView, publishedItemsTable } from '../../../../../drizzle/schema';
+import type { DBConnection } from '../../../../../drizzle/db.js';
+import { isAncestorOrSelf } from '../../../../../drizzle/operations.js';
+import { items, membersView, publishedItemsTable } from '../../../../../drizzle/schema.js';
 import type {
   ItemPublishedRaw,
   ItemPublishedWithItemWithCreator,
   MemberRaw,
-} from '../../../../../drizzle/types';
-import type { MinimalMember } from '../../../../../types';
-import { type ItemRaw, resolveItemType } from '../../../item';
-import { ItemPublishedNotFound } from './errors';
+} from '../../../../../drizzle/types.js';
+import type { MinimalMember } from '../../../../../types.js';
+import { type ItemRaw, resolveItemType } from '../../../item.js';
+import { ItemPublishedNotFound } from './errors.js';
 
 @singleton()
 export class ItemPublishedRepository {
@@ -43,7 +43,10 @@ export class ItemPublishedRepository {
       const entry = res[0];
       const mappedEntry = {
         ...entry.published_items,
-        item: { ...resolveItemType(entry.item_view), creator: entry.members_view as MemberRaw },
+        item: {
+          ...resolveItemType(entry.item_view),
+          creator: entry.members_view as MemberRaw,
+        },
         // creator: entry.members_view,
       };
       return mappedEntry;
@@ -62,7 +65,10 @@ export class ItemPublishedRepository {
       .leftJoin(membersView, eq(items.creatorId, membersView.id));
 
     return result.map(({ published_items, item_view, members_view }) => ({
-      item: { ...resolveItemType(item_view), creator: members_view as MemberRaw },
+      item: {
+        ...resolveItemType(item_view),
+        creator: members_view as MemberRaw,
+      },
       ...published_items,
     }));
   }
@@ -84,7 +90,10 @@ export class ItemPublishedRepository {
       .limit(pageSize);
     const mappedResults = results.map(({ published_items, item_view, members_view }) => ({
       ...published_items,
-      item: { ...resolveItemType(item_view), creator: members_view as MemberRaw },
+      item: {
+        ...resolveItemType(item_view),
+        creator: members_view as MemberRaw,
+      },
     }));
     const total = (await dbConnection.select({ count: count() }).from(publishedItemsTable))[0]
       .count;

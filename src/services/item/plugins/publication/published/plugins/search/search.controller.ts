@@ -5,15 +5,18 @@ import type { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox';
 
 import { ActionTriggers } from '@graasp/sdk';
 
-import { REDIS_CONNECTION } from '../../../../../../../config/redis';
-import { resolveDependency } from '../../../../../../../di/utils';
-import { db } from '../../../../../../../drizzle/db';
-import { GRAASPER_CREATOR_ID, MEILISEARCH_REBUILD_SECRET } from '../../../../../../../utils/config';
-import { Queues } from '../../../../../../../workers/config';
-import { ActionService } from '../../../../../../action/action.service';
-import { optionalIsAuthenticated } from '../../../../../../auth/plugins/passport';
-import { getFacets, getFeatured, getMostLiked, getMostRecent, search } from './search.schemas';
-import { SearchService } from './search.service';
+import { REDIS_CONNECTION } from '../../../../../../../config/redis.js';
+import { resolveDependency } from '../../../../../../../di/utils.js';
+import { db } from '../../../../../../../drizzle/db.js';
+import {
+  GRAASPER_CREATOR_ID,
+  MEILISEARCH_REBUILD_SECRET,
+} from '../../../../../../../utils/config.js';
+import { Queues } from '../../../../../../../workers/config.js';
+import { ActionService } from '../../../../../../action/action.service.js';
+import { optionalIsAuthenticated } from '../../../../../../auth/plugins/passport/preHandlers.js';
+import { getFacets, getFeatured, getMostLiked, getMostRecent, search } from './search.schemas.js';
+import { SearchService } from './search.service.js';
 
 export type SearchFields = {
   keywords?: string;

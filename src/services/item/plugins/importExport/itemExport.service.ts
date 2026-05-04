@@ -2,10 +2,10 @@ import fetch from 'node-fetch';
 import { Readable } from 'stream';
 import { singleton } from 'tsyringe';
 
-import { FileItemExtra, getMimetype } from '@graasp/sdk';
+import { type FileItemExtra, getMimetype } from '@graasp/sdk';
 
-import { type DBConnection } from '../../../../drizzle/db';
-import { MaybeUser } from '../../../../types';
+import type { DBConnection } from '../../../../drizzle/db.js';
+import type { MaybeUser } from '../../../../types.js';
 import {
   type ItemRaw,
   isAppItem,
@@ -14,11 +14,11 @@ import {
   isEtherpadItem,
   isFileItem,
   isH5PItem,
-} from '../../item';
-import { EtherpadItemService } from '../etherpad/etherpad.service';
-import FileItemService from '../file/itemFile.service';
-import { H5PService } from '../html/h5p/h5p.service';
-import { buildTextContent, getFilenameFromItem } from './utils';
+} from '../../item.js';
+import { EtherpadItemService } from '../etherpad/etherpad.service.js';
+import FileItemService from '../file/itemFile.service.js';
+import { H5PService } from '../html/h5p/h5p.service.js';
+import { buildTextContent, getFilenameFromItem } from './utils.js';
 
 @singleton()
 export class ItemExportService {
@@ -40,7 +40,11 @@ export class ItemExportService {
     dbConnection: DBConnection,
     actor: MaybeUser,
     item: ItemRaw,
-  ): Promise<{ name: string; stream: NodeJS.ReadableStream; mimetype: string }> {
+  ): Promise<{
+    name: string;
+    stream: NodeJS.ReadableStream;
+    mimetype: string;
+  }> {
     switch (true) {
       case isFileItem(item): {
         // bug: we need to cast because of mismatch with sdk
@@ -62,7 +66,11 @@ export class ItemExportService {
         const res = await fetch(h5pUrl);
 
         const filename = getFilenameFromItem(item);
-        return { mimetype: 'application/octet-stream', name: filename, stream: res.body };
+        return {
+          mimetype: 'application/octet-stream',
+          name: filename,
+          stream: res.body,
+        };
       }
       case isDocumentItem(item): {
         return {

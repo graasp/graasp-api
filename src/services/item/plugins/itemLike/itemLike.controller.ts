@@ -2,17 +2,26 @@ import type { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox';
 
 import { ActionTriggers } from '@graasp/sdk';
 
-import { resolveDependency } from '../../../../di/utils';
-import { db } from '../../../../drizzle/db';
-import { asDefined } from '../../../../utils/assertions';
-import { ActionService } from '../../../action/action.service';
-import { isAuthenticated, matchOne, optionalIsAuthenticated } from '../../../auth/plugins/passport';
-import { assertIsMember } from '../../../authentication';
-import { AuthorizedItemService } from '../../../authorizedItem.service';
-import { memberAccountRole } from '../../../member/strategies/memberAccountRole';
-import { validatedMemberAccountRole } from '../../../member/strategies/validatedMemberAccountRole';
-import { create, deleteOne, getLikesForCurrentMember, getLikesForItem } from './itemLike.schemas';
-import { ItemLikeService } from './itemLike.service';
+import { resolveDependency } from '../../../../di/utils.js';
+import { db } from '../../../../drizzle/db.js';
+import { asDefined } from '../../../../utils/assertions.js';
+import { ActionService } from '../../../action/action.service.js';
+import {
+  isAuthenticated,
+  matchOne,
+  optionalIsAuthenticated,
+} from '../../../auth/plugins/passport/preHandlers.js';
+import { assertIsMember } from '../../../authentication.js';
+import { AuthorizedItemService } from '../../../authorizedItem.service.js';
+import { memberAccountRole } from '../../../member/strategies/memberAccountRole.js';
+import { validatedMemberAccountRole } from '../../../member/strategies/validatedMemberAccountRole.js';
+import {
+  create,
+  deleteOne,
+  getLikesForCurrentMember,
+  getLikesForItem,
+} from './itemLike.schemas.js';
+import { ItemLikeService } from './itemLike.service.js';
 
 const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
   const authorizedItemService = resolveDependency(AuthorizedItemService);
@@ -46,7 +55,10 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
   // create item like entry
   fastify.post(
     '/:itemId/like',
-    { schema: create, preHandler: [isAuthenticated, matchOne(validatedMemberAccountRole)] },
+    {
+      schema: create,
+      preHandler: [isAuthenticated, matchOne(validatedMemberAccountRole)],
+    },
     async (request) => {
       const {
         user,
@@ -57,7 +69,10 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
       return await db.transaction(async (tx) => {
         const itemLike = await itemLikeService.post(tx, member, itemId);
         // action like item
-        const item = await authorizedItemService.getItemById(tx, { accountId: member.id, itemId });
+        const item = await authorizedItemService.getItemById(tx, {
+          accountId: member.id,
+          itemId,
+        });
         const action = {
           item,
           type: ActionTriggers.ItemLike,
@@ -74,7 +89,10 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
   // delete item like entry
   fastify.delete(
     '/:itemId/like',
-    { schema: deleteOne, preHandler: [isAuthenticated, matchOne(validatedMemberAccountRole)] },
+    {
+      schema: deleteOne,
+      preHandler: [isAuthenticated, matchOne(validatedMemberAccountRole)],
+    },
     async (request) => {
       const {
         user,
@@ -86,7 +104,10 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
       return db.transaction(async (tx) => {
         const newItemLike = await itemLikeService.removeOne(tx, member, itemId);
         // action unlike item
-        const item = await authorizedItemService.getItemById(tx, { accountId: member.id, itemId });
+        const item = await authorizedItemService.getItemById(tx, {
+          accountId: member.id,
+          itemId,
+        });
 
         const action = {
           item,

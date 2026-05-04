@@ -1,17 +1,17 @@
 import { v4 } from 'uuid';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { seedFromJson } from '../../../../../test/mocks/seed';
-import { db } from '../../../../drizzle/db';
-import { assertIsDefined } from '../../../../utils/assertions';
-import { ItemNotFound, MemberCannotWriteItem } from '../../../../utils/errors';
-import { assertIsMemberForTest } from '../../../authentication';
-import { AuthorizedItemService } from '../../../authorizedItem.service';
-import { resolveItemType } from '../../item';
-import { ItemThumbnailService } from '../thumbnail/itemThumbnail.service';
-import { ItemGeolocationRepository } from './itemGeolocation.repository';
-import { ItemGeolocationService } from './itemGeolocation.service';
-import { expectPackedItemGeolocations } from './test/utils';
+import { seedFromJson } from '../../../../../test/mocks/seed.js';
+import { db } from '../../../../drizzle/db.js';
+import { assertIsDefined } from '../../../../utils/assertions.js';
+import { ItemNotFound, MemberCannotWriteItem } from '../../../../utils/errors.js';
+import { assertIsMemberForTest } from '../../../authentication.js';
+import { AuthorizedItemService } from '../../../authorizedItem.service.js';
+import { resolveItemType } from '../../item.js';
+import { ItemThumbnailService } from '../thumbnail/itemThumbnail.service.js';
+import { ItemGeolocationRepository } from './itemGeolocation.repository.js';
+import { ItemGeolocationService } from './itemGeolocation.service.js';
+import { expectPackedItemGeolocations } from './test/utils.js';
 
 const itemThumbnailService = {
   getUrlsByItems: vi.fn(() => ({ small: 'url' })),

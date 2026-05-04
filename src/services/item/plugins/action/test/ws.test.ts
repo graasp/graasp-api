@@ -5,20 +5,20 @@ import type { FastifyInstance } from 'fastify';
 
 import { HttpMethod, type ItemOpFeedbackEvent as ItemOpFeedbackEventType } from '@graasp/sdk';
 
-import { clearDatabase, mockAuthenticate, unmockAuthenticate } from '../../../../../../test/app';
-import { seedFromJson } from '../../../../../../test/mocks/seed';
-import { db } from '../../../../../drizzle/db';
-import { assertIsDefined } from '../../../../../utils/assertions';
-import { TestWsClient } from '../../../../websockets/test/test-websocket-client';
-import { setupWsApp } from '../../../../websockets/test/ws-app';
-import { type ItemRaw } from '../../../item';
+import { clearDatabase, mockAuthenticate, unmockAuthenticate } from '../../../../../../test/app.js';
+import { seedFromJson } from '../../../../../../test/mocks/seed.js';
+import { db } from '../../../../../drizzle/db.js';
+import { assertIsDefined } from '../../../../../utils/assertions.js';
+import { TestWsClient } from '../../../../websockets/test/test-websocket-client.js';
+import { setupWsApp } from '../../../../websockets/test/ws-app.js';
+import { type ItemRaw } from '../../../item.js';
 import {
   ItemOpFeedbackErrorEvent,
   ItemOpFeedbackEvent,
   memberItemsTopic,
-} from '../../../ws/item.events';
-import { ActionRequestExportRepository } from '../requestExport/itemAction.requestExport.repository';
-import { expectExportFeedbackOp } from './utils';
+} from '../../../ws/item.events.js';
+import { ActionRequestExportRepository } from '../requestExport/itemAction.requestExport.repository.js';
+import { expectExportFeedbackOp } from './utils.js';
 
 const uploadDoneMock = jest.fn(async () => console.debug('aws s3 storage upload'));
 const deleteObjectMock = jest.fn(async () => console.debug('deleteObjectMock'));

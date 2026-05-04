@@ -1,11 +1,11 @@
 import { Type } from '@sinclair/typebox';
 import { StatusCodes } from 'http-status-codes';
 
-import { customType, registerSchemaAsRef } from '../../../../../plugins/typebox';
-import { errorSchemaRef } from '../../../../../schemas/global';
-import { nullableMemberSchemaRef } from '../../../../member/member.schemas';
-import { genericItemSchemaRef } from '../../../common.schemas';
-import { packedItemSchemaRef } from '../../../item.schemas.packed';
+import { customType, registerSchemaAsRef } from '../../../../../plugins/typebox.js';
+import { errorSchemaRef } from '../../../../../schemas/global.js';
+import { nullableMemberSchemaRef } from '../../../../member/member.schemas.js';
+import { genericItemSchemaRef } from '../../../common.schemas.js';
+import { packedItemSchemaRef } from '../../../item.schemas.packed.js';
 
 const publishEntrySchema = customType.StrictObject(
   {

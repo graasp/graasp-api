@@ -2,9 +2,9 @@ import { drizzle } from 'drizzle-orm/node-postgres';
 import { withReplicas } from 'drizzle-orm/pg-core';
 import { Pool } from 'pg';
 
-import { DB_CONNECTION_POOL_SIZE, DB_READ_REPLICA_CONNECTIONS } from '../utils/config';
-import * as relations from './relations';
-import * as schema from './schema';
+import { DB_CONNECTION_POOL_SIZE, DB_READ_REPLICA_CONNECTIONS } from '../utils/config.js';
+import * as relations from './relations.js';
+import * as schema from './schema.js';
 
 export const client = new Pool({
   connectionString: process.env.DB_CONNECTION,

@@ -2,13 +2,13 @@ import { subMonths } from 'date-fns';
 import { eq } from 'drizzle-orm';
 import { describe, expect, it } from 'vitest';
 
-import { seedFromJson } from '../../../../../test/mocks/seed';
-import { db } from '../../../../drizzle/db';
-import { recycledItemDatasTable } from '../../../../drizzle/schema';
-import { assertIsDefined } from '../../../../utils/assertions';
-import { MemberCannotAdminItem } from '../../../../utils/errors';
-import { assertIsMemberForTest } from '../../../authentication';
-import { RecycledItemDataRepository } from './recycled.repository';
+import { seedFromJson } from '../../../../../test/mocks/seed.js';
+import { db } from '../../../../drizzle/db.js';
+import { recycledItemDatasTable } from '../../../../drizzle/schema.js';
+import { assertIsDefined } from '../../../../utils/assertions.js';
+import { MemberCannotAdminItem } from '../../../../utils/errors.js';
+import { assertIsMemberForTest } from '../../../authentication.js';
+import { RecycledItemDataRepository } from './recycled.repository.js';
 
 const recycledRepository = new RecycledItemDataRepository();
 

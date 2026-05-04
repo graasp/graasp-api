@@ -2,11 +2,11 @@ import { singleton } from 'tsyringe';
 
 import type { MemberStorage, Pagination } from '@graasp/sdk';
 
-import { type DBConnection } from '../../../../drizzle/db';
-import type { MinimalMember } from '../../../../types';
-import { ItemRepository } from '../../../item/item.repository';
-import { DEFAULT_MAX_STORAGE } from '../../../item/plugins/file/utils/constants';
-import { StorageExceeded } from '../../../item/plugins/file/utils/errors';
+import { type DBConnection } from '../../../../drizzle/db.js';
+import type { MinimalMember } from '../../../../types.js';
+import { ItemRepository } from '../../../item/item.repository.js';
+import { DEFAULT_MAX_STORAGE } from '../../../item/plugins/file/utils/constants.js';
+import { StorageExceeded } from '../../../item/plugins/file/utils/errors.js';
 
 @singleton()
 export class StorageService {

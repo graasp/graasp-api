@@ -1,24 +1,21 @@
-import { sign as jwtSign } from 'jsonwebtoken';
 import { singleton } from 'tsyringe';
 
 import { ClientManager, Context, DEFAULT_LANG, type UUID } from '@graasp/sdk';
 
-import {
-  EMAIL_CHANGE_JWT_EXPIRATION_IN_MINUTES,
-  EMAIL_CHANGE_JWT_SECRET,
-} from '../../config/secrets';
-import { type DBConnection } from '../../drizzle/db';
-import type { MemberCreationDTO, MemberRaw } from '../../drizzle/types';
-import { TRANSLATIONS } from '../../langs/constants';
-import { BaseLogger } from '../../logger';
-import { MailBuilder } from '../../plugins/mailer/builder';
-import { MailerService } from '../../plugins/mailer/mailer.service';
-import { type MemberInfo } from '../../types';
-import { MemberAlreadySignedUp } from '../../utils/errors';
-import { NEW_EMAIL_PARAM, SHORT_TOKEN_PARAM } from '../auth/plugins/passport';
-import { MemberPasswordRepository } from '../auth/plugins/password/password.repository';
-import { MemberRepository } from './member.repository';
-import { MemberProfileRepository } from './plugins/profile/memberProfile.repository';
+import { EMAIL_CHANGE_JWT_EXPIRATION_IN_MINUTES } from '../../config/secrets.js';
+import { signAccessToken } from '../../crypto/jwt.js';
+import { type DBConnection } from '../../drizzle/db.js';
+import type { MemberCreationDTO, MemberRaw } from '../../drizzle/types.js';
+import { TRANSLATIONS } from '../../langs/constants.js';
+import { BaseLogger } from '../../logger.js';
+import { MailBuilder } from '../../plugins/mailer/builder.js';
+import { MailerService } from '../../plugins/mailer/mailer.service.js';
+import { type MemberInfo } from '../../types.js';
+import { MemberAlreadySignedUp } from '../../utils/errors.js';
+import { NEW_EMAIL_PARAM, SHORT_TOKEN_PARAM } from '../auth/plugins/passport/constants.js';
+import { MemberPasswordRepository } from '../auth/plugins/password/password.repository.js';
+import { MemberRepository } from './member.repository.js';
+import { MemberProfileRepository } from './plugins/profile/memberProfile.repository.js';
 
 @singleton()
 export class MemberService {
@@ -120,11 +117,13 @@ export class MemberService {
     });
   }
 
-  createEmailChangeRequest(member: MemberInfo, newEmail: string) {
+  async createEmailChangeRequest(member: MemberInfo, newEmail: string) {
     const payload = { uuid: member.id, oldEmail: member.email, newEmail };
-    return jwtSign(payload, EMAIL_CHANGE_JWT_SECRET, {
-      expiresIn: `${EMAIL_CHANGE_JWT_EXPIRATION_IN_MINUTES}m`,
-    });
+    return await signAccessToken(
+      payload,
+      'change-email',
+      `${EMAIL_CHANGE_JWT_EXPIRATION_IN_MINUTES}m`,
+    );
   }
 
   /**

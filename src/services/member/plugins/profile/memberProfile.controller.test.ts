@@ -10,13 +10,13 @@ import build, {
   clearDatabase,
   mockAuthenticate,
   unmockAuthenticate,
-} from '../../../../../test/app';
-import { seedFromJson } from '../../../../../test/mocks/seed';
-import { db } from '../../../../drizzle/db';
-import { memberProfilesTable } from '../../../../drizzle/schema';
-import type { MemberProfileRaw } from '../../../../drizzle/types';
-import { assertIsDefined } from '../../../../utils/assertions';
-import { MEMBER_PROFILE_ROUTE_PREFIX } from '../../../../utils/config';
+} from '../../../../../test/app.js';
+import { seedFromJson } from '../../../../../test/mocks/seed.js';
+import { db } from '../../../../drizzle/db.js';
+import { memberProfilesTable } from '../../../../drizzle/schema.js';
+import type { MemberProfileRaw } from '../../../../drizzle/types.js';
+import { assertIsDefined } from '../../../../utils/assertions.js';
+import { MEMBER_PROFILE_ROUTE_PREFIX } from '../../../../utils/config.js';
 
 const expectProfile = (
   profile: Pick<MemberProfileRaw, 'linkedinId' | 'facebookId' | 'twitterId' | 'bio'>,

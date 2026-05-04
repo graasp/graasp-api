@@ -1,9 +1,9 @@
-import type { FileServiceConfig } from '../file.service';
-import type { LocalFileConfiguration, S3FileConfiguration } from '../interfaces/configuration';
-import { LocalFileRepository } from '../repositories/local';
-import { S3FileRepository } from '../repositories/s3';
-import { FileStorage, type FileStorageType } from '../types';
-import { MalformedFileConfigError } from './errors';
+import type { FileServiceConfig } from '../file.service.js';
+import type { LocalFileConfiguration, S3FileConfiguration } from '../interfaces/configuration.js';
+import { LocalFileRepository } from '../repositories/local.js';
+import { S3FileRepository } from '../repositories/s3.js';
+import { FileStorage, type FileStorageType } from '../types.js';
+import { MalformedFileConfigError } from './errors.js';
 
 const verifyLocalConfig = (config?: LocalFileConfiguration) => {
   if (!config?.storageRootPath.startsWith('/')) {

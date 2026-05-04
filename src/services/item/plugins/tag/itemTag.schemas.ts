@@ -5,9 +5,9 @@ import type { FastifySchema } from 'fastify';
 
 import { TAG_NAME_MAX_LENGTH, TAG_NAME_PATTERN, TagCategory } from '@graasp/sdk';
 
-import { customType } from '../../../../plugins/typebox';
-import { errorSchemaRef } from '../../../../schemas/global';
-import { tagSchemaRef } from '../../../tag/tag.schemas';
+import { customType } from '../../../../plugins/typebox.js';
+import { errorSchemaRef } from '../../../../schemas/global.js';
+import { tagSchemaRef } from '../../../tag/tag.schemas.js';
 
 export const getTagsForItem = {
   operationId: 'getTagsForItem',

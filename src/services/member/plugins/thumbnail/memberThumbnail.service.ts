@@ -3,16 +3,16 @@ import { injectWithTransform, singleton } from 'tsyringe';
 
 import { AccountType } from '@graasp/sdk';
 
-import { type DBConnection } from '../../../../drizzle/db';
-import type { MinimalMember } from '../../../../types';
-import { AccountRepository } from '../../../account/account.repository';
-import { AccountNotFound } from '../../../account/errors';
+import { type DBConnection } from '../../../../drizzle/db.js';
+import type { MinimalMember } from '../../../../types.js';
+import { AccountRepository } from '../../../account/account.repository.js';
+import { AccountNotFound } from '../../../account/errors.js';
 import {
   AVATAR_THUMBNAIL_PREFIX,
   ThumbnailService,
   ThumbnailServiceTransformer,
-} from '../../../thumbnail/thumbnail.service';
-import { MemberService } from '../../member.service';
+} from '../../../thumbnail/thumbnail.service.js';
+import { MemberService } from '../../member.service.js';
 
 @singleton()
 export class MemberThumbnailService {

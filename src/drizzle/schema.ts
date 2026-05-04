@@ -24,9 +24,9 @@ import geoip from 'geoip-lite';
 
 import { AccountType, type ItemSettings } from '@graasp/sdk';
 
-import { ItemType } from '../schemas/global';
-import type { MemberExtra } from '../services/member/types';
-import { binary, binaryHash, citext, customNumeric, ltree } from './customTypes';
+import type { ItemType } from '../schemas/global.js';
+import type { MemberExtra } from '../services/member/member_extra.js';
+import { binary, binaryHash, citext, customNumeric, ltree } from './customTypes.js';
 
 export const actionViewEnum = pgEnum('action_view_enum', [
   'builder',
@@ -856,8 +856,12 @@ export const actionRequestExportsTable = pgTable(
 export const itemExportRequestsTable = pgTable('item_export_request', {
   id: uuid().primaryKey().defaultRandom().notNull(),
   createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
-  memberId: uuid('member_id').references(() => accountsTable.id, { onDelete: 'cascade' }),
-  itemId: uuid('item_id').references(() => itemsRawTable.id, { onDelete: 'cascade' }),
+  memberId: uuid('member_id').references(() => accountsTable.id, {
+    onDelete: 'cascade',
+  }),
+  itemId: uuid('item_id').references(() => itemsRawTable.id, {
+    onDelete: 'cascade',
+  }),
   type: itemExportRequestTypeEnum().notNull(),
 });
 
@@ -950,9 +954,15 @@ export const accountsTable = pgTable(
       .defaultNow()
       .notNull()
       .$onUpdate(() => sql.raw('DEFAULT')),
-    userAgreementsDate: timestamp('user_agreements_date', { withTimezone: true, mode: 'string' }),
+    userAgreementsDate: timestamp('user_agreements_date', {
+      withTimezone: true,
+      mode: 'string',
+    }),
     enableSaveActions: boolean('enable_save_actions').default(true),
-    lastAuthenticatedAt: timestamp('last_authenticated_at', { withTimezone: true, mode: 'string' }),
+    lastAuthenticatedAt: timestamp('last_authenticated_at', {
+      withTimezone: true,
+      mode: 'string',
+    }),
     isValidated: boolean('is_validated').default(false),
     itemLoginSchemaId: uuid('item_login_schema_id').references(
       (): AnyPgColumn => itemLoginSchemasTable.id,
@@ -1129,7 +1139,10 @@ export const itemTagsTable = pgTable(
 
 export const maintenanceTable = pgTable('maintenance', {
   slug: varchar({ length: 100 }).notNull().primaryKey().unique('UQ_maintenance_slug'),
-  startAt: timestamp('start_at', { withTimezone: true, mode: 'string' }).notNull(),
+  startAt: timestamp('start_at', {
+    withTimezone: true,
+    mode: 'string',
+  }).notNull(),
   endAt: timestamp('end_at', { withTimezone: true, mode: 'string' }).notNull(),
 });
 
@@ -1174,9 +1187,18 @@ export const adminsTable = pgTable(
     id: uuid().primaryKey().notNull(),
     email: citext().unique().notNull(),
     hashed_password: varchar({ length: 255 }),
-    confirmedAt: timestamp('confirmed_at', { withTimezone: false, precision: 0 }),
-    createdAt: timestamp('created_at', { withTimezone: false, precision: 0 }).notNull(),
-    updatedAt: timestamp('updated_at', { withTimezone: false, precision: 0 }).notNull(),
+    confirmedAt: timestamp('confirmed_at', {
+      withTimezone: false,
+      precision: 0,
+    }),
+    createdAt: timestamp('created_at', {
+      withTimezone: false,
+      precision: 0,
+    }).notNull(),
+    updatedAt: timestamp('updated_at', {
+      withTimezone: false,
+      precision: 0,
+    }).notNull(),
   },
   (table) => [index('admins_email_index').using('btree', table.email)],
 );
@@ -1207,8 +1229,12 @@ export const removalNotices = pgTable(
     id: uuid('id').primaryKey().notNull(),
     publicationName: varchar('publication_name', { length: 255 }),
     reason: text('reason'),
-    itemId: uuid('item_id').references(() => itemsRawTable.id, { onDelete: 'cascade' }),
-    creatorId: uuid('creator_id').references(() => adminsTable.id, { onDelete: 'set null' }),
+    itemId: uuid('item_id').references(() => itemsRawTable.id, {
+      onDelete: 'cascade',
+    }),
+    creatorId: uuid('creator_id').references(() => adminsTable.id, {
+      onDelete: 'set null',
+    }),
     createdAt: timestamp('created_at', { precision: 0 }).notNull(),
   },
   (table) => [

@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest';
 
-import { seedFromJson } from '../../../../../../test/mocks/seed';
-import { db } from '../../../../../drizzle/db';
-import { assertIsDefined } from '../../../../../utils/assertions';
-import { assertIsMemberForTest } from '../../../../authentication';
-import { ActionRequestExportRepository } from './itemAction.requestExport.repository';
+import { seedFromJson } from '../../../../../../test/mocks/seed.js';
+import { db } from '../../../../../drizzle/db.js';
+import { assertIsDefined } from '../../../../../utils/assertions.js';
+import { assertIsMemberForTest } from '../../../../authentication.js';
+import { ActionRequestExportRepository } from './itemAction.requestExport.repository.js';
 
 const actionRequestExportRepository = new ActionRequestExportRepository();
 

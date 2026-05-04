@@ -1,29 +1,28 @@
 import { faker } from '@faker-js/faker';
 import { StatusCodes } from 'http-status-codes';
-import { sign, verify } from 'jsonwebtoken';
 import { v4 } from 'uuid';
 
 import type { FastifyInstance, PassportUser } from 'fastify';
 
 import { HttpMethod } from '@graasp/sdk';
 
-import build from '../../../../../test/app';
-import { seedFromJson } from '../../../../../test/mocks/seed';
+import build from '../../../../../test/app.js';
+import { seedFromJson } from '../../../../../test/mocks/seed.js';
 import {
   APPS_JWT_SECRET,
   EMAIL_CHANGE_JWT_SECRET,
-  JWT_SECRET,
   PASSWORD_RESET_JWT_SECRET,
-} from '../../../../config/secrets';
-import { resolveDependency } from '../../../../di/utils';
-import { db } from '../../../../drizzle/db';
-import type { MemberRaw } from '../../../../drizzle/types';
-import { assertIsDefined } from '../../../../utils/assertions';
-import { BadCredentials } from '../../../../utils/errors';
-import { assertIsMember, assertIsMemberForTest } from '../../../authentication';
-import type { ItemRaw } from '../../../item/item';
-import { expectItem } from '../../../item/test/fixtures/items';
-import { MemberPasswordService } from '../password/password.service';
+} from '../../../../config/secrets.js';
+import { signAccessToken } from '../../../../crypto/jwt.js';
+import { resolveDependency } from '../../../../di/utils.js';
+import { db } from '../../../../drizzle/db.js';
+import type { MemberRaw } from '../../../../drizzle/types.js';
+import { assertIsDefined } from '../../../../utils/assertions.js';
+import { BadCredentials } from '../../../../utils/errors.js';
+import { assertIsMember, assertIsMemberForTest } from '../../../authentication.js';
+import type { ItemRaw } from '../../../item/item.js';
+import { expectItem } from '../../../item/test/fixtures/items.js';
+import { MemberPasswordService } from '../password/password.service.js';
 import {
   authenticateAppsJWT,
   authenticateEmailChange,
@@ -32,7 +31,7 @@ import {
   guestAuthenticateAppsJWT,
   isAuthenticated,
   optionalIsAuthenticated,
-} from './preHandlers';
+} from './preHandlers.js';
 
 const MOCKED_ROUTE = '/mock-route';
 
@@ -52,7 +51,7 @@ const expectUserApp = (
  * @returns set-cookie header
  */
 async function logIn(app: FastifyInstance, member: { id: string }) {
-  const token = sign({ sub: member.id }, JWT_SECRET);
+  const token = await signAccessToken({ sub: member.id }, 'login', '1m');
   const response = await app.inject({
     method: HttpMethod.Get,
     path: '/api/auth',
@@ -99,7 +98,7 @@ describe('Passport Plugin', () => {
     it('Invalid JWT Member', async () => {
       const { actor } = await seedFromJson();
       assertIsDefined(actor);
-      const token = sign({ sub: actor.id }, 'invalid');
+      const token = await signAccessToken({ sub: actor.id }, 'invalid', '1m');
       handler.mockImplementation(shouldBeNull);
       const response = await app.inject({
         path: MOCKED_ROUTE,
@@ -150,7 +149,7 @@ describe('Passport Plugin', () => {
     it('Invalid JWT Member', async () => {
       const { actor } = await seedFromJson();
       assertIsDefined(actor);
-      const token = sign({ sub: actor.id }, 'invalid');
+      const token = await signAccessToken({ sub: actor.id }, 'invalid', '1m');
       handler.mockImplementation(shouldNotBeCalled);
       const response = await app.inject({
         path: MOCKED_ROUTE,

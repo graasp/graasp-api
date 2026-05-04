@@ -6,15 +6,15 @@ import type { FastifyInstance } from 'fastify';
 
 import { HttpMethod, ItemLoginSchemaType, MAX_USERNAME_LENGTH } from '@graasp/sdk';
 
-import build, { clearDatabase, mockAuthenticate, unmockAuthenticate } from '../../../test/app';
-import { MemberFactory } from '../../../test/factories/member.factory';
-import { seedFromJson } from '../../../test/mocks/seed';
-import { db } from '../../drizzle/db';
-import { accountsTable } from '../../drizzle/schema';
-import { assertIsDefined } from '../../utils/assertions';
-import { MemberNotFound } from '../../utils/errors';
-import { assertIsMember, assertIsMemberForTest } from '../authentication';
-import { DEFAULT_MAX_STORAGE } from '../item/plugins/file/utils/constants';
+import build, { clearDatabase, mockAuthenticate, unmockAuthenticate } from '../../../test/app.js';
+import { MemberFactory } from '../../../test/factories/member.factory.js';
+import { seedFromJson } from '../../../test/mocks/seed.js';
+import { db } from '../../drizzle/db.js';
+import { accountsTable } from '../../drizzle/schema.js';
+import { assertIsDefined } from '../../utils/assertions.js';
+import { MemberNotFound } from '../../utils/errors.js';
+import { assertIsMember, assertIsMemberForTest } from '../authentication.js';
+import { DEFAULT_MAX_STORAGE } from '../item/plugins/file/utils/constants.js';
 
 const getMemberUtil = async (actorId: string) => {
   return await db.query.accountsTable.findFirst({ where: eq(accountsTable.id, actorId) });

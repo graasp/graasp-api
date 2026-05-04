@@ -1,28 +1,18 @@
 /* source: https://github.com/yjs/y-websocket-server/blob/main/src/utils.js */
 import { captureException } from '@sentry/node';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-expect-error
 import * as encoding from 'lib0/encoding';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-expect-error
 import * as map from 'lib0/map';
 import { WebSocket } from 'ws';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-expect-error
 import * as awarenessProtocol from 'y-protocols/awareness';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-expect-error
 import * as syncProtocol from 'y-protocols/sync';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-expect-error
 import * as Y from 'yjs';
 
-import { FastifyBaseLogger } from 'fastify';
+import type { FastifyBaseLogger } from 'fastify';
 
-import { db } from '../../../../drizzle/db';
-import { WSDoc } from './WSDoc';
-import { MESSAGE_AWARENESS_CODE, MESSAGE_SYNC_CODE, PING_TIMEOUT } from './constants';
-import { PageItemService } from './page.service';
+import { db } from '../../../../drizzle/db.js';
+import { WSDoc } from './WSDoc.js';
+import { MESSAGE_AWARENESS_CODE, MESSAGE_SYNC_CODE, PING_TIMEOUT } from './constants.js';
+import { PageItemService } from './page.service.js';
 
 /**
  * In-memory storage of currently used yjs docs and readonly yjs docs
@@ -50,7 +40,11 @@ class WSSharedDoc extends WSDoc {
         added,
         updated,
         removed,
-      }: { added: Array<number>; updated: Array<number>; removed: Array<number> },
+      }: {
+        added: Array<number>;
+        updated: Array<number>;
+        removed: Array<number>;
+      },
       conn: WebSocket | null,
     ) => {
       const changedClients = added.concat(updated, removed);

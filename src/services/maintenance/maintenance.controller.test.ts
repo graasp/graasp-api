@@ -5,9 +5,9 @@ import type { FastifyInstance } from 'fastify';
 
 import { HttpMethod } from '@graasp/sdk';
 
-import build, { clearDatabase, unmockAuthenticate } from '../../../test/app';
-import { db } from '../../drizzle/db';
-import { maintenanceTable } from '../../drizzle/schema';
+import build, { clearDatabase, unmockAuthenticate } from '../../../test/app.js';
+import { db } from '../../drizzle/db.js';
+import { maintenanceTable } from '../../drizzle/schema.js';
 
 describe('Maintenance Controller Tests', () => {
   let app: FastifyInstance;

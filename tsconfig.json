@@ -1,13 +1,15 @@
 {
   "compilerOptions": {
     "lib": ["es2023", "es6", "esnext.asynciterable"],
-    "target": "es6",
-    "module": "node16", // TODO: use "preserve" when moving to ESM
+    "target": "esnext",
+    "module": "nodenext", // TODO: use "preserve" when moving to ESM
     // "strict": true, // TODO: enable
     "esModuleInterop": true /* Emit additional JavaScript to ease support for importing CommonJS modules. This enables `allowSyntheticDefaultImports` for type compatibility. */,
     "checkJs": false,
     "allowJs": false,
-    "moduleResolution": "node16",
+    "moduleResolution": "nodenext",
+    // for running typescript with tsx without the need to build and watch
+    "verbatimModuleSyntax": true, // TODO: enable when we want to move to ESM
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "noImplicitAny": false, // TODO: enable
@@ -16,8 +18,6 @@
     "forceConsistentCasingInFileNames": true /* Ensure that casing is correct in imports. */,
     "strictNullChecks": true,
     "isolatedModules": true,
-    // for running typescript with tsx without the need to build and watch
-    // "verbatimModuleSyntax": true, // TODO: enable when we want to move to ESM
     "strictPropertyInitialization": false, // disable because of entities,
     "strict": true,
     "typeRoots": ["./node_modules/@types", "./src/@types/*"],

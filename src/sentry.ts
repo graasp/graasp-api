@@ -3,7 +3,7 @@ import '@sentry/tracing';
 
 import type { FastifyInstance } from 'fastify';
 
-import { NODE_ENV } from './config/env';
+import { NODE_ENV } from './config/env.js';
 import {
   APP_VERSION,
   SENTRY_DSN,
@@ -12,7 +12,7 @@ import {
   SENTRY_ENV,
   SENTRY_PROFILES_SAMPLE_RATE,
   SENTRY_TRACES_SAMPLE_RATE,
-} from './utils/config';
+} from './utils/config.js';
 
 declare module 'fastify' {
   interface FastifyRequest {

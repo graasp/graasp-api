@@ -3,17 +3,17 @@ import { expect, it, vi } from 'vitest';
 
 import { ItemVisibilityType } from '@graasp/sdk';
 
-import { ItemFactory } from '../../../test/factories/item.factory';
-import { ItemVisibilityFactory } from '../../../test/factories/itemVisibility.factory';
-import { seedFromJson } from '../../../test/mocks/seed';
-import type { DBConnection } from '../../drizzle/db';
-import { assertIsDefined } from '../../utils/assertions';
-import { assertIsMemberForTest } from '../authentication';
-import { ItemMembershipRepository } from '../itemMembership/membership.repository';
-import { resolveItemType } from './item';
-import { PackedItemDTO, PackedItemService } from './packedItem.dto';
-import { ItemVisibilityRepository } from './plugins/itemVisibility/itemVisibility.repository';
-import { ItemThumbnailService } from './plugins/thumbnail/itemThumbnail.service';
+import { ItemFactory } from '../../../test/factories/item.factory.js';
+import { ItemVisibilityFactory } from '../../../test/factories/itemVisibility.factory.js';
+import { seedFromJson } from '../../../test/mocks/seed.js';
+import type { DBConnection } from '../../drizzle/db.js';
+import { assertIsDefined } from '../../utils/assertions.js';
+import { assertIsMemberForTest } from '../authentication.js';
+import { ItemMembershipRepository } from '../itemMembership/membership.repository.js';
+import { resolveItemType } from './item.js';
+import { PackedItemDTO, PackedItemService } from './packedItem.dto.js';
+import { ItemVisibilityRepository } from './plugins/itemVisibility/itemVisibility.repository.js';
+import { ItemThumbnailService } from './plugins/thumbnail/itemThumbnail.service.js';
 
 describe('PackedItemDTO', () => {
   describe('packed', () => {

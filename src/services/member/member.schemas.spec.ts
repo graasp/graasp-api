@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { EMAIL_REGEX } from './member.schemas';
+import { EMAIL_REGEX } from './member.schemas.js';
 
 describe('Email regex', () => {
   it('Allows basic CH emails', () => {

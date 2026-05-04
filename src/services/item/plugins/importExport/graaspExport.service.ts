@@ -6,19 +6,19 @@ import { ZipFile } from 'yazl';
 
 import { ThumbnailSize } from '@graasp/sdk';
 
-import { DBConnection } from '../../../../drizzle/db';
-import type { AppSettingRaw } from '../../../../drizzle/types';
-import { BaseLogger } from '../../../../logger';
-import { MaybeUser } from '../../../../types';
-import { ItemRaw, isAppItem, isFolderItem, isShortcutItem } from '../../item';
-import { ItemService } from '../../item.service';
-import { AppSettingRepository } from '../app/appSetting/appSetting.repository';
-import { ItemThumbnailService } from '../thumbnail/itemThumbnail.service';
-import { GRAASP_MANIFEST_FILENAME } from './constants';
-import { UnexpectedExportError } from './errors';
-import { GraaspExportItem } from './import.service';
-import { ItemExportService } from './itemExport.service';
-import { generateThumbnailFilename } from './utils';
+import type { DBConnection } from '../../../../drizzle/db.js';
+import type { AppSettingRaw } from '../../../../drizzle/types.js';
+import { BaseLogger } from '../../../../logger.js';
+import type { MaybeUser } from '../../../../types.js';
+import { type ItemRaw, isAppItem, isFolderItem, isShortcutItem } from '../../item.js';
+import { ItemService } from '../../item.service.js';
+import { AppSettingRepository } from '../app/appSetting/appSetting.repository.js';
+import { ItemThumbnailService } from '../thumbnail/itemThumbnail.service.js';
+import { GRAASP_MANIFEST_FILENAME } from './constants.js';
+import { UnexpectedExportError } from './errors.js';
+import type { GraaspExportItem } from './import.service.js';
+import { ItemExportService } from './itemExport.service.js';
+import { generateThumbnailFilename } from './utils.js';
 
 @singleton()
 export class GraaspExportService {

@@ -1,8 +1,8 @@
 import { asc, gte } from 'drizzle-orm';
 import { singleton } from 'tsyringe';
 
-import type { DBConnection } from '../../drizzle/db';
-import { maintenanceTable } from '../../drizzle/schema';
+import type { DBConnection } from '../../drizzle/db.js';
+import { maintenanceTable } from '../../drizzle/schema.js';
 
 @singleton()
 export class MaintenanceRepository {

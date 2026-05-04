@@ -1,6 +1,6 @@
 import type { FastifySchema } from 'fastify';
 
-import { customType } from '../../../../../plugins/typebox';
+import { customType } from '../../../../../plugins/typebox.js';
 
 export const getPublicationState = {
   params: customType.StrictObject({

@@ -1,8 +1,8 @@
 import { and, asc, desc, eq, gte, lt } from 'drizzle-orm/sql';
 import { singleton } from 'tsyringe';
 
-import { DBConnection } from '../../../../drizzle/db';
-import { pageUpdateTable } from '../../../../drizzle/schema';
+import type { DBConnection } from '../../../../drizzle/db.js';
+import { pageUpdateTable } from '../../../../drizzle/schema.js';
 
 @singleton()
 export class PageRepository {

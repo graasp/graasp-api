@@ -1,21 +1,25 @@
 import { createBullBoard } from '@bull-board/api';
-import { BullMQAdapter } from '@bull-board/api/bullMQAdapter';
+import { BullMQAdapter } from '@bull-board/api/bullMQAdapter.js';
 import { FastifyAdapter } from '@bull-board/fastify';
 import { Queue } from 'bullmq';
 
-import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox';
+import type { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox';
 
-import { DEV } from '../config/env';
-import { REDIS_CONNECTION } from '../config/redis';
-import { Queues } from './config';
+import { DEV } from '../config/env.js';
+import { REDIS_CONNECTION } from '../config/redis.js';
+import { Queues } from './config.js';
 
 export const queueDashboardPlugin: FastifyPluginAsyncTypebox = async (instance) => {
   if (DEV) {
     const serverAdapter = new FastifyAdapter();
 
     const queues = [
-      new Queue(Queues.ItemExport.queueName, { connection: { url: REDIS_CONNECTION } }),
-      new Queue(Queues.SearchIndex.queueName, { connection: { url: REDIS_CONNECTION } }),
+      new Queue(Queues.ItemExport.queueName, {
+        connection: { url: REDIS_CONNECTION },
+      }),
+      new Queue(Queues.SearchIndex.queueName, {
+        connection: { url: REDIS_CONNECTION },
+      }),
     ];
 
     createBullBoard({

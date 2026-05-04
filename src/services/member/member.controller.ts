@@ -2,25 +2,25 @@ import { StatusCodes } from 'http-status-codes';
 
 import type { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox';
 
-import { resolveDependency } from '../../di/utils';
-import { db } from '../../drizzle/db';
-import { AccountType } from '../../types';
-import { asDefined, assertIsDefined } from '../../utils/assertions';
-import { AccountRepository } from '../account/account.repository';
-import { ActionService } from '../action/action.service';
+import { resolveDependency } from '../../di/utils.js';
+import { db } from '../../drizzle/db.js';
+import { AccountType } from '../../types.js';
+import { asDefined, assertIsDefined } from '../../utils/assertions.js';
+import { AccountRepository } from '../account/account.repository.js';
+import { ActionService } from '../action/action.service.js';
 import {
   authenticateEmailChange,
   isAuthenticated,
   matchOne,
   optionalIsAuthenticated,
-} from '../auth/plugins/passport';
-import { assertIsMember } from '../authentication';
+} from '../auth/plugins/passport/preHandlers.js';
+import { assertIsMember } from '../authentication.js';
 import {
   FILE_METADATA_MAX_PAGE_SIZE,
   FILE_METADATA_MIN_PAGE,
   FILE_METADATA_MIN_PAGE_SIZE,
-} from './constants';
-import { EmailAlreadyTaken } from './error';
+} from './constants.js';
+import { EmailAlreadyTaken } from './error.js';
 import {
   deleteCurrent,
   getCurrent,
@@ -33,10 +33,10 @@ import {
   patchChangeEmail,
   postChangeEmail,
   updateCurrent,
-} from './member.schemas';
-import { MemberService } from './member.service';
-import { StorageService } from './plugins/storage/memberStorage.service';
-import { memberAccountRole } from './strategies/memberAccountRole';
+} from './member.schemas.js';
+import { MemberService } from './member.service.js';
+import { StorageService } from './plugins/storage/memberStorage.service.js';
+import { memberAccountRole } from './strategies/memberAccountRole.js';
 
 const controller: FastifyPluginAsyncTypebox = async (fastify) => {
   const memberService = resolveDependency(MemberService);
@@ -188,7 +188,7 @@ const controller: FastifyPluginAsyncTypebox = async (fastify) => {
       const member = await memberService.get(db, account.id);
       assertIsDefined(member);
       const memberInfo = member.toMemberInfo();
-      const token = memberService.createEmailChangeRequest(memberInfo, newEmail);
+      const token = await memberService.createEmailChangeRequest(memberInfo, newEmail);
       memberService.sendEmailChangeRequest(newEmail, token, memberInfo.lang);
 
       reply.status(StatusCodes.NO_CONTENT);

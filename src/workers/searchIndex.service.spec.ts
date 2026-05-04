@@ -4,16 +4,16 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { type IndexItem } from '@graasp/sdk';
 
-import { MOCK_LOGGER } from '../../test/app.vitest';
-import { ItemFactory } from '../../test/factories/item.factory';
-import { db } from '../drizzle/db';
-import { ItemPublishedWithItemWithCreator } from '../drizzle/types';
-import { ItemPublishedRepository } from '../services/item/plugins/publication/published/itemPublished.repository';
+import { MOCK_LOGGER } from '../../test/app.vitest.js';
+import { ItemFactory } from '../../test/factories/item.factory.js';
+import { db } from '../drizzle/db.js';
+import { ItemPublishedWithItemWithCreator } from '../drizzle/types.js';
+import { ItemPublishedRepository } from '../services/item/plugins/publication/published/itemPublished.repository.js';
 import {
   ACTIVE_INDEX,
   MeiliSearchWrapper,
-} from '../services/item/plugins/publication/published/plugins/search/meilisearch';
-import { SearchIndexService } from './searchIndex.service';
+} from '../services/item/plugins/publication/published/plugins/search/meilisearch.js';
+import { SearchIndexService } from './searchIndex.service.js';
 
 const mockItemPublished = ({
   id,

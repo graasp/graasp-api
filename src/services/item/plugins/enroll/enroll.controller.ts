@@ -3,14 +3,14 @@ import { StatusCodes } from 'http-status-codes';
 import type { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox';
 import fp from 'fastify-plugin';
 
-import { resolveDependency } from '../../../../di/utils';
-import { db } from '../../../../drizzle/db';
-import { asDefined } from '../../../../utils/assertions';
-import { isAuthenticated, matchOne } from '../../../auth/plugins/passport';
-import { assertIsMember } from '../../../authentication';
-import { validatedMemberAccountRole } from '../../../member/strategies/validatedMemberAccountRole';
-import { enroll } from './enroll.schema';
-import { EnrollService } from './enroll.service';
+import { resolveDependency } from '../../../../di/utils.js';
+import { db } from '../../../../drizzle/db.js';
+import { asDefined } from '../../../../utils/assertions.js';
+import { isAuthenticated, matchOne } from '../../../auth/plugins/passport/preHandlers.js';
+import { assertIsMember } from '../../../authentication.js';
+import { validatedMemberAccountRole } from '../../../member/strategies/validatedMemberAccountRole.js';
+import { enroll } from './enroll.schema.js';
+import { EnrollService } from './enroll.service.js';
 
 const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
   const enrollService = resolveDependency(EnrollService);

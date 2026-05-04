@@ -5,15 +5,15 @@ import type { FastifyInstance } from 'fastify';
 
 import { HttpMethod, Websocket } from '@graasp/sdk';
 
-import { clearDatabase, mockAuthenticate, unmockAuthenticate } from '../../../../test/app';
-import { seedFromJson } from '../../../../test/mocks/seed';
-import { db } from '../../../drizzle/db';
-import { assertIsDefined } from '../../../utils/assertions';
-import { MemberCannotAccess } from '../../../utils/errors';
-import { expectDeleteMembershipFeedback } from '../../item/plugins/action/test/utils';
-import { TestWsClient } from '../../websockets/test/test-websocket-client';
-import { setupWsApp } from '../../websockets/test/ws-app';
-import { ItemMembershipEvent, type MembershipEvent, itemMembershipsTopic } from '../ws/events';
+import { clearDatabase, mockAuthenticate, unmockAuthenticate } from '../../../../test/app.js';
+import { seedFromJson } from '../../../../test/mocks/seed.js';
+import { db } from '../../../drizzle/db.js';
+import { assertIsDefined } from '../../../utils/assertions.js';
+import { MemberCannotAccess } from '../../../utils/errors.js';
+import { expectDeleteMembershipFeedback } from '../../item/plugins/action/test/utils.js';
+import { TestWsClient } from '../../websockets/test/test-websocket-client.js';
+import { setupWsApp } from '../../websockets/test/ws-app.js';
+import { ItemMembershipEvent, type MembershipEvent, itemMembershipsTopic } from '../ws/events.js';
 
 describe('Item websocket hooks', () => {
   let app: FastifyInstance;

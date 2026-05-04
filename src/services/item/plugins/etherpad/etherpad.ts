@@ -1,10 +1,10 @@
-import { default as EtherpadApi } from '@graasp/etherpad-api';
+import type { Etherpad } from '@graasp/etherpad-api';
 
-import { wrapErrorsWithCustom } from '../../../../utils/errorsWrapper';
-import { EtherpadServerError } from './errors';
+import { wrapErrorsWithCustom } from '../../../../utils/errorsWrapper.js';
+import { EtherpadServerError } from './errors.js';
 
 /**
  * A wrapper for Etherpad which converts errors into graasp error.
  */
-export const wrapEtherpadErrors = (etherpad: EtherpadApi) =>
+export const wrapEtherpadErrors = (etherpad: Etherpad) =>
   wrapErrorsWithCustom(etherpad, EtherpadServerError);

@@ -2,8 +2,8 @@ import { singleton } from 'tsyringe';
 
 import { FlagType } from '@graasp/sdk';
 
-import { type DBConnection } from '../../../../drizzle/db';
-import { itemFlagsTable } from '../../../../drizzle/schema';
+import { type DBConnection } from '../../../../drizzle/db.js';
+import { itemFlagsTable } from '../../../../drizzle/schema.js';
 
 type CreateItemFlagBody = {
   flagType: FlagType;

@@ -2,13 +2,13 @@ import { singleton } from 'tsyringe';
 
 import { type TagCategoryType, type UUID } from '@graasp/sdk';
 
-import { type DBConnection } from '../../../../drizzle/db';
-import type { AuthenticatedUser, MaybeUser } from '../../../../types';
-import { AuthorizedItemService } from '../../../authorizedItem.service';
-import { TagRepository } from '../../../tag/tag.repository';
-import { ItemPublishedRepository } from '../publication/published/itemPublished.repository';
-import { MeiliSearchWrapper } from '../publication/published/plugins/search/meilisearch';
-import { ItemTagRepository } from './itemTag.repository';
+import type { DBConnection } from '../../../../drizzle/db.js';
+import type { AuthenticatedUser, MaybeUser } from '../../../../types.js';
+import { AuthorizedItemService } from '../../../authorizedItem.service.js';
+import { TagRepository } from '../../../tag/tag.repository.js';
+import { ItemPublishedRepository } from '../publication/published/itemPublished.repository.js';
+import { MeiliSearchWrapper } from '../publication/published/plugins/search/meilisearch.js';
+import { ItemTagRepository } from './itemTag.repository.js';
 
 @singleton()
 export class ItemTagService {

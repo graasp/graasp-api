@@ -4,16 +4,16 @@ import { describe, expect, it } from 'vitest';
 
 import { MentionStatus } from '@graasp/sdk';
 
-import { seedFromJson } from '../../../../../test/mocks/seed';
-import { db } from '../../../../drizzle/db';
-import { chatMentionsTable } from '../../../../drizzle/schema';
-import { assertIsDefined } from '../../../../utils/assertions';
-import { ChatMentionNotFound, NoChatMentionForMember } from '../../errors';
+import { seedFromJson } from '../../../../../test/mocks/seed.js';
+import { db } from '../../../../drizzle/db.js';
+import { chatMentionsTable } from '../../../../drizzle/schema.js';
+import { assertIsDefined } from '../../../../utils/assertions.js';
+import { ChatMentionNotFound, NoChatMentionForMember } from '../../errors.js';
 import {
   expectFullChatMentions,
   expectRawChatMentions,
-} from '../../test/chatMentions.expectations';
-import { ChatMentionRepository } from './chatMention.repository';
+} from '../../test/chatMentions.expectations.js';
+import { ChatMentionRepository } from './chatMention.repository.js';
 
 const repository = new ChatMentionRepository();
 

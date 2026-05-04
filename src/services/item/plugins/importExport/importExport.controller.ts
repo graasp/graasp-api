@@ -7,26 +7,30 @@ import type { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox';
 
 import { ActionTriggers, Context, MAX_ZIP_FILE_SIZE } from '@graasp/sdk';
 
-import { REDIS_CONNECTION } from '../../../../config/redis';
-import { resolveDependency } from '../../../../di/utils';
-import { db } from '../../../../drizzle/db';
-import { BaseLogger } from '../../../../logger';
-import { asDefined, assertIsDefined } from '../../../../utils/assertions';
-import { Queues } from '../../../../workers/config';
-import { ActionService } from '../../../action/action.service';
-import { isAuthenticated, matchOne, optionalIsAuthenticated } from '../../../auth/plugins/passport';
-import { assertIsMember } from '../../../authentication';
-import { AuthorizedItemService } from '../../../authorizedItem.service';
-import { validatedMemberAccountRole } from '../../../member/strategies/validatedMemberAccountRole';
-import { WrongItemTypeError } from '../../errors';
-import { isFolderItem } from '../../item';
-import { ZIP_FILE_MIME_TYPES } from './constants';
-import { FileIsInvalidArchiveError } from './errors';
-import { GraaspExportService } from './graaspExport.service';
-import { ImportService } from './import.service';
-import { downloadFile, exportZip, graaspZipExport, zipImport } from './importExport.schemas';
-import { ItemExportService } from './itemExport.service';
-import { prepareZip } from './utils';
+import { REDIS_CONNECTION } from '../../../../config/redis.js';
+import { resolveDependency } from '../../../../di/utils.js';
+import { db } from '../../../../drizzle/db.js';
+import { BaseLogger } from '../../../../logger.js';
+import { asDefined, assertIsDefined } from '../../../../utils/assertions.js';
+import { Queues } from '../../../../workers/config.js';
+import { ActionService } from '../../../action/action.service.js';
+import {
+  isAuthenticated,
+  matchOne,
+  optionalIsAuthenticated,
+} from '../../../auth/plugins/passport/preHandlers.js';
+import { assertIsMember } from '../../../authentication.js';
+import { AuthorizedItemService } from '../../../authorizedItem.service.js';
+import { validatedMemberAccountRole } from '../../../member/strategies/validatedMemberAccountRole.js';
+import { WrongItemTypeError } from '../../errors.js';
+import { isFolderItem } from '../../item.js';
+import { ZIP_FILE_MIME_TYPES } from './constants.js';
+import { FileIsInvalidArchiveError } from './errors.js';
+import { GraaspExportService } from './graaspExport.service.js';
+import { ImportService } from './import.service.js';
+import { downloadFile, exportZip, graaspZipExport, zipImport } from './importExport.schemas.js';
+import { ItemExportService } from './itemExport.service.js';
+import { prepareZip } from './utils.js';
 
 function encodeFilename(name: string) {
   return encodeURI(sanitize(name, { replacement: '_' }));

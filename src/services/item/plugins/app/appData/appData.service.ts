@@ -1,25 +1,25 @@
 import { singleton } from 'tsyringe';
 
-import { MultipartFile } from '@fastify/multipart';
+import type { MultipartFile } from '@fastify/multipart';
 
 import { AppDataVisibility, PermissionLevelCompare, type UUID } from '@graasp/sdk';
 
-import { type DBConnection } from '../../../../../drizzle/db';
-import type { AppDataRaw, ItemMembershipRaw } from '../../../../../drizzle/types';
-import { BaseLogger } from '../../../../../logger';
-import type { AuthenticatedUser, MaybeUser, PermissionLevel } from '../../../../../types';
-import { AuthorizedItemService } from '../../../../authorizedItem.service';
-import FileService from '../../../../file/file.service';
-import type { ItemRaw } from '../../../item';
-import { AppDataRepository } from './appData.repository';
-import { AppDataFileServiceAdapter } from './appDataFileServiceAdapter';
+import { type DBConnection } from '../../../../../drizzle/db.js';
+import type { AppDataRaw, ItemMembershipRaw } from '../../../../../drizzle/types.js';
+import { BaseLogger } from '../../../../../logger.js';
+import type { AuthenticatedUser, MaybeUser, PermissionLevel } from '../../../../../types.js';
+import { AuthorizedItemService } from '../../../../authorizedItem.service.js';
+import FileService from '../../../../file/file.service.js';
+import type { ItemRaw } from '../../../item.js';
+import { AppDataRepository } from './appData.repository.js';
+import { AppDataFileServiceAdapter } from './appDataFileServiceAdapter.js';
 import {
   AppDataNotAccessible,
   AppDataNotFound,
   PreventUpdateAppDataFile,
   PreventUpdateOtherAppData,
-} from './errors';
-import { AppDataFileService } from './interfaces/appDataFileService';
+} from './errors.js';
+import type { AppDataFileService } from './interfaces/appDataFileService.js';
 
 const ownAppDataAbility = (appData: AppDataRaw, actor: MaybeUser) => {
   if (!actor) {
@@ -232,7 +232,11 @@ export class AppDataService {
     // posting an app data is allowed to readers
     const { itemMembership } = await this.authorizedItemService.getPropertiesForItemById(
       dbConnection,
-      { permission: 'read', accountId: maybeUser?.id, itemId },
+      {
+        permission: 'read',
+        accountId: maybeUser?.id,
+        itemId,
+      },
     );
 
     return this.appDataRepository.getForItem(

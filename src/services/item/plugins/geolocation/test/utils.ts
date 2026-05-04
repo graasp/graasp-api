@@ -3,8 +3,8 @@ import { expect } from 'vitest';
 import type {
   ItemGeolocationRaw,
   ItemGeolocationWithItemWithCreator,
-} from '../../../../../drizzle/types';
-import type { PackedItemGeolocation } from '../itemGeolocation.service';
+} from '../../../../../drizzle/types.js';
+import type { PackedItemGeolocation } from '../itemGeolocation.service.js';
 
 export const expectItemGeolocations = (
   results: ItemGeolocationRaw[] | null,

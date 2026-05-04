@@ -9,9 +9,9 @@ import { v4 } from 'uuid';
 
 import type { FastifyBaseLogger } from 'fastify';
 
-import { FileItemExtra, getMimetype } from '@graasp/sdk';
+import { type FileItemExtra, getMimetype } from '@graasp/sdk';
 
-import { ItemType } from '../../../../schemas/global';
+import type { ItemType } from '../../../../schemas/global.js';
 import {
   type ItemRaw,
   isAppItem,
@@ -21,8 +21,8 @@ import {
   isFileItem,
   isFolderItem,
   isH5PItem,
-} from '../../item';
-import { APP_URL_PREFIX, TMP_IMPORT_ZIP_FOLDER_PATH, URL_PREFIX } from './constants';
+} from '../../item.js';
+import { APP_URL_PREFIX, TMP_IMPORT_ZIP_FOLDER_PATH, URL_PREFIX } from './constants.js';
 
 export const prepareZip = async (file: Readable, log?: FastifyBaseLogger) => {
   // read and prepare folder for zip and content

@@ -3,22 +3,25 @@ import type { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox';
 
 import { AppDataVisibility } from '@graasp/sdk';
 
-import { resolveDependency } from '../../../../../di/utils';
-import { db } from '../../../../../drizzle/db';
-import type { FastifyInstanceTypebox } from '../../../../../plugins/typebox';
-import { asDefined } from '../../../../../utils/assertions';
-import { authenticateAppsJWT, guestAuthenticateAppsJWT } from '../../../../auth/plugins/passport';
-import { AuthorizedItemService } from '../../../../authorizedItem.service';
+import { resolveDependency } from '../../../../../di/utils.js';
+import { db } from '../../../../../drizzle/db.js';
+import type { FastifyInstanceTypebox } from '../../../../../plugins/typebox.js';
+import { asDefined } from '../../../../../utils/assertions.js';
+import {
+  authenticateAppsJWT,
+  guestAuthenticateAppsJWT,
+} from '../../../../auth/plugins/passport/preHandlers.js';
+import { AuthorizedItemService } from '../../../../authorizedItem.service.js';
 import {
   DownloadFileUnexpectedError,
   UploadEmptyFileError,
   UploadFileUnexpectedError,
-} from '../../../../file/utils/errors';
-import { addMemberInAppData } from '../legacy';
-import { AppDataEvent, appDataTopic } from '../ws/events';
-import { checkItemIsApp } from '../ws/utils';
-import { create, deleteOne, download, getForOne, updateOne, upload } from './appData.schemas';
-import { AppDataService } from './appData.service';
+} from '../../../../file/utils/errors.js';
+import { addMemberInAppData } from '../legacy.js';
+import { AppDataEvent, appDataTopic } from '../ws/events.js';
+import { checkItemIsApp } from '../ws/utils.js';
+import { create, deleteOne, download, getForOne, updateOne, upload } from './appData.schemas.js';
+import { AppDataService } from './appData.service.js';
 
 export const DEFAULT_MAX_FILE_SIZE = 1024 * 1024 * 1024; // 1GB
 

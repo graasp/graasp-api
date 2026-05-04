@@ -2,14 +2,14 @@ import { singleton } from 'tsyringe';
 
 import { type UUID } from '@graasp/sdk';
 
-import { type DBConnection } from '../../../../../drizzle/db';
-import type { AppSettingInsertDTO, AppSettingRaw } from '../../../../../drizzle/types';
-import type { AuthenticatedUser, MaybeUser } from '../../../../../types';
-import { UnauthorizedMember } from '../../../../../utils/errors';
-import HookManager from '../../../../../utils/hook';
-import { AuthorizedItemService } from '../../../../authorizedItem.service';
-import type { ItemRaw } from '../../../item';
-import { AppSettingRepository } from './appSetting.repository';
+import { type DBConnection } from '../../../../../drizzle/db.js';
+import type { AppSettingInsertDTO, AppSettingRaw } from '../../../../../drizzle/types.js';
+import type { AuthenticatedUser, MaybeUser } from '../../../../../types.js';
+import { UnauthorizedMember } from '../../../../../utils/errors.js';
+import HookManager from '../../../../../utils/hook.js';
+import { AuthorizedItemService } from '../../../../authorizedItem.service.js';
+import type { ItemRaw } from '../../../item.js';
+import { AppSettingRepository } from './appSetting.repository.js';
 
 @singleton()
 export class AppSettingService {
@@ -118,7 +118,10 @@ export class AppSettingService {
 
     await this.appSettingRepository.deleteOne(dbConnection, appSettingId);
 
-    await this.hooks.runPostHooks('delete', member, dbConnection, { appSetting, itemId });
+    await this.hooks.runPostHooks('delete', member, dbConnection, {
+      appSetting,
+      itemId,
+    });
 
     return appSetting;
   }

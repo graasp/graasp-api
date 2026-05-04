@@ -5,9 +5,9 @@ import type { FastifySchema } from 'fastify';
 
 import { ItemValidationProcess, ItemValidationStatus } from '@graasp/sdk';
 
-import { customType, registerSchemaAsRef } from '../../../../../plugins/typebox';
-import { errorSchemaRef } from '../../../../../schemas/global';
-import { genericItemSchemaRef } from '../../../common.schemas';
+import { customType, registerSchemaAsRef } from '../../../../../plugins/typebox.js';
+import { errorSchemaRef } from '../../../../../schemas/global.js';
+import { genericItemSchemaRef } from '../../../common.schemas.js';
 
 const itemValidationGroupSchema = customType.StrictObject(
   {

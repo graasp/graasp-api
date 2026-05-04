@@ -2,14 +2,18 @@ import { StatusCodes } from 'http-status-codes';
 
 import type { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox';
 
-import { resolveDependency } from '../../../../di/utils';
-import { db } from '../../../../drizzle/db';
-import { asDefined } from '../../../../utils/assertions';
-import { isAuthenticated, matchOne, optionalIsAuthenticated } from '../../../auth/plugins/passport';
-import { assertIsMember } from '../../../authentication';
-import { validatedMemberAccountRole } from '../../../member/strategies/validatedMemberAccountRole';
-import { createTagForItem, deleteTagForItem, getTagsForItem } from './itemTag.schemas';
-import { ItemTagService } from './itemTag.service';
+import { resolveDependency } from '../../../../di/utils.js';
+import { db } from '../../../../drizzle/db.js';
+import { asDefined } from '../../../../utils/assertions.js';
+import {
+  isAuthenticated,
+  matchOne,
+  optionalIsAuthenticated,
+} from '../../../auth/plugins/passport/preHandlers.js';
+import { assertIsMember } from '../../../authentication.js';
+import { validatedMemberAccountRole } from '../../../member/strategies/validatedMemberAccountRole.js';
+import { createTagForItem, deleteTagForItem, getTagsForItem } from './itemTag.schemas.js';
+import { ItemTagService } from './itemTag.service.js';
 
 const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
   const itemTagService = resolveDependency(ItemTagService);

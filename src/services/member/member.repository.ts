@@ -3,12 +3,12 @@ import { singleton } from 'tsyringe';
 
 import { AccountType, type ResultOf, type UUID } from '@graasp/sdk';
 
-import { type DBConnection } from '../../drizzle/db';
-import { accountsTable, membersView } from '../../drizzle/schema';
-import type { AccountInsertDTO, MemberCreationDTO } from '../../drizzle/types';
-import { MemberNotFound } from '../../utils/errors';
-import { mapById } from '../utils';
-import { MemberDTO } from './types';
+import { type DBConnection } from '../../drizzle/db.js';
+import { accountsTable, membersView } from '../../drizzle/schema.js';
+import type { AccountInsertDTO, MemberCreationDTO } from '../../drizzle/types.js';
+import { MemberNotFound } from '../../utils/errors.js';
+import { mapById } from '../utils.js';
+import { MemberDTO } from './types.js';
 
 @singleton()
 export class MemberRepository {

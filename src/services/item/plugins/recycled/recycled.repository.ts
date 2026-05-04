@@ -5,20 +5,20 @@ import { and, asc, desc, gte, isNotNull, ne } from 'drizzle-orm/sql';
 
 import { type Paginated, type Pagination } from '@graasp/sdk';
 
-import { type DBConnection } from '../../../../drizzle/db';
-import { isAncestorOrSelf, isDescendantOrSelf } from '../../../../drizzle/operations';
+import { type DBConnection } from '../../../../drizzle/db.js';
+import { isAncestorOrSelf, isDescendantOrSelf } from '../../../../drizzle/operations.js';
 import {
   itemMembershipsTable,
   itemsRawTable,
   membersView,
   recycledItemDatasTable,
-} from '../../../../drizzle/schema';
-import type { MemberRaw } from '../../../../drizzle/types';
-import { throwsIfParamIsInvalid } from '../../../../repositories/utils';
-import type { MinimalMember } from '../../../../types';
-import { MemberCannotAdminItem } from '../../../../utils/errors';
-import { ITEMS_PAGE_SIZE_MAX } from '../../constants';
-import { FolderItem, ItemRaw } from '../../item';
+} from '../../../../drizzle/schema.js';
+import type { MemberRaw } from '../../../../drizzle/types.js';
+import { throwsIfParamIsInvalid } from '../../../../repositories/utils.js';
+import type { MinimalMember } from '../../../../types.js';
+import { MemberCannotAdminItem } from '../../../../utils/errors.js';
+import { ITEMS_PAGE_SIZE_MAX } from '../../constants.js';
+import type { FolderItem, ItemRaw } from '../../item.js';
 
 type CreateRecycledItemDataBody = { itemPath: string; creatorId: string };
 
@@ -41,7 +41,10 @@ export class RecycledItemDataRepository {
     items: ItemRaw[],
     creator: MinimalMember,
   ): Promise<void> {
-    const recycled = items.map((item) => ({ itemPath: item.path, creatorId: creator.id }));
+    const recycled = items.map((item) => ({
+      itemPath: item.path,
+      creatorId: creator.id,
+    }));
     await dbConnection.insert(recycledItemDatasTable).values(recycled);
   }
 

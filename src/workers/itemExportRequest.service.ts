@@ -6,23 +6,23 @@ import { ZipFile } from 'yazl';
 
 import { type UnionOfConst } from '@graasp/sdk';
 
-import { type DBConnection } from '../drizzle/db';
-import type { MinimalAccount } from '../drizzle/types';
-import { TRANSLATIONS } from '../langs/constants';
-import { BaseLogger } from '../logger';
-import { MailBuilder } from '../plugins/mailer/builder';
-import { MailerService } from '../plugins/mailer/mailer.service';
-import { AuthorizedItemService } from '../services/authorizedItem.service';
-import FileService from '../services/file/file.service';
-import { ItemRaw, isFolderItem } from '../services/item/item';
-import { ItemService } from '../services/item/item.service';
-import { DESCRIPTION_EXTENSION } from '../services/item/plugins/importExport/constants';
-import { UnexpectedExportError } from '../services/item/plugins/importExport/errors';
-import { ItemExportService } from '../services/item/plugins/importExport/itemExport.service';
-import { MemberService } from '../services/member/member.service';
-import { MaybeUser, MinimalMember } from '../types';
-import { TMP_FOLDER } from '../utils/config';
-import { ItemExportRequestRepository } from './itemExportRequest.repository';
+import { type DBConnection } from '../drizzle/db.js';
+import type { MinimalAccount } from '../drizzle/types.js';
+import { TRANSLATIONS } from '../langs/constants.js';
+import { BaseLogger } from '../logger.js';
+import { MailBuilder } from '../plugins/mailer/builder.js';
+import { MailerService } from '../plugins/mailer/mailer.service.js';
+import { AuthorizedItemService } from '../services/authorizedItem.service.js';
+import FileService from '../services/file/file.service.js';
+import { type ItemRaw, isFolderItem } from '../services/item/item.js';
+import { ItemService } from '../services/item/item.service.js';
+import { DESCRIPTION_EXTENSION } from '../services/item/plugins/importExport/constants.js';
+import { UnexpectedExportError } from '../services/item/plugins/importExport/errors.js';
+import { ItemExportService } from '../services/item/plugins/importExport/itemExport.service.js';
+import { MemberService } from '../services/member/member.service.js';
+import type { MaybeUser, MinimalMember } from '../types.js';
+import { TMP_FOLDER } from '../utils/config.js';
+import { ItemExportRequestRepository } from './itemExportRequest.repository.js';
 
 const EXPORT_ITEM_EXPIRATION_DAYS = 7;
 const EXPORT_ITEM_EXPIRATION = 3600 * 24 * EXPORT_ITEM_EXPIRATION_DAYS; // max value: one week

@@ -24,15 +24,15 @@ import build, {
   clearDatabase,
   mockAuthenticate,
   unmockAuthenticate,
-} from '../../../../../test/app';
-import { seedFromJson } from '../../../../../test/mocks/seed';
-import { resolveDependency } from '../../../../di/utils';
-import { db } from '../../../../drizzle/db';
-import { itemsRawTable, pageUpdateTable } from '../../../../drizzle/schema';
-import { assertIsDefined } from '../../../../utils/assertions';
-import { assertIsMemberForTest } from '../../../authentication';
-import { MESSAGE_SYNC_CODE } from './constants';
-import { PageItemService } from './page.service';
+} from '../../../../../test/app.js';
+import { seedFromJson } from '../../../../../test/mocks/seed.js';
+import { resolveDependency } from '../../../../di/utils.js';
+import { db } from '../../../../drizzle/db.js';
+import { itemsRawTable, pageUpdateTable } from '../../../../drizzle/schema.js';
+import { assertIsDefined } from '../../../../utils/assertions.js';
+import { assertIsMemberForTest } from '../../../authentication.js';
+import { MESSAGE_SYNC_CODE } from './constants.js';
+import { PageItemService } from './page.service.js';
 
 async function getAppPort(app: FastifyInstance) {
   await app.ready();

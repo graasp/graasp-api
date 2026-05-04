@@ -1,4 +1,4 @@
-import type { ChatMentionRaw } from '../../../../../drizzle/types';
+import type { ChatMentionRaw } from '../../../../../drizzle/types.js';
 
 // chat mentions topic
 export const chatMentionTopic = 'mentions';

@@ -16,18 +16,22 @@ import build, {
   clearDatabase,
   mockAuthenticate,
   unmockAuthenticate,
-} from '../../../../../test/app';
-import { uniqueEmail } from '../../../../../test/factories/member.factory';
-import { seedFromJson } from '../../../../../test/mocks/seed';
-import { resolveDependency } from '../../../../di/utils';
-import { db } from '../../../../drizzle/db';
-import { accountsTable, invitationsTable, itemMembershipsTable } from '../../../../drizzle/schema';
-import type { InvitationRaw } from '../../../../drizzle/types';
-import { MailerService } from '../../../../plugins/mailer/mailer.service';
-import { assertIsDefined } from '../../../../utils/assertions';
-import { ITEMS_ROUTE_PREFIX } from '../../../../utils/config';
-import { assertIsMemberForTest } from '../../../authentication';
-import { MissingGroupColumnInCSVError } from './utils/errors';
+} from '../../../../../test/app.js';
+import { uniqueEmail } from '../../../../../test/factories/member.factory.js';
+import { seedFromJson } from '../../../../../test/mocks/seed.js';
+import { resolveDependency } from '../../../../di/utils.js';
+import { db } from '../../../../drizzle/db.js';
+import {
+  accountsTable,
+  invitationsTable,
+  itemMembershipsTable,
+} from '../../../../drizzle/schema.js';
+import type { InvitationRaw } from '../../../../drizzle/types.js';
+import { MailerService } from '../../../../plugins/mailer/mailer.service.js';
+import { assertIsDefined } from '../../../../utils/assertions.js';
+import { ITEMS_ROUTE_PREFIX } from '../../../../utils/config.js';
+import { assertIsMemberForTest } from '../../../authentication.js';
+import { MissingGroupColumnInCSVError } from './utils/errors.js';
 
 // we need a different form data for each test
 const createFormData = (filename: string) => {

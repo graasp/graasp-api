@@ -8,12 +8,12 @@
  */
 import type { FastifyPluginAsync } from 'fastify';
 
-import { NODE_ENV } from '../../config/env';
-import { optionalIsAuthenticated } from '../auth/plugins/passport';
-import { AjvMessageSerializer } from './message-serializer';
-import { MultiInstanceChannelsBroker } from './multi-instance';
-import { WebSocketChannels } from './ws-channels';
-import { WebsocketService } from './ws-service';
+import { NODE_ENV } from '../../config/env.js';
+import { optionalIsAuthenticated } from '../auth/plugins/passport/preHandlers.js';
+import { AjvMessageSerializer } from './message-serializer.js';
+import { MultiInstanceChannelsBroker } from './multi-instance.js';
+import { WebSocketChannels } from './ws-channels.js';
+import { WebsocketService } from './ws-service.js';
 
 /**
  * Type definition for plugin options

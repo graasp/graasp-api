@@ -5,14 +5,14 @@ import path from 'path';
 import { Readable } from 'stream';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { MemberFactory } from '../../../../../test/factories/member.factory';
-import { BaseLogger } from '../../../../logger';
-import { TMP_FOLDER } from '../../../../utils/config';
-import { FileStorage } from '../../../file/types';
-import { StorageService } from '../../../member/plugins/storage/memberStorage.service';
-import { ItemRepository } from '../../item.repository';
-import { HtmlService } from './html.service';
-import type { HtmlValidator } from './validator';
+import { MemberFactory } from '../../../../../test/factories/member.factory.js';
+import { BaseLogger } from '../../../../logger.js';
+import { TMP_FOLDER } from '../../../../utils/config.js';
+import { FileStorage } from '../../../file/types.js';
+import { StorageService } from '../../../member/plugins/storage/memberStorage.service.js';
+import { ItemRepository } from '../../item.repository.js';
+import { HtmlService } from './html.service.js';
+import type { HtmlValidator } from './validator.js';
 
 // ensure uuid.v4 is deterministic
 vi.mock('uuid', () => ({

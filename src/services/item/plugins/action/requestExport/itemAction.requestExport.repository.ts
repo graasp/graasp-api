@@ -4,8 +4,8 @@ import { singleton } from 'tsyringe';
 
 import { type UUID } from '@graasp/sdk';
 
-import { type DBConnection } from '../../../../../drizzle/db';
-import { isAncestorOrSelf, isDescendantOrSelf } from '../../../../../drizzle/operations';
+import { type DBConnection } from '../../../../../drizzle/db.js';
+import { isAncestorOrSelf, isDescendantOrSelf } from '../../../../../drizzle/operations.js';
 import {
   accountsTable,
   actionRequestExportsTable,
@@ -15,7 +15,7 @@ import {
   chatMessagesTable,
   itemMembershipsTable,
   itemsRawTable,
-} from '../../../../../drizzle/schema';
+} from '../../../../../drizzle/schema.js';
 import {
   type ActionRequestExportFormat,
   type ActionRequestExportRaw,
@@ -25,10 +25,10 @@ import {
   type ChatMessageRaw,
   type ItemMembershipRaw,
   type MinimalAccount,
-} from '../../../../../drizzle/types';
-import { IllegalArgumentException } from '../../../../../repositories/errors';
-import { DEFAULT_REQUEST_EXPORT_INTERVAL } from '../../../../action/constants';
-import type { ItemRaw } from '../../../item';
+} from '../../../../../drizzle/types.js';
+import { IllegalArgumentException } from '../../../../../repositories/errors.js';
+import { DEFAULT_REQUEST_EXPORT_INTERVAL } from '../../../../action/constants.js';
+import type { ItemRaw } from '../../../item.js';
 
 @singleton()
 export class ActionRequestExportRepository {

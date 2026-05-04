@@ -1,7 +1,7 @@
 import { Type } from '@sinclair/typebox';
 import { StatusCodes } from 'http-status-codes';
 
-import { customType } from '../../../../plugins/typebox';
+import { customType } from '../../../../plugins/typebox.js';
 
 export const enroll = {
   operationId: 'enroll',

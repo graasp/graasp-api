@@ -1,11 +1,15 @@
 import { singleton } from 'tsyringe';
 
-import { type DBConnection } from '../../drizzle/db';
-import type { AuthenticatedUser, MaybeUser } from '../../types';
-import { AuthorizedItemService } from '../authorizedItem.service';
-import { ChatMessageRepository } from './chatMessage.repository';
-import { ChatMessageNotFound, MemberCannotDeleteMessage, MemberCannotEditMessage } from './errors';
-import { MentionService } from './plugins/mentions/chatMention.service';
+import { type DBConnection } from '../../drizzle/db.js';
+import type { AuthenticatedUser, MaybeUser } from '../../types.js';
+import { AuthorizedItemService } from '../authorizedItem.service.js';
+import { ChatMessageRepository } from './chatMessage.repository.js';
+import {
+  ChatMessageNotFound,
+  MemberCannotDeleteMessage,
+  MemberCannotEditMessage,
+} from './errors.js';
+import { MentionService } from './plugins/mentions/chatMention.service.js';
 
 @singleton()
 export class ChatMessageService {
@@ -95,7 +99,10 @@ export class ChatMessageService {
       ...message,
     });
     // assumes update can only be done by the author of the message
-    const updatedMessageWithCreator = { ...updatedMessage, creator: authenticatedUser };
+    const updatedMessageWithCreator = {
+      ...updatedMessage,
+      creator: authenticatedUser,
+    };
 
     return updatedMessageWithCreator;
   }

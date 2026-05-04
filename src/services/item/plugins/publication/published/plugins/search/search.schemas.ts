@@ -5,14 +5,14 @@ import type { FastifySchema } from 'fastify';
 
 import { TagCategory } from '@graasp/sdk';
 
-import { customType, registerSchemaAsRef } from '../../../../../../../plugins/typebox';
-import { errorSchemaRef, itemTypeSchemaRef } from '../../../../../../../schemas/global';
+import { customType, registerSchemaAsRef } from '../../../../../../../plugins/typebox.js';
+import { errorSchemaRef, itemTypeSchemaRef } from '../../../../../../../schemas/global.js';
 import {
   GET_FEATURED_ITEMS_MAXIMUM,
   GET_MOST_LIKED_ITEMS_MAXIMUM,
   GET_MOST_RECENT_ITEMS_MAXIMUM,
-} from '../../../../../../../utils/config';
-import { FILTERABLE_ATTRIBUTES } from './search.constants';
+} from '../../../../../../../utils/config.js';
+import { FILTERABLE_ATTRIBUTES } from './search.constants.js';
 
 const meilisearchHitRef = registerSchemaAsRef(
   'searchHit',

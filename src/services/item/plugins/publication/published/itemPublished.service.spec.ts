@@ -3,19 +3,19 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { buildPathFromIds } from '@graasp/sdk';
 
-import { MOCK_LOGGER } from '../../../../../../test/app.vitest';
-import { db } from '../../../../../drizzle/db';
-import { MailerService } from '../../../../../plugins/mailer/mailer.service';
-import { AuthorizedItemService } from '../../../../authorizedItem.service';
-import { ItemMembershipRepository } from '../../../../itemMembership/membership.repository';
-import { MemberRepository } from '../../../../member/member.repository';
-import { ItemRepository } from '../../../item.repository';
-import { PackedItemService } from '../../../packedItem.dto';
-import { ItemActionService } from '../../action/itemAction.service';
-import { ItemVisibilityRepository } from '../../itemVisibility/itemVisibility.repository';
-import { ItemPublishedRepository } from './itemPublished.repository';
-import { ItemPublishedService } from './itemPublished.service';
-import { MeiliSearchWrapper } from './plugins/search/meilisearch';
+import { MOCK_LOGGER } from '../../../../../../test/app.vitest.js';
+import { db } from '../../../../../drizzle/db.js';
+import { MailerService } from '../../../../../plugins/mailer/mailer.service.js';
+import { AuthorizedItemService } from '../../../../authorizedItem.service.js';
+import { ItemMembershipRepository } from '../../../../itemMembership/membership.repository.js';
+import { MemberRepository } from '../../../../member/member.repository.js';
+import { ItemRepository } from '../../../item.repository.js';
+import { PackedItemService } from '../../../packedItem.dto.js';
+import { ItemActionService } from '../../action/itemAction.service.js';
+import { ItemVisibilityRepository } from '../../itemVisibility/itemVisibility.repository.js';
+import { ItemPublishedRepository } from './itemPublished.repository.js';
+import { ItemPublishedService } from './itemPublished.service.js';
+import { MeiliSearchWrapper } from './plugins/search/meilisearch.js';
 
 const meiliSearchWrapper = {
   updateItem: vi.fn(),

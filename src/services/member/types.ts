@@ -1,18 +1,12 @@
-import { AccountType, type CompleteMember, DEFAULT_LANG } from '@graasp/sdk';
+import { AccountType, DEFAULT_LANG } from '@graasp/sdk';
 
-import { membersView } from '../../drizzle/schema';
-import type { MaybeUser, MemberInfo, MinimalMember } from '../../types';
+import { membersView } from '../../drizzle/schema.js';
+import type { MaybeUser, MemberInfo, MinimalMember } from '../../types.js';
+import type { MemberExtra } from './member_extra.js';
 
 export type Member = {
   id: string;
   name: string;
-};
-
-export type NotificationFrequency = 'always' | 'never';
-
-// TODO: move the member extra type here, so we have control over it
-export type MemberExtra = CompleteMember['extra'] & {
-  emailFreq?: NotificationFrequency;
 };
 
 export type CurrentMember = {

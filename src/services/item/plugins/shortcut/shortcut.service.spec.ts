@@ -1,22 +1,22 @@
 import { v4 } from 'uuid';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { MOCK_LOGGER } from '../../../../../test/app.vitest';
-import { ItemFactory } from '../../../../../test/factories/item.factory';
-import { MemberFactory } from '../../../../../test/factories/member.factory';
-import { db } from '../../../../drizzle/db';
-import { AuthorizedItemService } from '../../../authorizedItem.service';
-import { ItemMembershipRepository } from '../../../itemMembership/membership.repository';
-import { ThumbnailService } from '../../../thumbnail/thumbnail.service';
-import { ItemRepository } from '../../item.repository';
-import { PackedItemService } from '../../packedItem.dto';
-import { ItemGeolocationRepository } from '../geolocation/itemGeolocation.repository';
-import { ItemVisibilityRepository } from '../itemVisibility/itemVisibility.repository';
-import { ItemPublishedRepository } from '../publication/published/itemPublished.repository';
-import { MeiliSearchWrapper } from '../publication/published/plugins/search/meilisearch';
-import { RecycledBinService } from '../recycled/recycled.service';
-import { ItemThumbnailService } from '../thumbnail/itemThumbnail.service';
-import { ShortcutItemService } from './shortcut.service';
+import { MOCK_LOGGER } from '../../../../../test/app.vitest.js';
+import { ItemFactory } from '../../../../../test/factories/item.factory.js';
+import { MemberFactory } from '../../../../../test/factories/member.factory.js';
+import { db } from '../../../../drizzle/db.js';
+import { AuthorizedItemService } from '../../../authorizedItem.service.js';
+import { ItemMembershipRepository } from '../../../itemMembership/membership.repository.js';
+import { ThumbnailService } from '../../../thumbnail/thumbnail.service.js';
+import { ItemRepository } from '../../item.repository.js';
+import { PackedItemService } from '../../packedItem.dto.js';
+import { ItemGeolocationRepository } from '../geolocation/itemGeolocation.repository.js';
+import { ItemVisibilityRepository } from '../itemVisibility/itemVisibility.repository.js';
+import { ItemPublishedRepository } from '../publication/published/itemPublished.repository.js';
+import { MeiliSearchWrapper } from '../publication/published/plugins/search/meilisearch.js';
+import { RecycledBinService } from '../recycled/recycled.service.js';
+import { ItemThumbnailService } from '../thumbnail/itemThumbnail.service.js';
+import { ShortcutItemService } from './shortcut.service.js';
 
 const MOCK_ITEM = ItemFactory({ type: 'shortcut' });
 const MOCK_MEMBER = MemberFactory({ extra: { lang: 'en' } });

@@ -3,17 +3,17 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { ItemVisibilityType, PackedFolderItemFactory } from '@graasp/sdk';
 
-import { ItemFactory } from '../../test/factories/item.factory';
-import { MemberFactory } from '../../test/factories/member.factory';
-import type { DBConnection } from '../drizzle/db';
-import type { ItemVisibilityRaw, ItemVisibilityWithItem } from '../drizzle/types';
-import { AccountType, MinimalMember, PermissionLevel } from '../types';
-import { filterOutPackedDescendants } from './authorization.utils';
-import type { ItemRaw } from './item/item';
-import type { PackedItem } from './item/packedItem.dto';
-import { ItemVisibilityRepository } from './item/plugins/itemVisibility/itemVisibility.repository';
-import { expectItem } from './item/test/fixtures/items.vitest';
-import { ItemMembershipRepository } from './itemMembership/membership.repository';
+import { ItemFactory } from '../../test/factories/item.factory.js';
+import { MemberFactory } from '../../test/factories/member.factory.js';
+import type { DBConnection } from '../drizzle/db.js';
+import type { ItemVisibilityRaw, ItemVisibilityWithItem } from '../drizzle/types.js';
+import { AccountType, MinimalMember, PermissionLevel } from '../types.js';
+import { filterOutPackedDescendants } from './authorization.utils.js';
+import type { ItemRaw } from './item/item.js';
+import type { PackedItem } from './item/packedItem.dto.js';
+import { ItemVisibilityRepository } from './item/plugins/itemVisibility/itemVisibility.repository.js';
+import { expectItem } from './item/test/fixtures/items.vitest.js';
+import { ItemMembershipRepository } from './itemMembership/membership.repository.js';
 
 const OWNER = { id: 'owner', name: 'owner', type: AccountType.Individual, isValidated: true };
 

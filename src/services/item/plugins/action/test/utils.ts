@@ -1,8 +1,8 @@
 import type { ItemOpFeedbackEvent } from '@graasp/sdk';
 
-import type { MembershipEvent } from '../../../../itemMembership/ws/events';
-import { type ItemRaw } from '../../../item';
-import { expectItem, expectManyItems } from '../../../test/fixtures/items';
+import type { MembershipEvent } from '../../../../itemMembership/ws/events.js';
+import { type ItemRaw } from '../../../item.js';
+import { expectItem, expectManyItems } from '../../../test/fixtures/items.js';
 
 export const expectExportFeedbackOp = <
   S extends {

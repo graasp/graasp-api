@@ -4,14 +4,14 @@ import { singleton } from 'tsyringe';
 
 import type { UUID } from '@graasp/sdk';
 
-import { type DBConnection } from '../../../../drizzle/db';
-import { itemTagsTable, tagsTable } from '../../../../drizzle/schema';
-import { type TagRaw } from '../../../../drizzle/types';
-import { IllegalArgumentException } from '../../../../repositories/errors';
-import type { TagCategoryOptions, TagCount } from '../../../tag/tag.schemas';
-import type { ItemRaw } from '../../item';
-import { TAG_COUNT_MAX_RESULTS } from './constants';
-import { ItemTagAlreadyExists } from './errors';
+import type { DBConnection } from '../../../../drizzle/db.js';
+import { itemTagsTable, tagsTable } from '../../../../drizzle/schema.js';
+import { type TagRaw } from '../../../../drizzle/types.js';
+import { IllegalArgumentException } from '../../../../repositories/errors.js';
+import type { TagCategoryOptions, TagCount } from '../../../tag/tag.schemas.js';
+import type { ItemRaw } from '../../item.js';
+import { TAG_COUNT_MAX_RESULTS } from './constants.js';
+import { ItemTagAlreadyExists } from './errors.js';
 
 @singleton()
 export class ItemTagRepository {

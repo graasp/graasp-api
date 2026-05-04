@@ -10,13 +10,13 @@ import build, {
   clearDatabase,
   mockAuthenticate,
   unmockAuthenticate,
-} from '../../../../../test/app';
-import { seedFromJson } from '../../../../../test/mocks/seed';
-import { db } from '../../../../drizzle/db';
-import { itemVisibilitiesTable } from '../../../../drizzle/schema';
-import { assertIsDefined } from '../../../../utils/assertions';
-import { ITEMS_ROUTE_PREFIX } from '../../../../utils/config';
-import { CannotModifyParentVisibility, ConflictingVisibilitiesInTheHierarchy } from './errors';
+} from '../../../../../test/app.js';
+import { seedFromJson } from '../../../../../test/mocks/seed.js';
+import { db } from '../../../../drizzle/db.js';
+import { itemVisibilitiesTable } from '../../../../drizzle/schema.js';
+import { assertIsDefined } from '../../../../utils/assertions.js';
+import { ITEMS_ROUTE_PREFIX } from '../../../../utils/config.js';
+import { CannotModifyParentVisibility, ConflictingVisibilitiesInTheHierarchy } from './errors.js';
 
 export const saveTagsForItem = async ({ item, creator }) => {
   const res = await db

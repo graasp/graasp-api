@@ -4,21 +4,21 @@ import type { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox';
 
 import { ActionTriggers, Context, RecaptchaAction } from '@graasp/sdk';
 
-import { resolveDependency } from '../../../../di/utils';
-import { db } from '../../../../drizzle/db';
-import type { ActionInsertDTO } from '../../../../drizzle/types';
-import { asDefined } from '../../../../utils/assertions';
-import { ActionService } from '../../../action/action.service';
-import { View } from '../../../item/plugins/action/itemAction.schemas';
-import { MemberService } from '../../../member/member.service';
-import { validatedMemberAccountRole } from '../../../member/strategies/validatedMemberAccountRole';
-import captchaPreHandler from '../captcha/captcha';
+import { resolveDependency } from '../../../../di/utils.js';
+import { db } from '../../../../drizzle/db.js';
+import type { ActionInsertDTO } from '../../../../drizzle/types.js';
+import { asDefined } from '../../../../utils/assertions.js';
+import { ActionService } from '../../../action/action.service.js';
+import { View } from '../../../item/plugins/action/itemAction.schemas.js';
+import { MemberService } from '../../../member/member.service.js';
+import { validatedMemberAccountRole } from '../../../member/strategies/validatedMemberAccountRole.js';
+import captchaPreHandler from '../captcha/captcha.js';
 import {
   authenticatePassword,
   authenticatePasswordReset,
   isAuthenticated,
   matchOne,
-} from '../passport';
+} from '../passport/preHandlers.js';
 import {
   createPassword,
   getOwnPasswordStatus,
@@ -26,8 +26,8 @@ import {
   resetPassword,
   signInWithPassword,
   updatePassword,
-} from './password.schemas';
-import { MemberPasswordService } from './password.service';
+} from './password.schemas.js';
+import { MemberPasswordService } from './password.service.js';
 
 const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
   const actionService = resolveDependency(ActionService);

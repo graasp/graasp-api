@@ -3,8 +3,8 @@ import { v4 } from 'uuid';
 
 import { CCLicenseAdaptions, buildPathFromIds } from '@graasp/sdk';
 
-import type { ItemWithCreator } from '../../src/drizzle/types';
-import { resolveItemType } from '../../src/services/item/item';
+import type { ItemWithCreator } from '../../src/drizzle/types.js';
+import { resolveItemType } from '../../src/services/item/item.js';
 
 /**
  * This factory does not guarantee valid items given their type. But they are acceptable when seed into the db.

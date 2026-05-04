@@ -1,6 +1,6 @@
 import { expect } from 'vitest';
 
-import type { ChatMentionRaw, ChatMentionWithMessageAndCreator } from '../../../drizzle/types';
+import type { ChatMentionRaw, ChatMentionWithMessageAndCreator } from '../../../drizzle/types.js';
 
 export const expectFullChatMentions = (
   mentions: ChatMentionWithMessageAndCreator[],

@@ -1,8 +1,8 @@
-import { Static, Type } from '@sinclair/typebox';
+import { type Static, Type } from '@sinclair/typebox';
 
 import type { UnionOfConst } from '@graasp/sdk';
 
-import { registerSchemaAsRef } from './plugins/typebox';
+import { registerSchemaAsRef } from './plugins/typebox.js';
 
 export const AccountType = {
   Individual: 'individual',

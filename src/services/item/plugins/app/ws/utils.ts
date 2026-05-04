@@ -1,6 +1,6 @@
 import { Websocket } from '@graasp/sdk';
 
-import { type ItemRaw } from '../../../item';
+import { type ItemRaw } from '../../../item.js';
 
 export const checkItemIsApp = (item: ItemRaw): void => {
   if (item.type !== 'app') {

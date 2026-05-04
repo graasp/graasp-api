@@ -2,7 +2,7 @@ import { Readable } from 'stream';
 import { delay, inject, singleton } from 'tsyringe';
 
 import {
-  H5PItemExtra,
+  type H5PItemExtra,
   ItemVisibilityType,
   MAX_DESCENDANTS_FOR_COPY,
   MAX_DESCENDANTS_FOR_DELETE,
@@ -18,17 +18,17 @@ import {
   getParentFromPath,
 } from '@graasp/sdk';
 
-import { type DBConnection } from '../../drizzle/db';
+import { type DBConnection } from '../../drizzle/db.js';
 import {
   type ItemGeolocationRaw,
   type ItemMembershipRaw,
   type ItemWithCreator,
   type MinimalItemForInsert,
-} from '../../drizzle/types';
-import { BaseLogger } from '../../logger';
-import { ItemType } from '../../schemas/global';
-import type { AuthenticatedUser, MaybeUser, MinimalMember, PermissionLevel } from '../../types';
-import { H5P_INTEGRATION_URL } from '../../utils/config';
+} from '../../drizzle/types.js';
+import { BaseLogger } from '../../logger.js';
+import type { ItemType } from '../../schemas/global.js';
+import type { AuthenticatedUser, MaybeUser, MinimalMember, PermissionLevel } from '../../types.js';
+import { H5P_INTEGRATION_URL } from '../../utils/config.js';
 import {
   CannotReorderRootItem,
   InvalidMembership,
@@ -37,27 +37,27 @@ import {
   TooManyChildren,
   TooManyDescendants,
   UnauthorizedMember,
-} from '../../utils/errors';
-import HookManager from '../../utils/hook';
+} from '../../utils/errors.js';
+import HookManager from '../../utils/hook.js';
 import {
   filterOutItems,
   filterOutPackedDescendants,
   filterOutPackedItems,
-} from '../authorization.utils';
-import { AuthorizedItemService } from '../authorizedItem.service';
-import { ItemMembershipRepository } from '../itemMembership/membership.repository';
-import { ThumbnailService } from '../thumbnail/thumbnail.service';
-import { DEFAULT_ORDER, IS_COPY_REGEX, MAX_COPY_SUFFIX_LENGTH } from './constants';
-import { FolderItem, ItemRaw, isFolderItem } from './item';
-import { ItemRepository } from './item.repository';
-import { type PackedItem, PackedItemDTO, PackedItemService } from './packedItem.dto';
-import { ItemGeolocationRepository } from './plugins/geolocation/itemGeolocation.repository';
-import { ItemVisibilityRepository } from './plugins/itemVisibility/itemVisibility.repository';
-import { ItemPublishedRepository } from './plugins/publication/published/itemPublished.repository';
-import { MeiliSearchWrapper } from './plugins/publication/published/plugins/search/meilisearch';
-import { RecycledBinService } from './plugins/recycled/recycled.service';
-import { ItemThumbnailService } from './plugins/thumbnail/itemThumbnail.service';
-import type { ItemChildrenParams, ItemSearchParams } from './types';
+} from '../authorization.utils.js';
+import { AuthorizedItemService } from '../authorizedItem.service.js';
+import { ItemMembershipRepository } from '../itemMembership/membership.repository.js';
+import { ThumbnailService } from '../thumbnail/thumbnail.service.js';
+import { DEFAULT_ORDER, IS_COPY_REGEX, MAX_COPY_SUFFIX_LENGTH } from './constants.js';
+import { type FolderItem, type ItemRaw, isFolderItem } from './item.js';
+import { ItemRepository } from './item.repository.js';
+import { type PackedItem, PackedItemDTO, PackedItemService } from './packedItem.dto.js';
+import { ItemGeolocationRepository } from './plugins/geolocation/itemGeolocation.repository.js';
+import { ItemVisibilityRepository } from './plugins/itemVisibility/itemVisibility.repository.js';
+import { ItemPublishedRepository } from './plugins/publication/published/itemPublished.repository.js';
+import { MeiliSearchWrapper } from './plugins/publication/published/plugins/search/meilisearch.js';
+import { RecycledBinService } from './plugins/recycled/recycled.service.js';
+import { ItemThumbnailService } from './plugins/thumbnail/itemThumbnail.service.js';
+import type { ItemChildrenParams, ItemSearchParams } from './types.js';
 
 @singleton()
 export class ItemService {
@@ -78,7 +78,10 @@ export class ItemService {
     create: { pre: { item: Partial<ItemRaw> }; post: { item: ItemRaw } };
     update: { pre: { item: ItemRaw }; post: { item: ItemRaw } };
     delete: { pre: { item: ItemRaw }; post: { item: ItemRaw } };
-    copy: { pre: { original: ItemRaw }; post: { original: ItemRaw; copy: MinimalItemForInsert } };
+    copy: {
+      pre: { original: ItemRaw };
+      post: { original: ItemRaw; copy: MinimalItemForInsert };
+    };
     move: {
       pre: {
         /** the item to be moved itself */
@@ -613,11 +616,15 @@ export class ItemService {
       itemId,
     });
 
-    await this.hooks.runPreHooks('update', member, dbConnection, { item: item });
+    await this.hooks.runPreHooks('update', member, dbConnection, {
+      item: item,
+    });
 
     const updated = await this.itemRepository.updateOne(dbConnection, item.id, body);
 
-    await this.hooks.runPostHooks('update', member, dbConnection, { item: updated });
+    await this.hooks.runPostHooks('update', member, dbConnection, {
+      item: updated,
+    });
 
     try {
       // Check if the item is published (or has published parent)

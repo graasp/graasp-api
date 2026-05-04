@@ -1,15 +1,15 @@
 import { inject, singleton } from 'tsyringe';
 
-import { GEOLOCATION_API_KEY_DI_KEY } from '../../../../di/constants';
-import { type DBConnection } from '../../../../drizzle/db';
-import type { ItemGeolocationRaw } from '../../../../drizzle/types';
-import type { MaybeUser, MinimalMember } from '../../../../types';
-import { AuthorizedItemService } from '../../../authorizedItem.service';
-import type { ItemRaw } from '../../item';
-import { type PackedItem, PackedItemDTO } from '../../packedItem.dto';
-import { ItemThumbnailService } from '../thumbnail/itemThumbnail.service';
-import { MissingGeolocationApiKey } from './errors';
-import { ItemGeolocationRepository } from './itemGeolocation.repository';
+import { GEOLOCATION_API_KEY_DI_KEY } from '../../../../di/constants.js';
+import { type DBConnection } from '../../../../drizzle/db.js';
+import type { ItemGeolocationRaw } from '../../../../drizzle/types.js';
+import type { MaybeUser, MinimalMember } from '../../../../types.js';
+import { AuthorizedItemService } from '../../../authorizedItem.service.js';
+import type { ItemRaw } from '../../item.js';
+import { type PackedItem, PackedItemDTO } from '../../packedItem.dto.js';
+import { ItemThumbnailService } from '../thumbnail/itemThumbnail.service.js';
+import { MissingGeolocationApiKey } from './errors.js';
+import { ItemGeolocationRepository } from './itemGeolocation.repository.js';
 
 export type PackedItemGeolocation = ItemGeolocationRaw & {
   item: PackedItem;

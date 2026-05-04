@@ -3,7 +3,7 @@ import type {
   ItemOpFeedbackEvent as ItemOpFeedbackEventType,
 } from '@graasp/sdk';
 
-import { type ItemRaw } from '../item';
+import { type ItemRaw } from '../item.js';
 
 // changes on items of given user
 export const memberItemsTopic = 'item/member';

@@ -1,13 +1,10 @@
-// this is an esm module, since we are using commonjs it can have unexpected behavior
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-expect-error esm module
 import { iso1A2Code } from '@rapideditor/country-coder';
 import { SQL, and, between, desc, eq, or } from 'drizzle-orm';
 import fetch from 'node-fetch';
 
 import { DEFAULT_LANG } from '@graasp/sdk';
 
-import { type DBConnection } from '../../../../drizzle/db';
+import { type DBConnection } from '../../../../drizzle/db.js';
 import {
   isAncestorOrSelf,
   isDescendantOrSelf,
@@ -15,19 +12,19 @@ import {
   keywordSearch,
   tagSearch,
   transformLangToReconfigLang,
-} from '../../../../drizzle/operations';
-import { accountsTable, itemGeolocationsTable, items } from '../../../../drizzle/schema';
+} from '../../../../drizzle/operations.js';
+import { accountsTable, itemGeolocationsTable, items } from '../../../../drizzle/schema.js';
 import type {
   ItemGeolocationRaw,
   ItemGeolocationWithItem,
   ItemGeolocationWithItemWithCreator,
   MemberRaw,
-} from '../../../../drizzle/types';
-import type { MaybeUser } from '../../../../types';
-import { GEOLOCATION_API_HOST, getSearchLang } from '../../../../utils/config';
-import { isMember } from '../../../authentication';
-import { type ItemRaw, resolveItemType } from '../../item';
-import { MissingGeolocationSearchParams, PartialItemGeolocation } from './errors';
+} from '../../../../drizzle/types.js';
+import type { MaybeUser } from '../../../../types.js';
+import { GEOLOCATION_API_HOST, getSearchLang } from '../../../../utils/config.js';
+import { isMember } from '../../../authentication.js';
+import { type ItemRaw, resolveItemType } from '../../item.js';
+import { MissingGeolocationSearchParams, PartialItemGeolocation } from './errors.js';
 
 export class ItemGeolocationRepository {
   /**

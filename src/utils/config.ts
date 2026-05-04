@@ -2,15 +2,15 @@ import os from 'os';
 
 import { ClientManager, Context, DEFAULT_LANG, GPTVersion, type GPTVersionType } from '@graasp/sdk';
 
-import { requiredEnvVar } from '../config/helpers';
+import { requiredEnvVar } from '../config/helpers.js';
 import type {
   LocalFileConfiguration,
   S3FileConfiguration,
-} from '../services/file/interfaces/configuration';
-import { FileStorage, type FileStorageType } from '../services/file/types';
-import { API_KEY_FORMAT } from '../services/item/plugins/etherpad/serviceConfig';
-import { validateEnv } from './validators/utils';
-import { RegexValidator, UrlValidator } from './validators/validators';
+} from '../services/file/interfaces/configuration.js';
+import { FileStorage, type FileStorageType } from '../services/file/types.js';
+import { API_KEY_FORMAT } from '../services/item/plugins/etherpad/validation.js';
+import { validateEnv } from './validators/utils.js';
+import { RegexValidator, UrlValidator } from './validators/validators.js';
 
 export const LOG_LEVEL: string | undefined = process.env.LOG_LEVEL;
 

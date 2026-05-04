@@ -6,14 +6,14 @@ import type { MultipartFile } from '@fastify/multipart';
 
 import { type FileItemProperties, MAX_ITEM_NAME_LENGTH, type UUID } from '@graasp/sdk';
 
-import { type DBConnection } from '../../../../../../../drizzle/db';
-import type { AppSettingRaw } from '../../../../../../../drizzle/types';
-import type { AuthenticatedUser, MaybeUser, MinimalMember } from '../../../../../../../types';
-import FileService from '../../../../../../file/file.service';
-import type { ItemRaw } from '../../../../../item';
-import { AppSettingRepository } from '../../appSetting.repository';
-import { AppSettingService } from '../../appSetting.service';
-import { NotAppSettingFile } from '../../errors';
+import { type DBConnection } from '../../../../../../../drizzle/db.js';
+import type { AppSettingRaw } from '../../../../../../../drizzle/types.js';
+import type { AuthenticatedUser, MaybeUser, MinimalMember } from '../../../../../../../types.js';
+import FileService from '../../../../../../file/file.service.js';
+import type { ItemRaw } from '../../../../../item.js';
+import { AppSettingRepository } from '../../appSetting.repository.js';
+import { AppSettingService } from '../../appSetting.service.js';
+import { NotAppSettingFile } from '../../errors.js';
 
 type AppSettingFileProperties = {
   path: string;

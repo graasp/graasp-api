@@ -1,22 +1,21 @@
-import { sign } from 'jsonwebtoken';
 import uniqBy from 'lodash.uniqby';
 import { singleton } from 'tsyringe';
 
 import { type AuthTokenSubject } from '@graasp/sdk';
 
-import { APPS_JWT_SECRET } from '../../../../config/secrets';
-import { type DBConnection } from '../../../../drizzle/db';
-import type { MinimalAccount } from '../../../../drizzle/types';
-import type { AuthenticatedUser, MaybeUser } from '../../../../types';
-import { AuthorizedItemService } from '../../../authorizedItem.service';
-import { ItemMembershipRepository } from '../../../itemMembership/membership.repository';
-import { WrongItemTypeError } from '../../errors';
-import type { ItemRaw } from '../../item';
-import { ItemRepository } from '../../item.repository';
-import { AppRepository } from './app.repository';
-import { DEFAULT_JWT_EXPIRATION } from './constants';
-import { PublisherRepository } from './publisher.repository';
-import { checkTargetItemAndTokenItemMatch } from './utils';
+import { signAccessToken } from '../../../../crypto/jwt.js';
+import { type DBConnection } from '../../../../drizzle/db.js';
+import type { MinimalAccount } from '../../../../drizzle/types.js';
+import type { AuthenticatedUser, MaybeUser } from '../../../../types.js';
+import { AuthorizedItemService } from '../../../authorizedItem.service.js';
+import { ItemMembershipRepository } from '../../../itemMembership/membership.repository.js';
+import { WrongItemTypeError } from '../../errors.js';
+import type { ItemRaw } from '../../item.js';
+import { ItemRepository } from '../../item.repository.js';
+import { AppRepository } from './app.repository.js';
+import { DEFAULT_JWT_EXPIRATION } from './constants.js';
+import { PublisherRepository } from './publisher.repository.js';
+import { checkTargetItemAndTokenItemMatch } from './utils.js';
 
 @singleton()
 export class AppService {
@@ -80,9 +79,11 @@ export class AppService {
       appDetails,
     );
 
-    const token = sign({ sub: authTokenSubject }, APPS_JWT_SECRET, {
-      expiresIn: `${this.jwtExpiration}m`,
-    });
+    const token = await signAccessToken(
+      { sub: authTokenSubject },
+      'app-token',
+      `${this.jwtExpiration}m`,
+    );
     return { token };
   }
 

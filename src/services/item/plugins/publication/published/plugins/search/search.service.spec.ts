@@ -1,14 +1,14 @@
 import { v4 } from 'uuid';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { MOCK_LOGGER } from '../../../../../../../../test/app.vitest';
-import { GRAASPER_CREATOR_ID } from '../../../../../../../utils/config';
-import HookManager from '../../../../../../../utils/hook';
-import { ItemService } from '../../../../../item.service';
-import { ItemThumbnailService } from '../../../../thumbnail/itemThumbnail.service';
-import { ItemPublishedService } from '../../itemPublished.service';
-import { MeiliSearchWrapper } from './meilisearch';
-import { SearchService } from './search.service';
+import { MOCK_LOGGER } from '../../../../../../../../test/app.vitest.js';
+import { GRAASPER_CREATOR_ID } from '../../../../../../../utils/config.js';
+import HookManager from '../../../../../../../utils/hook.js';
+import { ItemService } from '../../../../../item.service.js';
+import { ItemThumbnailService } from '../../../../thumbnail/itemThumbnail.service.js';
+import { ItemPublishedService } from '../../itemPublished.service.js';
+import { MeiliSearchWrapper } from './meilisearch.js';
+import { SearchService } from './search.service.js';
 
 const meilisearchClient = {
   search: vi.fn(async () => {

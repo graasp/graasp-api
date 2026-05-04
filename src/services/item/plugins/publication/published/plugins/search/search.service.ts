@@ -3,17 +3,17 @@ import { singleton } from 'tsyringe';
 
 import { TagCategory, type TagCategoryType, type UUID } from '@graasp/sdk';
 
-import type { TagRaw } from '../../../../../../../drizzle/types';
-import { BaseLogger } from '../../../../../../../logger';
+import type { TagRaw } from '../../../../../../../drizzle/types.js';
+import { BaseLogger } from '../../../../../../../logger.js';
 import {
   GET_FEATURED_ITEMS_MAXIMUM,
   GET_MOST_LIKED_ITEMS_MAXIMUM,
   GET_MOST_RECENT_ITEMS_MAXIMUM,
-} from '../../../../../../../utils/config';
-import { ItemService } from '../../../../../item.service';
-import { ItemThumbnailService } from '../../../../thumbnail/itemThumbnail.service';
-import { ItemPublishedService } from '../../itemPublished.service';
-import { MeiliSearchWrapper } from './meilisearch';
+} from '../../../../../../../utils/config.js';
+import { ItemService } from '../../../../../item.service.js';
+import { ItemThumbnailService } from '../../../../thumbnail/itemThumbnail.service.js';
+import { ItemPublishedService } from '../../itemPublished.service.js';
+import { MeiliSearchWrapper } from './meilisearch.js';
 
 type SearchFilters = Partial<{
   query?: string;

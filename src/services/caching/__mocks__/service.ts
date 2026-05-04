@@ -1,4 +1,4 @@
-import type { ICachingService } from '../interfaces';
+import type { ICachingService } from '../interfaces.js';
 
 export class CachingService implements ICachingService {
   private readonly cache: Map<string, string> = new Map();

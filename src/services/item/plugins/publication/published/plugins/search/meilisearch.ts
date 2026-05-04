@@ -5,17 +5,17 @@ import { singleton } from 'tsyringe';
 
 import { type IndexItem } from '@graasp/sdk';
 
-import { REDIS_CONNECTION } from '../../../../../../../config/redis';
-import { type DBConnection } from '../../../../../../../drizzle/db';
-import { items } from '../../../../../../../drizzle/schema';
-import type { ItemPublishedWithItemWithCreator } from '../../../../../../../drizzle/types';
-import { BaseLogger } from '../../../../../../../logger';
-import { ItemType } from '../../../../../../../schemas/global';
-import { Queues } from '../../../../../../../workers/config';
-import { ItemRaw, isFolderItem } from '../../../../../item';
-import { ItemRepository } from '../../../../../item.repository';
-import { MeilisearchRepository } from './meilisearch.repository';
-import type { Hit } from './search.schemas';
+import { REDIS_CONNECTION } from '../../../../../../../config/redis.js';
+import { type DBConnection } from '../../../../../../../drizzle/db.js';
+import { items } from '../../../../../../../drizzle/schema.js';
+import type { ItemPublishedWithItemWithCreator } from '../../../../../../../drizzle/types.js';
+import { BaseLogger } from '../../../../../../../logger.js';
+import type { ItemType } from '../../../../../../../schemas/global.js';
+import { Queues } from '../../../../../../../workers/config.js';
+import { type ItemRaw, isFolderItem } from '../../../../../item.js';
+import { ItemRepository } from '../../../../../item.repository.js';
+import { MeilisearchRepository } from './meilisearch.repository.js';
+import type { Hit } from './search.schemas.js';
 
 export const ACTIVE_INDEX = 'itemIndex';
 export const ROTATING_INDEX = 'itemIndex_tmp'; // Used when reindexing

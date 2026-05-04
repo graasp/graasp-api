@@ -2,10 +2,10 @@ import { singleton } from 'tsyringe';
 
 import { type ChatBotMessage, type GPTVersionType } from '@graasp/sdk';
 
-import { type DBConnection } from '../../../../../drizzle/db';
-import type { AuthenticatedUser } from '../../../../../types';
-import { AuthorizedItemService } from '../../../../authorizedItem.service';
-import { fetchOpenAI } from './utils';
+import { type DBConnection } from '../../../../../drizzle/db.js';
+import type { AuthenticatedUser } from '../../../../../types.js';
+import { AuthorizedItemService } from '../../../../authorizedItem.service.js';
+import { fetchOpenAI } from './utils.js';
 
 @singleton()
 export class ChatBotService {

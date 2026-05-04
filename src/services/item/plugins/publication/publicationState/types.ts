@@ -1,5 +1,5 @@
-import type { ItemValidationGroupRaw, ItemValidationRaw } from '../../../../../drizzle/types';
-import type { PackedItem } from '../../../packedItem.dto';
+import type { ItemValidationGroupRaw, ItemValidationRaw } from '../../../../../drizzle/types.js';
+import type { PackedItem } from '../../../packedItem.dto.js';
 
 type ValidationStatus = Pick<ItemValidationRaw, 'status'>;
 

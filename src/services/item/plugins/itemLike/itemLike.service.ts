@@ -1,14 +1,14 @@
 import { singleton } from 'tsyringe';
 
-import { type DBConnection } from '../../../../drizzle/db';
-import type { MaybeUser, MinimalMember } from '../../../../types';
-import { filterOutPackedItems } from '../../../authorization.utils';
-import { AuthorizedItemService } from '../../../authorizedItem.service';
-import { ItemMembershipRepository } from '../../../itemMembership/membership.repository';
-import { ItemVisibilityRepository } from '../itemVisibility/itemVisibility.repository';
-import { ItemPublishedRepository } from '../publication/published/itemPublished.repository';
-import { MeiliSearchWrapper } from '../publication/published/plugins/search/meilisearch';
-import { ItemLikeRepository } from './itemLike.repository';
+import { type DBConnection } from '../../../../drizzle/db.js';
+import type { MaybeUser, MinimalMember } from '../../../../types.js';
+import { filterOutPackedItems } from '../../../authorization.utils.js';
+import { AuthorizedItemService } from '../../../authorizedItem.service.js';
+import { ItemMembershipRepository } from '../../../itemMembership/membership.repository.js';
+import { ItemVisibilityRepository } from '../itemVisibility/itemVisibility.repository.js';
+import { ItemPublishedRepository } from '../publication/published/itemPublished.repository.js';
+import { MeiliSearchWrapper } from '../publication/published/plugins/search/meilisearch.js';
+import { ItemLikeRepository } from './itemLike.repository.js';
 
 @singleton()
 export class ItemLikeService {

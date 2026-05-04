@@ -4,9 +4,9 @@ import type { FastifyRequest } from 'fastify';
 
 import { Context, type UUID } from '@graasp/sdk';
 
-import { type DBConnection } from '../../../../drizzle/db';
-import type { ChatMessageRaw } from '../../../../drizzle/types';
-import { ActionService } from '../../../action/action.service';
+import { type DBConnection } from '../../../../drizzle/db.js';
+import type { ChatMessageRaw } from '../../../../drizzle/types.js';
+import { ActionService } from '../../../action/action.service.js';
 
 enum ChatActionType {
   Create = 'chat_create',

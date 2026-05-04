@@ -4,19 +4,19 @@ import { singleton } from 'tsyringe';
 
 import { type ItemVisibilityOptionsType, type ResultOf, getChildFromPath } from '@graasp/sdk';
 
-import { type DBConnection } from '../../../../drizzle/db';
-import { isAncestorOrSelf, isDescendantOrSelf } from '../../../../drizzle/operations';
-import { itemVisibilitiesTable, items, itemsRawTable } from '../../../../drizzle/schema';
-import type { ItemVisibilityRaw, ItemVisibilityWithItem } from '../../../../drizzle/types';
-import type { MinimalMember } from '../../../../types';
-import { mapById } from '../../../utils';
-import type { ItemRaw } from '../../item';
+import type { DBConnection } from '../../../../drizzle/db.js';
+import { isAncestorOrSelf, isDescendantOrSelf } from '../../../../drizzle/operations.js';
+import { itemVisibilitiesTable, items, itemsRawTable } from '../../../../drizzle/schema.js';
+import type { ItemVisibilityRaw, ItemVisibilityWithItem } from '../../../../drizzle/types.js';
+import type { MinimalMember } from '../../../../types.js';
+import { mapById } from '../../../utils.js';
+import type { ItemRaw } from '../../item.js';
 import {
   CannotModifyParentVisibility,
   ConflictingVisibilitiesInTheHierarchy,
   InvalidUseOfItemVisibilityRepository,
   ItemVisibilityNotFound,
-} from './errors';
+} from './errors.js';
 
 @singleton()
 export class ItemVisibilityRepository {

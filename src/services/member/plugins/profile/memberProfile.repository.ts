@@ -1,11 +1,11 @@
 import { and, eq } from 'drizzle-orm/sql';
 import { singleton } from 'tsyringe';
 
-import { type DBConnection } from '../../../../drizzle/db';
-import { memberProfilesTable } from '../../../../drizzle/schema';
-import { MemberNotFound } from '../../../../utils/errors';
-import { MemberProfileCreationError, MemberProfilePropertiesEmpty } from './errors';
-import type { IMemberProfile } from './types';
+import { type DBConnection } from '../../../../drizzle/db.js';
+import { memberProfilesTable } from '../../../../drizzle/schema.js';
+import { MemberNotFound } from '../../../../utils/errors.js';
+import { MemberProfileCreationError, MemberProfilePropertiesEmpty } from './errors.js';
+import type { IMemberProfile } from './types.js';
 
 @singleton()
 export class MemberProfileRepository {

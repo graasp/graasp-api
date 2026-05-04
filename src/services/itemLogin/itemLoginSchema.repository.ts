@@ -3,12 +3,12 @@ import { singleton } from 'tsyringe';
 
 import type { UnionOfConst } from '@graasp/sdk';
 
-import type { DBConnection } from '../../drizzle/db';
-import { isAncestorOrSelf } from '../../drizzle/operations';
-import { itemLoginSchemasTable, items } from '../../drizzle/schema';
-import type { ItemLoginSchemaRaw, ItemLoginSchemaWithItem } from '../../drizzle/types';
-import { throwsIfParamIsInvalid } from '../../repositories/utils';
-import { CannotNestItemLoginSchema } from './errors';
+import type { DBConnection } from '../../drizzle/db.js';
+import { isAncestorOrSelf } from '../../drizzle/operations.js';
+import { itemLoginSchemasTable, items } from '../../drizzle/schema.js';
+import type { ItemLoginSchemaRaw, ItemLoginSchemaWithItem } from '../../drizzle/types.js';
+import { throwsIfParamIsInvalid } from '../../repositories/utils.js';
+import { CannotNestItemLoginSchema } from './errors.js';
 
 export const ItemLoginSchemaType = {
   Username: 'username',

@@ -1,8 +1,8 @@
 import type { MultipartFile } from '@fastify/multipart';
 
-import type { AppDataRaw } from '../../../../../../drizzle/types';
-import { AuthenticatedUser } from '../../../../../../types';
-import type { ItemRaw } from '../../../../item';
+import type { AppDataRaw } from '../../../../../../drizzle/types.js';
+import type { AuthenticatedUser } from '../../../../../../types.js';
+import type { ItemRaw } from '../../../../item.js';
 
 export interface AppDataFileService {
   upload(

@@ -2,16 +2,16 @@ import { sql } from 'drizzle-orm';
 import { and, eq } from 'drizzle-orm/sql';
 import { singleton } from 'tsyringe';
 
-import { type DBConnection } from '../../../../drizzle/db';
-import { itemLikesTable } from '../../../../drizzle/schema';
+import { type DBConnection } from '../../../../drizzle/db.js';
+import { itemLikesTable } from '../../../../drizzle/schema.js';
 import type {
   ItemLikeRaw,
   ItemLikeWithItem,
   ItemLikeWithItemAndAccount,
   ItemLikeWithItemWithCreator,
-} from '../../../../drizzle/types';
-import { IllegalArgumentException } from '../../../../repositories/errors';
-import { ItemLikeNotFound } from './itemLike.errors';
+} from '../../../../drizzle/types.js';
+import { IllegalArgumentException } from '../../../../repositories/errors.js';
+import { ItemLikeNotFound } from './itemLike.errors.js';
 
 type CreatorId = ItemLikeRaw['creatorId'];
 type ItemId = ItemLikeRaw['itemId'];
@@ -72,7 +72,9 @@ export class ItemLikeRepository {
     }
     const result = await dbConnection.query.itemLikesTable.findMany({
       where: eq(itemLikesTable.creatorId, creatorId),
-      with: { item: { with: { creator: { columns: { id: true, name: true } } } } },
+      with: {
+        item: { with: { creator: { columns: { id: true, name: true } } } },
+      },
     });
     return result as ItemLikeWithItemWithCreator[];
   }

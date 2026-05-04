@@ -7,28 +7,28 @@ import { ZipFile } from 'yazl';
 
 import { Context, DEFAULT_EXPORT_ACTIONS_VALIDITY_IN_DAYS, type UUID } from '@graasp/sdk';
 
-import { type DBConnection } from '../../../../../drizzle/db';
+import { type DBConnection } from '../../../../../drizzle/db.js';
 import type {
   ActionRequestExportFormat,
   ActionRequestExportRaw,
-} from '../../../../../drizzle/types';
-import { TRANSLATIONS } from '../../../../../langs/constants';
-import { BaseLogger } from '../../../../../logger';
-import { MailBuilder } from '../../../../../plugins/mailer/builder';
-import { MailerService } from '../../../../../plugins/mailer/mailer.service';
-import type { MemberInfo, MinimalMember } from '../../../../../types';
-import { TMP_FOLDER } from '../../../../../utils/config';
-import { ActionRepository } from '../../../../action/action.repository';
-import { EXPORT_FILE_EXPIRATION, ZIP_MIMETYPE } from '../../../../action/constants';
-import { CannotWriteFileError } from '../../../../action/utils/errors';
-import { AuthorizedItemService } from '../../../../authorizedItem.service';
-import FileService from '../../../../file/file.service';
-import { S3FileNotFound } from '../../../../file/utils/errors';
-import { MemberService } from '../../../../member/member.service';
-import { convertToValidFilename } from '../../../../utils';
-import type { ItemRaw } from '../../../item';
-import { ActionRequestExportRepository } from './itemAction.requestExport.repository';
-import { formatData } from './utils';
+} from '../../../../../drizzle/types.js';
+import { TRANSLATIONS } from '../../../../../langs/constants.js';
+import { BaseLogger } from '../../../../../logger.js';
+import { MailBuilder } from '../../../../../plugins/mailer/builder.js';
+import { MailerService } from '../../../../../plugins/mailer/mailer.service.js';
+import type { MemberInfo, MinimalMember } from '../../../../../types.js';
+import { TMP_FOLDER } from '../../../../../utils/config.js';
+import { ActionRepository } from '../../../../action/action.repository.js';
+import { EXPORT_FILE_EXPIRATION, ZIP_MIMETYPE } from '../../../../action/constants.js';
+import { CannotWriteFileError } from '../../../../action/utils/errors.js';
+import { AuthorizedItemService } from '../../../../authorizedItem.service.js';
+import FileService from '../../../../file/file.service.js';
+import { S3FileNotFound } from '../../../../file/utils/errors.js';
+import { MemberService } from '../../../../member/member.service.js';
+import { convertToValidFilename } from '../../../../utils.js';
+import type { ItemRaw } from '../../../item.js';
+import { ActionRequestExportRepository } from './itemAction.requestExport.repository.js';
+import { formatData } from './utils.js';
 
 @singleton()
 export class ActionRequestExportService {

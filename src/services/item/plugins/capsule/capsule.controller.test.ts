@@ -17,22 +17,22 @@ import build, {
   clearDatabase,
   mockAuthenticate,
   unmockAuthenticate,
-} from '../../../../../test/app';
-import { seedFromJson } from '../../../../../test/mocks/seed';
-import { resolveDependency } from '../../../../di/utils';
-import { db } from '../../../../drizzle/db';
-import { itemMembershipsTable, itemsRawTable } from '../../../../drizzle/schema';
-import { assertIsDefined } from '../../../../utils/assertions';
+} from '../../../../../test/app.js';
+import { seedFromJson } from '../../../../../test/mocks/seed.js';
+import { resolveDependency } from '../../../../di/utils.js';
+import { db } from '../../../../drizzle/db.js';
+import { itemMembershipsTable, itemsRawTable } from '../../../../drizzle/schema.js';
+import { assertIsDefined } from '../../../../utils/assertions.js';
 import {
   ItemNotFolder,
   MemberCannotAccess,
   MemberCannotWriteItem,
   TooManyChildren,
-} from '../../../../utils/errors';
-import { assertIsMember, assertIsMemberForTest } from '../../../authentication';
-import { expectItem } from '../../test/fixtures/items';
-import { ItemActionService } from '../action/itemAction.service';
-import { FolderItemService } from '../folder/folder.service';
+} from '../../../../utils/errors.js';
+import { assertIsMember, assertIsMemberForTest } from '../../../authentication.js';
+import { expectItem } from '../../test/fixtures/items.js';
+import { ItemActionService } from '../action/itemAction.service.js';
+import { FolderItemService } from '../folder/folder.service.js';
 
 describe('Capsule routes tests', () => {
   let app: FastifyInstance;

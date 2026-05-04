@@ -1,10 +1,10 @@
 import { v4 as uuidV4 } from 'uuid';
 import { describe, expect, it } from 'vitest';
 
-import { seedFromJson } from '../../../test/mocks/seed';
-import { db } from '../../drizzle/db';
-import type { AccountRaw } from '../../drizzle/types';
-import { AccountDTO, AccountRepository } from './account.repository';
+import { seedFromJson } from '../../../test/mocks/seed.js';
+import { db } from '../../drizzle/db.js';
+import type { AccountRaw } from '../../drizzle/types.js';
+import { AccountDTO, AccountRepository } from './account.repository.js';
 
 const accountRepository = new AccountRepository();
 

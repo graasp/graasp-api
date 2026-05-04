@@ -1,5 +1,5 @@
-import type { ItemRaw } from '../services/item/item';
-import type { MinimalGuest, MinimalMember } from '../types';
+import type { ItemRaw } from '../services/item/item.js';
+import type { MinimalGuest, MinimalMember } from '../types.js';
 import {
   accountsTable,
   actionRequestExportsTable,
@@ -30,7 +30,7 @@ import {
   publishedItemsTable,
   shortLinksTable,
   tagsTable,
-} from './schema';
+} from './schema.js';
 
 export type AccountInsertDTO = typeof accountsTable.$inferInsert;
 export type AccountRaw = typeof accountsTable.$inferSelect;

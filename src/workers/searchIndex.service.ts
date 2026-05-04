@@ -4,23 +4,23 @@ import {
   MeiliSearch,
   MeiliSearchApiError,
   MeiliSearchTimeOutError,
-  TypoTolerance,
+  type TypoTolerance,
 } from 'meilisearch';
 import { singleton } from 'tsyringe';
 
-import { IndexItem } from '@graasp/sdk';
+import { type IndexItem } from '@graasp/sdk';
 
-import { db } from '../drizzle/db';
-import { BaseLogger } from '../logger';
-import { ItemPublishedRepository } from '../services/item/plugins/publication/published/itemPublished.repository';
+import { db } from '../drizzle/db.js';
+import { BaseLogger } from '../logger.js';
+import { ItemPublishedRepository } from '../services/item/plugins/publication/published/itemPublished.repository.js';
 import {
   ACTIVE_INDEX,
-  AllowedIndices,
+  type AllowedIndices,
   MeiliSearchWrapper,
   ROTATING_INDEX,
-} from '../services/item/plugins/publication/published/plugins/search/meilisearch';
-import { FILTERABLE_ATTRIBUTES } from '../services/item/plugins/publication/published/plugins/search/search.constants';
-import { TagCategory } from '../services/tag/tag.schemas';
+} from '../services/item/plugins/publication/published/plugins/search/meilisearch.js';
+import { FILTERABLE_ATTRIBUTES } from '../services/item/plugins/publication/published/plugins/search/search.constants.js';
+import { TagCategory } from '../services/tag/tag.schemas.js';
 
 // Make index configuration typesafe
 const SEARCHABLE_ATTRIBUTES: (keyof IndexItem)[] = [
@@ -148,7 +148,10 @@ export class SearchIndexService {
         // for one task and still be able to await other tasks
         for (const taskUid of tasks.map((t) => t.taskUid)) {
           try {
-            await tmpIndex.waitForTask(taskUid, { timeOutMs: 60_000, intervalMs: 1000 });
+            await tmpIndex.waitForTask(taskUid, {
+              timeOutMs: 60_000,
+              intervalMs: 1000,
+            });
           } catch (e) {
             if (e instanceof MeiliSearchTimeOutError) {
               this.logger.info(

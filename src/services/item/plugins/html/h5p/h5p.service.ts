@@ -7,22 +7,22 @@ import type { FastifyBaseLogger } from 'fastify';
 
 import { type H5PItemExtra } from '@graasp/sdk';
 
-import type { DBConnection } from '../../../../../drizzle/db';
-import { MinimalItemForInsert } from '../../../../../drizzle/types';
-import { BaseLogger } from '../../../../../logger';
-import type { MinimalMember } from '../../../../../types';
+import type { DBConnection } from '../../../../../drizzle/db.js';
+import type { MinimalItemForInsert } from '../../../../../drizzle/types.js';
+import { BaseLogger } from '../../../../../logger.js';
+import type { MinimalMember } from '../../../../../types.js';
 import {
   H5P_FILE_STORAGE_CONFIG,
   H5P_FILE_STORAGE_TYPE,
   H5P_PATH_PREFIX,
-} from '../../../../../utils/config';
-import { StorageService } from '../../../../member/plugins/storage/memberStorage.service';
-import { H5PItem, ItemRaw, isH5PItem } from '../../../item';
-import { ItemRepository } from '../../../item.repository';
-import { ItemService } from '../../../item.service';
-import { HtmlService } from '../html.service';
-import { H5P_FILE_DOT_EXTENSION, H5P_FILE_MIME_TYPE } from './constants';
-import { H5PValidator } from './validation/h5p-validator';
+} from '../../../../../utils/config.js';
+import { StorageService } from '../../../../member/plugins/storage/memberStorage.service.js';
+import { type H5PItem, type ItemRaw, isH5PItem } from '../../../item.js';
+import { ItemRepository } from '../../../item.repository.js';
+import { ItemService } from '../../../item.service.js';
+import { HtmlService } from '../html.service.js';
+import { H5P_FILE_DOT_EXTENSION, H5P_FILE_MIME_TYPE } from './constants.js';
+import { H5PValidator } from './validation/h5p-validator.js';
 
 /**
  * Implementation for the H5P service
@@ -41,7 +41,10 @@ export class H5PService extends HtmlService {
     const h5pValidator = new H5PValidator();
 
     super(
-      { config: H5P_FILE_STORAGE_CONFIG, fileStorageType: H5P_FILE_STORAGE_TYPE },
+      {
+        config: H5P_FILE_STORAGE_CONFIG,
+        fileStorageType: H5P_FILE_STORAGE_TYPE,
+      },
       storageService,
       H5P_PATH_PREFIX,
       H5P_FILE_MIME_TYPE,

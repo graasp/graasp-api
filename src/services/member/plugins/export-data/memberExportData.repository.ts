@@ -2,7 +2,7 @@ import { or } from 'drizzle-orm';
 import { desc, eq } from 'drizzle-orm/sql';
 import { singleton } from 'tsyringe';
 
-import { type DBConnection } from '../../../../drizzle/db';
+import { type DBConnection } from '../../../../drizzle/db.js';
 import {
   actionsTable,
   appActionsTable,
@@ -14,7 +14,7 @@ import {
   itemLikesTable,
   itemMembershipsTable,
   itemsRawTable,
-} from '../../../../drizzle/schema';
+} from '../../../../drizzle/schema.js';
 import type {
   ActionRaw,
   AppActionRaw,
@@ -24,12 +24,12 @@ import type {
   ChatMessageRaw,
   ItemLikeWithItem,
   ItemMembershipRaw,
-} from '../../../../drizzle/types';
-import { IllegalArgumentException } from '../../../../repositories/errors';
-import { throwsIfParamIsInvalid } from '../../../../repositories/utils';
-import { NoChatMentionForMember } from '../../../chat/errors';
-import type { ItemRaw } from '../../../item/item';
-import { MemberIdentifierNotFound } from '../../../itemLogin/errors';
+} from '../../../../drizzle/types.js';
+import { IllegalArgumentException } from '../../../../repositories/errors.js';
+import { throwsIfParamIsInvalid } from '../../../../repositories/utils.js';
+import { NoChatMentionForMember } from '../../../chat/errors.js';
+import type { ItemRaw } from '../../../item/item.js';
+import { MemberIdentifierNotFound } from '../../../itemLogin/errors.js';
 
 @singleton()
 export class ExportDataRepository {
@@ -129,7 +129,14 @@ export class ExportDataRepository {
     }
 
     return await dbConnection.query.actionsTable.findMany({
-      columns: { id: true, view: true, type: true, extra: true, createdAt: true, itemId: true },
+      columns: {
+        id: true,
+        view: true,
+        type: true,
+        extra: true,
+        createdAt: true,
+        itemId: true,
+      },
       where: eq(actionsTable.accountId, accountId),
       orderBy: desc(actionsTable.createdAt),
     });
@@ -149,7 +156,13 @@ export class ExportDataRepository {
     }
 
     return await dbConnection.query.appActionsTable.findMany({
-      columns: { id: true, type: true, data: true, createdAt: true, itemId: true },
+      columns: {
+        id: true,
+        type: true,
+        data: true,
+        createdAt: true,
+        itemId: true,
+      },
       where: eq(appActionsTable.accountId, accountId),
       orderBy: desc(appActionsTable.createdAt),
     });

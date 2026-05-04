@@ -14,23 +14,23 @@ import { singleton } from 'tsyringe';
 
 import { PermissionLevelCompare, type ResultOf, type UUID, getChildFromPath } from '@graasp/sdk';
 
-import type { DBConnection } from '../../drizzle/db';
-import { isAncestorOrSelf, isDescendantOrSelf } from '../../drizzle/operations';
+import type { DBConnection } from '../../drizzle/db.js';
+import { isAncestorOrSelf, isDescendantOrSelf } from '../../drizzle/operations.js';
 import {
   accountsTable,
   itemMembershipsTable,
   items,
   itemsRawTable,
   membersView,
-} from '../../drizzle/schema';
+} from '../../drizzle/schema.js';
 import type {
   ItemMembershipRaw,
   ItemMembershipWithItem,
   ItemMembershipWithItemAndAccount,
   ItemMembershipWithItemAndCompleteAccount,
   MemberRaw,
-} from '../../drizzle/types';
-import type { AuthenticatedUser, MinimalMember, PermissionLevel } from '../../types';
+} from '../../drizzle/types.js';
+import type { AuthenticatedUser, MinimalMember, PermissionLevel } from '../../types.js';
 import {
   InvalidMembership,
   InvalidPermissionLevel,
@@ -38,10 +38,10 @@ import {
   ItemNotFound,
   MemberNotFound,
   ModifyExistingMembership,
-} from '../../utils/errors';
-import type { ItemRaw } from '../item/item';
-import { mapById } from '../utils';
-import { PermissionType, getPermissionsAtItemSql } from './utils';
+} from '../../utils/errors.js';
+import type { ItemRaw } from '../item/item.js';
+import { mapById } from '../utils.js';
+import { PermissionType, getPermissionsAtItemSql } from './utils.js';
 
 type ItemPath = ItemRaw['path'];
 type AccountId = string;

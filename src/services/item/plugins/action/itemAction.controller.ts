@@ -3,30 +3,34 @@ import { StatusCodes } from 'http-status-codes';
 import type { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox';
 import fp from 'fastify-plugin';
 
-import { resolveDependency } from '../../../../di/utils';
-import { db } from '../../../../drizzle/db';
-import { asDefined } from '../../../../utils/assertions';
-import { ALLOWED_ORIGINS } from '../../../../utils/config';
-import { ActionService } from '../../../action/action.service';
-import { isAuthenticated, matchOne, optionalIsAuthenticated } from '../../../auth/plugins/passport';
-import { assertIsMember } from '../../../authentication';
-import { AuthorizedItemService } from '../../../authorizedItem.service';
-import { validatedMemberAccountRole } from '../../../member/strategies/validatedMemberAccountRole';
+import { resolveDependency } from '../../../../di/utils.js';
+import { db } from '../../../../drizzle/db.js';
+import { asDefined } from '../../../../utils/assertions.js';
+import { ALLOWED_ORIGINS } from '../../../../utils/config.js';
+import { ActionService } from '../../../action/action.service.js';
+import {
+  isAuthenticated,
+  matchOne,
+  optionalIsAuthenticated,
+} from '../../../auth/plugins/passport/preHandlers.js';
+import { assertIsMember } from '../../../authentication.js';
+import { AuthorizedItemService } from '../../../authorizedItem.service.js';
+import { validatedMemberAccountRole } from '../../../member/strategies/validatedMemberAccountRole.js';
 import {
   ItemOpFeedbackErrorEvent,
   ItemOpFeedbackEvent,
   memberItemsTopic,
-} from '../../ws/item.events';
-import { CannotPostAction } from './errors';
+} from '../../ws/item.events.js';
+import { CannotPostAction } from './errors.js';
 import {
   exportActions,
   getItemActionsByDay,
   getItemActionsByHour,
   getItemActionsByWeekday,
   postAction,
-} from './itemAction.schemas';
-import { ItemActionService } from './itemAction.service';
-import { ActionRequestExportService } from './requestExport/itemAction.requestExport.service';
+} from './itemAction.schemas.js';
+import { ItemActionService } from './itemAction.service.js';
+import { ActionRequestExportService } from './requestExport/itemAction.requestExport.service.js';
 
 const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
   const { websockets } = fastify;

@@ -2,8 +2,8 @@ import { SQL, and, eq, exists, ilike } from 'drizzle-orm';
 import { PgColumn } from 'drizzle-orm/pg-core';
 import { sql } from 'drizzle-orm/sql';
 
-import { type DBConnection } from './db';
-import { itemTagsTable, tagsTable } from './schema';
+import { type DBConnection } from './db.js';
+import { itemTagsTable, tagsTable } from './schema.js';
 
 export function isAncestorOrSelf(column: PgColumn, path: string | PgColumn): SQL {
   return sql`${column} @> ${path}`;

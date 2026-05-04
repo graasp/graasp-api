@@ -1,10 +1,10 @@
 import { fastifyCors } from '@fastify/cors';
 import type { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox';
 
-import { resolveDependency } from '../../di/utils';
-import { db } from '../../drizzle/db';
-import { getNextMaintenance } from './maintenance.schemas';
-import { MaintenanceService } from './maintenance.service';
+import { resolveDependency } from '../../di/utils.js';
+import { db } from '../../drizzle/db.js';
+import { getNextMaintenance } from './maintenance.schemas.js';
+import { MaintenanceService } from './maintenance.service.js';
 
 export const maintenancePlugin: FastifyPluginAsyncTypebox = async (fastify) => {
   const maintenanceService = resolveDependency(MaintenanceService);

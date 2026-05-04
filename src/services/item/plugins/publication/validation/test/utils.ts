@@ -1,13 +1,13 @@
 import { ItemValidationStatus } from '@graasp/sdk';
 
-import { registerValue } from '../../../../../../di/utils';
-import type { DBConnection } from '../../../../../../drizzle/db';
-import type { ItemValidationGroupRaw } from '../../../../../../drizzle/types';
-import type { ItemRaw } from '../../../../item';
-import { ItemValidationRepository } from '../itemValidation.repository';
-import { ItemValidationReviewRepository } from '../itemValidationReview.repository';
-import { ItemValidationModerator } from '../moderators/itemValidationModerator';
-import { StrategyExecutorFactory } from '../moderators/strategyExecutorFactory';
+import { registerValue } from '../../../../../../di/utils.js';
+import type { DBConnection } from '../../../../../../drizzle/db.js';
+import type { ItemValidationGroupRaw } from '../../../../../../drizzle/types.js';
+import type { ItemRaw } from '../../../../item.js';
+import { ItemValidationRepository } from '../itemValidation.repository.js';
+import { ItemValidationReviewRepository } from '../itemValidationReview.repository.js';
+import { ItemValidationModerator } from '../moderators/itemValidationModerator.js';
+import { StrategyExecutorFactory } from '../moderators/strategyExecutorFactory.js';
 
 export type ItemModeratorValidate = (
   dbConnection: DBConnection,

@@ -1,34 +1,33 @@
-import fastifyPassport from '@fastify/passport';
 import { fastifySecureSession } from '@fastify/secure-session';
 import type { FastifyInstance, FastifyPluginAsync, PassportUser } from 'fastify';
 
-import { PROD, STAGING } from '../../../../config/env';
+import { PROD, STAGING } from '../../../../config/env.js';
 import {
-  JWT_SECRET,
   MAX_SECURE_SESSION_EXPIRATION_IN_SECONDS,
   SECURE_SESSION_EXPIRATION_IN_SECONDS,
   SECURE_SESSION_SECRET_KEY,
-} from '../../../../config/secrets';
-import { resolveDependency } from '../../../../di/utils';
-import { db } from '../../../../drizzle/db';
-import { assertIsDefined } from '../../../../utils/assertions';
-import { COOKIE_DOMAIN } from '../../../../utils/config';
-import { AccountRepository } from '../../../account/account.repository';
-import { ItemRepository } from '../../../item/item.repository';
-import { MemberRepository } from '../../../member/member.repository';
-import { MemberPasswordService } from '../password/password.service';
-import { SHORT_TOKEN_PARAM } from './constants';
-import { PassportStrategy } from './strategies';
-import emailChangeStrategy from './strategies/emailChange';
-import jwtAppsStrategy from './strategies/jwtApps';
-import jwtChallengeVerifierStrategy from './strategies/jwtChallengeVerifier';
-import magicLinkStrategy from './strategies/magicLink';
-import passwordStrategy from './strategies/password';
-import passwordResetStrategy from './strategies/passwordReset';
-import strictSessionStrategy from './strategies/strictSession';
+} from '../../../../config/secrets.js';
+import { resolveDependency } from '../../../../di/utils.js';
+import { db } from '../../../../drizzle/db.js';
+import { assertIsDefined } from '../../../../utils/assertions.js';
+import { COOKIE_DOMAIN } from '../../../../utils/config.js';
+import { AccountRepository } from '../../../account/account.repository.js';
+import { ItemRepository } from '../../../item/item.repository.js';
+import { MemberRepository } from '../../../member/member.repository.js';
+import { MemberPasswordService } from '../password/password.service.js';
+import { SHORT_TOKEN_PARAM } from './constants.js';
+import { fastifyPassportInstance } from './preHandlers.js';
+import { PassportStrategy } from './strategies.js';
+import emailChangeStrategy from './strategies/emailChange.js';
+import jwtAppsStrategy from './strategies/jwtApps.js';
+import jwtChallengeVerifierStrategy from './strategies/jwtChallengeVerifier.js';
+import magicLinkStrategy from './strategies/magicLink.js';
+import passwordStrategy from './strategies/password.js';
+import passwordResetStrategy from './strategies/passwordReset.js';
+import strictSessionStrategy from './strategies/strictSession.js';
 
 // This plugin needs to be globally register before using the prehandlers.
-const plugin: FastifyPluginAsync = async (fastify: FastifyInstance) => {
+export const plugin: FastifyPluginAsync = async (fastify: FastifyInstance) => {
   const memberPasswordService = resolveDependency(MemberPasswordService);
   const memberRepository = resolveDependency(MemberRepository);
   const accountRepository = resolveDependency(AccountRepository);
@@ -51,42 +50,42 @@ const plugin: FastifyPluginAsync = async (fastify: FastifyInstance) => {
       // The user must re-authenticate.
       expiry: MAX_SECURE_SESSION_EXPIRATION_IN_SECONDS,
     })
-    .register(fastifyPassport.initialize())
-    .register(fastifyPassport.secureSession());
+    .register(fastifyPassportInstance.initialize())
+    .register(fastifyPassportInstance.secureSession());
 
   //-- Sessions Strategies --//
-  strictSessionStrategy(fastifyPassport);
+  strictSessionStrategy(fastifyPassportInstance);
 
   //-- Password Strategies --//
-  passwordStrategy(fastifyPassport, memberPasswordService, {
+  passwordStrategy(fastifyPassportInstance, memberPasswordService, {
     propagateError: true,
   });
 
   magicLinkStrategy(
-    fastifyPassport,
+    fastifyPassportInstance,
     memberRepository,
     PassportStrategy.WebMagicLink,
     SHORT_TOKEN_PARAM,
-    JWT_SECRET,
+    'login',
     { propagateError: true },
   );
 
   //-- JWT Strategies --//
-  passwordResetStrategy(fastifyPassport, memberPasswordService);
-  emailChangeStrategy(fastifyPassport, memberRepository);
-  jwtChallengeVerifierStrategy(fastifyPassport, accountRepository, {
+  passwordResetStrategy(fastifyPassportInstance, memberPasswordService);
+  emailChangeStrategy(fastifyPassportInstance, memberRepository);
+  jwtChallengeVerifierStrategy(fastifyPassportInstance, accountRepository, {
     propagateError: true,
   });
 
   jwtAppsStrategy(
-    fastifyPassport,
+    fastifyPassportInstance,
     accountRepository,
     itemRepository,
     PassportStrategy.AppsJwt,
     true,
   );
   jwtAppsStrategy(
-    fastifyPassport,
+    fastifyPassportInstance,
     accountRepository,
     itemRepository,
     PassportStrategy.OptionalAppsJwt,
@@ -94,14 +93,15 @@ const plugin: FastifyPluginAsync = async (fastify: FastifyInstance) => {
   );
 
   // Serialize and Deserialize user
-  fastifyPassport.registerUserSerializer(async (user: PassportUser, _req) => {
+  fastifyPassportInstance.registerUserSerializer(async (user: PassportUser, _req) => {
     assertIsDefined(user.account);
     return user.account.id;
   });
-  fastifyPassport.registerUserDeserializer(async (uuid: string, _req): Promise<PassportUser> => {
-    const account = await accountRepository.get(db, uuid);
+  fastifyPassportInstance.registerUserDeserializer(
+    async (uuid: string, _req): Promise<PassportUser> => {
+      const account = await accountRepository.get(db, uuid);
 
-    return { account: account.toMaybeUser() };
-  });
+      return { account: account.toMaybeUser() };
+    },
+  );
 };
-export default plugin;

@@ -1,5 +1,5 @@
-import fs, { existsSync } from 'fs';
-import { createReadStream, exists } from 'fs-extra';
+import fs, { createReadStream, existsSync } from 'fs';
+import { pathExists } from 'fs-extra/esm';
 import { readFile } from 'fs/promises';
 import mimetics from 'mimetics';
 import path from 'path';
@@ -9,19 +9,19 @@ import { singleton } from 'tsyringe';
 
 import { type DocumentItemExtraProperties, type ItemSettings } from '@graasp/sdk';
 
-import { type DBConnection } from '../../../../drizzle/db';
-import type { AppSettingInsertDTO, AppSettingRaw } from '../../../../drizzle/types';
-import { BaseLogger } from '../../../../logger';
-import { ItemType } from '../../../../schemas/global';
-import type { MinimalMember } from '../../../../types';
-import { AuthorizedItemService } from '../../../authorizedItem.service';
-import { UploadEmptyFileError } from '../../../file/utils/errors';
-import { type ItemRaw, isFolderItem } from '../../item';
-import { ItemService } from '../../item.service';
-import { AppSettingRepository } from '../app/appSetting/appSetting.repository';
-import FileItemService from '../file/itemFile.service';
-import { H5PService } from '../html/h5p/h5p.service';
-import { ItemThumbnailService } from '../thumbnail/itemThumbnail.service';
+import { type DBConnection } from '../../../../drizzle/db.js';
+import type { AppSettingInsertDTO, AppSettingRaw } from '../../../../drizzle/types.js';
+import { BaseLogger } from '../../../../logger.js';
+import type { ItemType } from '../../../../schemas/global.js';
+import type { MinimalMember } from '../../../../types.js';
+import { AuthorizedItemService } from '../../../authorizedItem.service.js';
+import { UploadEmptyFileError } from '../../../file/utils/errors.js';
+import { type ItemRaw, isFolderItem } from '../../item.js';
+import { ItemService } from '../../item.service.js';
+import { AppSettingRepository } from '../app/appSetting/appSetting.repository.js';
+import FileItemService from '../file/itemFile.service.js';
+import { H5PService } from '../html/h5p/h5p.service.js';
+import { ItemThumbnailService } from '../thumbnail/itemThumbnail.service.js';
 import {
   DESCRIPTION_EXTENSION,
   GRAASP_DOCUMENT_EXTENSION,
@@ -30,10 +30,10 @@ import {
   LINK_EXTENSION,
   TXT_EXTENSION,
   URL_PREFIX,
-} from './constants';
-import { GraaspExportInvalidFileError } from './errors';
-import { ItemExportService } from './itemExport.service';
-import { generateThumbnailFilename } from './utils';
+} from './constants.js';
+import { GraaspExportInvalidFileError } from './errors.js';
+import { ItemExportService } from './itemExport.service.js';
+import { generateThumbnailFilename } from './utils.js';
 
 /**
  * Defines the properties of an individual item in the graasp export format.
@@ -256,7 +256,11 @@ export class ImportService {
 
     const items = JSON.parse(graaspManifestFile) as GraaspExportItem[];
 
-    return this.importManifestItems(dbConnection, actor, { items, folderPath, parentId });
+    return this.importManifestItems(dbConnection, actor, {
+      items,
+      folderPath,
+      parentId,
+    });
   }
 
   private async importManifestItems(
@@ -291,7 +295,7 @@ export class ImportService {
         // Find and upload the thumbnail
         let thumbnail: Readable | undefined = undefined;
         const itemThumbnailPath = path.join(folderPath, generateThumbnailFilename(item.id));
-        if (await exists(itemThumbnailPath)) {
+        if (await pathExists(itemThumbnailPath)) {
           thumbnail = createReadStream(itemThumbnailPath);
         }
 
@@ -332,7 +336,11 @@ export class ImportService {
           };
         }
 
-        const augmentedItem = { ...item, description: sanitizedDescription, extra };
+        const augmentedItem = {
+          ...item,
+          description: sanitizedDescription,
+          extra,
+        };
 
         return { item: augmentedItem, thumbnail };
       }),
@@ -393,7 +401,11 @@ export class ImportService {
             const { id, creatorId, itemId, ...appSettingData } = appSetting;
 
             return arr.concat([
-              { creatorId: actor.id, itemId: uploadedItem.id, ...appSettingData },
+              {
+                creatorId: actor.id,
+                itemId: uploadedItem.id,
+                ...appSettingData,
+              },
             ]);
           }, []),
         );
@@ -492,7 +504,10 @@ export class ImportService {
         throw new Error('The graasp import needs a parent item');
       }
 
-      await this.importGraaspFile(dbConnection, actor, { parentId, folderPath });
+      await this.importGraaspFile(dbConnection, actor, {
+        parentId,
+        folderPath,
+      });
     } else {
       await this.importFiles(dbConnection, actor, { parentId, folderPath });
     }

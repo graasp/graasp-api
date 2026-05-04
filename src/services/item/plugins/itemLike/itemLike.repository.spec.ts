@@ -3,11 +3,11 @@ import { describe, expect, it } from 'vitest';
 
 import { FolderItemFactory } from '@graasp/sdk';
 
-import { seedFromJson } from '../../../../../test/mocks/seed';
-import { db } from '../../../../drizzle/db';
-import { itemLikesTable } from '../../../../drizzle/schema';
-import { IllegalArgumentException } from '../../../../repositories/errors';
-import { ItemLikeRepository } from './itemLike.repository';
+import { seedFromJson } from '../../../../../test/mocks/seed.js';
+import { db } from '../../../../drizzle/db.js';
+import { itemLikesTable } from '../../../../drizzle/schema.js';
+import { IllegalArgumentException } from '../../../../repositories/errors.js';
+import { ItemLikeRepository } from './itemLike.repository.js';
 
 const repository = new ItemLikeRepository();
 

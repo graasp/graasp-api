@@ -1,10 +1,10 @@
 import { Type } from '@sinclair/typebox';
 import { StatusCodes } from 'http-status-codes';
 
-import { customType, registerSchemaAsRef } from '../../../../plugins/typebox';
-import { errorSchemaRef } from '../../../../schemas/global';
-import { genericItemSchemaRef } from '../../common.schemas';
-import { packedItemSchemaRef } from '../../item.schemas.packed';
+import { customType, registerSchemaAsRef } from '../../../../plugins/typebox.js';
+import { errorSchemaRef } from '../../../../schemas/global.js';
+import { genericItemSchemaRef } from '../../common.schemas.js';
+import { packedItemSchemaRef } from '../../item.schemas.packed.js';
 
 export const itemLikeSchemaRef = registerSchemaAsRef(
   'itemLike',

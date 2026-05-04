@@ -3,15 +3,15 @@ import { and, eq, or } from 'drizzle-orm/sql';
 
 import { AppDataVisibility } from '@graasp/sdk';
 
-import type { DBConnection } from '../../../../../drizzle/db';
-import { appDataTable } from '../../../../../drizzle/schema';
+import type { DBConnection } from '../../../../../drizzle/db.js';
+import { appDataTable } from '../../../../../drizzle/schema.js';
 import type {
   AppDataRaw,
   AppDataWithItemAndAccountAndCreator,
   MinimalAccount,
-} from '../../../../../drizzle/types';
-import { PermissionLevel } from '../../../../../types';
-import { AppDataNotFound, PreventUpdateAppDataFile } from './errors';
+} from '../../../../../drizzle/types.js';
+import type { PermissionLevel } from '../../../../../types.js';
+import { AppDataNotFound, PreventUpdateAppDataFile } from './errors.js';
 
 export class AppDataRepository {
   async addOne(

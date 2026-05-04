@@ -4,29 +4,29 @@ import type { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox';
 
 import { ItemLoginSchemaStatus } from '@graasp/sdk';
 
-import { resolveDependency } from '../../di/utils';
-import { db } from '../../drizzle/db';
-import { asDefined } from '../../utils/assertions';
-import { ItemNotFound } from '../../utils/errors';
+import { resolveDependency } from '../../di/utils.js';
+import { db } from '../../drizzle/db.js';
+import { asDefined } from '../../utils/assertions.js';
+import { ItemNotFound } from '../../utils/errors.js';
+import { SESSION_KEY } from '../auth/plugins/passport/constants.js';
 import {
-  SESSION_KEY,
   isAuthenticated,
   matchOne,
   optionalIsAuthenticated,
-} from '../auth/plugins/passport';
-import { assertIsMember } from '../authentication';
-import { AuthorizedItemService } from '../authorizedItem.service';
-import { ItemRepository } from '../item/item.repository';
-import { validatedMemberAccountRole } from '../member/strategies/validatedMemberAccountRole';
-import { ItemLoginSchemaNotFound, ValidMemberSession } from './errors';
+} from '../auth/plugins/passport/preHandlers.js';
+import { assertIsMember } from '../authentication.js';
+import { AuthorizedItemService } from '../authorizedItem.service.js';
+import { ItemRepository } from '../item/item.repository.js';
+import { validatedMemberAccountRole } from '../member/strategies/validatedMemberAccountRole.js';
+import { ItemLoginSchemaNotFound, ValidMemberSession } from './errors.js';
 import {
   deleteLoginSchema,
   getItemLoginSchema,
   getLoginSchemaType,
   loginOrRegisterAsGuest,
   updateLoginSchema,
-} from './itemLogin.schemas';
-import { ItemLoginService } from './itemLogin.service';
+} from './itemLogin.schemas.js';
+import { ItemLoginService } from './itemLogin.service.js';
 
 const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
   const itemLoginService = resolveDependency(ItemLoginService);

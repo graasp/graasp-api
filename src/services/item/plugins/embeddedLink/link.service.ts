@@ -11,26 +11,26 @@ import {
   type UUID,
 } from '@graasp/sdk';
 
-import { IFRAMELY_API_DI_KEY } from '../../../../di/constants';
-import { type DBConnection } from '../../../../drizzle/db';
-import { BaseLogger } from '../../../../logger';
-import type { MinimalMember } from '../../../../types';
-import { AuthorizedItemService } from '../../../authorizedItem.service';
-import { ItemMembershipRepository } from '../../../itemMembership/membership.repository';
-import { ThumbnailService } from '../../../thumbnail/thumbnail.service';
-import { WrongItemTypeError } from '../../errors';
-import { EmbeddedLinkItem, type ItemRaw, isEmbeddedLinkItem } from '../../item';
-import { ItemRepository } from '../../item.repository';
-import { ItemService } from '../../item.service';
-import { PackedItemService } from '../../packedItem.dto';
-import { ItemGeolocationRepository } from '../geolocation/itemGeolocation.repository';
-import { ItemVisibilityRepository } from '../itemVisibility/itemVisibility.repository';
-import { ItemPublishedRepository } from '../publication/published/itemPublished.repository';
-import { MeiliSearchWrapper } from '../publication/published/plugins/search/meilisearch';
-import { RecycledBinService } from '../recycled/recycled.service';
-import { ItemThumbnailService } from '../thumbnail/itemThumbnail.service';
-import { InvalidUrl } from './errors';
-import { isValidUrl } from './utils';
+import { IFRAMELY_API_DI_KEY } from '../../../../di/constants.js';
+import { type DBConnection } from '../../../../drizzle/db.js';
+import { BaseLogger } from '../../../../logger.js';
+import type { MinimalMember } from '../../../../types.js';
+import { AuthorizedItemService } from '../../../authorizedItem.service.js';
+import { ItemMembershipRepository } from '../../../itemMembership/membership.repository.js';
+import { ThumbnailService } from '../../../thumbnail/thumbnail.service.js';
+import { WrongItemTypeError } from '../../errors.js';
+import { type EmbeddedLinkItem, type ItemRaw, isEmbeddedLinkItem } from '../../item.js';
+import { ItemRepository } from '../../item.repository.js';
+import { ItemService } from '../../item.service.js';
+import { PackedItemService } from '../../packedItem.dto.js';
+import { ItemGeolocationRepository } from '../geolocation/itemGeolocation.repository.js';
+import { ItemVisibilityRepository } from '../itemVisibility/itemVisibility.repository.js';
+import { ItemPublishedRepository } from '../publication/published/itemPublished.repository.js';
+import { MeiliSearchWrapper } from '../publication/published/plugins/search/meilisearch.js';
+import { RecycledBinService } from '../recycled/recycled.service.js';
+import { ItemThumbnailService } from '../thumbnail/itemThumbnail.service.js';
+import { InvalidUrl } from './errors.js';
+import { isValidUrl } from './utils.js';
 
 type IframelyLink = {
   rel: string[];
@@ -136,7 +136,13 @@ export class EmbeddedLinkItemService extends ItemService {
       captureException(e);
       console.error(e);
       // return empty values to reset fields
-      return { icons: [], thumbnails: [], title: '', html: '', description: '' };
+      return {
+        icons: [],
+        thumbnails: [],
+        title: '',
+        html: '',
+        description: '',
+      };
     }
   }
 

@@ -2,7 +2,7 @@ import { StatusCodes } from 'http-status-codes';
 
 import { ErrorFactory, FAILURE_MESSAGES } from '@graasp/sdk';
 
-import { PLUGIN_NAME } from './constants';
+import { PLUGIN_NAME } from './constants.js';
 
 export const GraaspAppsError = ErrorFactory(PLUGIN_NAME);
 

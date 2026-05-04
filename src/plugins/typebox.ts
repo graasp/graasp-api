@@ -23,7 +23,7 @@ import type {
 
 import { MAX_ITEM_NAME_LENGTH, MAX_USERNAME_LENGTH, MIN_USERNAME_LENGTH } from '@graasp/sdk';
 
-import { discriminable } from './typebox/discriminable';
+import { discriminable } from './typebox/discriminable.js';
 
 /**
  * List of schemas to be registered in the Fastify instance.

@@ -3,24 +3,24 @@ import { singleton } from 'tsyringe';
 
 import type { FastifyRequest } from 'fastify';
 
-import { type DBConnection } from '../../../../drizzle/db';
-import { actionsTable } from '../../../../drizzle/schema';
-import type { ActionWithItem } from '../../../../drizzle/types';
-import type { AuthenticatedUser, MaybeUser } from '../../../../types';
-import { UnauthorizedMember } from '../../../../utils/errors';
-import { ActionRepository } from '../../../action/action.repository';
-import { ActionService } from '../../../action/action.service';
+import { type DBConnection } from '../../../../drizzle/db.js';
+import { actionsTable } from '../../../../drizzle/schema.js';
+import type { ActionWithItem } from '../../../../drizzle/types.js';
+import type { AuthenticatedUser, MaybeUser } from '../../../../types.js';
+import { UnauthorizedMember } from '../../../../utils/errors.js';
+import { ActionRepository } from '../../../action/action.repository.js';
+import { ActionService } from '../../../action/action.service.js';
 import {
   DEFAULT_ACTIONS_SAMPLE_SIZE,
   MAX_ACTIONS_SAMPLE_SIZE,
   MIN_ACTIONS_SAMPLE_SIZE,
-} from '../../../action/constants';
-import { AuthorizedItemService } from '../../../authorizedItem.service';
-import { ItemMembershipRepository } from '../../../itemMembership/membership.repository';
-import type { ItemRaw } from '../../item';
-import { type ActionDateFilters, ItemActionRepository } from './itemAction.repository';
-import { View, type ViewOptions } from './itemAction.schemas';
-import { ItemActionType } from './utils';
+} from '../../../action/constants.js';
+import { AuthorizedItemService } from '../../../authorizedItem.service.js';
+import { ItemMembershipRepository } from '../../../itemMembership/membership.repository.js';
+import type { ItemRaw } from '../../item.js';
+import { type ActionDateFilters, ItemActionRepository } from './itemAction.repository.js';
+import { View, type ViewOptions } from './itemAction.schemas.js';
+import { ItemActionType } from './utils.js';
 
 @singleton()
 export class ItemActionService {

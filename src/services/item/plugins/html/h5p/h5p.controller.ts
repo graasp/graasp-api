@@ -5,32 +5,32 @@ import { fastifyMultipart } from '@fastify/multipart';
 import { fastifyStatic } from '@fastify/static';
 import type { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox';
 
-import { resolveDependency } from '../../../../../di/utils';
-import { type DBConnection, db } from '../../../../../drizzle/db';
-import { MinimalItemForInsert } from '../../../../../drizzle/types';
-import type { MaybeUser } from '../../../../../types';
-import { asDefined } from '../../../../../utils/assertions';
-import { H5P_FILE_STORAGE_TYPE } from '../../../../../utils/config';
-import { isAuthenticated, matchOne } from '../../../../auth/plugins/passport';
-import { assertIsMember, isMember } from '../../../../authentication';
-import { AuthorizedItemService } from '../../../../authorizedItem.service';
-import { FileStorage } from '../../../../file/types';
-import { validatedMemberAccountRole } from '../../../../member/strategies/validatedMemberAccountRole';
-import { type ItemRaw, isH5PItem } from '../../../item';
-import { ItemService } from '../../../item.service';
-import type { FastifyStaticReply } from '../types';
+import { resolveDependency } from '../../../../../di/utils.js';
+import { type DBConnection, db } from '../../../../../drizzle/db.js';
+import type { MinimalItemForInsert } from '../../../../../drizzle/types.js';
+import type { MaybeUser } from '../../../../../types.js';
+import { asDefined } from '../../../../../utils/assertions.js';
+import { H5P_FILE_STORAGE_TYPE } from '../../../../../utils/config.js';
+import { isAuthenticated, matchOne } from '../../../../auth/plugins/passport/preHandlers.js';
+import { assertIsMember, isMember } from '../../../../authentication.js';
+import { AuthorizedItemService } from '../../../../authorizedItem.service.js';
+import { FileStorage } from '../../../../file/types.js';
+import { validatedMemberAccountRole } from '../../../../member/strategies/validatedMemberAccountRole.js';
+import { type ItemRaw, isH5PItem } from '../../../item.js';
+import { ItemService } from '../../../item.service.js';
+import type { FastifyStaticReply } from '../types.js';
 import {
   DEFAULT_H5P_ASSETS_ROUTE,
   DEFAULT_H5P_CONTENT_ROUTE,
   MAX_FILES,
   MAX_FILE_SIZE,
   MAX_NON_FILE_FIELDS,
-} from './constants';
-import { H5PInvalidFileError } from './errors';
-import { h5pImport } from './h5p.schemas';
-import { H5PService } from './h5p.service';
-import { renderHtml } from './integration';
-import type { H5PPluginOptions } from './types';
+} from './constants.js';
+import { H5PInvalidFileError } from './errors.js';
+import { h5pImport } from './h5p.schemas.js';
+import { H5PService } from './h5p.service.js';
+import { renderHtml } from './integration.js';
+import type { H5PPluginOptions } from './types.js';
 
 const plugin: FastifyPluginAsyncTypebox<H5PPluginOptions> = async (fastify) => {
   const itemService = resolveDependency(ItemService);

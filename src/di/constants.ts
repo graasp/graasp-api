@@ -6,3 +6,4 @@ export const IFRAMELY_API_DI_KEY = 'IframelyAPI';
 export const ETHERPAD_NAME_FACTORY_DI_KEY = 'IPadNameFactory';
 export const FILE_SERVICE_URLS_CACHING_DI_KEY = 'FileServiceUrlsCaching';
 export const FILE_SERVICE_DI_KEY = 'FileService';
+export const FASTIFY_PASSPORT_KEY = 'FastifyPassport';

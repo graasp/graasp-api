@@ -2,7 +2,7 @@ import 'dotenv/config';
 
 import type { FastifyPluginAsync } from 'fastify';
 
-import { client } from '../drizzle/db';
+import { client } from '../drizzle/db.js';
 
 const plugin: FastifyPluginAsync = async (_fastify) => {
   // connect drizzle to database

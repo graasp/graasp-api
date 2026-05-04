@@ -2,14 +2,14 @@ import { singleton } from 'tsyringe';
 
 import { type Paginated, type Pagination } from '@graasp/sdk';
 
-import { type DBConnection } from '../../../../drizzle/db';
-import type { MinimalMember } from '../../../../types';
-import { ItemNotFound } from '../../../../utils/errors';
-import HookManager from '../../../../utils/hook';
-import { AuthorizedItemService } from '../../../authorizedItem.service';
-import { type ItemRaw, isFolderItem } from '../../item';
-import { ItemRepository } from '../../item.repository';
-import { RecycledItemDataRepository } from './recycled.repository';
+import { type DBConnection } from '../../../../drizzle/db.js';
+import type { MinimalMember } from '../../../../types.js';
+import { ItemNotFound } from '../../../../utils/errors.js';
+import HookManager from '../../../../utils/hook.js';
+import { AuthorizedItemService } from '../../../authorizedItem.service.js';
+import { type ItemRaw, isFolderItem } from '../../item.js';
+import { ItemRepository } from '../../item.repository.js';
+import { RecycledItemDataRepository } from './recycled.repository.js';
 
 @singleton()
 export class RecycledBinService {
@@ -73,7 +73,10 @@ export class RecycledBinService {
 
     let allDescendants: ItemRaw[] = [];
     for (const item of items) {
-      await this.hooks.runPreHooks('recycle', member, dbConnection, { item, isRecycledRoot: true });
+      await this.hooks.runPreHooks('recycle', member, dbConnection, {
+        item,
+        isRecycledRoot: true,
+      });
       if (isFolderItem(item)) {
         allDescendants = allDescendants.concat(
           await this.itemRepository.getDescendants(dbConnection, item),
@@ -94,7 +97,10 @@ export class RecycledBinService {
     await this.recycledItemRepository.addMany(dbConnection, items, member);
 
     for (const d of allDescendants) {
-      this.hooks.runPostHooks('recycle', member, dbConnection, { item: d, isRecycledRoot: false });
+      this.hooks.runPostHooks('recycle', member, dbConnection, {
+        item: d,
+        isRecycledRoot: false,
+      });
     }
     for (const item of items) {
       await this.hooks.runPostHooks('recycle', member, dbConnection, {
@@ -125,7 +131,10 @@ export class RecycledBinService {
 
     let allDescendants: ItemRaw[] = [];
     for (const item of items) {
-      await this.hooks.runPreHooks('restore', member, dbConnection, { item, isRestoredRoot: true });
+      await this.hooks.runPreHooks('restore', member, dbConnection, {
+        item,
+        isRestoredRoot: true,
+      });
       if (isFolderItem(item)) {
         const descendants = await this.recycledItemRepository.getDeletedDescendants(
           dbConnection,

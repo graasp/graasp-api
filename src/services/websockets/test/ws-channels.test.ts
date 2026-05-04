@@ -8,14 +8,14 @@
 import waitForExpect from 'wait-for-expect';
 import { WebSocket } from 'ws';
 
-import { createServerInfo } from '../message';
+import { createServerInfo } from '../message.js';
 import {
   PortGenerator,
   createConnUrl,
   createDefaultLocalConfig,
   createWsChannels,
   createWsClients,
-} from './test-utils';
+} from './test-utils.js';
 
 const portGen = new PortGenerator(4000);
 

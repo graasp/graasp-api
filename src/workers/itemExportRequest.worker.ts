@@ -1,11 +1,11 @@
 import { type Job, Worker } from 'bullmq';
 import { validate } from 'uuid';
 
-import { REDIS_CONNECTION } from '../config/redis';
-import { db } from '../drizzle/db';
-import { BaseLogger } from '../logger';
-import { Queues } from './config';
-import { ItemExportRequestService } from './itemExportRequest.service';
+import { REDIS_CONNECTION } from '../config/redis.js';
+import { db } from '../drizzle/db.js';
+import { BaseLogger } from '../logger.js';
+import { Queues } from './config.js';
+import { ItemExportRequestService } from './itemExportRequest.service.js';
 
 type ExportFolderZipJob = Job<{
   itemId: string;

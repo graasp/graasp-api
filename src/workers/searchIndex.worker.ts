@@ -1,9 +1,9 @@
 import { type Job, Worker } from 'bullmq';
 
-import { REDIS_CONNECTION } from '../config/redis';
-import { type BaseLogger } from '../logger';
-import { Queues } from './config';
-import { SearchIndexService } from './searchIndex.service';
+import { REDIS_CONNECTION } from '../config/redis.js';
+import { type BaseLogger } from '../logger.js';
+import { Queues } from './config.js';
+import { SearchIndexService } from './searchIndex.service.js';
 
 type BuildIndexJob = Job;
 

@@ -10,13 +10,13 @@ import build, {
   clearDatabase,
   mockAuthenticate,
   unmockAuthenticate,
-} from '../../../../../test/app';
-import { seedFromJson } from '../../../../../test/mocks/seed';
-import { resolveDependency } from '../../../../di/utils';
-import { db } from '../../../../drizzle/db';
-import { MailerService } from '../../../../plugins/mailer/mailer.service';
-import { assertIsDefined } from '../../../../utils/assertions';
-import { MEMBER_EXPORT_DATA_ROUTE_PREFIX } from '../../../../utils/config';
+} from '../../../../../test/app.js';
+import { seedFromJson } from '../../../../../test/mocks/seed.js';
+import { resolveDependency } from '../../../../di/utils.js';
+import { db } from '../../../../drizzle/db.js';
+import { MailerService } from '../../../../plugins/mailer/mailer.service.js';
+import { assertIsDefined } from '../../../../utils/assertions.js';
+import { MEMBER_EXPORT_DATA_ROUTE_PREFIX } from '../../../../utils/config.js';
 
 const POST_URL = `/api/members${MEMBER_EXPORT_DATA_ROUTE_PREFIX}`;
 

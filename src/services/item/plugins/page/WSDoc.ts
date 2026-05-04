@@ -1,25 +1,15 @@
 import { captureException } from '@sentry/node';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-expect-error
 import * as decoding from 'lib0/decoding';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-expect-error
 import * as encoding from 'lib0/encoding';
 import { WebSocket } from 'ws';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-expect-error
 import * as awarenessProtocol from 'y-protocols/awareness';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-expect-error
 import * as syncProtocol from 'y-protocols/sync';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-expect-error
 import * as Y from 'yjs';
 
-import { FastifyBaseLogger } from 'fastify';
+import type { FastifyBaseLogger } from 'fastify';
 
-import { MESSAGE_AWARENESS_CODE, MESSAGE_SYNC_CODE } from './constants';
-import { PageItemService } from './page.service';
+import { MESSAGE_AWARENESS_CODE, MESSAGE_SYNC_CODE } from './constants.js';
+import { PageItemService } from './page.service.js';
 
 const wsReadyStateConnecting = 0;
 const wsReadyStateOpen = 1;

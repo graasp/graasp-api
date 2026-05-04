@@ -32,7 +32,7 @@ import {
   getParentFromPath,
 } from '@graasp/sdk';
 
-import type { DBConnection } from '../../drizzle/db';
+import type { DBConnection } from '../../drizzle/db.js';
 import {
   isAncestorOrSelf,
   isDescendantOrSelf,
@@ -40,7 +40,7 @@ import {
   itemFullTextSearch,
   keywordSearch,
   transformLangToReconfigLang,
-} from '../../drizzle/operations';
+} from '../../drizzle/operations.js';
 import {
   accountsTable,
   itemMembershipsTable,
@@ -49,12 +49,12 @@ import {
   itemsRawTable,
   membersView,
   publishedItemsTable,
-} from '../../drizzle/schema';
-import type { ItemWithCreator, MemberRaw, MinimalItemForInsert } from '../../drizzle/types';
-import { IllegalArgumentException } from '../../repositories/errors';
-import { ItemType } from '../../schemas/global';
-import type { AuthenticatedUser, MaybeUser, MinimalMember } from '../../types';
-import { getSearchLang } from '../../utils/config';
+} from '../../drizzle/schema.js';
+import type { ItemWithCreator, MemberRaw, MinimalItemForInsert } from '../../drizzle/types.js';
+import { IllegalArgumentException } from '../../repositories/errors.js';
+import { type ItemType } from '../../schemas/global.js';
+import type { AuthenticatedUser, MaybeUser, MinimalMember } from '../../types.js';
+import { getSearchLang } from '../../utils/config.js';
 import {
   HierarchyTooDeep,
   InvalidMoveTarget,
@@ -63,24 +63,24 @@ import {
   NothingToUpdateItem,
   TooManyDescendants,
   UnexpectedError,
-} from '../../utils/errors';
-import { isMember } from '../authentication';
+} from '../../utils/errors.js';
+import { isMember } from '../authentication.js';
 import {
   FILE_METADATA_DEFAULT_PAGE_SIZE,
   FILE_METADATA_MAX_PAGE_SIZE,
   FILE_METADATA_MIN_PAGE,
-} from '../member/constants';
-import { DEFAULT_ORDER, IS_COPY_REGEX, ITEMS_PAGE_SIZE_MAX } from './constants';
-import { ItemOrderingError } from './errors';
-import { FolderItem, Item, ItemRaw, isFolderItem, resolveItemType } from './item';
+} from '../member/constants.js';
+import { DEFAULT_ORDER, IS_COPY_REGEX, ITEMS_PAGE_SIZE_MAX } from './constants.js';
+import { ItemOrderingError } from './errors.js';
+import { type FolderItem, type Item, type ItemRaw, isFolderItem, resolveItemType } from './item.js';
 import {
   type ItemChildrenParams,
   type ItemSearchParams,
   Ordering,
   SortBy,
   orderingToUpperCase,
-} from './types';
-import { sortChildrenForTreeWith } from './utils';
+} from './types.js';
+import { sortChildrenForTreeWith } from './utils.js';
 
 const DEFAULT_COPY_SUFFIX = ' (2)';
 const RESCALE_ORDER_THRESHOLD = 0.1;

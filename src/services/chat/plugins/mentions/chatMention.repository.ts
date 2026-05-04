@@ -3,10 +3,13 @@ import { singleton } from 'tsyringe';
 
 import { MentionStatus } from '@graasp/sdk';
 
-import { type DBConnection } from '../../../../drizzle/db';
-import { chatMentionsTable } from '../../../../drizzle/schema';
-import type { ChatMentionRaw, ChatMentionWithMessageAndCreator } from '../../../../drizzle/types';
-import { ChatMentionNotFound, NoChatMentionForMember } from '../../errors';
+import { type DBConnection } from '../../../../drizzle/db.js';
+import { chatMentionsTable } from '../../../../drizzle/schema.js';
+import type {
+  ChatMentionRaw,
+  ChatMentionWithMessageAndCreator,
+} from '../../../../drizzle/types.js';
+import { ChatMentionNotFound, NoChatMentionForMember } from '../../errors.js';
 
 @singleton()
 export class ChatMentionRepository {

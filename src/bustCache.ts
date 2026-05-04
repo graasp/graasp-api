@@ -1,6 +1,6 @@
 import { Redis } from 'ioredis';
 
-import { REDIS_CONNECTION } from './config/redis';
+import { REDIS_CONNECTION } from './config/redis.js';
 
 export async function bustFileCache() {
   const redis = new Redis(REDIS_CONNECTION);

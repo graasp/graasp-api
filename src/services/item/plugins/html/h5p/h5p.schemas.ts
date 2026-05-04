@@ -4,10 +4,10 @@ import { StatusCodes } from 'http-status-codes';
 
 import type { FastifySchema } from 'fastify';
 
-import { customType, registerSchemaAsRef } from '../../../../../plugins/typebox';
-import { errorSchemaRef } from '../../../../../schemas/global';
-import { itemCommonSchema } from '../../../common.schemas';
-import { H5P } from './validation/h5p';
+import { customType, registerSchemaAsRef } from '../../../../../plugins/typebox.js';
+import { errorSchemaRef } from '../../../../../schemas/global.js';
+import { itemCommonSchema } from '../../../common.schemas.js';
+import { H5P } from './validation/h5p.js';
 
 const h5pItemSchema = Type.Composite([
   itemCommonSchema,

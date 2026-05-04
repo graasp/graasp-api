@@ -5,8 +5,8 @@ import type { FastifySchema } from 'fastify';
 
 import { MembershipRequestStatus } from '@graasp/sdk';
 
-import { customType, registerSchemaAsRef } from '../../../../plugins/typebox';
-import { genericItemSchemaRef } from '../../../item/common.schemas';
+import { customType, registerSchemaAsRef } from '../../../../plugins/typebox.js';
+import { genericItemSchemaRef } from '../../../item/common.schemas.js';
 
 const completeMembershipRequestSchema = customType.StrictObject({
   member: customType.StrictObject({

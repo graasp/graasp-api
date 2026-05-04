@@ -2,7 +2,7 @@ import { expect } from 'vitest';
 
 import { AccountType, DEFAULT_LANG } from '@graasp/sdk';
 
-import type { MemberRaw, MinimalAccount } from '../../../../drizzle/types';
+import type { MemberRaw, MinimalAccount } from '../../../../drizzle/types.js';
 
 export const expectMember = (
   m: MemberRaw | undefined | null,

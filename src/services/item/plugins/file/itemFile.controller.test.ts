@@ -14,26 +14,26 @@ import build, {
   clearDatabase,
   mockAuthenticate,
   unmockAuthenticate,
-} from '../../../../../test/app';
-import { MULTIPLE_ITEMS_LOADING_TIME } from '../../../../../test/constants';
-import { buildFile, seedFromJson } from '../../../../../test/mocks/seed';
-import { db } from '../../../../drizzle/db';
-import { isDirectChild } from '../../../../drizzle/operations';
-import { itemMembershipsTable, itemsRawTable } from '../../../../drizzle/schema';
-import { assertIsDefined } from '../../../../utils/assertions';
-import { ITEMS_ROUTE_PREFIX } from '../../../../utils/config';
-import { MemberCannotAccess, MemberCannotWriteItem } from '../../../../utils/errors';
+} from '../../../../../test/app.js';
+import { MULTIPLE_ITEMS_LOADING_TIME } from '../../../../../test/constants.js';
+import { buildFile, seedFromJson } from '../../../../../test/mocks/seed.js';
+import { db } from '../../../../drizzle/db.js';
+import { isDirectChild } from '../../../../drizzle/operations.js';
+import { itemMembershipsTable, itemsRawTable } from '../../../../drizzle/schema.js';
+import { assertIsDefined } from '../../../../utils/assertions.js';
+import { ITEMS_ROUTE_PREFIX } from '../../../../utils/config.js';
+import { MemberCannotAccess, MemberCannotWriteItem } from '../../../../utils/errors.js';
 import {
   DownloadFileInvalidParameterError,
   DownloadFileUnexpectedError,
   S3FileNotFound,
   UploadEmptyFileError,
   UploadFileUnexpectedError,
-} from '../../../file/utils/errors';
-import { ThumbnailSizeFormat } from '../../../thumbnail/constants';
-import { expectItem } from '../../test/fixtures/items';
-import { DEFAULT_MAX_STORAGE } from './utils/constants';
-import { StorageExceeded } from './utils/errors';
+} from '../../../file/utils/errors.js';
+import { ThumbnailSizeFormat } from '../../../thumbnail/constants.js';
+import { expectItem } from '../../test/fixtures/items.js';
+import { DEFAULT_MAX_STORAGE } from './utils/constants.js';
+import { StorageExceeded } from './utils/errors.js';
 
 const getItemById = async (id: string) =>
   await db.query.itemsRawTable.findFirst({ where: eq(itemsRawTable.id, id) });

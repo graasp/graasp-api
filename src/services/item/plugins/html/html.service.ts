@@ -10,18 +10,18 @@ import { v4 } from 'uuid';
 
 import type { FastifyBaseLogger } from 'fastify';
 
-import { type DBConnection } from '../../../../drizzle/db';
-import { BaseLogger } from '../../../../logger';
-import type { MinimalMember } from '../../../../types';
-import { TMP_FOLDER } from '../../../../utils/config';
-import FileService, { type FileServiceConfig } from '../../../file/file.service';
-import type { FileStorageType } from '../../../file/types';
-import { fileRepositoryFactory } from '../../../file/utils/factory';
-import { StorageService } from '../../../member/plugins/storage/memberStorage.service';
-import { type ItemRaw } from '../../item';
-import { GraaspHtmlError, HtmlImportError } from './errors';
-import { DEFAULT_MIME_TYPE } from './h5p/constants';
-import type { HtmlValidator } from './validator';
+import { type DBConnection } from '../../../../drizzle/db.js';
+import { BaseLogger } from '../../../../logger.js';
+import type { MinimalMember } from '../../../../types.js';
+import { TMP_FOLDER } from '../../../../utils/config.js';
+import FileService, { type FileServiceConfig } from '../../../file/file.service.js';
+import type { FileStorageType } from '../../../file/types.js';
+import { fileRepositoryFactory } from '../../../file/utils/factory.js';
+import { StorageService } from '../../../member/plugins/storage/memberStorage.service.js';
+import { type ItemRaw } from '../../item.js';
+import { GraaspHtmlError, HtmlImportError } from './errors.js';
+import { DEFAULT_MIME_TYPE } from './h5p/constants.js';
+import type { HtmlValidator } from './validator.js';
 
 /**
  * Implementation for the Html service

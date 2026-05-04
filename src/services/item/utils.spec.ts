@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
 
-import { ItemFactory } from '../../../test/factories/item.factory';
-import { FolderItem } from './item';
-import { sortChildrenForTreeWith } from './utils';
+import { ItemFactory } from '../../../test/factories/item.factory.js';
+import { FolderItem } from './item.js';
+import { sortChildrenForTreeWith } from './utils.js';
 
 const buildFolderItem = (args: { parentItem?: FolderItem; order: number }) => {
   const item = ItemFactory({ order: args.order, parentPath: args.parentItem?.path });

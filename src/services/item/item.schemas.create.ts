@@ -5,10 +5,10 @@ import type { FastifySchema } from 'fastify';
 
 import { DocumentItemExtraFlavor } from '@graasp/sdk';
 
-import { customType } from '../../plugins/typebox';
-import { errorSchemaRef } from '../../schemas/global';
-import { genericItemSchemaRef, itemCommonSchema, settingsSchema } from './common.schemas';
-import { geoCoordinateSchemaRef } from './plugins/geolocation/itemGeolocation.schemas';
+import { customType } from '../../plugins/typebox.js';
+import { errorSchemaRef } from '../../schemas/global.js';
+import { genericItemSchemaRef, itemCommonSchema, settingsSchema } from './common.schemas.js';
+import { geoCoordinateSchemaRef } from './plugins/geolocation/geolocation.schema.js';
 
 const baseItemCreateSchema = Type.Composite(
   [
@@ -137,7 +137,10 @@ export const create = {
     'Create item, whose possible types are folder, app, document, embeddedLink, file, etherpad, h5p and shortcut.',
 
   querystring: Type.Partial(
-    customType.StrictObject({ parentId: customType.UUID(), previousItemId: customType.UUID() }),
+    customType.StrictObject({
+      parentId: customType.UUID(),
+      previousItemId: customType.UUID(),
+    }),
   ),
   body: customType.Discriminable(
     [
@@ -162,7 +165,10 @@ export const createWithThumbnail = {
   description: 'Create an item with a thumbnail. The data is sent using a form-data.',
 
   querystring: Type.Partial(
-    customType.StrictObject({ parentId: customType.UUID(), previousItemId: customType.UUID() }),
+    customType.StrictObject({
+      parentId: customType.UUID(),
+      previousItemId: customType.UUID(),
+    }),
   ),
   response: { [StatusCodes.OK]: genericItemSchemaRef, '4xx': errorSchemaRef },
 } as const satisfies FastifySchema;

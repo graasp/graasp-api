@@ -5,35 +5,29 @@ import { delay, inject, injectable } from 'tsyringe';
 
 import { MimeTypes, ThumbnailSize } from '@graasp/sdk';
 
-import { type DBConnection } from '../../../../drizzle/db';
-import { BaseLogger } from '../../../../logger';
-import type { MaybeUser, MinimalMember } from '../../../../types';
-import { asDefined } from '../../../../utils/assertions';
-import { AuthorizedItemService } from '../../../authorizedItem.service';
-import { ThumbnailService } from '../../../thumbnail/thumbnail.service';
-import { type ItemRaw } from '../../item';
-import { ItemService } from '../../item.service';
-import { DEFAULT_ITEM_THUMBNAIL_SIZES } from './constants';
-import type { ItemsThumbnails } from './types';
+import { type DBConnection } from '../../../../drizzle/db.js';
+import { BaseLogger } from '../../../../logger.js';
+import type { MaybeUser, MinimalMember } from '../../../../types.js';
+import { asDefined } from '../../../../utils/assertions.js';
+import { AuthorizedItemService } from '../../../authorizedItem.service.js';
+import { ThumbnailService } from '../../../thumbnail/thumbnail.service.js';
+import { type ItemRaw } from '../../item.js';
+import { DEFAULT_ITEM_THUMBNAIL_SIZES } from './constants.js';
+import type { ItemsThumbnails } from './types.js';
 
 @injectable()
 export class ItemThumbnailService {
   private readonly thumbnailService: ThumbnailService;
-  private readonly itemService: ItemService;
   private readonly logger: BaseLogger;
   private readonly authorizedItemService: AuthorizedItemService;
 
   constructor(
-    // As ItemService use ItemThumbnailService, there is a circular dependency issue.
-    // This can be solved by refactoring the code or using the `delay` helper function.
-    @inject(delay(() => ItemService)) itemService: ItemService,
     thumbnailService: ThumbnailService,
     @inject(delay(() => AuthorizedItemService))
     authorizedItemService: AuthorizedItemService,
     logger: BaseLogger,
   ) {
     this.thumbnailService = thumbnailService;
-    this.itemService = itemService;
     this.authorizedItemService = authorizedItemService;
     this.logger = logger;
   }
@@ -45,11 +39,6 @@ export class ItemThumbnailService {
       itemId,
     });
     await this.thumbnailService.upload(member, itemId, file);
-
-    // update item that should have thumbnail
-    await this.itemService.patch(dbConnection, member, itemId, {
-      settings: { hasThumbnail: true },
-    });
   }
 
   async getFile(
@@ -169,9 +158,6 @@ export class ItemThumbnailService {
         this.thumbnailService.delete({ id: itemId, size });
       }),
     );
-    await this.itemService.patch(dbConnection, member, itemId, {
-      settings: { hasThumbnail: false },
-    });
   }
 
   /**
@@ -186,7 +172,9 @@ export class ItemThumbnailService {
         return fs.createReadStream(path);
       } else if (MimeTypes.isPdf(mimetype)) {
         // Convert first page of PDF to image buffer and upload as thumbnail
-        const outputImg = await convertPDFtoImageFromPath(path)(1, { responseType: 'buffer' });
+        const outputImg = await convertPDFtoImageFromPath(path)(1, {
+          responseType: 'buffer',
+        });
         const buffer = asDefined(outputImg.buffer);
         return Readable.from(buffer);
       }

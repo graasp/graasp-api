@@ -1,16 +1,16 @@
 import { asc, eq } from 'drizzle-orm/sql';
 import { singleton } from 'tsyringe';
 
-import type { DBConnection } from '../../drizzle/db';
-import { chatMessagesTable } from '../../drizzle/schema';
+import type { DBConnection } from '../../drizzle/db.js';
+import { chatMessagesTable } from '../../drizzle/schema.js';
 import type {
   ChatMessageInsertDTO,
   ChatMessageRaw,
   ChatMessageWithCreator,
-} from '../../drizzle/types';
-import { DeleteException } from '../../repositories/errors';
-import { throwsIfParamIsInvalid } from '../../repositories/utils';
-import { assertIsError } from '../../utils/assertions';
+} from '../../drizzle/types.js';
+import { DeleteException } from '../../repositories/errors.js';
+import { throwsIfParamIsInvalid } from '../../repositories/utils.js';
+import { assertIsError } from '../../utils/assertions.js';
 
 @singleton()
 export class ChatMessageRepository {

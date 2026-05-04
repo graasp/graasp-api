@@ -11,19 +11,19 @@ import build, {
   clearDatabase,
   mockAuthenticate,
   unmockAuthenticate,
-} from '../../../../../../test/app';
-import { seedFromJson } from '../../../../../../test/mocks/seed';
-import { resolveDependency } from '../../../../../di/utils';
-import { db } from '../../../../../drizzle/db';
-import { publishedItemsTable } from '../../../../../drizzle/schema';
-import { MailerService } from '../../../../../plugins/mailer/mailer.service';
-import { assertIsDefined } from '../../../../../utils/assertions';
-import { ITEMS_ROUTE_PREFIX } from '../../../../../utils/config';
-import { MemberCannotAdminItem } from '../../../../../utils/errors';
-import { PackedItemDTO } from '../../../packedItem.dto';
-import { expectItem, expectManyPackedItems } from '../../../test/fixtures/items';
-import { ItemVisibilityNotFound } from '../../itemVisibility/errors';
-import { MeiliSearchWrapper } from './plugins/search/meilisearch';
+} from '../../../../../../test/app.js';
+import { seedFromJson } from '../../../../../../test/mocks/seed.js';
+import { resolveDependency } from '../../../../../di/utils.js';
+import { db } from '../../../../../drizzle/db.js';
+import { publishedItemsTable } from '../../../../../drizzle/schema.js';
+import { MailerService } from '../../../../../plugins/mailer/mailer.service.js';
+import { assertIsDefined } from '../../../../../utils/assertions.js';
+import { ITEMS_ROUTE_PREFIX } from '../../../../../utils/config.js';
+import { MemberCannotAdminItem } from '../../../../../utils/errors.js';
+import { PackedItemDTO } from '../../../packedItem.dto.js';
+import { expectItem, expectManyPackedItems } from '../../../test/fixtures/items.js';
+import { ItemVisibilityNotFound } from '../../itemVisibility/errors.js';
+import { MeiliSearchWrapper } from './plugins/search/meilisearch.js';
 
 jest.mock('./plugins/search/meilisearch');
 

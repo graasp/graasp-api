@@ -2,29 +2,29 @@ import { singleton } from 'tsyringe';
 
 import { ClientManager, Context, type UUID } from '@graasp/sdk';
 
-import type { DBConnection } from '../../drizzle/db';
+import type { DBConnection } from '../../drizzle/db.js';
 import type {
   ItemMembershipRaw,
   ItemMembershipWithItem,
   ItemMembershipWithItemAndAccount,
-} from '../../drizzle/types';
-import { TRANSLATIONS } from '../../langs/constants';
-import { MailBuilder } from '../../plugins/mailer/builder';
-import { MailerService } from '../../plugins/mailer/mailer.service';
+} from '../../drizzle/types.js';
+import { TRANSLATIONS } from '../../langs/constants.js';
+import { MailBuilder } from '../../plugins/mailer/builder.js';
+import { MailerService } from '../../plugins/mailer/mailer.service.js';
 import {
   AccountType,
   type AuthenticatedUser,
   type MaybeUser,
   type MemberInfo,
-  PermissionLevel,
-} from '../../types';
-import { CannotDeleteOnlyAdmin, CannotModifyGuestItemMembership } from '../../utils/errors';
-import HookManager from '../../utils/hook';
-import { AuthorizedItemService } from '../authorizedItem.service';
-import type { ItemRaw } from '../item/item';
-import { MemberRepository } from '../member/member.repository';
-import { ItemMembershipRepository } from './membership.repository';
-import { MembershipRequestRepository } from './plugins/MembershipRequest/membershipRequest.repository';
+  type PermissionLevel,
+} from '../../types.js';
+import { CannotDeleteOnlyAdmin, CannotModifyGuestItemMembership } from '../../utils/errors.js';
+import HookManager from '../../utils/hook.js';
+import { AuthorizedItemService } from '../authorizedItem.service.js';
+import type { ItemRaw } from '../item/item.js';
+import { MemberRepository } from '../member/member.repository.js';
+import { ItemMembershipRepository } from './membership.repository.js';
+import { MembershipRequestRepository } from './plugins/MembershipRequest/membershipRequest.repository.js';
 
 @singleton()
 export class ItemMembershipService {
@@ -40,7 +40,10 @@ export class ItemMembershipService {
       pre: ItemMembershipWithItemAndAccount;
       post: ItemMembershipWithItem;
     };
-    delete: { pre: ItemMembershipWithItemAndAccount; post: ItemMembershipWithItem };
+    delete: {
+      pre: ItemMembershipWithItemAndAccount;
+      post: ItemMembershipWithItem;
+    };
   }>();
 
   constructor(

@@ -1,17 +1,17 @@
 import path from 'path';
 import { v4 } from 'uuid';
 
-import { MultipartFile } from '@fastify/multipart';
+import type { MultipartFile } from '@fastify/multipart';
 
-import { FileItemProperties, UUID } from '@graasp/sdk';
+import type { FileItemProperties, UUID } from '@graasp/sdk';
 
-import type { AppDataRaw } from '../../../../../drizzle/types';
-import { BaseLogger } from '../../../../../logger';
-import { AuthenticatedUser } from '../../../../../types';
-import FileService from '../../../../file/file.service';
-import type { ItemRaw } from '../../../item';
-import { NotAppDataFile } from './errors';
-import { AppDataFileService } from './interfaces/appDataFileService';
+import type { AppDataRaw } from '../../../../../drizzle/types.js';
+import { BaseLogger } from '../../../../../logger.js';
+import type { AuthenticatedUser } from '../../../../../types.js';
+import FileService from '../../../../file/file.service.js';
+import type { ItemRaw } from '../../../item.js';
+import { NotAppDataFile } from './errors.js';
+import type { AppDataFileService } from './interfaces/appDataFileService.js';
 
 export class AppDataFileServiceAdapter implements AppDataFileService {
   private readonly fileService: FileService;

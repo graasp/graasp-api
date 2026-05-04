@@ -1,20 +1,21 @@
 import { Redis } from 'ioredis';
 import { MeiliSearch } from 'meilisearch';
 
+import { Authenticator } from '@fastify/passport';
 import type { FastifyBaseLogger } from 'fastify';
 
-import Etherpad from '@graasp/etherpad-api';
+import { Etherpad } from '@graasp/etherpad-api';
 
-import { MAILER_CONFIG_FROM_EMAIL, MAILER_CONNECTION, MAILER_USE_SSL } from '../config/mailer';
-import { REDIS_CONNECTION } from '../config/redis';
-import { BaseLogger } from '../logger';
-import { MailerService } from '../plugins/mailer/mailer.service';
-import { CachingService } from '../services/caching/service';
-import FileService from '../services/file/file.service';
-import { fileRepositoryFactory } from '../services/file/utils/factory';
-import { wrapEtherpadErrors } from '../services/item/plugins/etherpad/etherpad';
-import { RandomPadNameFactory } from '../services/item/plugins/etherpad/etherpad.service';
-import { EtherpadServiceConfig } from '../services/item/plugins/etherpad/serviceConfig';
+import { MAILER_CONFIG_FROM_EMAIL, MAILER_CONNECTION, MAILER_USE_SSL } from '../config/mailer.js';
+import { REDIS_CONNECTION } from '../config/redis.js';
+import { BaseLogger } from '../logger.js';
+import { MailerService } from '../plugins/mailer/mailer.service.js';
+import { CachingService } from '../services/caching/service.js';
+import FileService from '../services/file/file.service.js';
+import { fileRepositoryFactory } from '../services/file/utils/factory.js';
+import { wrapEtherpadErrors } from '../services/item/plugins/etherpad/etherpad.js';
+import { RandomPadNameFactory } from '../services/item/plugins/etherpad/etherpad.service.js';
+import { EtherpadServiceConfig } from '../services/item/plugins/etherpad/serviceConfig.js';
 import {
   EMBEDDED_LINK_ITEM_IFRAMELY_HREF_ORIGIN,
   FILE_ITEM_PLUGIN_OPTIONS,
@@ -24,17 +25,18 @@ import {
   MEILISEARCH_MASTER_KEY,
   MEILISEARCH_URL,
   S3_FILE_ITEM_PLUGIN_OPTIONS,
-} from '../utils/config';
+} from '../utils/config.js';
 import {
   ETHERPAD_NAME_FACTORY_DI_KEY,
   FASTIFY_LOGGER_DI_KEY,
+  FASTIFY_PASSPORT_KEY,
   FILE_SERVICE_URLS_CACHING_DI_KEY,
   FILE_STORAGE_TYPE_DI_KEY,
   GEOLOCATION_API_KEY_DI_KEY,
   IFRAMELY_API_DI_KEY,
   IMAGE_CLASSIFIER_API_DI_KEY,
-} from './constants';
-import { registerValue, resolveDependency } from './utils';
+} from './constants.js';
+import { registerValue, resolveDependency } from './utils.js';
 
 export const registerDependencies = (log: FastifyBaseLogger) => {
   // register FastifyBaseLogger as a value to allow BaseLogger to be injected automatically.
@@ -53,6 +55,8 @@ export const registerDependencies = (log: FastifyBaseLogger) => {
   registerValue(GEOLOCATION_API_KEY_DI_KEY, GEOLOCATION_API_KEY);
 
   registerValue(Redis, new Redis(REDIS_CONNECTION));
+
+  registerValue(FASTIFY_PASSPORT_KEY, new Authenticator());
 
   // Register CachingService for the thumbnails urls.
   registerValue(

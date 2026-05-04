@@ -4,11 +4,11 @@ import { afterEach, describe, expect, it } from 'vitest';
 
 import { TagCategory, type TagCategoryType, TagFactory } from '@graasp/sdk';
 
-import { seedFromJson } from '../../../test/mocks/seed';
-import { db } from '../../drizzle/db';
-import { tagsTable } from '../../drizzle/schema';
-import { IllegalArgumentException } from '../../repositories/errors';
-import { TagRepository } from './tag.repository';
+import { seedFromJson } from '../../../test/mocks/seed.js';
+import { db } from '../../drizzle/db.js';
+import { tagsTable } from '../../drizzle/schema.js';
+import { IllegalArgumentException } from '../../repositories/errors.js';
+import { TagRepository } from './tag.repository.js';
 
 const repository = new TagRepository();
 

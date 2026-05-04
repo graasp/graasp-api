@@ -5,10 +5,10 @@ import type { FastifySchema } from 'fastify';
 
 import { AppDataVisibility } from '@graasp/sdk';
 
-import { customType, registerSchemaAsRef } from '../../../../../plugins/typebox';
-import { errorSchemaRef } from '../../../../../schemas/global';
-import { accountSchemaRef, nullableAccountSchemaRef } from '../../../../account/account.schemas';
-import { genericItemSchemaRef } from '../../../common.schemas';
+import { customType, registerSchemaAsRef } from '../../../../../plugins/typebox.js';
+import { errorSchemaRef } from '../../../../../schemas/global.js';
+import { accountSchemaRef, nullableAccountSchemaRef } from '../../../../account/account.schemas.js';
+import { genericItemSchemaRef } from '../../../common.schemas.js';
 
 const appDataSchema = customType.StrictObject(
   {

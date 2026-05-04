@@ -2,14 +2,14 @@ import fetch from 'node-fetch';
 
 import { forwarded } from '@fastify/forwarded';
 import type { FastifyReply, FastifyRequest } from 'fastify';
-import type { preHandlerHookHandler } from 'fastify/types/hooks';
-import type { RouteShorthandHook } from 'fastify/types/route';
+import type { preHandlerHookHandler } from 'fastify/types/hooks.js';
+import type { RouteShorthandHook } from 'fastify/types/route.js';
 
 import type { RecaptchaActionType } from '@graasp/sdk';
 
-import { DEV } from '../../../../config/env';
-import { RECAPTCHA_SECRET_ACCESS_KEY } from '../../../../utils/config';
-import { AuthenticationError } from './errors';
+import { DEV } from '../../../../config/env.js';
+import { RECAPTCHA_SECRET_ACCESS_KEY } from '../../../../utils/config.js';
+import { AuthenticationError } from './errors.js';
 
 export const RECAPTCHA_VERIFY_LINK = 'https://www.google.com/recaptcha/api/siteverify';
 export const RECAPTCHA_SCORE_THRESHOLD = 0.5;

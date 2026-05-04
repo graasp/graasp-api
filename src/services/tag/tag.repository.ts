@@ -3,10 +3,10 @@ import { singleton } from 'tsyringe';
 
 import type { TagCategoryType } from '@graasp/sdk';
 
-import type { DBConnection } from '../../drizzle/db';
-import { tagsTable } from '../../drizzle/schema';
-import type { TagRaw } from '../../drizzle/types';
-import { IllegalArgumentException } from '../../repositories/errors';
+import type { DBConnection } from '../../drizzle/db.js';
+import { tagsTable } from '../../drizzle/schema.js';
+import type { TagRaw } from '../../drizzle/types.js';
+import { IllegalArgumentException } from '../../repositories/errors.js';
 
 @singleton()
 export class TagRepository {
@@ -19,7 +19,9 @@ export class TagRepository {
     if (!tagId) {
       throw new IllegalArgumentException('tagId is not valid');
     }
-    const tag = await dbConnection.query.tagsTable.findFirst({ where: eq(tagsTable.id, tagId) });
+    const tag = await dbConnection.query.tagsTable.findFirst({
+      where: eq(tagsTable.id, tagId),
+    });
     return tag;
   }
 

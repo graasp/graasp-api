@@ -4,7 +4,7 @@ import { singleton } from 'tsyringe';
 
 import { getChildFromPath, getIdsFromPath } from '@graasp/sdk';
 
-import { ItemValidationAlreadyExist } from './errors';
+import { ItemValidationAlreadyExist } from './errors.js';
 
 const EXPIRES_IN_SECONDS = hoursToSeconds(2);
 const REDIS_PROGRESS_VALIDATION_KEY = 'validation_in_progress';

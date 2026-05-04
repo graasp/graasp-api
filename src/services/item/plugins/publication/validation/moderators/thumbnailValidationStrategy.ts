@@ -2,15 +2,15 @@ import { inject, injectWithTransform, singleton } from 'tsyringe';
 
 import { ItemValidationProcess, ItemValidationStatus, ThumbnailSize } from '@graasp/sdk';
 
-import { IMAGE_CLASSIFIER_API_DI_KEY } from '../../../../../../di/constants';
+import { IMAGE_CLASSIFIER_API_DI_KEY } from '../../../../../../di/constants.js';
 import {
   ITEM_THUMBNAIL_PREFIX,
   ThumbnailService,
   ThumbnailServiceTransformer,
-} from '../../../../../thumbnail/thumbnail.service';
-import { type ItemRaw } from '../../../../item';
-import { classifyImage } from '../processes/imageClassification';
-import type { ValidationProcessResult, ValidationStrategy } from './types';
+} from '../../../../../thumbnail/thumbnail.service.js';
+import { type ItemRaw } from '../../../../item.js';
+import { classifyImage } from '../processes/imageClassification.js';
+import type { ValidationProcessResult, ValidationStrategy } from './types.js';
 
 @singleton()
 export class ThumbnailValidationStrategy implements ValidationStrategy {

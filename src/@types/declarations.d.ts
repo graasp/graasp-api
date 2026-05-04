@@ -1,6 +1,6 @@
 import 'fastify';
 
-import { WebsocketService } from '../services/websockets/ws-service';
+import { WebsocketService } from '../services/websockets/ws-service.ts';
 import { MaybeUser } from '../types';
 
 declare module 'fastify' {

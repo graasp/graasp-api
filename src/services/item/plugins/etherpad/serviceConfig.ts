@@ -5,10 +5,8 @@ import {
   ETHERPAD_COOKIE_DOMAIN,
   ETHERPAD_PUBLIC_URL,
   ETHERPAD_URL,
-} from '../../../../utils/config';
-import { ETHERPAD_API_VERSION } from './constants';
-
-export const API_KEY_FORMAT = /^[a-f\d]{64}$/;
+} from '../../../../utils/config.js';
+import { ETHERPAD_API_VERSION } from './constants.js';
 
 @singleton()
 export class EtherpadServiceConfig {

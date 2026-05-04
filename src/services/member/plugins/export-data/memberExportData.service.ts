@@ -7,17 +7,17 @@ import { ZipFile } from 'yazl';
 
 import { DEFAULT_EXPORT_ACTIONS_VALIDITY_IN_DAYS } from '@graasp/sdk';
 
-import { type DBConnection } from '../../../../drizzle/db';
-import { TRANSLATIONS } from '../../../../langs/constants';
-import { MailBuilder } from '../../../../plugins/mailer/builder';
-import { MailerService } from '../../../../plugins/mailer/mailer.service';
-import type { MemberInfo, MinimalMember } from '../../../../types';
-import { TMP_FOLDER } from '../../../../utils/config';
-import { EXPORT_FILE_EXPIRATION, ZIP_MIMETYPE } from '../../../action/constants';
-import FileService from '../../../file/file.service';
-import { UnexpectedExportError } from '../../../item/plugins/importExport/errors';
-import { ExportDataRepository } from './memberExportData.repository';
-import { anonymizeMentionsMessage, anonymizeMessages } from './utils/anonymize.utils';
+import { type DBConnection } from '../../../../drizzle/db.js';
+import { TRANSLATIONS } from '../../../../langs/constants.js';
+import { MailBuilder } from '../../../../plugins/mailer/builder.js';
+import { MailerService } from '../../../../plugins/mailer/mailer.service.js';
+import type { MemberInfo, MinimalMember } from '../../../../types.js';
+import { TMP_FOLDER } from '../../../../utils/config.js';
+import { EXPORT_FILE_EXPIRATION, ZIP_MIMETYPE } from '../../../action/constants.js';
+import FileService from '../../../file/file.service.js';
+import { UnexpectedExportError } from '../../../item/plugins/importExport/errors.js';
+import { ExportDataRepository } from './memberExportData.repository.js';
+import { anonymizeMentionsMessage, anonymizeMessages } from './utils/anonymize.utils.js';
 
 /**
  * DataToExport will be used to store each values in its own file with the name of the key.

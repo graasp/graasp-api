@@ -3,18 +3,23 @@ import { StatusCodes } from 'http-status-codes';
 import { fastifyMultipart } from '@fastify/multipart';
 import type { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox';
 
-import { resolveDependency } from '../../../../di/utils';
-import { db } from '../../../../drizzle/db';
-import { asDefined } from '../../../../utils/assertions';
-import { THUMBNAILS_ROUTE_PREFIX } from '../../../../utils/config';
-import { isAuthenticated, matchOne, optionalIsAuthenticated } from '../../../auth/plugins/passport';
-import { assertIsMember } from '../../../authentication';
-import { UploadFileUnexpectedError } from '../../../file/utils/errors';
-import { validatedMemberAccountRole } from '../../../member/strategies/validatedMemberAccountRole';
-import { DEFAULT_MAX_FILE_SIZE } from '../file/utils/constants';
-import { UploadFileNotImageError } from './errors';
-import { deleteSchema, download, upload } from './itemThumbnail.schemas';
-import { ItemThumbnailService } from './itemThumbnail.service';
+import { resolveDependency } from '../../../../di/utils.js';
+import { db } from '../../../../drizzle/db.js';
+import { asDefined } from '../../../../utils/assertions.js';
+import { THUMBNAILS_ROUTE_PREFIX } from '../../../../utils/config.js';
+import {
+  isAuthenticated,
+  matchOne,
+  optionalIsAuthenticated,
+} from '../../../auth/plugins/passport/preHandlers.js';
+import { assertIsMember } from '../../../authentication.js';
+import { UploadFileUnexpectedError } from '../../../file/utils/errors.js';
+import { validatedMemberAccountRole } from '../../../member/strategies/validatedMemberAccountRole.js';
+import { ItemService } from '../../item.service.js';
+import { DEFAULT_MAX_FILE_SIZE } from '../file/utils/constants.js';
+import { UploadFileNotImageError } from './errors.js';
+import { deleteSchema, download, upload } from './itemThumbnail.schemas.js';
+import { ItemThumbnailService } from './itemThumbnail.service.js';
 
 type GraaspThumbnailsOptions = {
   shouldRedirectOnDownload?: boolean;
@@ -25,6 +30,7 @@ const plugin: FastifyPluginAsyncTypebox<GraaspThumbnailsOptions> = async (fastif
   const { maxFileSize = DEFAULT_MAX_FILE_SIZE } = options;
 
   const itemThumbnailService = resolveDependency(ItemThumbnailService);
+  const itemService = resolveDependency(ItemService);
 
   fastify.register(fastifyMultipart, {
     limits: {
@@ -66,6 +72,10 @@ const plugin: FastifyPluginAsyncTypebox<GraaspThumbnailsOptions> = async (fastif
 
           await itemThumbnailService.upload(tx, member, itemId, file.file);
 
+          // update item that should have thumbnail
+          await itemService.patch(tx, member, itemId, {
+            settings: { hasThumbnail: true },
+          });
           reply.status(StatusCodes.NO_CONTENT);
         })
         .catch((e) => {
@@ -112,8 +122,13 @@ const plugin: FastifyPluginAsyncTypebox<GraaspThumbnailsOptions> = async (fastif
       } = request;
       const member = asDefined(user?.account);
       assertIsMember(member);
-      await itemThumbnailService.deleteAllThumbnailSizes(db, member, {
-        itemId,
+      await db.transaction(async (tx) => {
+        await itemThumbnailService.deleteAllThumbnailSizes(tx, member, {
+          itemId,
+        });
+        await itemService.patch(tx, member, itemId, {
+          settings: { hasThumbnail: false },
+        });
       });
       reply.status(StatusCodes.NO_CONTENT);
     },

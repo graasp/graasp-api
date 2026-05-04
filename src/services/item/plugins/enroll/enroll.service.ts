@@ -2,17 +2,17 @@ import { singleton } from 'tsyringe';
 
 import { ItemLoginSchemaStatus, type UUID } from '@graasp/sdk';
 
-import { type DBConnection } from '../../../../drizzle/db';
-import type { MinimalMember } from '../../../../types';
-import { AuthorizedItemService } from '../../../authorizedItem.service';
+import { type DBConnection } from '../../../../drizzle/db.js';
+import type { MinimalMember } from '../../../../types.js';
+import { AuthorizedItemService } from '../../../authorizedItem.service.js';
 import {
   CannotEnrollFrozenItemLoginSchema,
   CannotEnrollItemWithoutItemLoginSchema,
-} from '../../../itemLogin/errors';
-import { ItemLoginService } from '../../../itemLogin/itemLogin.service';
-import { ItemMembershipRepository } from '../../../itemMembership/membership.repository';
-import { ItemMembershipAlreadyExists } from '../../../itemMembership/plugins/MembershipRequest/error';
-import { ItemRepository } from '../../item.repository';
+} from '../../../itemLogin/errors.js';
+import { ItemLoginService } from '../../../itemLogin/itemLogin.service.js';
+import { ItemMembershipRepository } from '../../../itemMembership/membership.repository.js';
+import { ItemMembershipAlreadyExists } from '../../../itemMembership/plugins/MembershipRequest/error.js';
+import { ItemRepository } from '../../item.repository.js';
 
 @singleton()
 export class EnrollService {

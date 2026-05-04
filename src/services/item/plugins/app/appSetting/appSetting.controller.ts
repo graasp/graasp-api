@@ -1,25 +1,25 @@
 import type { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox';
 
-import { resolveDependency } from '../../../../../di/utils';
-import { type DBConnection, db } from '../../../../../drizzle/db';
-import { MinimalItemForInsert } from '../../../../../drizzle/types';
-import type { MaybeUser } from '../../../../../types';
-import { asDefined } from '../../../../../utils/assertions';
+import { resolveDependency } from '../../../../../di/utils.js';
+import { type DBConnection, db } from '../../../../../drizzle/db.js';
+import type { MinimalItemForInsert } from '../../../../../drizzle/types.js';
+import type { MaybeUser } from '../../../../../types.js';
+import { asDefined } from '../../../../../utils/assertions.js';
 import {
   authenticateAppsJWT,
   guestAuthenticateAppsJWT,
   matchOne,
-} from '../../../../auth/plugins/passport';
-import { assertIsMember } from '../../../../authentication';
-import { AuthorizedItemService } from '../../../../authorizedItem.service';
-import { validatedMemberAccountRole } from '../../../../member/strategies/validatedMemberAccountRole';
-import type { ItemRaw } from '../../../item';
-import { ItemService } from '../../../item.service';
-import { AppSettingEvent, appSettingsTopic } from '../ws/events';
-import { checkItemIsApp } from '../ws/utils';
-import { create, deleteOne, getForOne, updateOne } from './appSetting.schemas';
-import { AppSettingService } from './appSetting.service';
-import appSettingFilePlugin from './plugins/file/appSetting.file.controller';
+} from '../../../../auth/plugins/passport/preHandlers.js';
+import { assertIsMember } from '../../../../authentication.js';
+import { AuthorizedItemService } from '../../../../authorizedItem.service.js';
+import { validatedMemberAccountRole } from '../../../../member/strategies/validatedMemberAccountRole.js';
+import type { ItemRaw } from '../../../item.js';
+import { ItemService } from '../../../item.service.js';
+import { AppSettingEvent, appSettingsTopic } from '../ws/events.js';
+import { checkItemIsApp } from '../ws/utils.js';
+import { create, deleteOne, getForOne, updateOne } from './appSetting.schemas.js';
+import { AppSettingService } from './appSetting.service.js';
+import appSettingFilePlugin from './plugins/file/appSetting.file.controller.js';
 
 const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
   const { websockets } = fastify;
@@ -29,7 +29,10 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
 
   websockets.register(appSettingsTopic, async (req) => {
     const { channel: id, member } = req;
-    const item = await authorizedItemService.getItemById(db, { accountId: member?.id, itemId: id });
+    const item = await authorizedItemService.getItemById(db, {
+      accountId: member?.id,
+      itemId: id,
+    });
     checkItemIsApp(item);
   });
 

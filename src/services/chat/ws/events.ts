@@ -1,4 +1,4 @@
-import type { ChatMessageRaw } from '../../../drizzle/types';
+import type { ChatMessageRaw } from '../../../drizzle/types.js';
 
 // item chat messages
 export const itemChatTopic = 'chat/item';

@@ -3,11 +3,11 @@ import { getTableColumns, sql } from 'drizzle-orm';
 import { and, count, desc, gte, inArray, lte } from 'drizzle-orm/sql';
 import { singleton } from 'tsyringe';
 
-import { type DBConnection } from '../../../../drizzle/db';
-import { isDescendantOrSelf } from '../../../../drizzle/operations';
-import { actionsTable, itemsRawTable } from '../../../../drizzle/schema';
-import type { MaybeUser } from '../../../../types';
-import type { ItemRaw } from '../../item';
+import { type DBConnection } from '../../../../drizzle/db.js';
+import { isDescendantOrSelf } from '../../../../drizzle/operations.js';
+import { actionsTable, itemsRawTable } from '../../../../drizzle/schema.js';
+import type { MaybeUser } from '../../../../types.js';
+import type { ItemRaw } from '../../item.js';
 
 export type ActionDateFilters = { startDate?: string; endDate?: string };
 

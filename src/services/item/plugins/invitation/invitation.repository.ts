@@ -1,17 +1,17 @@
 import { and, eq } from 'drizzle-orm/sql';
 import { singleton } from 'tsyringe';
 
-import { type DBConnection } from '../../../../drizzle/db';
-import { isAncestorOrSelf } from '../../../../drizzle/operations';
-import { invitationsTable, items } from '../../../../drizzle/schema';
+import { type DBConnection } from '../../../../drizzle/db.js';
+import { isAncestorOrSelf } from '../../../../drizzle/operations.js';
+import { invitationsTable, items } from '../../../../drizzle/schema.js';
 import type {
   InvitationInsertDTO,
   InvitationRaw,
   InvitationWithItem,
-} from '../../../../drizzle/types';
-import { throwsIfParamIsInvalid } from '../../../../repositories/utils';
-import type { AuthenticatedUser } from '../../../../types';
-import type { ItemRaw } from '../../item';
+} from '../../../../drizzle/types.js';
+import { throwsIfParamIsInvalid } from '../../../../repositories/utils.js';
+import type { AuthenticatedUser } from '../../../../types.js';
+import type { ItemRaw } from '../../item.js';
 
 type ItemPath = ItemRaw['path'];
 type Email = InvitationRaw['email'];

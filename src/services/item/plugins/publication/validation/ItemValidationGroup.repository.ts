@@ -1,13 +1,13 @@
 import { desc, eq } from 'drizzle-orm';
 import { singleton } from 'tsyringe';
 
-import { type DBConnection } from '../../../../../drizzle/db';
-import { itemValidationGroupsTable } from '../../../../../drizzle/schema';
+import { type DBConnection } from '../../../../../drizzle/db.js';
+import { itemValidationGroupsTable } from '../../../../../drizzle/schema.js';
 import type {
   ItemValidationGroupRaw,
   ItemValidationGroupWithItemAndValidations,
-} from '../../../../../drizzle/types';
-import { ItemValidationGroupNotFound } from './errors';
+} from '../../../../../drizzle/types.js';
+import { ItemValidationGroupNotFound } from './errors.js';
 
 @singleton()
 export class ItemValidationGroupRepository {

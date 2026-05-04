@@ -1,7 +1,7 @@
 import type { FastifyBaseLogger } from 'fastify';
 
-import type { DBConnection } from '../drizzle/db';
-import type { MaybeUser } from '../types';
+import type { DBConnection } from '../drizzle/db.js';
+import type { MaybeUser } from '../types.js';
 
 export type Handler<Data> = (
   actor: MaybeUser,

@@ -8,20 +8,20 @@ import build, {
   clearDatabase,
   mockAuthenticate,
   unmockAuthenticate,
-} from '../../../../../../test/app';
-import { seedFromJson } from '../../../../../../test/mocks/seed';
-import { db } from '../../../../../drizzle/db';
-import { assertIsDefined } from '../../../../../utils/assertions';
-import { APP_ITEMS_PREFIX, OPENAI_GPT_VERSION } from '../../../../../utils/config';
-import { OpenAILengthError, OpenAIUnknownStopError } from '../../../../../utils/errors';
-import { getAccessToken } from '../test/fixtures';
-import { FinishReason } from './chatBot.types';
+} from '../../../../../../test/app.js';
+import { seedFromJson } from '../../../../../../test/mocks/seed.js';
+import { db } from '../../../../../drizzle/db.js';
+import { assertIsDefined } from '../../../../../utils/assertions.js';
+import { APP_ITEMS_PREFIX, OPENAI_GPT_VERSION } from '../../../../../utils/config.js';
+import { OpenAILengthError, OpenAIUnknownStopError } from '../../../../../utils/errors.js';
+import { getAccessToken } from '../test/fixtures.js';
+import { FinishReason } from './chatBot.types.js';
 import {
   DOCKER_MOCKED_BODY,
   DOCKER_MOCKED_RESPONSE,
   copyArray,
   mockResponse,
-} from './test/fixtures';
+} from './test/fixtures.js';
 
 // Indicate that the module openAICompletion will be mocked.
 // This allow to mock the response of OpenAI only.

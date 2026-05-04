@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { detectFieldNameWithBadWords } from './badWordsDetection';
+import { detectFieldNameWithBadWords } from './badWordsDetection.js';
 
 describe('detectFieldNameWithBadWords', () => {
   it('No bad words', async () => {

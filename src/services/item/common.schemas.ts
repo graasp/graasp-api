@@ -2,8 +2,8 @@ import { Type } from '@sinclair/typebox';
 
 import { Alignment, CCLicenseAdaptions, DescriptionPlacement, MaxWidth } from '@graasp/sdk';
 
-import { customType, registerSchemaAsRef } from '../../plugins/typebox';
-import { itemTypeSchemaRef } from '../../schemas/global';
+import { customType, registerSchemaAsRef } from '../../plugins/typebox.js';
+import { itemTypeSchemaRef } from '../../schemas/global.js';
 
 export const settingsSchema = Type.Partial(
   customType.StrictObject(

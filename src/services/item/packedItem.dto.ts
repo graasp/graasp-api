@@ -2,19 +2,19 @@ import { singleton } from 'tsyringe';
 
 import { ItemVisibilityType, type ResultOf, type ThumbnailsBySize } from '@graasp/sdk';
 
-import type { DBConnection } from '../../drizzle/db';
+import type { DBConnection } from '../../drizzle/db.js';
 import type {
   ItemMembershipRaw,
   ItemVisibilityRaw,
   ItemWithCreator,
   MinimalAccount,
-} from '../../drizzle/types';
-import { MaybeUser } from '../../types';
-import { ItemMembershipRepository } from '../itemMembership/membership.repository';
-import { Item, resolveItemType } from './item';
-import { ItemVisibilityRepository } from './plugins/itemVisibility/itemVisibility.repository';
-import { ItemThumbnailService } from './plugins/thumbnail/itemThumbnail.service';
-import type { ItemsThumbnails } from './plugins/thumbnail/types';
+} from '../../drizzle/types.js';
+import type { MaybeUser } from '../../types.js';
+import { ItemMembershipRepository } from '../itemMembership/membership.repository.js';
+import { type Item, resolveItemType } from './item.js';
+import { ItemVisibilityRepository } from './plugins/itemVisibility/itemVisibility.repository.js';
+import { ItemThumbnailService } from './plugins/thumbnail/itemThumbnail.service.js';
+import type { ItemsThumbnails } from './plugins/thumbnail/types.js';
 
 export type PackedItem = Item & {
   creator: MinimalAccount | null;

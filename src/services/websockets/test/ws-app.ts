@@ -1,7 +1,7 @@
 import type { FastifyInstance } from 'fastify';
 
-import build from '../../../../test/app';
-import { HOST_LISTEN_ADDRESS } from '../../../utils/config';
+import build from '../../../../test/app.js';
+import { HOST_LISTEN_ADDRESS } from '../../../utils/config.js';
 
 const MAX_PORT = 65535;
 const MIN_PORT = 1025;

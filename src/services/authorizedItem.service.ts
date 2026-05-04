@@ -2,19 +2,19 @@ import { singleton } from 'tsyringe';
 
 import { ItemVisibilityType, type ResultOf } from '@graasp/sdk';
 
-import type { DBConnection } from '../drizzle/db';
-import type { ItemMembershipRaw, ItemVisibilityWithItem } from '../drizzle/types';
-import type { PermissionLevel } from '../types';
+import type { DBConnection } from '../drizzle/db.js';
+import type { ItemMembershipRaw, ItemVisibilityWithItem } from '../drizzle/types.js';
+import type { PermissionLevel } from '../types.js';
 import {
   MemberCannotAccess,
   MemberCannotAdminItem,
   MemberCannotReadItem,
   MemberCannotWriteItem,
-} from '../utils/errors';
-import { type ItemRaw, resolveItemType } from './item/item';
-import { ItemRepository } from './item/item.repository';
-import { ItemVisibilityRepository } from './item/plugins/itemVisibility/itemVisibility.repository';
-import { ItemMembershipRepository } from './itemMembership/membership.repository';
+} from '../utils/errors.js';
+import { type ItemRaw, resolveItemType } from './item/item.js';
+import { ItemRepository } from './item/item.repository.js';
+import { ItemVisibilityRepository } from './item/plugins/itemVisibility/itemVisibility.repository.js';
+import { ItemMembershipRepository } from './itemMembership/membership.repository.js';
 
 const permissionMapping: { [K in PermissionLevel]: PermissionLevel[] } = {
   ['read']: ['read'],
@@ -189,7 +189,11 @@ export class AuthorizedItemService {
       item,
     }: { permission?: PermissionLevel; accountId?: string; item: ItemRaw },
   ) {
-    await this.getPropertiesForItem(dbConnection, { permission, accountId, item });
+    await this.getPropertiesForItem(dbConnection, {
+      permission,
+      accountId,
+      item,
+    });
   }
 
   /**
@@ -253,7 +257,11 @@ export class AuthorizedItemService {
     visibilities: ItemVisibilityWithItem[];
   }> {
     const item = await this.itemRepository.getOneOrThrow(dbConnection, itemId);
-    return this.getPropertiesForItem(dbConnection, { permission, accountId, item });
+    return this.getPropertiesForItem(dbConnection, {
+      permission,
+      accountId,
+      item,
+    });
   }
 
   /**

@@ -1,14 +1,12 @@
 import assert from 'assert';
 import { eq } from 'drizzle-orm/sql';
 import { describe, expect, it } from 'vitest';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-expect-error
 import { Doc, encodeStateAsUpdate } from 'yjs';
 
-import { seedFromJson } from '../../../../../test/mocks/seed';
-import { db } from '../../../../drizzle/db';
-import { pageUpdateTable } from '../../../../drizzle/schema';
-import { PageRepository } from './page.repository';
+import { seedFromJson } from '../../../../../test/mocks/seed.js';
+import { db } from '../../../../drizzle/db.js';
+import { pageUpdateTable } from '../../../../drizzle/schema.js';
+import { PageRepository } from './page.repository.js';
 
 const pageRepository = new PageRepository();
 

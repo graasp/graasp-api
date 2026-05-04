@@ -4,17 +4,17 @@ import { singleton } from 'tsyringe';
 
 import { ItemValidationStatus, type UUID } from '@graasp/sdk';
 
-import type { DBConnection } from '../../../../../drizzle/db';
-import { BaseLogger } from '../../../../../logger';
-import type { MinimalMember } from '../../../../../types';
-import { TMP_FOLDER } from '../../../../../utils/config';
-import { AuthorizedItemService } from '../../../../authorizedItem.service';
-import { FolderItem, type ItemRaw } from '../../../item';
-import { ItemRepository } from '../../../item.repository';
-import { ItemPublishedService } from '../published/itemPublished.service';
-import { ItemValidationGroupRepository } from './ItemValidationGroup.repository';
-import { ItemValidationModerator } from './moderators/itemValidationModerator';
-import { ValidationQueue } from './validationQueue';
+import type { DBConnection } from '../../../../../drizzle/db.js';
+import { BaseLogger } from '../../../../../logger.js';
+import type { MinimalMember } from '../../../../../types.js';
+import { TMP_FOLDER } from '../../../../../utils/config.js';
+import { AuthorizedItemService } from '../../../../authorizedItem.service.js';
+import type { FolderItem, ItemRaw } from '../../../item.js';
+import { ItemRepository } from '../../../item.repository.js';
+import { ItemPublishedService } from '../published/itemPublished.service.js';
+import { ItemValidationGroupRepository } from './ItemValidationGroup.repository.js';
+import { ItemValidationModerator } from './moderators/itemValidationModerator.js';
+import { ValidationQueue } from './validationQueue.js';
 
 @singleton()
 export class ItemValidationService {

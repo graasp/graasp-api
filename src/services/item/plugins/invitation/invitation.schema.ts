@@ -3,11 +3,11 @@ import { StatusCodes } from 'http-status-codes';
 
 import type { FastifySchema } from 'fastify';
 
-import { customType, registerSchemaAsRef } from '../../../../plugins/typebox';
-import { errorSchemaRef } from '../../../../schemas/global';
-import { permissionLevelSchemaRef } from '../../../../types';
-import { itemMembershipWithoutRelationsSchemaRef } from '../../../itemMembership/membership.schemas';
-import { genericItemSchemaRef } from '../../common.schemas';
+import { customType, registerSchemaAsRef } from '../../../../plugins/typebox.js';
+import { errorSchemaRef } from '../../../../schemas/global.js';
+import { permissionLevelSchemaRef } from '../../../../types.js';
+import { itemMembershipWithoutRelationsSchemaRef } from '../../../itemMembership/membership.schemas.js';
+import { genericItemSchemaRef } from '../../common.schemas.js';
 
 export const invitationSchemaRef = registerSchemaAsRef(
   'invitation',

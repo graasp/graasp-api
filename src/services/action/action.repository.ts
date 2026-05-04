@@ -3,13 +3,13 @@ import { and, between, desc, eq } from 'drizzle-orm/sql';
 
 import type { UUID } from '@graasp/sdk';
 
-import { type DBConnection } from '../../drizzle/db';
-import { isDescendantOrSelf } from '../../drizzle/operations';
-import { actionsTable, items } from '../../drizzle/schema';
-import type { ActionInsertDTO, ActionWithItem } from '../../drizzle/types';
-import type { ViewOptions } from '../item/plugins/action/itemAction.schemas';
-import { MemberIdentifierNotFound } from '../itemLogin/errors';
-import { DEFAULT_ACTIONS_SAMPLE_SIZE } from './constants';
+import { type DBConnection } from '../../drizzle/db.js';
+import { isDescendantOrSelf } from '../../drizzle/operations.js';
+import { actionsTable, items } from '../../drizzle/schema.js';
+import type { ActionInsertDTO, ActionWithItem } from '../../drizzle/types.js';
+import type { ViewOptions } from '../item/plugins/action/itemAction.schemas.js';
+import { MemberIdentifierNotFound } from '../itemLogin/errors.js';
+import { DEFAULT_ACTIONS_SAMPLE_SIZE } from './constants.js';
 
 export class ActionRepository {
   /**
