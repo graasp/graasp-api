@@ -2151,14 +2151,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fastify/busboy@npm:3.1.1":
-  version: 3.1.1
-  resolution: "@fastify/busboy@npm:3.1.1"
-  checksum: 10/3d67fe6c6fbd9bace81f45d932809ea6b0c20da030315ac961e43a788f0a235380883c14c6c789d5ff6d099d0aca6561d540cac83c08e9bba3e7952d8814e0a4
-  languageName: node
-  linkType: hard
-
-"@fastify/busboy@npm:^3.0.0":
+"@fastify/busboy@npm:3.2.0, @fastify/busboy@npm:^3.0.0":
   version: 3.2.0
   resolution: "@fastify/busboy@npm:3.2.0"
   checksum: 10/7d42b23eed18b1aaf2d2b1c77a5b76ec3606d59f5ddec31c04b144536be57478ed0c73e04768f11535b11a37b48aaaa0aed4904d5f18391ff90045c258e41acc
@@ -2175,31 +2168,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fastify/cors@npm:11.0.1":
-  version: 11.0.1
-  resolution: "@fastify/cors@npm:11.0.1"
+"@fastify/cors@npm:11.2.0":
+  version: 11.2.0
+  resolution: "@fastify/cors@npm:11.2.0"
   dependencies:
     fastify-plugin: "npm:^5.0.0"
     toad-cache: "npm:^3.7.0"
-  checksum: 10/4dec4e370b122dce6f6801cd0b599ad19621b406a314c2ccccf006a0fb3123f2d74293f675038f49a26e7536d61a1f35b0b8b16a87b1d6f977bedc898eedfab3
+  checksum: 10/3c2defc8a8624ad2f5d88cc21b97a5bb2ae9d4eca836e276815c18e791b0628b1638ce62c208a8167794ba6e7ed57c531226459d35ba02b9c4a0ad31b95d72a0
   languageName: node
   linkType: hard
 
-"@fastify/deepmerge@npm:^2.0.0":
-  version: 2.0.2
-  resolution: "@fastify/deepmerge@npm:2.0.2"
-  checksum: 10/c2cc3c23b472264517cfaa2cfe30bb8f05488c0126ad6490588c0b5b068032b699827588cb0d609d5407770d3e748d87ab5a09c0edfd1b89e68351b520009721
+"@fastify/deepmerge@npm:^3.0.0":
+  version: 3.2.1
+  resolution: "@fastify/deepmerge@npm:3.2.1"
+  checksum: 10/e35db0525b2cbb45ba5c0ca8b6f40f80016f4d1b89c8428ed17d181e69b2a7262cdaabeb9cd8033684ca9b2771c037ae2749f02519928f1407c118014248033b
   languageName: node
   linkType: hard
 
-"@fastify/error@npm:4.1.0":
-  version: 4.1.0
-  resolution: "@fastify/error@npm:4.1.0"
-  checksum: 10/dc4d89ffafefdbd4b2e0a0e0a7103bb07db14791682878c1552d8f1b5461c4c3c4916ff86dfd673b3f7a3f7b075d2eb2de3b43ddd8ceb1950e84a0a583e958f6
-  languageName: node
-  linkType: hard
-
-"@fastify/error@npm:^4.0.0":
+"@fastify/error@npm:4.2.0, @fastify/error@npm:^4.0.0":
   version: 4.2.0
   resolution: "@fastify/error@npm:4.2.0"
   checksum: 10/50b0a15a2ec540631a1ea1591ed3281fd6f92258ea61c49b6a1899c44c9ab3567390be87bd13ef9db48190a05c3be0a2afbe646a69da70f68e0be233205e2dd0
@@ -2250,16 +2236,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fastify/multipart@npm:9.0.3":
-  version: 9.0.3
-  resolution: "@fastify/multipart@npm:9.0.3"
+"@fastify/multipart@npm:9.4.0":
+  version: 9.4.0
+  resolution: "@fastify/multipart@npm:9.4.0"
   dependencies:
     "@fastify/busboy": "npm:^3.0.0"
-    "@fastify/deepmerge": "npm:^2.0.0"
+    "@fastify/deepmerge": "npm:^3.0.0"
     "@fastify/error": "npm:^4.0.0"
     fastify-plugin: "npm:^5.0.0"
-    secure-json-parse: "npm:^3.0.0"
-  checksum: 10/b3d24c5e81c20e33da9a00be58766834123a7d235aa081f50bfe38217de7a93bbd9521119c8353c54e90bef21ba924d86b778a1264c5fee7035573251f5d696d
+    secure-json-parse: "npm:^4.0.0"
+  checksum: 10/a14c3e6c4cd75d6c8d48b2094c7c49113cad322ead77081c1c8a01309fea26b10c41ddb4e90251bbba6a53289c3fe0c88f80a50d6308ae5f5a83c6699a8ab5b1
   languageName: node
   linkType: hard
 
@@ -2283,16 +2269,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fastify/secure-session@npm:8.2.0":
-  version: 8.2.0
-  resolution: "@fastify/secure-session@npm:8.2.0"
+"@fastify/secure-session@npm:8.3.0":
+  version: 8.3.0
+  resolution: "@fastify/secure-session@npm:8.3.0"
   dependencies:
     "@fastify/cookie": "npm:^11.0.1"
     fastify-plugin: "npm:^5.0.0"
-    sodium-native: "npm:^4.0.10"
+    sodium-native: "npm:^5.0.1"
   bin:
     secure-session: genkey.js
-  checksum: 10/d91ef1e7936dc18e0c856be79be4f4468c05bcec7e0ae931b508c09d417a29eed8db72030b6be46e6f24b2e9088db766ec42f5ed4cd302f3c48b6682e7bffbe5
+  checksum: 10/ac3f716fd30fd185316a3b2a1432d059863f52818bd37b79524643d30d32bf310258b45c26d4f3fee06df2aaf8e2e85c3d21757ee85ab711a35945c53413bebe
   languageName: node
   linkType: hard
 
@@ -2309,7 +2295,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fastify/static@npm:9.1.3, @fastify/static@npm:^9.0.0":
+"@fastify/static@npm:9.1.3, @fastify/static@npm:^9.1.2":
   version: 9.1.3
   resolution: "@fastify/static@npm:9.1.3"
   dependencies:
@@ -2337,29 +2323,29 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fastify/swagger-ui@npm:5.2.5":
-  version: 5.2.5
-  resolution: "@fastify/swagger-ui@npm:5.2.5"
+"@fastify/swagger-ui@npm:5.2.6":
+  version: 5.2.6
+  resolution: "@fastify/swagger-ui@npm:5.2.6"
   dependencies:
-    "@fastify/static": "npm:^9.0.0"
+    "@fastify/static": "npm:^9.1.2"
     fastify-plugin: "npm:^5.0.0"
     openapi-types: "npm:^12.1.3"
     rfdc: "npm:^1.3.1"
     yaml: "npm:^2.4.1"
-  checksum: 10/e0bd87142c41a2d17855337c9e92345f3b0d39e96875d585eaf76e8c59a938ef6cfd62ea7ca9036fd2ffcbca3740d1f6230314c8b8d316c6daffafd4d1a2a89c
+  checksum: 10/4e27c6a99a46e46288455fb1e7a46aa894f42035b8570b4a1d53717330d3719521c514d435bf7ecc798ffd56d603b274ada4fe666b60676a99656d17434d7b2d
   languageName: node
   linkType: hard
 
-"@fastify/swagger@npm:9.5.2":
-  version: 9.5.2
-  resolution: "@fastify/swagger@npm:9.5.2"
+"@fastify/swagger@npm:9.7.0":
+  version: 9.7.0
+  resolution: "@fastify/swagger@npm:9.7.0"
   dependencies:
     fastify-plugin: "npm:^5.0.0"
     json-schema-resolver: "npm:^3.0.0"
     openapi-types: "npm:^12.1.3"
     rfdc: "npm:^1.3.1"
     yaml: "npm:^2.4.2"
-  checksum: 10/8eb6c711698f534b438394c5a95a4ac57cce60d4b20b242efee682ff1d32583170226d7e655c2d63bb2c1ae45e021426c6881d6ebafb55d774b7c170d8e70b02
+  checksum: 10/ed5158a93093106bb2e80140ed2fb32abe425daeac53ff1d08fa507d2f9d726216d6e1d278faa4a83694ac5dbba5f0cf383bb96bde54606be2310ace8db65cd9
   languageName: node
   linkType: hard
 
@@ -2382,14 +2368,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fastify/websocket@npm:11.0.2":
-  version: 11.0.2
-  resolution: "@fastify/websocket@npm:11.0.2"
+"@fastify/websocket@npm:11.2.0":
+  version: 11.2.0
+  resolution: "@fastify/websocket@npm:11.2.0"
   dependencies:
     duplexify: "npm:^4.1.3"
     fastify-plugin: "npm:^5.0.0"
     ws: "npm:^8.16.0"
-  checksum: 10/d81348c81f762d4356fb8ea92758e0b4024134358383bdc843e8d1b75a62304296cdb751c92ed60d1f76df0803449d9420d6206074fcaa674215f89d7903c55d
+  checksum: 10/15ef658f9d4433c4990bee4c21285c5f6843bc18492425e54e8477754156dda7b095bacf7fd23b76525a7ae310c8fa056c60acba72ae8f7e922443de65c10d79
   languageName: node
   linkType: hard
 
@@ -3799,13 +3785,6 @@ __metadata:
   version: 0.34.48
   resolution: "@sinclair/typebox@npm:0.34.48"
   checksum: 10/186eebb338255db7cfd77c2f94be0ad91816c7b5ee994c3adb95e0474ae98b769574c2b6b1f26a81613d7148ed20b11e02528f4263d8d95e3ca8dcf8faaf5306
-  languageName: node
-  linkType: hard
-
-"@sinclair/typebox@npm:^0.27.8":
-  version: 0.27.10
-  resolution: "@sinclair/typebox@npm:0.27.10"
-  checksum: 10/1498c5ef1375787e6272528615d5c262afb60873191d2441316359817b1c411917063c8be102ef15b0b5c62243a9daa7aefc8426f20eb406b67038b3eaa0695a
   languageName: node
   linkType: hard
 
@@ -8142,10 +8121,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fastify-plugin@npm:5.0.1":
-  version: 5.0.1
-  resolution: "fastify-plugin@npm:5.0.1"
-  checksum: 10/76f6960558239d1ead520ecfb9dbb9b0435a63376d9d48bed0861609a909bf1958cb097745bb1a5485592f2c6d1438941e7481203c86b0e74d2bc34f09e8ed3e
+"fastify-plugin@npm:5.1.0, fastify-plugin@npm:^5.0.0":
+  version: 5.1.0
+  resolution: "fastify-plugin@npm:5.1.0"
+  checksum: 10/4532fa1f980f1e76f0e0bf1514945fdd9eb1379108235be3db78e07e76761bdc4218c4cc978d382de77aa298c9b49b1723e60c4628e052402d1134af01aa384c
   languageName: node
   linkType: hard
 
@@ -8155,13 +8134,6 @@ __metadata:
   dependencies:
     semver: "npm:^7.3.2"
   checksum: 10/fbef02cac12901411b5f1f196231d6f32e395a51e9d5c85f060f4f218283c2e51e1470006525446d08ba02abcb18d8bee5b8ecbebcc5a365736294d27aa54991
-  languageName: node
-  linkType: hard
-
-"fastify-plugin@npm:^5.0.0":
-  version: 5.1.0
-  resolution: "fastify-plugin@npm:5.1.0"
-  checksum: 10/4532fa1f980f1e76f0e0bf1514945fdd9eb1379108235be3db78e07e76761bdc4218c4cc978d382de77aa298c9b49b1723e60c4628e052402d1134af01aa384c
   languageName: node
   linkType: hard
 
@@ -8757,19 +8729,19 @@ __metadata:
     "@commitlint/cli": "npm:19.8.1"
     "@commitlint/config-conventional": "npm:19.8.1"
     "@faker-js/faker": "npm:9.9.0"
-    "@fastify/busboy": "npm:3.1.1"
-    "@fastify/cors": "npm:11.0.1"
-    "@fastify/error": "npm:4.1.0"
+    "@fastify/busboy": "npm:3.2.0"
+    "@fastify/cors": "npm:11.2.0"
+    "@fastify/error": "npm:4.2.0"
     "@fastify/forwarded": "npm:3.0.1"
     "@fastify/helmet": "npm:13.0.2"
-    "@fastify/multipart": "npm:9.0.3"
+    "@fastify/multipart": "npm:9.4.0"
     "@fastify/passport": "npm:3.0.2"
-    "@fastify/secure-session": "npm:8.2.0"
+    "@fastify/secure-session": "npm:8.3.0"
     "@fastify/static": "npm:9.1.3"
-    "@fastify/swagger": "npm:9.5.2"
-    "@fastify/swagger-ui": "npm:5.2.5"
+    "@fastify/swagger": "npm:9.7.0"
+    "@fastify/swagger-ui": "npm:5.2.6"
     "@fastify/type-provider-typebox": "npm:5.1.0"
-    "@fastify/websocket": "npm:11.0.2"
+    "@fastify/websocket": "npm:11.2.0"
     "@graasp/etherpad-api": "npm:2.1.1"
     "@graasp/sdk": "npm:5.18.1"
     "@jest/globals": "npm:29.7.0"
@@ -8823,7 +8795,7 @@ __metadata:
     fast-json-stringify: "npm:6.0.1"
     fastify: "npm:5.8.5"
     fastify-nodemailer: "npm:5.0.0"
-    fastify-plugin: "npm:5.0.1"
+    fastify-plugin: "npm:5.1.0"
     form-data: "npm:4.0.5"
     fs-extra: "npm:11.3.0"
     geoip-lite: "npm:1.4.10"
@@ -13066,13 +13038,6 @@ __metadata:
   version: 2.7.0
   resolution: "secure-json-parse@npm:2.7.0"
   checksum: 10/974386587060b6fc5b1ac06481b2f9dbbb0d63c860cc73dc7533f27835fdb67b0ef08762dbfef25625c15bc0a0c366899e00076cb0d556af06b71e22f1dede4c
-  languageName: node
-  linkType: hard
-
-"secure-json-parse@npm:^3.0.0":
-  version: 3.0.2
-  resolution: "secure-json-parse@npm:3.0.2"
-  checksum: 10/a83e2067eef8f5c25b0614f261593721d5cb56c7b739197cb64b7f1fcc6944b632aac4cbc8817cf5976b891a7d6eee8bd07e1aabe082eabf424922f112a7a356
   languageName: node
   linkType: hard
 
