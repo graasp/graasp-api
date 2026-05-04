@@ -1,5 +1,7 @@
 import fastifyPassport from '@fastify/passport';
-import type { FastifyRequest, RouteGenericInterface, RouteHandlerMethod } from 'fastify';
+import type { FastifyRequest, RouteGenericInterface } from 'fastify';
+import type { preHandlerHookHandler } from 'fastify/types/hooks';
+import type { RouteShorthandHook } from 'fastify/types/route';
 
 import { InsufficientPermission } from '../../../../utils/errors';
 import { PassportStrategy } from './strategies';
@@ -20,7 +22,7 @@ import { PassportStrategy } from './strategies';
 export const optionalIsAuthenticated = fastifyPassport.authenticate(
   // PassportStrategy.MobileJwt,
   PassportStrategy.Session,
-);
+) as RouteShorthandHook<preHandlerHookHandler>;
 
 /**
  * Validate authentication.
@@ -29,13 +31,15 @@ export const optionalIsAuthenticated = fastifyPassport.authenticate(
 export const isAuthenticated = fastifyPassport.authenticate(
   // PassportStrategy.MobileJwt,
   PassportStrategy.StrictSession,
-);
+) as RouteShorthandHook<preHandlerHookHandler>;
 
 //-- Password Strategies --//
 /**
  * Classic password authentication to create a session.
  */
-export const authenticatePassword = fastifyPassport.authenticate(PassportStrategy.Password);
+export const authenticatePassword = fastifyPassport.authenticate(
+  PassportStrategy.Password,
+) as RouteShorthandHook<preHandlerHookHandler>;
 
 //-- JWT Strategies --//
 /**
@@ -44,21 +48,21 @@ export const authenticatePassword = fastifyPassport.authenticate(PassportStrateg
 export const authenticatePasswordReset = fastifyPassport.authenticate(
   PassportStrategy.PasswordReset,
   { session: false },
-);
+) as RouteShorthandHook<preHandlerHookHandler>;
 
 /**
  * JWT authentication for email change operation.
  */
 export const authenticateEmailChange = fastifyPassport.authenticate(PassportStrategy.EmailChange, {
   session: false,
-});
+}) as RouteShorthandHook<preHandlerHookHandler>;
 
 /**
  * Items app authentication
  */
 export const authenticateAppsJWT = fastifyPassport.authenticate(PassportStrategy.AppsJwt, {
   session: false,
-});
+}) as RouteShorthandHook<preHandlerHookHandler>;
 
 /**
  *  Items app authentication. Allows authentication without member, can fail if item is not found.
@@ -68,7 +72,7 @@ export const guestAuthenticateAppsJWT = fastifyPassport.authenticate(
   {
     session: false,
   },
-);
+) as RouteShorthandHook<preHandlerHookHandler>;
 
 /**
  * Pre-handler function that checks if the user meets at least one of the specified access preconditions.
@@ -78,7 +82,7 @@ export const guestAuthenticateAppsJWT = fastifyPassport.authenticate(
  */
 export function matchOne<R extends RouteGenericInterface>(
   ...strategies: RessourceAuthorizationStrategy<R>[]
-): RouteHandlerMethod {
+): RouteShorthandHook<preHandlerHookHandler> {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-expect-error
   return async (req: FastifyRequest<R>) => {

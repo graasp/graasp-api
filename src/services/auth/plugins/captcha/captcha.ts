@@ -1,7 +1,9 @@
 import fetch from 'node-fetch';
 
 import { forwarded } from '@fastify/forwarded';
-import type { FastifyReply, FastifyRequest, RouteHandlerMethod } from 'fastify';
+import type { FastifyReply, FastifyRequest } from 'fastify';
+import type { preHandlerHookHandler } from 'fastify/types/hooks';
+import type { RouteShorthandHook } from 'fastify/types/route';
 
 import type { RecaptchaActionType } from '@graasp/sdk';
 
@@ -24,7 +26,7 @@ type CaptchaResponse = { success?: boolean; action?: RecaptchaActionType; score?
 export default function captchaPreHandler(
   action: RecaptchaActionType,
   options?: { shouldFail: boolean },
-): RouteHandlerMethod {
+): RouteShorthandHook<preHandlerHookHandler> {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   return async (request: FastifyRequest<{ Body: { captcha: string } }>, _reply: FastifyReply) => {

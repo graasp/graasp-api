@@ -2,7 +2,8 @@ import { StatusCodes } from 'http-status-codes';
 
 import fastifyPassport from '@fastify/passport';
 import type { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox';
-import type { PassportUser } from 'fastify';
+import type { PassportUser, preHandlerHookHandler } from 'fastify';
+import type { RouteShorthandHook } from 'fastify/types/route';
 
 import { ClientManager, Context, DEFAULT_LANG, RecaptchaAction } from '@graasp/sdk';
 
@@ -102,7 +103,7 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
             request.authInfo = info;
           }
         },
-      ),
+      ) as RouteShorthandHook<preHandlerHookHandler>,
     },
     async (request, reply) => {
       const {
