@@ -1,72 +1,35 @@
 import { StatusCodes } from 'http-status-codes';
 
-import { ErrorFactory, FAILURE_MESSAGES } from '@graasp/sdk';
+import { createError } from '@fastify/error';
 
-import { PLUGIN_NAME } from '../constants';
+import { FAILURE_MESSAGES } from '@graasp/sdk';
 
-export const GraaspAppDataError = ErrorFactory(PLUGIN_NAME + '/app-data');
+export const AppDataNotFound = createError(
+  'GAERR004',
+  FAILURE_MESSAGES.APP_DATA_NOT_FOUND,
+  StatusCodes.NOT_FOUND,
+);
 
-export class AppDataNotFound extends GraaspAppDataError {
-  constructor(data?: unknown) {
-    super(
-      {
-        code: 'GAERR004',
-        statusCode: StatusCodes.NOT_FOUND,
-        message: FAILURE_MESSAGES.APP_DATA_NOT_FOUND,
-      },
-      data,
-    );
-  }
-}
+export const AppDataNotAccessible = createError(
+  'GAERR005',
+  FAILURE_MESSAGES.APP_DATA_NOT_ACCESSIBLE,
+  StatusCodes.FORBIDDEN,
+);
 
-export class AppDataNotAccessible extends GraaspAppDataError {
-  constructor(data?: unknown) {
-    super(
-      {
-        code: 'GAERR005',
-        statusCode: StatusCodes.FORBIDDEN,
-        message: FAILURE_MESSAGES.APP_DATA_NOT_ACCESSIBLE,
-      },
-      data,
-    );
-  }
-}
+export const PreventUpdateAppDataFile = createError(
+  'GAERR008',
+  FAILURE_MESSAGES.PREVENT_APP_DATA_FILE_UPDATE,
+  StatusCodes.FORBIDDEN,
+);
 
-export class PreventUpdateAppDataFile extends GraaspAppDataError {
-  constructor(data?: unknown) {
-    super(
-      {
-        code: 'GAERR008',
-        statusCode: StatusCodes.FORBIDDEN,
-        message: FAILURE_MESSAGES.PREVENT_APP_DATA_FILE_UPDATE,
-      },
-      data,
-    );
-  }
-}
+export const PreventUpdateOtherAppData = createError(
+  'GAERR009',
+  FAILURE_MESSAGES.CANNOT_MODIFY_OTHER_MEMBERS,
+  StatusCodes.FORBIDDEN,
+);
 
-export class PreventUpdateOtherAppData extends GraaspAppDataError {
-  constructor(data?: unknown) {
-    super(
-      {
-        code: 'GAERR009',
-        statusCode: StatusCodes.FORBIDDEN,
-        message: FAILURE_MESSAGES.CANNOT_MODIFY_OTHER_MEMBERS,
-      },
-      data,
-    );
-  }
-}
-
-export class NotAppDataFile extends GraaspAppDataError {
-  constructor(data?: unknown) {
-    super(
-      {
-        code: 'GAERR010',
-        statusCode: StatusCodes.BAD_REQUEST,
-        message: 'App data is not a file',
-      },
-      data,
-    );
-  }
-}
+export const NotAppDataFile = createError(
+  'GAERR010',
+  'App data is not a file',
+  StatusCodes.BAD_REQUEST,
+);

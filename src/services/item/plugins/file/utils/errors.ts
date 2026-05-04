@@ -2,11 +2,7 @@ import { StatusCodes } from 'http-status-codes';
 
 import { createError } from '@fastify/error';
 
-import { ErrorFactory, FAILURE_MESSAGES } from '@graasp/sdk';
-
-import { PLUGIN_NAME } from './constants';
-
-export const GraaspFileItemError = ErrorFactory(PLUGIN_NAME);
+import { FAILURE_MESSAGES } from '@graasp/sdk';
 
 export const StorageExceeded = createError(
   'GPFERR009',

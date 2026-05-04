@@ -1,46 +1,23 @@
 import { StatusCodes } from 'http-status-codes';
 
-import { ErrorFactory, FAILURE_MESSAGES } from '@graasp/sdk';
+import { createError } from '@fastify/error';
 
-import { PLUGIN_NAME } from './constants';
+import { FAILURE_MESSAGES } from '@graasp/sdk';
 
-export const GraaspAppsError = ErrorFactory(PLUGIN_NAME);
+export const NotAppItem = createError(
+  'GAERR001',
+  FAILURE_MESSAGES.NOT_APP_ITEM,
+  StatusCodes.BAD_REQUEST,
+);
 
-export class NotAppItem extends GraaspAppsError {
-  constructor(data?: unknown) {
-    super(
-      {
-        code: 'GAERR001',
-        statusCode: StatusCodes.BAD_REQUEST,
-        message: FAILURE_MESSAGES.NOT_APP_ITEM,
-      },
-      data,
-    );
-  }
-}
+export const InvalidApplicationOrigin = createError(
+  'GAERR002',
+  FAILURE_MESSAGES.INVALID_APP_ORIGIN,
+  StatusCodes.FORBIDDEN,
+);
 
-export class InvalidApplicationOrigin extends GraaspAppsError {
-  constructor(data?: unknown) {
-    super(
-      {
-        code: 'GAERR002',
-        statusCode: StatusCodes.FORBIDDEN,
-        message: FAILURE_MESSAGES.INVALID_APP_ORIGIN,
-      },
-      data,
-    );
-  }
-}
-
-export class TokenItemIdMismatch extends GraaspAppsError {
-  constructor(data?: unknown) {
-    super(
-      {
-        code: 'GAERR003',
-        statusCode: StatusCodes.UNAUTHORIZED,
-        message: FAILURE_MESSAGES.TOKEN_ITEM_ID_MISMATCH,
-      },
-      data,
-    );
-  }
-}
+export const TokenItemIdMismatch = createError(
+  'GAERR003',
+  FAILURE_MESSAGES.TOKEN_ITEM_ID_MISMATCH,
+  StatusCodes.UNAUTHORIZED,
+);
