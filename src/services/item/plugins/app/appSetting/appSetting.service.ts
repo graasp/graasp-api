@@ -3,10 +3,7 @@ import { singleton } from 'tsyringe';
 import { type UUID } from '@graasp/sdk';
 
 import { type DBConnection } from '../../../../../drizzle/db.js';
-import type {
-  AppSettingInsertDTO,
-  AppSettingRaw,
-} from '../../../../../drizzle/types.js';
+import type { AppSettingInsertDTO, AppSettingRaw } from '../../../../../drizzle/types.js';
 import type { AuthenticatedUser, MaybeUser } from '../../../../../types.js';
 import { UnauthorizedMember } from '../../../../../utils/errors.js';
 import HookManager from '../../../../../utils/hook.js';
@@ -91,11 +88,7 @@ export class AppSettingService {
       itemId,
     });
 
-    const appSetting = await this.appSettingRepository.updateOne(
-      dbConnection,
-      appSettingId,
-      body,
-    );
+    const appSetting = await this.appSettingRepository.updateOne(dbConnection, appSettingId, body);
     await this.hooks.runPostHooks('patch', member, dbConnection, {
       appSetting,
       itemId,
@@ -116,10 +109,7 @@ export class AppSettingService {
       permission: 'admin',
     });
 
-    const appSetting = await this.appSettingRepository.getOneOrThrow(
-      dbConnection,
-      appSettingId,
-    );
+    const appSetting = await this.appSettingRepository.getOneOrThrow(dbConnection, appSettingId);
 
     await this.hooks.runPreHooks('delete', member, dbConnection, {
       appSettingId,
@@ -136,22 +126,14 @@ export class AppSettingService {
     return appSetting;
   }
 
-  async get(
-    dbConnection: DBConnection,
-    maybeUser: MaybeUser,
-    itemId: string,
-    appSettingId: UUID,
-  ) {
+  async get(dbConnection: DBConnection, maybeUser: MaybeUser, itemId: string, appSettingId: UUID) {
     // get app setting is allowed to readers
     await this.authorizedItemService.assertAccessForItemId(dbConnection, {
       accountId: maybeUser?.id,
       itemId,
     });
 
-    return await this.appSettingRepository.getOneOrThrow(
-      dbConnection,
-      appSettingId,
-    );
+    return await this.appSettingRepository.getOneOrThrow(dbConnection, appSettingId);
   }
 
   async getForItem(
@@ -180,11 +162,7 @@ export class AppSettingService {
       throw new UnauthorizedMember();
     }
     try {
-      const appSettings = await this.getForItem(
-        dbConnection,
-        actor,
-        original.id,
-      );
+      const appSettings = await this.getForItem(dbConnection, actor, original.id);
       const newAppSettings: AppSettingRaw[] = [];
       for (const appSetting of appSettings) {
         const copyData = {
@@ -193,14 +171,11 @@ export class AppSettingService {
           itemId: copyItemId,
           creator: { id: actor.id },
         };
-        const newSetting = await this.appSettingRepository.addOne(
-          dbConnection,
-          {
-            ...copyData,
-            itemId: copyItemId,
-            creatorId: appSetting.creatorId,
-          },
-        );
+        const newSetting = await this.appSettingRepository.addOne(dbConnection, {
+          ...copyData,
+          itemId: copyItemId,
+          creatorId: appSetting.creatorId,
+        });
         newAppSettings.push(newSetting);
       }
       await this.hooks.runPostHooks('copyMany', actor, dbConnection, {

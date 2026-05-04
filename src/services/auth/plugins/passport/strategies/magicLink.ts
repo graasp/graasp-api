@@ -4,16 +4,10 @@ import { Authenticator } from '@fastify/passport';
 
 import { SECRET_KEY } from '../../../../../crypto/jwt.js';
 import { db } from '../../../../../drizzle/db.js';
-import {
-  MemberNotFound,
-  UnauthorizedMember,
-} from '../../../../../utils/errors.js';
+import { MemberNotFound, UnauthorizedMember } from '../../../../../utils/errors.js';
 import { MemberRepository } from '../../../../member/member.repository.js';
 import { PassportStrategy } from '../strategies.js';
-import type {
-  CustomStrategyOptions,
-  StrictVerifiedCallback,
-} from '../types.js';
+import type { CustomStrategyOptions, StrictVerifiedCallback } from '../types.js';
 
 const queryParamExtractor =
   (queryParameter: string) =>
@@ -51,11 +45,7 @@ export default (
           const member = await memberRepository.get(db, sub!);
           if (member) {
             // Token has been validated
-            return done(
-              null,
-              { account: member.toMaybeUser() },
-              { emailValidation },
-            );
+            return done(null, { account: member.toMaybeUser() }, { emailValidation });
           } else {
             // Authentication refused
             return done(
@@ -65,10 +55,7 @@ export default (
           }
         } catch (err) {
           // Exception occurred while fetching member
-          return done(
-            options?.propagateError ? (err as Error) : new UnauthorizedMember(),
-            false,
-          );
+          return done(options?.propagateError ? (err as Error) : new UnauthorizedMember(), false);
         }
       },
     ),

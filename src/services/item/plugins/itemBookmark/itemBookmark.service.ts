@@ -31,10 +31,7 @@ export class BookmarkService {
     this.itemVisibilityRepository = itemVisibilityRepository;
   }
 
-  async getOwn(
-    dbConnection: DBConnection,
-    member: MinimalMember,
-  ): Promise<PackedBookmarkedItem[]> {
+  async getOwn(dbConnection: DBConnection, member: MinimalMember): Promise<PackedBookmarkedItem[]> {
     const bookmarks = await this.itemBookmarkRepository.getBookmarksForMember(
       dbConnection,
       member.id,
@@ -63,11 +60,7 @@ export class BookmarkService {
     });
   }
 
-  async post(
-    dbConnection: DBConnection,
-    member: MinimalMember,
-    itemId: string,
-  ) {
+  async post(dbConnection: DBConnection, member: MinimalMember, itemId: string) {
     // get and check permissions
     const item = await this.authorizedItemService.getItemById(dbConnection, {
       accountId: member.id,
@@ -77,15 +70,7 @@ export class BookmarkService {
     await this.itemBookmarkRepository.post(dbConnection, item.id, member.id);
   }
 
-  async delete(
-    dbConnection: DBConnection,
-    member: MinimalMember,
-    itemId: string,
-  ) {
-    return this.itemBookmarkRepository.deleteOne(
-      dbConnection,
-      itemId,
-      member.id,
-    );
+  async delete(dbConnection: DBConnection, member: MinimalMember, itemId: string) {
+    return this.itemBookmarkRepository.deleteOne(dbConnection, itemId, member.id);
   }
 }

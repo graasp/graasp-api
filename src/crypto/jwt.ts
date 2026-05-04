@@ -17,9 +17,7 @@ export async function signAccessToken(
     .sign(SECRET_KEY);
 }
 
-export async function verifyAccessToken<T extends object = any>(
-  token: string,
-): Promise<T> {
+export async function verifyAccessToken<T extends object = any>(token: string): Promise<T> {
   const { payload } = await jwtVerify(token, SECRET_KEY, {
     algorithms: ['HS256'],
   });

@@ -25,10 +25,7 @@ export interface GraaspPluginFileOptions {
   appSettingService: AppSettingService;
 }
 
-const basePlugin: FastifyPluginAsyncTypebox<GraaspPluginFileOptions> = async (
-  fastify,
-  options,
-) => {
+const basePlugin: FastifyPluginAsyncTypebox<GraaspPluginFileOptions> = async (fastify, options) => {
   const { maxFileSize = DEFAULT_MAX_FILE_SIZE, appSettingService } = options;
 
   const appSettingFileService = resolveDependency(AppSettingFileService);

@@ -52,8 +52,7 @@ export const auth = {
   operationId: 'authenticate',
   tags: ['authentication'],
   summary: 'Authentication validating the token',
-  description:
-    'Authenticate to obtain session cookie given provided token and verifier',
+  description: 'Authenticate to obtain session cookie given provided token and verifier',
 
   querystring: customType.StrictObject({
     [SHORT_TOKEN_PARAM]: Type.String({ format: 'jwt' }),

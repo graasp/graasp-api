@@ -48,10 +48,7 @@ export class ItemLikeRepository {
     return result[0];
   }
 
-  async getOne(
-    dbConnection: DBConnection,
-    id: string,
-  ): Promise<ItemLikeWithItemAndAccount> {
+  async getOne(dbConnection: DBConnection, id: string): Promise<ItemLikeWithItemAndAccount> {
     const result = await dbConnection.query.itemLikesTable.findFirst({
       where: eq(itemLikesTable.id, id),
       with: { item: true, creator: true },
@@ -86,10 +83,7 @@ export class ItemLikeRepository {
    * Get likes for item
    * @param itemId
    */
-  async getByItemId(
-    dbConnection: DBConnection,
-    itemId: ItemId,
-  ): Promise<ItemLikeWithItem[]> {
+  async getByItemId(dbConnection: DBConnection, itemId: ItemId): Promise<ItemLikeWithItem[]> {
     this.throwsIfParamIsInvalid('itemId', itemId);
     const res = await dbConnection.query.itemLikesTable.findMany({
       where: eq(itemLikesTable.itemId, itemId),
@@ -104,15 +98,9 @@ export class ItemLikeRepository {
    * @param itemId
    * @returns number of likes for item
    */
-  async getCountByItemId(
-    dbConnection: DBConnection,
-    itemId: ItemId,
-  ): Promise<number> {
+  async getCountByItemId(dbConnection: DBConnection, itemId: ItemId): Promise<number> {
     this.throwsIfParamIsInvalid('itemId', itemId);
-    const res = await dbConnection.$count(
-      itemLikesTable,
-      eq(itemLikesTable.itemId, itemId),
-    );
+    const res = await dbConnection.$count(itemLikesTable, eq(itemLikesTable.itemId, itemId));
     return res;
   }
 
@@ -128,12 +116,7 @@ export class ItemLikeRepository {
   ): Promise<ItemLikeRaw> {
     const result = await dbConnection
       .delete(itemLikesTable)
-      .where(
-        and(
-          eq(itemLikesTable.itemId, itemId),
-          eq(itemLikesTable.creatorId, creatorId),
-        ),
-      )
+      .where(and(eq(itemLikesTable.itemId, itemId), eq(itemLikesTable.creatorId, creatorId)))
       .returning();
 
     if (result.length != 1) {

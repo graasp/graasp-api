@@ -26,10 +26,7 @@ export interface WebsocketsPluginOptions {
   };
 }
 
-const plugin: FastifyPluginAsync<WebsocketsPluginOptions> = async (
-  fastify,
-  options,
-) => {
+const plugin: FastifyPluginAsync<WebsocketsPluginOptions> = async (fastify, options) => {
   // destructure passed fastify instance
   const { log } = fastify;
 
@@ -37,26 +34,13 @@ const plugin: FastifyPluginAsync<WebsocketsPluginOptions> = async (
   const serdes = new AjvMessageSerializer();
 
   // create channels abstraction instance
-  const wsChannels = new WebSocketChannels(
-    fastify.websocketServer,
-    serdes.serialize,
-    log,
-  );
+  const wsChannels = new WebSocketChannels(fastify.websocketServer, serdes.serialize, log);
 
   // create multi-instance channels broker
-  const wsMultiBroker = new MultiInstanceChannelsBroker(
-    wsChannels,
-    options.redis,
-    log,
-  );
+  const wsMultiBroker = new MultiInstanceChannelsBroker(wsChannels, options.redis, log);
 
   // create websockets service
-  const wsService = new WebsocketService(
-    wsChannels,
-    wsMultiBroker,
-    serdes.parse,
-    log,
-  );
+  const wsService = new WebsocketService(wsChannels, wsMultiBroker, serdes.parse, log);
 
   // decorate server with service
   fastify.decorate('websockets', wsService);
@@ -80,9 +64,7 @@ const plugin: FastifyPluginAsync<WebsocketsPluginOptions> = async (
 
       wsChannels.clientRegister(client);
 
-      client.on('message', (msg) =>
-        wsService.handleRequest(msg, user?.account, client),
-      );
+      client.on('message', (msg) => wsService.handleRequest(msg, user?.account, client));
 
       client.on('error', (error, conn) => {
         log.error(error);

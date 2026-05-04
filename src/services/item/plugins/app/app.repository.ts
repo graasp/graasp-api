@@ -3,19 +3,12 @@ import { and, arrayContains, count, desc, eq, sql } from 'drizzle-orm/sql';
 import type { AuthTokenSubject } from '@graasp/sdk';
 
 import { type DBConnection } from '../../../../drizzle/db.js';
-import {
-  appsTable,
-  items,
-  publishersTable,
-} from '../../../../drizzle/schema.js';
+import { appsTable, items, publishersTable } from '../../../../drizzle/schema.js';
 import type { AppRaw } from '../../../../drizzle/types.js';
 import { InvalidApplicationOrigin } from './errors.js';
 
 export class AppRepository {
-  async getAll(
-    dbConnection: DBConnection,
-    publisherId: string,
-  ): Promise<AppRaw[]> {
+  async getAll(dbConnection: DBConnection, publisherId: string): Promise<AppRaw[]> {
     return await dbConnection.query.appsTable.findMany({
       where: eq(appsTable.publisherId, publisherId),
     });

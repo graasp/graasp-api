@@ -11,10 +11,7 @@ import type { MinimalItemForInsert } from '../../../../../drizzle/types.js';
 import type { MaybeUser } from '../../../../../types.js';
 import { asDefined } from '../../../../../utils/assertions.js';
 import { H5P_FILE_STORAGE_TYPE } from '../../../../../utils/config.js';
-import {
-  isAuthenticated,
-  matchOne,
-} from '../../../../auth/plugins/passport/preHandlers.js';
+import { isAuthenticated, matchOne } from '../../../../auth/plugins/passport/preHandlers.js';
 import { assertIsMember, isMember } from '../../../../authentication.js';
 import { AuthorizedItemService } from '../../../../authorizedItem.service.js';
 import { FileStorage } from '../../../../file/types.js';
@@ -52,10 +49,7 @@ const plugin: FastifyPluginAsyncTypebox<H5PPluginOptions> = async (fastify) => {
     };
 
     // serve integration html
-    const integrationRoute = path.join(
-      DEFAULT_H5P_ASSETS_ROUTE,
-      'integration.html',
-    );
+    const integrationRoute = path.join(DEFAULT_H5P_ASSETS_ROUTE, 'integration.html');
     fastify.get(integrationRoute, async (req, res) => {
       const html = renderHtml(
         DEFAULT_H5P_ASSETS_ROUTE,
@@ -145,19 +139,16 @@ const plugin: FastifyPluginAsyncTypebox<H5PPluginOptions> = async (fastify) => {
   /**
    * Delete H5P assets on item delete
    */
-  itemService.hooks.setPostHook(
-    'delete',
-    async (actor, _dbConnection, { item }) => {
-      if (!isH5PItem(item)) {
-        return;
-      }
-      if (!actor) {
-        return;
-      }
-      const { extra } = item;
-      await h5pService.deletePackage(extra.h5p.contentId);
-    },
-  );
+  itemService.hooks.setPostHook('delete', async (actor, _dbConnection, { item }) => {
+    if (!isH5PItem(item)) {
+      return;
+    }
+    if (!actor) {
+      return;
+    }
+    const { extra } = item;
+    await h5pService.deletePackage(extra.h5p.contentId);
+  });
 
   /**
    * Copy H5P assets on item copy

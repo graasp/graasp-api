@@ -43,10 +43,7 @@ export class PublicationService {
     member: AuthenticatedUser,
     itemId: string,
   ) {
-    const item = await this.itemRepository.getOneWithCreatorOrThrow(
-      dbConnection,
-      itemId,
-    );
+    const item = await this.itemRepository.getOneWithCreatorOrThrow(dbConnection, itemId);
     await this.authorizedItemService.assertAccess(dbConnection, {
       accountId: member.id,
       item,
@@ -65,16 +62,10 @@ export class PublicationService {
       undefined,
       publicVisibility ? [publicVisibility] : [],
     ).packed();
-    const validationGroup = await this.validationRepository.getLastForItem(
-      dbConnection,
-      itemId,
-    );
+    const validationGroup = await this.validationRepository.getLastForItem(dbConnection, itemId);
     const publishedEntry =
-      (await this.publishedRepository.getForItem(dbConnection, item.path)) ??
-      undefined;
-    const isValidationInProgress = await this.validationQueue.isInProgress(
-      item.path,
-    );
+      (await this.publishedRepository.getForItem(dbConnection, item.path)) ?? undefined;
+    const isValidationInProgress = await this.validationQueue.isInProgress(item.path);
 
     return new PublicationState(packedItem, {
       isValidationInProgress,

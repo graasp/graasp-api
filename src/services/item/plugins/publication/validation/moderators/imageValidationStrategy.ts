@@ -44,9 +44,7 @@ export class ImageValidationStrategy implements ValidationStrategy {
     const classes = await classifyImage(this.imageClassifierApi, url);
     const isSafe = classes.length === 0;
     const result = classes.map((c) => `${c.class}: ${c.score}`).join(' | ');
-    const status = isSafe
-      ? ItemValidationStatus.Success
-      : ItemValidationStatus.Failure;
+    const status = isSafe ? ItemValidationStatus.Success : ItemValidationStatus.Failure;
     return { status, result };
   }
 }

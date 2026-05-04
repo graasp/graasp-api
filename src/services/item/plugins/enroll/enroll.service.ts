@@ -33,21 +33,11 @@ export class EnrollService {
     this.itemMembershipRepository = itemMembershipRepository;
   }
 
-  async enroll(
-    dbConnection: DBConnection,
-    member: MinimalMember,
-    itemId: UUID,
-  ) {
+  async enroll(dbConnection: DBConnection, member: MinimalMember, itemId: UUID) {
     const item = await this.itemRepository.getOneOrThrow(dbConnection, itemId);
 
-    const itemLoginSchema = await this.itemLoginService.getByItemPath(
-      dbConnection,
-      item.path,
-    );
-    if (
-      !itemLoginSchema ||
-      itemLoginSchema.status === ItemLoginSchemaStatus.Disabled
-    ) {
+    const itemLoginSchema = await this.itemLoginService.getByItemPath(dbConnection, item.path);
+    if (!itemLoginSchema || itemLoginSchema.status === ItemLoginSchemaStatus.Disabled) {
       throw new CannotEnrollItemWithoutItemLoginSchema();
     } else if (itemLoginSchema.status === ItemLoginSchemaStatus.Freeze) {
       throw new CannotEnrollFrozenItemLoginSchema();

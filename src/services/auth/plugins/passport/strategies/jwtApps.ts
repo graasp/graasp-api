@@ -8,10 +8,7 @@ import { UnauthorizedMember, buildError } from '../../../../../utils/errors.js';
 import { AccountRepository } from '../../../../account/account.repository.js';
 import { ItemRepository } from '../../../../item/item.repository.js';
 import { PassportStrategy } from '../strategies.js';
-import type {
-  CustomStrategyOptions,
-  StrictVerifiedCallback,
-} from '../types.js';
+import type { CustomStrategyOptions, StrictVerifiedCallback } from '../types.js';
 
 export default (
   passport: Authenticator,
@@ -65,9 +62,7 @@ export default (
           // itemRepository.getOneOrThrow() can fail for many reasons like the item was not found, database error, etc.
           // To avoid leaking information, we prefer to return UnauthorizedMember error.
           return done(
-            options?.propagateError
-              ? buildError(error)
-              : new UnauthorizedMember(),
+            options?.propagateError ? buildError(error) : new UnauthorizedMember(),
             false,
           );
         }

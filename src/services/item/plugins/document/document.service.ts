@@ -1,11 +1,7 @@
 import sanitize from 'sanitize-html';
 import { singleton } from 'tsyringe';
 
-import {
-  type DocumentItemExtraProperties,
-  type ItemGeolocation,
-  type UUID,
-} from '@graasp/sdk';
+import { type DocumentItemExtraProperties, type ItemGeolocation, type UUID } from '@graasp/sdk';
 
 import { type DBConnection } from '../../../../drizzle/db.js';
 import { BaseLogger } from '../../../../logger.js';
@@ -106,8 +102,7 @@ export class DocumentItemService extends ItemService {
       previousItemId?: ItemRaw['id'];
     } & Partial<DocumentItemExtraProperties>,
   ): Promise<DocumentItem> {
-    const { name, description, lang, content, isRaw, flavor, ...options } =
-      args;
+    const { name, description, lang, content, isRaw, flavor, ...options } = args;
 
     const newItem = this.createDocument(
       { name, description, lang },
@@ -151,11 +146,6 @@ export class DocumentItemService extends ItemService {
         item.extra.document,
       ),
     );
-    return (await this.patch(
-      dbConnection,
-      member,
-      itemId,
-      newItem,
-    )) as DocumentItem;
+    return (await this.patch(dbConnection, member, itemId, newItem)) as DocumentItem;
   }
 }

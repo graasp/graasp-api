@@ -42,13 +42,11 @@ export class ItemValidationGroupRepository {
     if (!itemId) {
       throw new ItemValidationGroupNotFound(itemId);
     }
-    const result = await dbConnection.query.itemValidationGroupsTable.findFirst(
-      {
-        where: eq(itemValidationGroupsTable.itemId, itemId),
-        orderBy: desc(itemValidationGroupsTable.createdAt),
-        with: { item: true, itemValidations: true },
-      },
-    );
+    const result = await dbConnection.query.itemValidationGroupsTable.findFirst({
+      where: eq(itemValidationGroupsTable.itemId, itemId),
+      orderBy: desc(itemValidationGroupsTable.createdAt),
+      with: { item: true, itemValidations: true },
+    });
     return result;
 
     // const result = await dbConnection

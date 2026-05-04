@@ -3,10 +3,7 @@ import { singleton } from 'tsyringe';
 import { ItemVisibilityType, type ResultOf } from '@graasp/sdk';
 
 import type { DBConnection } from '../drizzle/db.js';
-import type {
-  ItemMembershipRaw,
-  ItemVisibilityWithItem,
-} from '../drizzle/types.js';
+import type { ItemMembershipRaw, ItemVisibilityWithItem } from '../drizzle/types.js';
 import type { PermissionLevel } from '../types.js';
 import {
   MemberCannotAccess,
@@ -70,18 +67,12 @@ export class AuthorizedItemService {
 
     // batch request for all items
     const inheritedMemberships = accountId
-      ? await this.itemMembershipRepository.getInheritedMany(
-          dbConnection,
-          items,
-          accountId,
-          true,
-        )
+      ? await this.itemMembershipRepository.getInheritedMany(dbConnection, items, accountId, true)
       : null;
-    const visibilities = await this.itemVisibilityRepository.getManyForMany(
-      dbConnection,
-      items,
-      [ItemVisibilityType.Public, ItemVisibilityType.Hidden],
-    );
+    const visibilities = await this.itemVisibilityRepository.getManyForMany(dbConnection, items, [
+      ItemVisibilityType.Public,
+      ItemVisibilityType.Hidden,
+    ]);
 
     const resultOfMemberships: ResultOf<ItemMembershipRaw | null> = {
       data: inheritedMemberships?.data ?? {},
@@ -90,11 +81,8 @@ export class AuthorizedItemService {
 
     for (const item of items) {
       const highest = resultOfMemberships.data[item.id]?.permission;
-      const isValid =
-        highest && permissionMapping[highest].includes(permission);
-      const isPublic = visibilities.data[item.id].find(
-        (t) => t.type === ItemVisibilityType.Public,
-      );
+      const isValid = highest && permissionMapping[highest].includes(permission);
+      const isPublic = visibilities.data[item.id].find((t) => t.type === ItemVisibilityType.Public);
 
       // HIDDEN CHECK - prevent read
       // cannot read if your have read access only
@@ -141,9 +129,7 @@ export class AuthorizedItemService {
           resultOfMemberships.errors.push(new MemberCannotAdminItem(item.id));
           break;
         default:
-          resultOfMemberships.errors.push(
-            new Error(`${permission} is not a valid permission`),
-          );
+          resultOfMemberships.errors.push(new Error(`${permission} is not a valid permission`));
           break;
       }
     }
@@ -169,20 +155,14 @@ export class AuthorizedItemService {
     }: { permission?: PermissionLevel; accountId?: string; item: ItemRaw },
   ) {
     try {
-      const { itemMembership, visibilities } = await this.getPropertiesForItem(
-        dbConnection,
-        {
-          permission,
-          accountId,
-          item,
-        },
-      );
+      const { itemMembership, visibilities } = await this.getPropertiesForItem(dbConnection, {
+        permission,
+        accountId,
+        item,
+      });
 
       // returns false if does not have membership and item is public
-      if (
-        !itemMembership &&
-        visibilities.find(({ type }) => type === ItemVisibilityType.Public)
-      ) {
+      if (!itemMembership && visibilities.find(({ type }) => type === ItemVisibilityType.Public)) {
         return false;
       }
 
@@ -303,33 +283,21 @@ export class AuthorizedItemService {
     // but do not fetch membership for signed out member
 
     const inheritedMembership = accountId
-      ? await this.itemMembershipRepository.getInherited(
-          dbConnection,
-          item.path,
-          accountId,
-          true,
-        )
+      ? await this.itemMembershipRepository.getInherited(dbConnection, item.path, accountId, true)
       : null;
     const highest = inheritedMembership?.permission;
     const isValid = highest && permissionMapping[highest].includes(permission);
     let isPublic = false;
-    const visibilities = await this.itemVisibilityRepository.getByItemPath(
-      dbConnection,
-      item.path,
-    );
+    const visibilities = await this.itemVisibilityRepository.getByItemPath(dbConnection, item.path);
     if (highest === 'read' || permission === 'read') {
-      isPublic = Boolean(
-        visibilities.find((t) => t.type === ItemVisibilityType.Public),
-      );
+      isPublic = Boolean(visibilities.find((t) => t.type === ItemVisibilityType.Public));
     }
 
     // HIDDEN CHECK - prevent read
     // cannot read if your have read access only
     // or if the item is public so you would have normally access without permission
     if (highest === 'read' || (isPublic && !highest)) {
-      const isHidden = Boolean(
-        visibilities.find((t) => t.type === ItemVisibilityType.Hidden),
-      );
+      const isHidden = Boolean(visibilities.find((t) => t.type === ItemVisibilityType.Hidden));
       if (isHidden) {
         throw new MemberCannotAccess(item.id);
       }

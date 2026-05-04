@@ -5,25 +5,17 @@ import { GPTVersion, type GPTVersionType } from '@graasp/sdk';
 import { resolveDependency } from '../../../../../di/utils.js';
 import { db } from '../../../../../drizzle/db.js';
 import { asDefined } from '../../../../../utils/assertions.js';
-import {
-  OPENAI_DEFAULT_TEMPERATURE,
-  OPENAI_GPT_VERSION,
-} from '../../../../../utils/config.js';
+import { OPENAI_DEFAULT_TEMPERATURE, OPENAI_GPT_VERSION } from '../../../../../utils/config.js';
 import { InvalidJWTItem } from '../../../../../utils/errors.js';
 import { authenticateAppsJWT } from '../../../../auth/plugins/passport/preHandlers.js';
 import { AuthorizedItemService } from '../../../../authorizedItem.service.js';
 import { create } from './chatBot.schemas.js';
 import { ChatBotService } from './chatBot.service.js';
 
-const validateGPTVersion = (
-  gptVersionInput: string | undefined,
-): GPTVersionType => {
+const validateGPTVersion = (gptVersionInput: string | undefined): GPTVersionType => {
   let gptVersion = gptVersionInput;
   // convert removed versions to the default
-  if (
-    !gptVersion ||
-    !(Object.values(GPTVersion) as string[]).includes(gptVersion)
-  ) {
+  if (!gptVersion || !(Object.values(GPTVersion) as string[]).includes(gptVersion)) {
     gptVersion = OPENAI_GPT_VERSION;
   }
   return gptVersion as GPTVersionType;
@@ -63,9 +55,7 @@ const chatBotPlugin: FastifyPluginAsyncTypebox = async (fastify) => {
         gptVersion,
         temperature,
       );
-      reply
-        .code(200)
-        .send({ completion: message.completion, model: message.model });
+      reply.code(200).send({ completion: message.completion, model: message.model });
     },
   );
 };

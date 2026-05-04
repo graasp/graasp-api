@@ -5,10 +5,7 @@ import { AccountType, type ResultOf, type UUID } from '@graasp/sdk';
 
 import { type DBConnection } from '../../drizzle/db.js';
 import { accountsTable, membersView } from '../../drizzle/schema.js';
-import type {
-  AccountInsertDTO,
-  MemberCreationDTO,
-} from '../../drizzle/types.js';
+import type { AccountInsertDTO, MemberCreationDTO } from '../../drizzle/types.js';
 import { MemberNotFound } from '../../utils/errors.js';
 import { mapById } from '../utils.js';
 import { MemberDTO } from './types.js';
@@ -19,12 +16,7 @@ export class MemberRepository {
     // need to use the accounts table as we can not delete from a view (membersView)
     await dbConnection
       .delete(accountsTable)
-      .where(
-        and(
-          eq(accountsTable.id, id),
-          eq(accountsTable.type, AccountType.Individual),
-        ),
-      );
+      .where(and(eq(accountsTable.id, id), eq(accountsTable.type, AccountType.Individual)));
   }
 
   async get(dbConnection: DBConnection, id: string): Promise<MemberDTO> {
@@ -33,10 +25,7 @@ export class MemberRepository {
     if (!id) {
       throw new MemberNotFound();
     }
-    const m = await dbConnection
-      .select()
-      .from(membersView)
-      .where(eq(membersView.id, id));
+    const m = await dbConnection.select().from(membersView).where(eq(membersView.id, id));
 
     if (!m.length) {
       throw new MemberNotFound();
@@ -44,10 +33,7 @@ export class MemberRepository {
     return new MemberDTO(m[0]);
   }
 
-  async getMany(
-    dbConnection: DBConnection,
-    ids: string[],
-  ): Promise<ResultOf<MemberDTO>> {
+  async getMany(dbConnection: DBConnection, ids: string[]): Promise<ResultOf<MemberDTO>> {
     const members = await dbConnection
       .select()
       .from(membersView)
@@ -64,10 +50,7 @@ export class MemberRepository {
     });
   }
 
-  async getByEmail(
-    dbConnection: DBConnection,
-    emailString: string,
-  ): Promise<MemberDTO | null> {
+  async getByEmail(dbConnection: DBConnection, emailString: string): Promise<MemberDTO | null> {
     const email = emailString.toLowerCase();
     const member = await dbConnection
       .select()
@@ -107,12 +90,7 @@ export class MemberRepository {
     body: Partial<
       Pick<
         AccountInsertDTO,
-        | 'extra'
-        | 'email'
-        | 'name'
-        | 'enableSaveActions'
-        | 'lastAuthenticatedAt'
-        | 'isValidated'
+        'extra' | 'email' | 'name' | 'enableSaveActions' | 'lastAuthenticatedAt' | 'isValidated'
       >
     >,
   ): Promise<MemberDTO> {
@@ -165,8 +143,7 @@ export class MemberRepository {
 
   async post(
     dbConnection: DBConnection,
-    data: Partial<MemberCreationDTO> &
-      Pick<MemberCreationDTO, 'email' | 'name'>,
+    data: Partial<MemberCreationDTO> & Pick<MemberCreationDTO, 'email' | 'name'>,
   ): Promise<MemberDTO> {
     const email = data.email.toLowerCase();
 

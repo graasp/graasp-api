@@ -7,16 +7,10 @@ import sanitize from 'sanitize-html';
 import { Readable } from 'stream';
 import { singleton } from 'tsyringe';
 
-import {
-  type DocumentItemExtraProperties,
-  type ItemSettings,
-} from '@graasp/sdk';
+import { type DocumentItemExtraProperties, type ItemSettings } from '@graasp/sdk';
 
 import { type DBConnection } from '../../../../drizzle/db.js';
-import type {
-  AppSettingInsertDTO,
-  AppSettingRaw,
-} from '../../../../drizzle/types.js';
+import type { AppSettingInsertDTO, AppSettingRaw } from '../../../../drizzle/types.js';
 import { BaseLogger } from '../../../../logger.js';
 import type { ItemType } from '../../../../schemas/global.js';
 import type { MinimalMember } from '../../../../types.js';
@@ -137,9 +131,7 @@ export class ImportService {
     if (stats.isDirectory()) {
       // element has no extension -> folder
 
-      const description = await this._getDescriptionForFilepath(
-        path.join(filepath, filename),
-      );
+      const description = await this._getDescriptionForFilepath(path.join(filepath, filename));
 
       this.log.debug(`create folder from '${filename}'`);
       return this.itemService.post(dbConnection, actor, {
@@ -171,9 +163,7 @@ export class ImportService {
         const url = link.slice(URL_PREFIX.length);
 
         // get if app in content -> url is either a link or an app
-        const type = linkType.includes('1')
-          ? ('app' as const)
-          : ('embeddedLink' as const);
+        const type = linkType.includes('1') ? ('app' as const) : ('embeddedLink' as const);
         if (type === 'app') {
           const newItem = {
             name,
@@ -230,24 +220,18 @@ export class ImportService {
       // normal files
       default: {
         // TODO: replace by file-type library once we are in ESM
-        const fileTypeAnalysis = await mimetics.parseAsync(
-          fs.readFileSync(filepath),
-        );
+        const fileTypeAnalysis = await mimetics.parseAsync(fs.readFileSync(filepath));
         const mimetype = fileTypeAnalysis?.mime ?? 'text/plain';
 
         // upload file
         const file = fs.createReadStream(filepath);
-        const item = await this.fileItemService.uploadFileAndCreateItem(
-          dbConnection,
-          actor,
-          {
-            filename,
-            mimetype,
-            description,
-            stream: file,
-            parentId,
-          },
-        );
+        const item = await this.fileItemService.uploadFileAndCreateItem(dbConnection, actor, {
+          filename,
+          mimetype,
+          description,
+          stream: file,
+          parentId,
+        });
 
         return item;
       }
@@ -293,9 +277,7 @@ export class ImportService {
     // Sanitize the items and add the thumbnails, if any
     const augmentedItems = await Promise.all(
       items.map(async (item) => {
-        const sanitizedDescription = item.description
-          ? sanitize(item.description)
-          : null;
+        const sanitizedDescription = item.description ? sanitize(item.description) : null;
         let extra;
 
         // Sanitize the document content
@@ -304,9 +286,7 @@ export class ImportService {
             throw new GraaspExportInvalidFileError();
           }
 
-          const documentExtraProps = item.extra[
-            'document'
-          ] as DocumentItemExtraProperties;
+          const documentExtraProps = item.extra['document'] as DocumentItemExtraProperties;
           const content = documentExtraProps.content;
           const sanitizedContent = sanitize(content);
           extra = { ['document']: { content: sanitizedContent } };
@@ -314,10 +294,7 @@ export class ImportService {
 
         // Find and upload the thumbnail
         let thumbnail: Readable | undefined = undefined;
-        const itemThumbnailPath = path.join(
-          folderPath,
-          generateThumbnailFilename(item.id),
-        );
+        const itemThumbnailPath = path.join(folderPath, generateThumbnailFilename(item.id));
         if (await pathExists(itemThumbnailPath)) {
           thumbnail = createReadStream(itemThumbnailPath);
         }
@@ -348,15 +325,11 @@ export class ImportService {
           }
 
           const pathToGraaspFile = path.join(folderPath, item.id);
-          const fileItemProperties = await this.fileItemService.uploadFile(
-            dbConnection,
-            actor,
-            {
-              filename: item.name,
-              filepath: pathToGraaspFile,
-              mimetype: item.mimetype,
-            },
-          );
+          const fileItemProperties = await this.fileItemService.uploadFile(dbConnection, actor, {
+            filename: item.name,
+            filepath: pathToGraaspFile,
+            mimetype: item.mimetype,
+          });
 
           extra = {
             ['file']: fileItemProperties,
@@ -415,29 +388,26 @@ export class ImportService {
         }
 
         return arr.concat(
-          settings.reduce<Omit<AppSettingInsertDTO[], 'id'>>(
-            (arr, appSetting) => {
-              // ignore app setting file
-              if (appSetting.data['file']) {
-                return arr;
-              }
+          settings.reduce<Omit<AppSettingInsertDTO[], 'id'>>((arr, appSetting) => {
+            // ignore app setting file
+            if (appSetting.data['file']) {
+              return arr;
+            }
 
-              // Remove the id property from the imported app settings as a precaution. Remove this condition as soon as the id is stripped directly in the post function.
-              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-              // @ts-expect-error
-              // eslint-disable-next-line @typescript-eslint/no-unused-vars
-              const { id, creatorId, itemId, ...appSettingData } = appSetting;
+            // Remove the id property from the imported app settings as a precaution. Remove this condition as soon as the id is stripped directly in the post function.
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-expect-error
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            const { id, creatorId, itemId, ...appSettingData } = appSetting;
 
-              return arr.concat([
-                {
-                  creatorId: actor.id,
-                  itemId: uploadedItem.id,
-                  ...appSettingData,
-                },
-              ]);
-            },
-            [],
-          ),
+            return arr.concat([
+              {
+                creatorId: actor.id,
+                itemId: uploadedItem.id,
+                ...appSettingData,
+              },
+            ]);
+          }, []),
         );
       },
       [],

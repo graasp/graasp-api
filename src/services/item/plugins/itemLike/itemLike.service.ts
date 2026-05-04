@@ -37,10 +37,7 @@ export class ItemLikeService {
 
   async getForMember(dbConnection: DBConnection, member: MinimalMember) {
     // only own items
-    const likes = await this.itemLikeRepository.getByCreator(
-      dbConnection,
-      member.id,
-    );
+    const likes = await this.itemLikeRepository.getByCreator(dbConnection, member.id);
     // filter out items user might not have access to
     // and packed item
     const filteredItems = await filterOutPackedItems(
@@ -58,11 +55,7 @@ export class ItemLikeService {
     });
   }
 
-  async getForItem(
-    dbConnection: DBConnection,
-    maybeUser: MaybeUser,
-    itemId: string,
-  ) {
+  async getForItem(dbConnection: DBConnection, maybeUser: MaybeUser, itemId: string) {
     await this.authorizedItemService.assertAccessForItemId(dbConnection, {
       accountId: maybeUser?.id,
       itemId,
@@ -71,11 +64,7 @@ export class ItemLikeService {
     return this.itemLikeRepository.getByItemId(dbConnection, itemId);
   }
 
-  async removeOne(
-    dbConnection: DBConnection,
-    member: MinimalMember,
-    itemId: string,
-  ) {
+  async removeOne(dbConnection: DBConnection, member: MinimalMember, itemId: string) {
     // QUESTION: allow public to be liked?
     const item = await this.authorizedItemService.getItemById(dbConnection, {
       accountId: member.id,
@@ -89,26 +78,16 @@ export class ItemLikeService {
     );
 
     // update index if item is published
-    const publishedItem = await this.itemPublishedRepository.getForItem(
-      dbConnection,
-      item.path,
-    );
+    const publishedItem = await this.itemPublishedRepository.getForItem(dbConnection, item.path);
     if (publishedItem) {
-      const likes = await this.itemLikeRepository.getCountByItemId(
-        dbConnection,
-        item.id,
-      );
+      const likes = await this.itemLikeRepository.getCountByItemId(dbConnection, item.id);
       await this.meilisearchClient.updateItem(item.id, { likes });
     }
 
     return result;
   }
 
-  async post(
-    dbConnection: DBConnection,
-    member: MinimalMember,
-    itemId: string,
-  ) {
+  async post(dbConnection: DBConnection, member: MinimalMember, itemId: string) {
     // QUESTION: allow public to be liked?
     const item = await this.authorizedItemService.getItemById(dbConnection, {
       accountId: member.id,
@@ -120,15 +99,9 @@ export class ItemLikeService {
     });
 
     // update index if item is published
-    const publishedItem = await this.itemPublishedRepository.getForItem(
-      dbConnection,
-      item.path,
-    );
+    const publishedItem = await this.itemPublishedRepository.getForItem(dbConnection, item.path);
     if (publishedItem) {
-      const likes = await this.itemLikeRepository.getCountByItemId(
-        dbConnection,
-        item.id,
-      );
+      const likes = await this.itemLikeRepository.getCountByItemId(dbConnection, item.id);
       await this.meilisearchClient.updateItem(item.id, { likes });
     }
 

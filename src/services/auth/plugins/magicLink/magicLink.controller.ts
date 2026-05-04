@@ -2,14 +2,9 @@ import { StatusCodes } from 'http-status-codes';
 
 import type { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox';
 import type { PassportUser, preHandlerHookHandler } from 'fastify';
-import type { RouteShorthandHook } from 'fastify/types/route';
+import type { RouteShorthandHook } from 'fastify/types/route.js';
 
-import {
-  ClientManager,
-  Context,
-  DEFAULT_LANG,
-  RecaptchaAction,
-} from '@graasp/sdk';
+import { ClientManager, Context, DEFAULT_LANG, RecaptchaAction } from '@graasp/sdk';
 
 import { resolveDependency } from '../../../../di/utils.js';
 import { db } from '../../../../drizzle/db.js';
@@ -89,13 +84,7 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
         PassportStrategy.WebMagicLink,
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        async (
-          request,
-          reply,
-          err,
-          user?: PassportUser,
-          info?: PassportInfo,
-        ) => {
+        async (request, reply, err, user?: PassportUser, info?: PassportInfo) => {
           // This function is called after the strategy has been executed.
           // It is necessary, so we match the behavior of the original implementation.
           if (!user || err) {
@@ -124,18 +113,11 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
         log,
       } = request;
       const member = asDefined(user?.account);
-      const redirectionLink = getRedirectionLink(
-        log,
-        url ? decodeURIComponent(url) : undefined,
-      );
+      const redirectionLink = getRedirectionLink(log, url ? decodeURIComponent(url) : undefined);
       await db.transaction(async (tx) => {
         await memberService.refreshLastAuthenticatedAt(tx, member.id);
         // on auth, if the user used the email sign in, its account gets validated
-        if (
-          authInfo?.emailValidation &&
-          isMember(member) &&
-          !member.isValidated
-        ) {
+        if (authInfo?.emailValidation && isMember(member) && !member.isValidated) {
           await memberService.validate(tx, member.id);
         }
       });

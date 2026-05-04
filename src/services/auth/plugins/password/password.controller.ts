@@ -97,12 +97,7 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
     async ({ user, body: { currentPassword, password } }, reply) => {
       const member = asDefined(user?.account);
       return db.transaction(async (tx) => {
-        await memberPasswordService.patch(
-          tx,
-          member,
-          password,
-          currentPassword,
-        );
+        await memberPasswordService.patch(tx, member, password, currentPassword);
         reply.status(StatusCodes.NO_CONTENT);
       });
     },
@@ -133,15 +128,13 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
       // need to await this
       await reply.send();
 
-      const resetPasswordRequest =
-        await memberPasswordService.createResetPasswordRequest(db, email);
+      const resetPasswordRequest = await memberPasswordService.createResetPasswordRequest(
+        db,
+        email,
+      );
       if (resetPasswordRequest) {
         const { token, member: memberInfo } = resetPasswordRequest;
-        memberPasswordService.mailResetPasswordRequest(
-          email,
-          token,
-          memberInfo.lang,
-        );
+        memberPasswordService.mailResetPasswordRequest(email, token, memberInfo.lang);
         const action = {
           member: memberInfo,
           type: ActionTriggers.AskResetPassword,
@@ -174,10 +167,7 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
         body: { password },
       } = request;
       const uuid = asDefined(user?.passwordResetRedisKey);
-      const member = await memberPasswordService.getMemberByPasswordResetUuid(
-        db,
-        uuid,
-      );
+      const member = await memberPasswordService.getMemberByPasswordResetUuid(db, uuid);
       await memberPasswordService.applyReset(db, password, uuid);
       try {
         reply.status(StatusCodes.NO_CONTENT);
@@ -209,10 +199,7 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
     },
     async ({ user }) => {
       const account = asDefined(user?.account);
-      const hasPassword = await memberPasswordService.hasPassword(
-        db,
-        account.id,
-      );
+      const hasPassword = await memberPasswordService.hasPassword(db, account.id);
       return { hasPassword };
     },
   );

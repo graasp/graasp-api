@@ -13,8 +13,7 @@ import { clientMessageSchema, serverMessageSchema } from './schemas/message.js';
 const ajv = new Ajv();
 
 class AjvMessageSerializer {
-  serialize =
-    ajv.compileSerializer<Websocket.ServerMessage>(serverMessageSchema);
+  serialize = ajv.compileSerializer<Websocket.ServerMessage>(serverMessageSchema);
 
   parse = ajv.compileParser<Websocket.ClientMessage>(clientMessageSchema);
 }

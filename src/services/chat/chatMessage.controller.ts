@@ -40,9 +40,7 @@ export interface GraaspChatPluginOptions {
   prefix?: string;
 }
 
-const plugin: FastifyPluginAsyncTypebox<GraaspChatPluginOptions> = async (
-  fastify,
-) => {
+const plugin: FastifyPluginAsyncTypebox<GraaspChatPluginOptions> = async (fastify) => {
   await fastify.register(fp(mentionPlugin));
 
   const authorizedItemService = resolveDependency(AuthorizedItemService);
@@ -75,10 +73,7 @@ const plugin: FastifyPluginAsyncTypebox<GraaspChatPluginOptions> = async (
       '/:itemId/chat',
       {
         schema: createChatMessage,
-        preHandler: [
-          isAuthenticated,
-          matchOne(validatedMemberAccountRole, guestAccountRole),
-        ],
+        preHandler: [isAuthenticated, matchOne(validatedMemberAccountRole, guestAccountRole)],
       },
       async (request) => {
         const {
@@ -95,11 +90,7 @@ const plugin: FastifyPluginAsyncTypebox<GraaspChatPluginOptions> = async (
 
         // websocket message
         try {
-          websockets.publish(
-            itemChatTopic,
-            message.itemId,
-            ItemChatEvent('publish', message),
-          );
+          websockets.publish(itemChatTopic, message.itemId, ItemChatEvent('publish', message));
         } catch (e) {
           request.log.error(e);
         }
@@ -116,10 +107,7 @@ const plugin: FastifyPluginAsyncTypebox<GraaspChatPluginOptions> = async (
       '/:itemId/chat/:messageId',
       {
         schema: patchMessage,
-        preHandler: [
-          isAuthenticated,
-          matchOne(validatedMemberAccountRole, guestAccountRole),
-        ],
+        preHandler: [isAuthenticated, matchOne(validatedMemberAccountRole, guestAccountRole)],
       },
       async (request) => {
         const {
@@ -129,24 +117,14 @@ const plugin: FastifyPluginAsyncTypebox<GraaspChatPluginOptions> = async (
         } = request;
         const message = await db.transaction(async (tx) => {
           const member = asDefined(user?.account);
-          const message = await chatService.patchOne(
-            tx,
-            member,
-            itemId,
-            messageId,
-            body,
-          );
+          const message = await chatService.patchOne(tx, member, itemId, messageId, body);
           await actionChatService.postPatchMessageAction(tx, request, message);
           return message;
         });
 
         // websocket message
         try {
-          websockets.publish(
-            itemChatTopic,
-            message.itemId,
-            ItemChatEvent('update', message),
-          );
+          websockets.publish(itemChatTopic, message.itemId, ItemChatEvent('update', message));
         } catch (e) {
           request.log.error(e);
         }
@@ -160,10 +138,7 @@ const plugin: FastifyPluginAsyncTypebox<GraaspChatPluginOptions> = async (
       '/:itemId/chat/:messageId',
       {
         schema: deleteMessage,
-        preHandler: [
-          isAuthenticated,
-          matchOne(validatedMemberAccountRole, guestAccountRole),
-        ],
+        preHandler: [isAuthenticated, matchOne(validatedMemberAccountRole, guestAccountRole)],
       },
       async (request) => {
         const {
@@ -172,23 +147,14 @@ const plugin: FastifyPluginAsyncTypebox<GraaspChatPluginOptions> = async (
         } = request;
         const member = asDefined(user?.account);
         const message = await db.transaction(async (tx) => {
-          const message = await chatService.deleteOne(
-            tx,
-            member,
-            itemId,
-            messageId,
-          );
+          const message = await chatService.deleteOne(tx, member, itemId, messageId);
           await actionChatService.postDeleteMessageAction(tx, request, message);
           return message;
         });
 
         // websocket message
         try {
-          websockets.publish(
-            itemChatTopic,
-            message.itemId,
-            ItemChatEvent('delete', message),
-          );
+          websockets.publish(itemChatTopic, message.itemId, ItemChatEvent('delete', message));
         } catch (e) {
           request.log.error(e);
         }

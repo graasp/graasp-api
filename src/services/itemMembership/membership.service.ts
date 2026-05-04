@@ -18,10 +18,7 @@ import {
   type MemberInfo,
   type PermissionLevel,
 } from '../../types.js';
-import {
-  CannotDeleteOnlyAdmin,
-  CannotModifyGuestItemMembership,
-} from '../../utils/errors.js';
+import { CannotDeleteOnlyAdmin, CannotModifyGuestItemMembership } from '../../utils/errors.js';
 import HookManager from '../../utils/hook.js';
 import { AuthorizedItemService } from '../authorizedItem.service.js';
 import type { ItemRaw } from '../item/item.js';
@@ -63,15 +60,8 @@ export class ItemMembershipService {
     this.membershipRequestRepository = membershipRequestRepository;
   }
 
-  async _notifyMember(
-    account: { name: string },
-    member: MemberInfo,
-    item: ItemRaw,
-  ): Promise<void> {
-    const link = ClientManager.getInstance().getItemLink(
-      Context.Player,
-      item.id,
-    );
+  async _notifyMember(account: { name: string }, member: MemberInfo, item: ItemRaw): Promise<void> {
+    const link = ClientManager.getInstance().getItemLink(Context.Player, item.id);
 
     const mail = new MailBuilder({
       subject: {
@@ -97,31 +87,16 @@ export class ItemMembershipService {
       });
   }
 
-  async hasMembershipOnItem(
-    dbConnection: DBConnection,
-    accountId: UUID,
-    itemId: UUID,
-  ) {
-    return await this.itemMembershipRepository.hasMembershipOnItem(
-      dbConnection,
-      accountId,
-      itemId,
-    );
+  async hasMembershipOnItem(dbConnection: DBConnection, accountId: UUID, itemId: UUID) {
+    return await this.itemMembershipRepository.hasMembershipOnItem(dbConnection, accountId, itemId);
   }
 
-  async getForItem(
-    dbConnection: DBConnection,
-    maybeUser: MaybeUser,
-    itemId: ItemRaw['id'],
-  ) {
+  async getForItem(dbConnection: DBConnection, maybeUser: MaybeUser, itemId: ItemRaw['id']) {
     const item = await this.authorizedItemService.getItemById(dbConnection, {
       accountId: maybeUser?.id,
       itemId,
     });
-    const result = await this.itemMembershipRepository.getForItem(
-      dbConnection,
-      item,
-    );
+    const result = await this.itemMembershipRepository.getForItem(dbConnection, item);
 
     return result;
   }
@@ -143,11 +118,7 @@ export class ItemMembershipService {
     });
 
     // Delete corresponding membership request if it exists. If there is not a membership request, it will do nothing.
-    await this.membershipRequestRepository.deleteOne(
-      dbConnection,
-      memberId,
-      item.id,
-    );
+    await this.membershipRequestRepository.deleteOne(dbConnection, memberId, item.id);
 
     await this.hooks.runPostHooks('create', account, dbConnection, result);
 
@@ -192,13 +163,7 @@ export class ItemMembershipService {
 
     return Promise.all(
       memberships.map(async ({ accountId, permission }) => {
-        return this._create(
-          dbConnection,
-          authenticatedUser,
-          item,
-          accountId,
-          permission,
-        );
+        return this._create(dbConnection, authenticatedUser, item, accountId, permission);
       }),
     );
   }
@@ -210,10 +175,7 @@ export class ItemMembershipService {
     data: { permission: PermissionLevel },
   ) {
     // check memberships
-    const membership = await this.itemMembershipRepository.get(
-      dbConnection,
-      itemMembershipId,
-    );
+    const membership = await this.itemMembershipRepository.get(dbConnection, itemMembershipId);
     if (membership.account.type === AccountType.Guest) {
       throw new CannotModifyGuestItemMembership();
     }
@@ -223,12 +185,7 @@ export class ItemMembershipService {
       item: membership.item,
     });
 
-    await this.hooks.runPreHooks(
-      'update',
-      authenticatedUser,
-      dbConnection,
-      membership,
-    );
+    await this.hooks.runPreHooks('update', authenticatedUser, dbConnection, membership);
 
     const result = await this.itemMembershipRepository.updateOne(
       dbConnection,
@@ -236,12 +193,7 @@ export class ItemMembershipService {
       data,
     );
 
-    await this.hooks.runPostHooks(
-      'update',
-      authenticatedUser,
-      dbConnection,
-      result,
-    );
+    await this.hooks.runPostHooks('update', authenticatedUser, dbConnection, result);
 
     return result;
   }
@@ -253,10 +205,7 @@ export class ItemMembershipService {
     args: { purgeBelow?: boolean } = { purgeBelow: false },
   ) {
     // check memberships
-    const membership = await this.itemMembershipRepository.get(
-      dbConnection,
-      itemMembershipId,
-    );
+    const membership = await this.itemMembershipRepository.get(dbConnection, itemMembershipId);
     const { item } = membership;
     await this.authorizedItemService.assertAccess(dbConnection, {
       permission: 'admin',
@@ -265,10 +214,7 @@ export class ItemMembershipService {
     });
 
     // check if last admin, in which case prevent deletion
-    const memberships = await this.itemMembershipRepository.getForItem(
-      dbConnection,
-      item,
-    );
+    const memberships = await this.itemMembershipRepository.getForItem(dbConnection, item);
 
     const otherAdminMemberships = memberships.filter(
       (m) => m.id !== itemMembershipId && m.permission === 'admin',
@@ -279,13 +225,9 @@ export class ItemMembershipService {
 
     await this.hooks.runPreHooks('delete', account, dbConnection, membership);
 
-    await this.itemMembershipRepository.deleteOne(
-      dbConnection,
-      itemMembershipId,
-      {
-        purgeBelow: args.purgeBelow,
-      },
-    );
+    await this.itemMembershipRepository.deleteOne(dbConnection, itemMembershipId, {
+      purgeBelow: args.purgeBelow,
+    });
 
     await this.hooks.runPostHooks('delete', account, dbConnection, membership);
   }

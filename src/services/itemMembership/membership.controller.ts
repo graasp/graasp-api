@@ -12,19 +12,12 @@ import {
   optionalIsAuthenticated,
 } from '../auth/plugins/passport/preHandlers.js';
 import { validatedMemberAccountRole } from '../member/strategies/validatedMemberAccountRole.js';
-import {
-  create,
-  deleteOne,
-  getItemMembershipsForItem,
-  updateOne,
-} from './membership.schemas.js';
+import { create, deleteOne, getItemMembershipsForItem, updateOne } from './membership.schemas.js';
 import { ItemMembershipService } from './membership.service.js';
 import MembershipRequestAPI from './plugins/MembershipRequest/membershipRequest.controller.js';
 import { membershipWsHooks } from './ws/hooks.js';
 
-export const itemMembershipsController: FastifyPluginAsyncTypebox = async (
-  fastify,
-) => {
+export const itemMembershipsController: FastifyPluginAsyncTypebox = async (fastify) => {
   const itemMembershipService = resolveDependency(ItemMembershipService);
 
   // routes

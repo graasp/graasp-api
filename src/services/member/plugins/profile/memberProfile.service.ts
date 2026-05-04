@@ -15,16 +15,8 @@ export class MemberProfileService {
     this.memberProfileRepository = memberProfileRepository;
   }
 
-  async post(
-    dbConnection: DBConnection,
-    member: MinimalMember,
-    data: Partial<IMemberProfile>,
-  ) {
-    const profile = await this.memberProfileRepository.createOne(
-      dbConnection,
-      member.id,
-      data,
-    );
+  async post(dbConnection: DBConnection, member: MinimalMember, data: Partial<IMemberProfile>) {
+    const profile = await this.memberProfileRepository.createOne(dbConnection, member.id, data);
 
     return profile;
   }
@@ -43,22 +35,11 @@ export class MemberProfileService {
   }
 
   async getOwn(dbConnection: DBConnection, member: MinimalMember) {
-    const memberProfile = await this.memberProfileRepository.getOwn(
-      dbConnection,
-      member.id,
-    );
+    const memberProfile = await this.memberProfileRepository.getOwn(dbConnection, member.id);
     return memberProfile;
   }
 
-  async patch(
-    dbConnection: DBConnection,
-    member: MinimalMember,
-    data: Partial<IMemberProfile>,
-  ) {
-    return await this.memberProfileRepository.patch(
-      dbConnection,
-      member.id,
-      data,
-    );
+  async patch(dbConnection: DBConnection, member: MinimalMember, data: Partial<IMemberProfile>) {
+    return await this.memberProfileRepository.patch(dbConnection, member.id, data);
   }
 }

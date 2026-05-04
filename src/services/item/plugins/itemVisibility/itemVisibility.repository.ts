@@ -2,26 +2,12 @@ import { inArray, isNull, or } from 'drizzle-orm';
 import { and, eq } from 'drizzle-orm/sql';
 import { singleton } from 'tsyringe';
 
-import {
-  type ItemVisibilityOptionsType,
-  type ResultOf,
-  getChildFromPath,
-} from '@graasp/sdk';
+import { type ItemVisibilityOptionsType, type ResultOf, getChildFromPath } from '@graasp/sdk';
 
 import type { DBConnection } from '../../../../drizzle/db.js';
-import {
-  isAncestorOrSelf,
-  isDescendantOrSelf,
-} from '../../../../drizzle/operations.js';
-import {
-  itemVisibilitiesTable,
-  items,
-  itemsRawTable,
-} from '../../../../drizzle/schema.js';
-import type {
-  ItemVisibilityRaw,
-  ItemVisibilityWithItem,
-} from '../../../../drizzle/types.js';
+import { isAncestorOrSelf, isDescendantOrSelf } from '../../../../drizzle/operations.js';
+import { itemVisibilitiesTable, items, itemsRawTable } from '../../../../drizzle/schema.js';
+import type { ItemVisibilityRaw, ItemVisibilityWithItem } from '../../../../drizzle/types.js';
 import type { MinimalMember } from '../../../../types.js';
 import { mapById } from '../../../utils.js';
 import type { ItemRaw } from '../../item.js';
@@ -47,10 +33,7 @@ export class ItemVisibilityRepository {
       .from(itemVisibilitiesTable)
       .innerJoin(items, eq(items.path, itemVisibilitiesTable.itemPath))
       .where(
-        and(
-          eq(itemVisibilitiesTable.type, visibilityType),
-          isAncestorOrSelf(items.path, itemPath),
-        ),
+        and(eq(itemVisibilitiesTable.type, visibilityType), isAncestorOrSelf(items.path, itemPath)),
       )
       .limit(1);
 
@@ -75,21 +58,18 @@ export class ItemVisibilityRepository {
     item: ItemRaw,
     visibilityTypes: ItemVisibilityOptionsType[],
   ): Promise<ResultOf<boolean>> {
-    const hasVisibilities =
-      await dbConnection.query.itemVisibilitiesTable.findMany({
-        with: { item: true },
-        where: and(
-          isAncestorOrSelf(itemVisibilitiesTable.itemPath, item.path),
-          inArray(itemVisibilitiesTable.type, visibilityTypes),
-        ),
-      });
+    const hasVisibilities = await dbConnection.query.itemVisibilitiesTable.findMany({
+      with: { item: true },
+      where: and(
+        isAncestorOrSelf(itemVisibilitiesTable.itemPath, item.path),
+        inArray(itemVisibilitiesTable.type, visibilityTypes),
+      ),
+    });
 
     return mapById({
       keys: visibilityTypes,
       findElement: (type) =>
-        Boolean(
-          hasVisibilities.find(({ type: thisType }) => type === thisType),
-        ),
+        Boolean(hasVisibilities.find(({ type: thisType }) => type === thisType)),
     });
   }
 
@@ -109,10 +89,7 @@ export class ItemVisibilityRepository {
 
     return await dbConnection.query.itemVisibilitiesTable.findMany({
       with: { item: true },
-      where: and(
-        inArray(itemVisibilitiesTable.type, visibilityTypes),
-        or(...pathsCondition),
-      ),
+      where: and(inArray(itemVisibilitiesTable.type, visibilityTypes), or(...pathsCondition)),
     });
   }
 
@@ -130,17 +107,12 @@ export class ItemVisibilityRepository {
     const mapByPath = mapById({
       keys: items.map(({ path }) => path),
       findElement: (path) =>
-        visibilities.filter((itemVisibility) =>
-          path.includes(itemVisibility.item.path),
-        ),
+        visibilities.filter((itemVisibility) => path.includes(itemVisibility.item.path)),
     });
 
     // use id as key
     const idToItemVisibilities = Object.fromEntries(
-      Object.entries(mapByPath.data).map(([key, value]) => [
-        getChildFromPath(key),
-        value,
-      ]),
+      Object.entries(mapByPath.data).map(([key, value]) => [getChildFromPath(key), value]),
     );
 
     return { data: idToItemVisibilities, errors: mapByPath.errors };
@@ -175,31 +147,20 @@ export class ItemVisibilityRepository {
       return isAncestorOrSelf(itemVisibilitiesTable.itemPath, path);
     });
 
-    const haveVisibility =
-      await dbConnection.query.itemVisibilitiesTable.findMany({
-        with: { item: true },
-        where: and(
-          eq(itemVisibilitiesTable.type, visibilityType),
-          or(...pathsCondition),
-        ),
-      });
+    const haveVisibility = await dbConnection.query.itemVisibilitiesTable.findMany({
+      with: { item: true },
+      where: and(eq(itemVisibilitiesTable.type, visibilityType), or(...pathsCondition)),
+    });
 
     const mapByPath = mapById({
       keys: items.map(({ path }) => path),
       findElement: (path) =>
-        Boolean(
-          haveVisibility.find((itemVisibility) =>
-            path.includes(itemVisibility.item.path),
-          ),
-        ),
+        Boolean(haveVisibility.find((itemVisibility) => path.includes(itemVisibility.item.path))),
     });
 
     // use id as key
     const idToItemVisibilities = Object.fromEntries(
-      Object.entries(mapByPath.data).map(([key, value]) => [
-        getChildFromPath(key),
-        value,
-      ]),
+      Object.entries(mapByPath.data).map(([key, value]) => [getChildFromPath(key), value]),
     );
 
     return { data: idToItemVisibilities, errors: mapByPath.errors };
@@ -302,41 +263,29 @@ export class ItemVisibilityRepository {
     }
 
     const pathsCondition = or(
-      ...inputItems.map(({ path }) =>
-        isAncestorOrSelf(itemVisibilitiesTable.itemPath, path),
-      ),
+      ...inputItems.map(({ path }) => isAncestorOrSelf(itemVisibilitiesTable.itemPath, path)),
     );
     const deletedCondition = isNull(itemsRawTable.deletedAt);
 
     const visibilities = await dbConnection
       .select()
       .from(itemVisibilitiesTable)
-      .innerJoin(
-        itemsRawTable,
-        eq(itemVisibilitiesTable.itemPath, itemsRawTable.path),
-      )
+      .innerJoin(itemsRawTable, eq(itemVisibilitiesTable.itemPath, itemsRawTable.path))
       .where(and(pathsCondition, deletedCondition));
 
-    const transformedVisibilities = visibilities.map(
-      ({ item, item_visibility }) => ({
-        item,
-        ...item_visibility,
-      }),
-    );
+    const transformedVisibilities = visibilities.map(({ item, item_visibility }) => ({
+      item,
+      ...item_visibility,
+    }));
 
     const mapByPath = mapById({
       keys: inputItems.map(({ path }) => path),
       findElement: (path) =>
-        transformedVisibilities.filter((itemVisibility) =>
-          path.includes(itemVisibility.item.path),
-        ),
+        transformedVisibilities.filter((itemVisibility) => path.includes(itemVisibility.item.path)),
     });
     // use id as key
     const idToItemVisibilities = Object.fromEntries(
-      Object.entries(mapByPath.data).map(([key, value]) => [
-        getChildFromPath(key),
-        value,
-      ]),
+      Object.entries(mapByPath.data).map(([key, value]) => [getChildFromPath(key), value]),
     );
 
     return { data: idToItemVisibilities, errors: mapByPath.errors };
@@ -356,18 +305,13 @@ export class ItemVisibilityRepository {
     copyPath: ItemRaw['path'],
     excludeTypes?: ItemVisibilityOptionsType[],
   ): Promise<void> {
-    const originalVisibilities = await this.getByItemPath(
-      dbConnection,
-      original.path,
-    );
+    const originalVisibilities = await this.getByItemPath(dbConnection, original.path);
     const visibilitiesToInsert = originalVisibilities
       .filter((visibility) => !excludeTypes?.includes(visibility.type))
       .map(({ type }) => ({ itemPath: copyPath, type, creator }));
 
     if (visibilitiesToInsert.length) {
-      await dbConnection
-        .insert(itemVisibilitiesTable)
-        .values(visibilitiesToInsert);
+      await dbConnection.insert(itemVisibilitiesTable).values(visibilitiesToInsert);
       // await this.repository.insert(
       //   itemVisibilitiesTable
       //     .filter((visibility) => !excludeTypes?.includes(visibility.type))

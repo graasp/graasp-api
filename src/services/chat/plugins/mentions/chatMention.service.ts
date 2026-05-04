@@ -42,13 +42,9 @@ export class MentionService {
     member: { email: string; lang: string };
     creator: { name: string };
   }) {
-    const itemLink = ClientManager.getInstance().getItemLink(
-      Context.Builder,
-      item.id,
-      {
-        chatOpen: true,
-      },
-    );
+    const itemLink = ClientManager.getInstance().getItemLink(Context.Builder, item.id, {
+      chatOpen: true,
+    });
 
     const mail = new MailBuilder({
       subject: {
@@ -106,25 +102,12 @@ export class MentionService {
     return mentions;
   }
 
-  async getForAccount(
-    dbConnection: DBConnection,
-    authenticatedUser: AuthenticatedUser,
-  ) {
-    return this.chatMentionRepository.getForAccount(
-      dbConnection,
-      authenticatedUser.id,
-    );
+  async getForAccount(dbConnection: DBConnection, authenticatedUser: AuthenticatedUser) {
+    return this.chatMentionRepository.getForAccount(dbConnection, authenticatedUser.id);
   }
 
-  async get(
-    dbConnection: DBConnection,
-    authenticatedUser: AuthenticatedUser,
-    mentionId: string,
-  ) {
-    const mentionContent = await this.chatMentionRepository.get(
-      dbConnection,
-      mentionId,
-    );
+  async get(dbConnection: DBConnection, authenticatedUser: AuthenticatedUser, mentionId: string) {
+    const mentionContent = await this.chatMentionRepository.get(dbConnection, mentionId);
 
     if (mentionContent.accountId !== authenticatedUser.id) {
       throw new MemberCannotAccessMention({ id: mentionId });
@@ -156,13 +139,7 @@ export class MentionService {
     return this.chatMentionRepository.deleteOne(dbConnection, mentionId);
   }
 
-  async deleteAll(
-    dbConnection: DBConnection,
-    authenticatedUser: AuthenticatedUser,
-  ) {
-    await this.chatMentionRepository.deleteAll(
-      dbConnection,
-      authenticatedUser.id,
-    );
+  async deleteAll(dbConnection: DBConnection, authenticatedUser: AuthenticatedUser) {
+    await this.chatMentionRepository.deleteAll(dbConnection, authenticatedUser.id);
   }
 }

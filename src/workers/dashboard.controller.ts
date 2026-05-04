@@ -9,9 +9,7 @@ import { DEV } from '../config/env.js';
 import { REDIS_CONNECTION } from '../config/redis.js';
 import { Queues } from './config.js';
 
-export const queueDashboardPlugin: FastifyPluginAsyncTypebox = async (
-  instance,
-) => {
+export const queueDashboardPlugin: FastifyPluginAsyncTypebox = async (instance) => {
   if (DEV) {
     const serverAdapter = new FastifyAdapter();
 
@@ -33,8 +31,6 @@ export const queueDashboardPlugin: FastifyPluginAsyncTypebox = async (
     instance.register(serverAdapter.registerPlugin(), { prefix: '/ui' });
   } else {
     // warn that the dashboard will not be available.
-    instance.log.info(
-      'Not running in dev mode, the bullmq dashboard will not be available.',
-    );
+    instance.log.info('Not running in dev mode, the bullmq dashboard will not be available.');
   }
 };

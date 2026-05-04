@@ -26,13 +26,7 @@ import { AccountType, type ItemSettings } from '@graasp/sdk';
 
 import type { ItemType } from '../schemas/global.js';
 import type { MemberExtra } from '../services/member/member_extra.js';
-import {
-  binary,
-  binaryHash,
-  citext,
-  customNumeric,
-  ltree,
-} from './customTypes.js';
+import { binary, binaryHash, citext, customNumeric, ltree } from './customTypes.js';
 
 export const actionViewEnum = pgEnum('action_view_enum', [
   'builder',
@@ -49,14 +43,8 @@ export const actionRequestExportFormatEnum = pgEnum(
   'action_request_export_format_enum',
   actionRequestExportFormats,
 );
-export const itemExportRequestTypeEnum = pgEnum(
-  'item_export_request_type_enum',
-  ['raw', 'graasp'],
-);
-export const chatMentionStatusEnum = pgEnum('chat_mention_status_enum', [
-  'unread',
-  'read',
-]);
+export const itemExportRequestTypeEnum = pgEnum('item_export_request_type_enum', ['raw', 'graasp']);
+export const chatMentionStatusEnum = pgEnum('chat_mention_status_enum', ['unread', 'read']);
 export const shortLinkPlatformEnum = pgEnum('short_link_platform_enum', [
   'builder',
   'player',
@@ -67,19 +55,9 @@ export const tagCategoryEnum = pgEnum('tag_category_enum', [
   'discipline',
   'resource-type',
 ]);
-export const accountTypeEnum = pgEnum('account_type_enum', [
-  'individual',
-  'guest',
-]);
-export const permissionEnum = pgEnum('permission_enum', [
-  'read',
-  'write',
-  'admin',
-]);
-export const itemVisibilityEnum = pgEnum('item_visibility_type', [
-  'public',
-  'hidden',
-]);
+export const accountTypeEnum = pgEnum('account_type_enum', ['individual', 'guest']);
+export const permissionEnum = pgEnum('permission_enum', ['read', 'write', 'admin']);
+export const itemVisibilityEnum = pgEnum('item_visibility_type', ['public', 'hidden']);
 export const itemLoginSchemaStatusEnum = pgEnum('item_login_schema_status', [
   'active',
   'freeze',
@@ -249,10 +227,7 @@ export const recycledItemDatasTable = pgTable(
       'gist',
       table.itemPath.asc().nullsLast().op('gist_ltree_ops'),
     ),
-    index('IDX_recycled_item_data_created_at').using(
-      'btree',
-      table.createdAt.desc(),
-    ),
+    index('IDX_recycled_item_data_created_at').using('btree', table.createdAt.desc()),
   ],
 );
 
@@ -267,10 +242,7 @@ export const itemLikesTable = pgTable(
     itemId: uuid('item_id').notNull(),
   },
   (table) => [
-    index('IDX_item_like_item').using(
-      'btree',
-      table.itemId.asc().nullsLast().op('uuid_ops'),
-    ),
+    index('IDX_item_like_item').using('btree', table.itemId.asc().nullsLast().op('uuid_ops')),
     foreignKey({
       columns: [table.creatorId],
       foreignColumns: [accountsTable.id],
@@ -434,10 +406,7 @@ export const appDataTable = pgTable(
       'btree',
       table.type.asc().nullsLast().op('text_ops'),
     ),
-    index('IDX_app_data_item_id').using(
-      'btree',
-      table.itemId.asc().nullsLast().op('uuid_ops'),
-    ),
+    index('IDX_app_data_item_id').using('btree', table.itemId.asc().nullsLast().op('uuid_ops')),
     index('IDX_app_data_account_id').using(
       'btree',
       table.accountId.asc().nullsLast().op('uuid_ops'),
@@ -478,19 +447,13 @@ export const appActionsTable = pgTable(
       foreignColumns: [itemsRawTable.id],
       name: 'FK_c415fc186dda51fa260d338d776',
     }).onDelete('cascade'),
-    index('IDX_app_action_item_id').using(
-      'btree',
-      table.itemId.nullsLast().op('uuid_ops'),
-    ),
+    index('IDX_app_action_item_id').using('btree', table.itemId.nullsLast().op('uuid_ops')),
     foreignKey({
       columns: [table.accountId],
       foreignColumns: [accountsTable.id],
       name: 'FK_app_action_account_id',
     }).onDelete('cascade'),
-    index('IDX_app_action_account_id').using(
-      'btree',
-      table.accountId.nullsLast().op('uuid_ops'),
-    ),
+    index('IDX_app_action_account_id').using('btree', table.accountId.nullsLast().op('uuid_ops')),
   ],
 );
 
@@ -659,10 +622,7 @@ export const itemValidationsTable = pgTable(
       foreignColumns: [itemsRawTable.id],
       name: 'FK_d60969d5e478e7c844532ac4e7f',
     }).onDelete('cascade'),
-    index('IDX_item_validation_item_id').using(
-      'btree',
-      table.itemId.nullsLast().op('uuid_ops'),
-    ),
+    index('IDX_item_validation_item_id').using('btree', table.itemId.nullsLast().op('uuid_ops')),
     foreignKey({
       columns: [table.itemValidationGroupId],
       foreignColumns: [itemValidationGroupsTable.id],
@@ -819,10 +779,7 @@ export const actionsTable = pgTable(
       'btree',
       table.itemId.asc().nullsLast().op('uuid_ops'),
     ),
-    index('IDX_action_account_id').using(
-      'btree',
-      table.accountId.asc().nullsLast().op('uuid_ops'),
-    ),
+    index('IDX_action_account_id').using('btree', table.accountId.asc().nullsLast().op('uuid_ops')),
     // FIXME: We should probably cascade on delete, as there is no reason why we would want to keep the actions around after item deletion
     // Eventually if we wanted to keep a trace of the things that happened to the capsule for debugging and internal analysis,
     // but then we should probably keep them somewhere else and only store user/educational actions in here.
@@ -898,9 +855,7 @@ export const actionRequestExportsTable = pgTable(
 
 export const itemExportRequestsTable = pgTable('item_export_request', {
   id: uuid().primaryKey().defaultRandom().notNull(),
-  createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' })
-    .defaultNow()
-    .notNull(),
+  createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
   memberId: uuid('member_id').references(() => accountsTable.id, {
     onDelete: 'cascade',
   }),
@@ -939,14 +894,8 @@ export const itemsRawTable = pgTable(
       'btree',
       table.creatorId.asc().nullsLast().op('uuid_ops'),
     ),
-    index('IDX_gist_item_path').using(
-      'gist',
-      table.path.asc().nullsLast().op('gist_ltree_ops'),
-    ),
-    index('IDX_item_deleted_at').using(
-      'btree',
-      table.deletedAt.asc().nullsLast(),
-    ),
+    index('IDX_gist_item_path').using('gist', table.path.asc().nullsLast().op('gist_ltree_ops')),
+    index('IDX_item_deleted_at').using('btree', table.deletedAt.asc().nullsLast()),
     // allow the use of the view without loosing perf
     index('IDX_gist_item_path_deleted_at')
       .using('gist', table.path.asc().nullsLast().op('gist_ltree_ops'))
@@ -960,13 +909,9 @@ export const itemsRawTable = pgTable(
   ],
 );
 
-export const { deletedAt: _deletedAt, ...itemColumns } =
-  getTableColumns(itemsRawTable);
+export const { deletedAt: _deletedAt, ...itemColumns } = getTableColumns(itemsRawTable);
 export const items = pgView('item_view').as((qb) =>
-  qb
-    .select(itemColumns)
-    .from(itemsRawTable)
-    .where(isNull(itemsRawTable.deletedAt)),
+  qb.select(itemColumns).from(itemsRawTable).where(isNull(itemsRawTable.deletedAt)),
 );
 
 export const membershipRequestsTable = pgTable(
@@ -990,10 +935,7 @@ export const membershipRequestsTable = pgTable(
       foreignColumns: [itemsRawTable.id],
       name: 'FK_membership_request_item_id',
     }).onDelete('cascade'),
-    unique('UQ_membership_request_item-member').on(
-      table.memberId,
-      table.itemId,
-    ),
+    unique('UQ_membership_request_item-member').on(table.memberId, table.itemId),
   ],
 );
 
@@ -1034,27 +976,15 @@ export const accountsTable = pgTable(
     }).defaultNow(),
   },
   (table) => [
-    index('IDX_account_type').using(
-      'btree',
-      table.type.asc().nullsLast().op('enum_ops'),
-    ),
-    unique('UQ_account_name_item_login_schema_id').on(
-      table.name,
-      table.itemLoginSchemaId,
-    ),
+    index('IDX_account_type').using('btree', table.type.asc().nullsLast().op('enum_ops')),
+    unique('UQ_account_name_item_login_schema_id').on(table.name, table.itemLoginSchemaId),
     unique('member_email_key1').on(table.email),
     check(
       'CHK_account_is_validated',
       sql`(is_validated IS NOT NULL) OR ((type)::text <> 'individual'::text)`,
     ),
-    check(
-      'CHK_account_email',
-      sql`(email IS NOT NULL) OR ((type)::text <> 'individual'::text)`,
-    ),
-    check(
-      'CHK_account_extra',
-      sql`(extra IS NOT NULL) OR ((type)::text <> 'individual'::text)`,
-    ),
+    check('CHK_account_email', sql`(email IS NOT NULL) OR ((type)::text <> 'individual'::text)`),
+    check('CHK_account_extra', sql`(extra IS NOT NULL) OR ((type)::text <> 'individual'::text)`),
     check(
       'CHK_account_enable_save_actions',
       sql`(enable_save_actions IS NOT NULL) OR ((type)::text <> 'individual'::text)`,
@@ -1077,22 +1007,14 @@ export const membersView = pgView('members_view').as((qb) =>
   qb
     .select(membersColumns)
     .from(accountsTable)
-    .where(
-      and(
-        eq(accountsTable.type, AccountType.Individual),
-        isNotNull(accountsTable.email),
-      ),
-    ),
+    .where(and(eq(accountsTable.type, AccountType.Individual), isNotNull(accountsTable.email))),
 );
 export const guestsView = pgView('guests_view').as((qb) =>
   qb
     .select(guestColumns)
     .from(accountsTable)
     .where(
-      and(
-        eq(accountsTable.type, AccountType.Guest),
-        isNotNull(accountsTable.itemLoginSchemaId),
-      ),
+      and(eq(accountsTable.type, AccountType.Guest), isNotNull(accountsTable.itemLoginSchemaId)),
     ),
 );
 
@@ -1196,10 +1118,7 @@ export const itemTagsTable = pgTable(
     itemId: uuid('item_id').notNull(),
   },
   (table) => [
-    index('IDX_item_tag_item').using(
-      'btree',
-      table.itemId.asc().nullsLast().op('uuid_ops'),
-    ),
+    index('IDX_item_tag_item').using('btree', table.itemId.asc().nullsLast().op('uuid_ops')),
     foreignKey({
       columns: [table.tagId],
       foreignColumns: [tagsTable.id],
@@ -1219,10 +1138,7 @@ export const itemTagsTable = pgTable(
 );
 
 export const maintenanceTable = pgTable('maintenance', {
-  slug: varchar({ length: 100 })
-    .notNull()
-    .primaryKey()
-    .unique('UQ_maintenance_slug'),
+  slug: varchar({ length: 100 }).notNull().primaryKey().unique('UQ_maintenance_slug'),
   startAt: timestamp('start_at', {
     withTimezone: true,
     mode: 'string',
@@ -1238,10 +1154,7 @@ export const pageUpdateTable = pgTable(
     clock: integer().notNull(),
   },
   (table) => [
-    index('IDX_page_item_id').using(
-      'btree',
-      table.itemId.asc().nullsLast().op('uuid_ops'),
-    ),
+    index('IDX_page_item_id').using('btree', table.itemId.asc().nullsLast().op('uuid_ops')),
     foreignKey({
       columns: [table.itemId],
       foreignColumns: [itemsRawTable.id],
@@ -1306,10 +1219,7 @@ export const adminsTokens = pgTable(
   },
   (table) => [
     unique('admins_tokens_context_token_index').on(table.context, table.token),
-    index('admins_tokens_user_id_index').using(
-      'btree',
-      table.userId.op('uuid_ops'),
-    ),
+    index('admins_tokens_user_id_index').using('btree', table.userId.op('uuid_ops')),
   ],
 );
 
@@ -1328,9 +1238,6 @@ export const removalNotices = pgTable(
     createdAt: timestamp('created_at', { precision: 0 }).notNull(),
   },
   (table) => [
-    index('publication_removal_notices_item_id_index').using(
-      'btree',
-      table.itemId.op('uuid_ops'),
-    ),
+    index('publication_removal_notices_item_id_index').using('btree', table.itemId.op('uuid_ops')),
   ],
 );

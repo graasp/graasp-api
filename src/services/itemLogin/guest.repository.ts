@@ -5,15 +5,8 @@ import type { UUID } from '@graasp/sdk';
 
 import type { DBConnection } from '../../drizzle/db.js';
 import { isAncestorOrSelf } from '../../drizzle/operations.js';
-import {
-  accountsTable,
-  guestsView,
-  itemLoginSchemasTable,
-} from '../../drizzle/schema.js';
-import {
-  type GuestRaw,
-  type GuestWithItemLoginSchema,
-} from '../../drizzle/types.js';
+import { accountsTable, guestsView, itemLoginSchemasTable } from '../../drizzle/schema.js';
+import { type GuestRaw, type GuestWithItemLoginSchema } from '../../drizzle/types.js';
 import { AccountType } from '../../types.js';
 import type { ItemRaw } from '../item/item.js';
 

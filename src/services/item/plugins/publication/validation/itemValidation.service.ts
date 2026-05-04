@@ -55,10 +55,7 @@ export class ItemValidationService {
     member: MinimalMember,
     item: ItemRaw,
   ) {
-    const group = await this.itemValidationGroupRepository.getLastForItem(
-      dbConnection,
-      item.id,
-    );
+    const group = await this.itemValidationGroupRepository.getLastForItem(dbConnection, item.id);
 
     // check permissions
     await this.authorizedItemService.assertAccess(dbConnection, {
@@ -70,21 +67,11 @@ export class ItemValidationService {
     return group;
   }
 
-  async post(
-    dbConnection: DBConnection,
-    item: FolderItem,
-    onValidationStarted?: () => void,
-  ) {
-    const descendants = await this.itemRepository.getDescendants(
-      dbConnection,
-      item,
-    );
+  async post(dbConnection: DBConnection, item: FolderItem, onValidationStarted?: () => void) {
+    const descendants = await this.itemRepository.getDescendants(dbConnection, item);
 
     // create record in item-validation
-    const iVG = await this.itemValidationGroupRepository.post(
-      dbConnection,
-      item.id,
-    );
+    const iVG = await this.itemValidationGroupRepository.post(dbConnection, item.id);
 
     // indicates that the item's validation is pending
     await this.validationQueue.addInProgress(item.id);
@@ -102,9 +89,7 @@ export class ItemValidationService {
             currItem,
             iVG.id,
           );
-          return validationResults.every(
-            (v) => v === ItemValidationStatus.Success,
-          );
+          return validationResults.every((v) => v === ItemValidationStatus.Success);
         } catch (e) {
           this.logger.error(e);
         }

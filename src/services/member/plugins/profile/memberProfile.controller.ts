@@ -23,19 +23,15 @@ import { MemberProfileService } from './memberProfile.service.js';
 const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
   const memberProfileService = resolveDependency(MemberProfileService);
 
-  fastify.get(
-    '/own',
-    { schema: getOwnProfile, preHandler: isAuthenticated },
-    async ({ user }) => {
-      const member = asDefined(user?.account);
-      assertIsMember(member);
-      const profile = await memberProfileService.getOwn(db, member);
-      if (!profile) {
-        return null;
-      }
-      return profile;
-    },
-  );
+  fastify.get('/own', { schema: getOwnProfile, preHandler: isAuthenticated }, async ({ user }) => {
+    const member = asDefined(user?.account);
+    assertIsMember(member);
+    const profile = await memberProfileService.getOwn(db, member);
+    if (!profile) {
+      return null;
+    }
+    return profile;
+  });
 
   fastify.get(
     '/:memberId',

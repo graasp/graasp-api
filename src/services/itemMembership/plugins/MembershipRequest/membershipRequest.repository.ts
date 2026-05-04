@@ -58,11 +58,7 @@ export class MembershipRequestRepository {
     return res as MembershipRequestWithMember[];
   }
 
-  async deleteOne(
-    dbConnection: DBConnection,
-    memberId: string,
-    itemId: string,
-  ) {
+  async deleteOne(dbConnection: DBConnection, memberId: string, itemId: string) {
     const res = await dbConnection
       .delete(membershipRequestsTable)
       .where(

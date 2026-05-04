@@ -64,13 +64,10 @@ export class ShortcutItemService extends ItemService {
     const { target, item, ...properties } = args;
     const { description, name: definedName } = item;
 
-    const targetItem = await this.authorizedItemService.getItemById(
-      dbConnection,
-      {
-        accountId: member.id,
-        itemId: target,
-      },
-    );
+    const targetItem = await this.authorizedItemService.getItemById(dbConnection, {
+      accountId: member.id,
+      itemId: target,
+    });
 
     // generate name from target item if not defined
     const name =

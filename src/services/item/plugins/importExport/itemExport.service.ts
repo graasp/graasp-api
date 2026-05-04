@@ -48,9 +48,7 @@ export class ItemExportService {
     switch (true) {
       case isFileItem(item): {
         // bug: we need to cast because of mismatch with sdk
-        const mimetype =
-          getMimetype(item.extra as FileItemExtra) ||
-          'application/octet-stream';
+        const mimetype = getMimetype(item.extra as FileItemExtra) || 'application/octet-stream';
         const url = await this.fileItemService.getUrl(dbConnection, actor, {
           itemId: item.id,
         });
@@ -83,9 +81,7 @@ export class ItemExportService {
       }
       case isEmbeddedLinkItem(item): {
         return {
-          stream: Readable.from(
-            buildTextContent(item.extra.embeddedLink?.url, 'embeddedLink'),
-          ),
+          stream: Readable.from(buildTextContent(item.extra.embeddedLink?.url, 'embeddedLink')),
           name: getFilenameFromItem(item),
           mimetype: 'text/plain',
         };
@@ -100,11 +96,7 @@ export class ItemExportService {
       case isEtherpadItem(item): {
         return {
           stream: Readable.from(
-            await this.etherpadService.getEtherpadContentFromItem(
-              dbConnection,
-              actor,
-              item.id,
-            ),
+            await this.etherpadService.getEtherpadContentFromItem(dbConnection, actor, item.id),
           ),
           name: getFilenameFromItem(item),
           mimetype: 'text/html',

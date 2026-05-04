@@ -1,6 +1,6 @@
 import { Strategy as CustomStrategy } from 'passport-custom';
 
-import fastifyPassport from '@fastify/passport';
+import { Authenticator } from '@fastify/passport';
 import { fastify } from 'fastify';
 
 import registerAppPlugins from '../src/app.js';
@@ -8,7 +8,9 @@ import { resetDependencies } from '../src/di/utils.js';
 import type { DBConnection } from '../src/drizzle/db.js';
 import { BaseLogger } from '../src/logger.js';
 import { modifyAjvInstance } from '../src/schemas/ajvFormats.js';
-import { PassportStrategy } from '../src/services/auth/plugins/passport.js';
+import { PassportStrategy } from '../src/services/auth/plugins/passport/strategies.js';
+
+const fastifyPassport = new Authenticator();
 
 const originalSessionStrategy = fastifyPassport.strategy(PassportStrategy.Session)!;
 let originalStrictSessionStrategy;

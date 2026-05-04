@@ -56,8 +56,7 @@ export class CapsuleItemService extends ItemService {
     dbConnection: DBConnection,
     member: MinimalMember,
     args: {
-      item: Partial<Pick<ItemRaw, 'description' | 'settings' | 'lang'>> &
-        Pick<ItemRaw, 'name'>;
+      item: Partial<Pick<ItemRaw, 'description' | 'settings' | 'lang'>> & Pick<ItemRaw, 'name'>;
       parentId?: string;
       previousItemId?: ItemRaw['id'];
     },

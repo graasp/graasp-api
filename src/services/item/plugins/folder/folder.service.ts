@@ -5,22 +5,13 @@ import { type ItemGeolocation, type UUID } from '@graasp/sdk';
 
 import { type DBConnection } from '../../../../drizzle/db.js';
 import { BaseLogger } from '../../../../logger.js';
-import type {
-  MaybeUser,
-  MinimalMember,
-  PermissionLevel,
-} from '../../../../types.js';
+import type { MaybeUser, MinimalMember, PermissionLevel } from '../../../../types.js';
 import { ItemNotFolder } from '../../../../utils/errors.js';
 import { AuthorizedItemService } from '../../../authorizedItem.service.js';
 import { ItemMembershipRepository } from '../../../itemMembership/membership.repository.js';
 import { ThumbnailService } from '../../../thumbnail/thumbnail.service.js';
 import { WrongItemTypeError } from '../../errors.js';
-import {
-  type CapsuleItem,
-  type FolderItem,
-  type ItemRaw,
-  isFolderItem,
-} from '../../item.js';
+import { type CapsuleItem, type FolderItem, type ItemRaw, isFolderItem } from '../../item.js';
 import { ItemRepository } from '../../item.repository.js';
 import { ItemService } from '../../item.service.js';
 import { PackedItemService } from '../../packedItem.dto.js';
@@ -84,8 +75,7 @@ export class FolderItemService extends ItemService {
     dbConnection: DBConnection,
     member: MinimalMember,
     args: {
-      item: Partial<Pick<ItemRaw, 'description' | 'settings' | 'lang'>> &
-        Pick<ItemRaw, 'name'>;
+      item: Partial<Pick<ItemRaw, 'description' | 'settings' | 'lang'>> & Pick<ItemRaw, 'name'>;
       parentId?: string;
       geolocation?: Pick<ItemGeolocation, 'lat' | 'lng'>;
       thumbnail?: Readable;
@@ -111,12 +101,7 @@ export class FolderItemService extends ItemService {
       throw new WrongItemTypeError(item.type);
     }
 
-    return (await super.patch(
-      dbConnection,
-      member,
-      item.id,
-      body,
-    )) as FolderItem;
+    return (await super.patch(dbConnection, member, item.id, body)) as FolderItem;
   }
 
   async convertToCapsule(

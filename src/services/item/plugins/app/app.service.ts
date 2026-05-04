@@ -49,10 +49,7 @@ export class AppService {
     return this.appRepository.getAll(dbConnection, publisherId);
   }
 
-  async getMostUsedApps(
-    dbConnection: DBConnection,
-    account: AuthenticatedUser,
-  ) {
+  async getMostUsedApps(dbConnection: DBConnection, account: AuthenticatedUser) {
     return this.appRepository.getMostUsedApps(dbConnection, account.id);
   }
 
@@ -120,10 +117,7 @@ export class AppService {
     actor: AuthenticatedUser,
     item: ItemRaw,
   ): Promise<MinimalAccount[]> {
-    const memberships = await this.itemMembershipRepository.getForItem(
-      dbConnection,
-      item,
-    );
+    const memberships = await this.itemMembershipRepository.getForItem(dbConnection, item);
     // get members only without duplicate
     return uniqBy(
       memberships.map(({ account }) => account),

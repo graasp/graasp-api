@@ -5,11 +5,7 @@ import { pipeline } from 'stream/promises';
 import { singleton } from 'tsyringe';
 import { ZipFile } from 'yazl';
 
-import {
-  Context,
-  DEFAULT_EXPORT_ACTIONS_VALIDITY_IN_DAYS,
-  type UUID,
-} from '@graasp/sdk';
+import { Context, DEFAULT_EXPORT_ACTIONS_VALIDITY_IN_DAYS, type UUID } from '@graasp/sdk';
 
 import { type DBConnection } from '../../../../../drizzle/db.js';
 import type {
@@ -23,10 +19,7 @@ import { MailerService } from '../../../../../plugins/mailer/mailer.service.js';
 import type { MemberInfo, MinimalMember } from '../../../../../types.js';
 import { TMP_FOLDER } from '../../../../../utils/config.js';
 import { ActionRepository } from '../../../../action/action.repository.js';
-import {
-  EXPORT_FILE_EXPIRATION,
-  ZIP_MIMETYPE,
-} from '../../../../action/constants.js';
+import { EXPORT_FILE_EXPIRATION, ZIP_MIMETYPE } from '../../../../action/constants.js';
 import { CannotWriteFileError } from '../../../../action/utils/errors.js';
 import { AuthorizedItemService } from '../../../../authorizedItem.service.js';
 import FileService from '../../../../file/file.service.js';
@@ -81,14 +74,11 @@ export class ActionRequestExportService {
     });
 
     // get last export entry within interval
-    const lastRequestExport = await this.actionRequestExportRepository.getLast(
-      dbConnection,
-      {
-        memberId: member?.id,
-        itemPath: item.path,
-        format,
-      },
-    );
+    const lastRequestExport = await this.actionRequestExportRepository.getLast(dbConnection, {
+      memberId: member?.id,
+      itemPath: item.path,
+      format,
+    });
 
     // check if a previous request already created the file and send it back
     try {
@@ -112,31 +102,18 @@ export class ActionRequestExportService {
     }
 
     // create request row
-    const requestExport = await this.actionRequestExportRepository.addOne(
-      dbConnection,
-      {
-        itemPath: item.path,
-        memberId: minimalMember.id,
-        createdAt: new Date().toISOString(),
-        format,
-      },
-    );
+    const requestExport = await this.actionRequestExportRepository.addOne(dbConnection, {
+      itemPath: item.path,
+      memberId: minimalMember.id,
+      createdAt: new Date().toISOString(),
+      format,
+    });
 
     // create archive and upload on server
-    await this.createAndUploadArchive(
-      dbConnection,
-      minimalMember,
-      item,
-      requestExport,
-    );
+    await this.createAndUploadArchive(dbConnection, minimalMember, item, requestExport);
 
     // send email
-    await this.sendExportLinkInMail(
-      member.toMemberInfo(),
-      item,
-      requestExport.createdAt,
-      format,
-    );
+    await this.sendExportLinkInMail(member.toMemberInfo(), item, requestExport.createdAt, format);
 
     return item;
   }
@@ -167,11 +144,7 @@ export class ActionRequestExportService {
    * @param format
    * @returns
    */
-  private buildActionFileName(
-    name: string,
-    datetime: string,
-    format: string,
-  ): string {
+  private buildActionFileName(name: string, datetime: string, format: string): string {
     return `${name}_${formatDate(datetime, 't')}.${format}`;
   }
 
@@ -284,100 +257,52 @@ export class ActionRequestExportService {
 
     try {
       // create file for each view
-      const actions = await this.actionRepository.getForItem(
-        dbConnection,
-        item.path,
-      );
+      const actions = await this.actionRepository.getForItem(dbConnection, item.path);
 
-      const views = [
-        Context.Builder,
-        Context.Player,
-        Context.Library,
-        Context.Unknown,
-      ];
+      const views = [Context.Builder, Context.Player, Context.Library, Context.Unknown];
       views.forEach((viewName) => {
         const actionsPerView = actions.filter(({ view }) => view === viewName);
-        const filename = this.buildActionFileName(
-          `actions_${viewName}`,
-          timestamp,
-          format,
-        );
+        const filename = this.buildActionFileName(`actions_${viewName}`, timestamp, format);
 
         const actionData = formatData(format, actionsPerView);
-        archive.addBuffer(
-          Buffer.from(actionData),
-          path.join(rootName, filename),
-        );
+        archive.addBuffer(Buffer.from(actionData), path.join(rootName, filename));
       });
 
       // create file for items
-      const items = await this.actionRequestExportRepository.getItemTree(
+      const items = await this.actionRequestExportRepository.getItemTree(dbConnection, item.path);
+      const itemFilename = this.buildActionFileName('items', timestamp, format);
+      const itemData = formatData(format, items);
+      archive.addBuffer(Buffer.from(itemData), path.join(rootName, itemFilename));
+
+      // create file for the members
+      const accounts = await this.actionRequestExportRepository.getAccountsForTree(
         dbConnection,
         item.path,
       );
-      const itemFilename = this.buildActionFileName('items', timestamp, format);
-      const itemData = formatData(format, items);
-      archive.addBuffer(
-        Buffer.from(itemData),
-        path.join(rootName, itemFilename),
-      );
-
-      // create file for the members
-      const accounts =
-        await this.actionRequestExportRepository.getAccountsForTree(
-          dbConnection,
-          item.path,
-        );
-      const membersFilename = this.buildActionFileName(
-        'accounts',
-        timestamp,
-        format,
-      );
+      const membersFilename = this.buildActionFileName('accounts', timestamp, format);
       const membersData = formatData(format, accounts);
-      archive.addBuffer(
-        Buffer.from(membersData),
-        path.join(rootName, membersFilename),
-      );
+      archive.addBuffer(Buffer.from(membersData), path.join(rootName, membersFilename));
 
       // create file for the memberships
-      const itemMemberships =
-        await this.actionRequestExportRepository.getItemMembershipsForTree(
-          dbConnection,
-          item.path,
-        );
-      const iMembershipsFilename = this.buildActionFileName(
-        'memberships',
-        timestamp,
-        format,
+      const itemMemberships = await this.actionRequestExportRepository.getItemMembershipsForTree(
+        dbConnection,
+        item.path,
       );
+      const iMembershipsFilename = this.buildActionFileName('memberships', timestamp, format);
       const iMData = formatData(format, itemMemberships);
-      archive.addBuffer(
-        Buffer.from(iMData),
-        path.join(rootName, iMembershipsFilename),
-      );
+      archive.addBuffer(Buffer.from(iMData), path.join(rootName, iMembershipsFilename));
 
       // create file for the chat messages
-      const chatMessages =
-        await this.actionRequestExportRepository.getChatMessagesForTree(
-          dbConnection,
-          item.path,
-        );
+      const chatMessages = await this.actionRequestExportRepository.getChatMessagesForTree(
+        dbConnection,
+        item.path,
+      );
       const chatFilename = this.buildActionFileName('chat', timestamp, format);
       const chatData = formatData(format, chatMessages);
-      archive.addBuffer(
-        Buffer.from(chatData),
-        path.join(rootName, chatFilename),
-      );
+      archive.addBuffer(Buffer.from(chatData), path.join(rootName, chatFilename));
 
       // create files for the apps
-      await this.exportAppsData(
-        dbConnection,
-        item,
-        archive,
-        format,
-        timestamp,
-        rootName,
-      );
+      await this.exportAppsData(dbConnection, item, archive, format, timestamp, rootName);
     } catch (e) {
       console.error(e);
       throw new CannotWriteFileError(e);
@@ -405,77 +330,47 @@ export class ActionRequestExportService {
     archiveDate: string,
     rootName: string,
   ) {
-    const appActions =
-      await this.actionRequestExportRepository.getAppActionsForTree(
-        dbConnection,
-        item.path,
-      );
+    const appActions = await this.actionRequestExportRepository.getAppActionsForTree(
+      dbConnection,
+      item.path,
+    );
     const appData = await this.actionRequestExportRepository.getAppDataForTree(
       dbConnection,
       item.path,
     );
-    const appSettings =
-      await this.actionRequestExportRepository.getAppSettingsForTree(
-        dbConnection,
-        item.path,
-      );
+    const appSettings = await this.actionRequestExportRepository.getAppSettingsForTree(
+      dbConnection,
+      item.path,
+    );
 
     switch (format) {
       // For JSON format only output a single file
       case 'json': {
         // create files for the apps
-        const appsFilename = this.buildActionFileName(
-          'apps',
-          archiveDate,
-          format,
-        );
+        const appsFilename = this.buildActionFileName('apps', archiveDate, format);
         const appsData = formatData(format, {
           appActions,
           appData,
           appSettings,
         });
-        archive.addBuffer(
-          Buffer.from(appsData),
-          path.join(rootName, appsFilename),
-        );
+        archive.addBuffer(Buffer.from(appsData), path.join(rootName, appsFilename));
         break;
       }
       // For CSV format there will be one file for actions, one for data and one for settings
       // with all the apps together.
       case 'csv': {
         // create files for the apps
-        const appActionsFilename = this.buildActionFileName(
-          'app_actions',
-          archiveDate,
-          format,
-        );
+        const appActionsFilename = this.buildActionFileName('app_actions', archiveDate, format);
         const aaData = formatData(format, appActions);
-        archive.addBuffer(
-          Buffer.from(aaData),
-          path.join(rootName, appActionsFilename),
-        );
+        archive.addBuffer(Buffer.from(aaData), path.join(rootName, appActionsFilename));
 
-        const appDataFilename = this.buildActionFileName(
-          'app_data',
-          archiveDate,
-          format,
-        );
+        const appDataFilename = this.buildActionFileName('app_data', archiveDate, format);
         const adData = formatData(format, appData);
-        archive.addBuffer(
-          Buffer.from(adData),
-          path.join(rootName, appDataFilename),
-        );
+        archive.addBuffer(Buffer.from(adData), path.join(rootName, appDataFilename));
 
-        const appSettingsFilename = this.buildActionFileName(
-          'app_settings',
-          archiveDate,
-          format,
-        );
+        const appSettingsFilename = this.buildActionFileName('app_settings', archiveDate, format);
         const asData = formatData(format, appSettings);
-        archive.addBuffer(
-          Buffer.from(asData),
-          path.join(rootName, appSettingsFilename),
-        );
+        archive.addBuffer(Buffer.from(asData), path.join(rootName, appSettingsFilename));
 
         break;
       }

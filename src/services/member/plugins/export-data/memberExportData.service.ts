@@ -13,17 +13,11 @@ import { MailBuilder } from '../../../../plugins/mailer/builder.js';
 import { MailerService } from '../../../../plugins/mailer/mailer.service.js';
 import type { MemberInfo, MinimalMember } from '../../../../types.js';
 import { TMP_FOLDER } from '../../../../utils/config.js';
-import {
-  EXPORT_FILE_EXPIRATION,
-  ZIP_MIMETYPE,
-} from '../../../action/constants.js';
+import { EXPORT_FILE_EXPIRATION, ZIP_MIMETYPE } from '../../../action/constants.js';
 import FileService from '../../../file/file.service.js';
 import { UnexpectedExportError } from '../../../item/plugins/importExport/errors.js';
 import { ExportDataRepository } from './memberExportData.repository.js';
-import {
-  anonymizeMentionsMessage,
-  anonymizeMessages,
-} from './utils/anonymize.utils.js';
+import { anonymizeMentionsMessage, anonymizeMessages } from './utils/anonymize.utils.js';
 
 /**
  * DataToExport will be used to store each values in its own file with the name of the key.
@@ -66,10 +60,7 @@ export class ExportMemberDataService {
     values: object[],
     datetime: string,
   ): void {
-    archive.addBuffer(
-      Buffer.from(JSON.stringify(values)),
-      `${filename}_${datetime}.json`,
-    );
+    archive.addBuffer(Buffer.from(JSON.stringify(values)), `${filename}_${datetime}.json`);
   }
 
   /**
@@ -77,19 +68,12 @@ export class ExportMemberDataService {
    * @param dbConnection db connection
    * @param memberInfo member whose data are exported
    */
-  public async createArchiveAndSendByEmail(
-    dbConnection: DBConnection,
-    memberInfo: MemberInfo,
-  ) {
+  public async createArchiveAndSendByEmail(dbConnection: DBConnection, memberInfo: MemberInfo) {
     const exportId = memberInfo.id;
     const archiveCreationTime = new Date();
     const datetime = format(archiveCreationTime, 'yyyy-MM-dd HH-mm-ss');
 
-    const archive = await this.createExportArchive(
-      dbConnection,
-      memberInfo,
-      datetime,
-    );
+    const archive = await this.createExportArchive(dbConnection, memberInfo, datetime);
 
     // save temporary zip because archive.outputStream is NodeJS.ReadableStream
     const tmpFolder = path.join(TMP_FOLDER, this.ROOT_EXPORT_FOLDER, exportId);
@@ -178,12 +162,7 @@ export class ExportMemberDataService {
       await this.getChatMessages(dbConnection, member),
       datetime,
     );
-    this.addDataToArchive(
-      archive,
-      'items',
-      await this.getItems(dbConnection, member),
-      datetime,
-    );
+    this.addDataToArchive(archive, 'items', await this.getItems(dbConnection, member), datetime);
     this.addDataToArchive(
       archive,
       'likes',
@@ -206,44 +185,23 @@ export class ExportMemberDataService {
     return await this.exportDataRepository.getActions(dbConnection, actor.id);
   }
 
-  private async getAppActions(
-    dbConnection: DBConnection,
-    actor: MinimalMember,
-  ) {
-    const results = await this.exportDataRepository.getAppActions(
-      dbConnection,
-      actor.id,
-    );
+  private async getAppActions(dbConnection: DBConnection, actor: MinimalMember) {
+    const results = await this.exportDataRepository.getAppActions(dbConnection, actor.id);
     return results;
   }
 
   private async getAppData(dbConnection: DBConnection, actor: MinimalMember) {
-    const appData = await this.exportDataRepository.getAppData(
-      dbConnection,
-      actor.id,
-    );
+    const appData = await this.exportDataRepository.getAppData(dbConnection, actor.id);
     return appData;
   }
 
-  private async getAppSettings(
-    dbConnection: DBConnection,
-    actor: MinimalMember,
-  ) {
-    const results = await this.exportDataRepository.getAppSettings(
-      dbConnection,
-      actor.id,
-    );
+  private async getAppSettings(dbConnection: DBConnection, actor: MinimalMember) {
+    const results = await this.exportDataRepository.getAppSettings(dbConnection, actor.id);
     return results;
   }
 
-  private async getChatMentions(
-    dbConnection: DBConnection,
-    actor: MinimalMember,
-  ) {
-    const results = await this.exportDataRepository.getChatMentions(
-      dbConnection,
-      actor.id,
-    );
+  private async getChatMentions(dbConnection: DBConnection, actor: MinimalMember) {
+    const results = await this.exportDataRepository.getChatMentions(dbConnection, actor.id);
     const anonymized = anonymizeMentionsMessage({
       results,
       exportingActorId: actor.id,
@@ -251,14 +209,8 @@ export class ExportMemberDataService {
     return anonymized;
   }
 
-  private async getChatMessages(
-    dbConnection: DBConnection,
-    actor: MinimalMember,
-  ) {
-    const results = await this.exportDataRepository.getChatMessages(
-      dbConnection,
-      actor.id,
-    );
+  private async getChatMessages(dbConnection: DBConnection, actor: MinimalMember) {
+    const results = await this.exportDataRepository.getChatMessages(dbConnection, actor.id);
     const anonymized = anonymizeMessages({
       results,
       exportingActorId: actor.id,
@@ -266,10 +218,7 @@ export class ExportMemberDataService {
     return anonymized;
   }
 
-  private async getItemsMemberShips(
-    dbConnection: DBConnection,
-    actor: MinimalMember,
-  ) {
+  private async getItemsMemberShips(dbConnection: DBConnection, actor: MinimalMember) {
     const itemMemberShips = await this.exportDataRepository.getItemMemberships(
       dbConnection,
       actor.id,
@@ -278,21 +227,12 @@ export class ExportMemberDataService {
   }
 
   private async getItems(dbConnection: DBConnection, actor: MinimalMember) {
-    const results = await this.exportDataRepository.getItems(
-      dbConnection,
-      actor.id,
-    );
+    const results = await this.exportDataRepository.getItems(dbConnection, actor.id);
     return results;
   }
 
-  private async getItemBookmarks(
-    dbConnection: DBConnection,
-    actor: MinimalMember,
-  ) {
-    const results = await this.exportDataRepository.getItemBookmarks(
-      dbConnection,
-      actor.id,
-    );
+  private async getItemBookmarks(dbConnection: DBConnection, actor: MinimalMember) {
+    const results = await this.exportDataRepository.getItemBookmarks(dbConnection, actor.id);
     return results;
   }
 
@@ -300,10 +240,7 @@ export class ExportMemberDataService {
     // TODO: check if we should also export the likes created by another actor on its items
     // In this case, don't forget to anonymize the id of the other actor ?
     // Or should we put the username of the other actor who liked the item ?
-    const results = await this.exportDataRepository.getByCreatorToExport(
-      dbConnection,
-      actor.id,
-    );
+    const results = await this.exportDataRepository.getByCreatorToExport(dbConnection, actor.id);
     return results;
   }
 

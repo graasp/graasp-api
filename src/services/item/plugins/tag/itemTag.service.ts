@@ -46,22 +46,12 @@ export class ItemTagService {
     });
 
     // create tag if does not exist
-    const tag = await this.tagRepository.addOneIfDoesNotExist(
-      dbConnection,
-      tagInfo,
-    );
+    const tag = await this.tagRepository.addOneIfDoesNotExist(dbConnection, tagInfo);
 
-    const result = await this.itemTagRepository.create(
-      dbConnection,
-      itemId,
-      tag.id,
-    );
+    const result = await this.itemTagRepository.create(dbConnection, itemId, tag.id);
 
     // update index if item is published
-    const publishedItem = await this.itemPublishedRepository.getForItem(
-      dbConnection,
-      item.path,
-    );
+    const publishedItem = await this.itemPublishedRepository.getForItem(dbConnection, item.path);
     if (publishedItem) {
       await this.meilisearchClient.indexOne(dbConnection, publishedItem);
     }
@@ -69,11 +59,7 @@ export class ItemTagService {
     return result;
   }
 
-  async getByItemId(
-    dbConnection: DBConnection,
-    maybeUser: MaybeUser,
-    itemId: UUID,
-  ) {
+  async getByItemId(dbConnection: DBConnection, maybeUser: MaybeUser, itemId: UUID) {
     await this.authorizedItemService.assertAccessForItemId(dbConnection, {
       accountId: maybeUser?.id,
       itemId,
@@ -96,10 +82,7 @@ export class ItemTagService {
     });
 
     // update index if item is published
-    const publishedItem = await this.itemPublishedRepository.getForItem(
-      dbConnection,
-      item.path,
-    );
+    const publishedItem = await this.itemPublishedRepository.getForItem(dbConnection, item.path);
     if (publishedItem) {
       await this.meilisearchClient.indexOne(dbConnection, publishedItem);
     }

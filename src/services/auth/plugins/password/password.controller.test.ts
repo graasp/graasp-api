@@ -4,7 +4,6 @@ import { compareAsc } from 'date-fns';
 import { eq } from 'drizzle-orm';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 import { Redis } from 'ioredis';
-import { sign } from 'jsonwebtoken';
 import nock from 'nock';
 import waitForExpect from 'wait-for-expect';
 
@@ -22,6 +21,7 @@ import { seedFromJson } from '../../../../../test/mocks/seed.js';
 import { TOKEN_REGEX, mockCaptchaValidationOnce } from '../../../../../test/utils.js';
 import { REDIS_CONNECTION } from '../../../../config/redis.js';
 import { PASSWORD_RESET_JWT_EXPIRATION_IN_MINUTES } from '../../../../config/secrets.js';
+import { signAccessToken } from '../../../../crypto/jwt.js';
 import { resolveDependency } from '../../../../di/utils.js';
 import { db } from '../../../../drizzle/db.js';
 import { accountsTable, memberPasswordsTable } from '../../../../drizzle/schema.js';
@@ -420,7 +420,7 @@ describe('Password', () => {
               password: newPassword,
             },
             headers: {
-              Authorization: `Bearer ${sign({}, 'invalid-token')}`,
+              Authorization: `Bearer ${await signAccessToken({}, 'invalid-token', '1m')}`,
             },
           });
           expect(response.statusCode).toBe(StatusCodes.UNAUTHORIZED);

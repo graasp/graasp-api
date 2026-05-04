@@ -1,9 +1,5 @@
 import { fastifySecureSession } from '@fastify/secure-session';
-import type {
-  FastifyInstance,
-  FastifyPluginAsync,
-  PassportUser,
-} from 'fastify';
+import type { FastifyInstance, FastifyPluginAsync, PassportUser } from 'fastify';
 
 import { PROD, STAGING } from '../../../../config/env.js';
 import {
@@ -97,12 +93,10 @@ export const plugin: FastifyPluginAsync = async (fastify: FastifyInstance) => {
   );
 
   // Serialize and Deserialize user
-  fastifyPassportInstance.registerUserSerializer(
-    async (user: PassportUser, _req) => {
-      assertIsDefined(user.account);
-      return user.account.id;
-    },
-  );
+  fastifyPassportInstance.registerUserSerializer(async (user: PassportUser, _req) => {
+    assertIsDefined(user.account);
+    return user.account.id;
+  });
   fastifyPassportInstance.registerUserDeserializer(
     async (uuid: string, _req): Promise<PassportUser> => {
       const account = await accountRepository.get(db, uuid);

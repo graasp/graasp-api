@@ -19,11 +19,7 @@ import { AuthorizedItemService } from '../../../authorizedItem.service.js';
 import { ItemMembershipRepository } from '../../../itemMembership/membership.repository.js';
 import { ThumbnailService } from '../../../thumbnail/thumbnail.service.js';
 import { WrongItemTypeError } from '../../errors.js';
-import {
-  type EmbeddedLinkItem,
-  type ItemRaw,
-  isEmbeddedLinkItem,
-} from '../../item.js';
+import { type EmbeddedLinkItem, type ItemRaw, isEmbeddedLinkItem } from '../../item.js';
 import { ItemRepository } from '../../item.repository.js';
 import { ItemService } from '../../item.service.js';
 import { PackedItemService } from '../../packedItem.dto.js';
@@ -119,11 +115,7 @@ export class EmbeddedLinkItemService extends ItemService {
       );
 
       // better clues on how to extract the metadata here: https://iframely.com/docs/links
-      const {
-        meta = {},
-        html,
-        links = [],
-      } = (await response.json()) as IframelyResponse;
+      const { meta = {}, html, links = [] } = (await response.json()) as IframelyResponse;
       const { title, description } = meta;
 
       // does not accept weird unicode characters, non-breaking spaces, tabs, breaking lines
@@ -133,9 +125,7 @@ export class EmbeddedLinkItemService extends ItemService {
         title: title?.trim()?.replaceAll(r, ' '),
         description: description?.trim(),
         html,
-        thumbnails: links
-          .filter(({ rel }) => hasThumbnailRel(rel))
-          .map(({ href }) => href),
+        thumbnails: links.filter(({ rel }) => hasThumbnailRel(rel)).map(({ href }) => href),
         icons: links
           .filter(({ rel }: { rel: string[] }) => hasIconRel(rel))
           .map(({ href }) => href),
@@ -205,10 +195,7 @@ export class EmbeddedLinkItemService extends ItemService {
     };
   }
 
-  async checkEmbeddingAllowed(
-    url: string,
-    logger?: FastifyBaseLogger,
-  ): Promise<boolean> {
+  async checkEmbeddingAllowed(url: string, logger?: FastifyBaseLogger): Promise<boolean> {
     this.assertUrlIsValid(url);
 
     try {
@@ -247,15 +234,7 @@ export class EmbeddedLinkItemService extends ItemService {
         previousItemId?: ItemRaw['id'];
       },
   ): Promise<EmbeddedLinkItem> {
-    const {
-      name,
-      description,
-      lang,
-      url,
-      showLinkIframe,
-      showLinkButton,
-      ...options
-    } = args;
+    const { name, description, lang, url, showLinkIframe, showLinkButton, ...options } = args;
 
     const embeddedLink = await this.createExtra(url);
 
@@ -274,9 +253,7 @@ export class EmbeddedLinkItemService extends ItemService {
     dbConnection: DBConnection,
     member: MinimalMember,
     itemId: UUID,
-    args: Partial<
-      Pick<ItemRaw, 'name' | 'description' | 'lang' | 'settings'>
-    > & {
+    args: Partial<Pick<ItemRaw, 'name' | 'description' | 'lang' | 'settings'>> & {
       url?: string;
       showLinkIframe?: boolean;
       showLinkButton?: boolean;
@@ -289,15 +266,7 @@ export class EmbeddedLinkItemService extends ItemService {
       throw new WrongItemTypeError(item.type);
     }
 
-    const {
-      name,
-      description,
-      lang,
-      showLinkIframe,
-      showLinkButton,
-      url,
-      settings,
-    } = args;
+    const { name, description, lang, showLinkIframe, showLinkButton, url, settings } = args;
 
     // compute new extra if link is different
     let { embeddedLink } = item.extra;
@@ -316,11 +285,6 @@ export class EmbeddedLinkItemService extends ItemService {
         embeddedLink,
       },
     );
-    return (await super.patch(
-      dbConnection,
-      member,
-      itemId,
-      newItem,
-    )) as EmbeddedLinkItem;
+    return (await super.patch(dbConnection, member, itemId, newItem)) as EmbeddedLinkItem;
   }
 }

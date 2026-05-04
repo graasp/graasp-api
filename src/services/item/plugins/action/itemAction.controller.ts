@@ -104,12 +104,7 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
       // TODO: add in queue
       await db
         .transaction(async (tx) => {
-          const item = await requestExportService.request(
-            tx,
-            member,
-            itemId,
-            format,
-          );
+          const item = await requestExportService.request(tx, member, itemId, format);
           if (item) {
             websockets.publish(
               memberItemsTopic,
@@ -142,15 +137,10 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
         query: { startDate, endDate },
       } = request;
 
-      return await itemActionService.getActionsByDay(
-        db,
-        itemId,
-        user?.account,
-        {
-          startDate,
-          endDate,
-        },
-      );
+      return await itemActionService.getActionsByDay(db, itemId, user?.account, {
+        startDate,
+        endDate,
+      });
     },
   );
 
@@ -167,15 +157,10 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
         query: { startDate, endDate },
       } = request;
 
-      return await itemActionService.getActionsByHour(
-        db,
-        itemId,
-        user?.account,
-        {
-          startDate,
-          endDate,
-        },
-      );
+      return await itemActionService.getActionsByHour(db, itemId, user?.account, {
+        startDate,
+        endDate,
+      });
     },
   );
 
@@ -192,15 +177,10 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
         query: { startDate, endDate },
       } = request;
 
-      return await itemActionService.getActionsByWeekday(
-        db,
-        itemId,
-        user?.account,
-        {
-          startDate,
-          endDate,
-        },
-      );
+      return await itemActionService.getActionsByWeekday(db, itemId, user?.account, {
+        startDate,
+        endDate,
+      });
     },
   );
 };

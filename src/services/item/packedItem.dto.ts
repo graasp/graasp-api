@@ -1,10 +1,6 @@
 import { singleton } from 'tsyringe';
 
-import {
-  ItemVisibilityType,
-  type ResultOf,
-  type ThumbnailsBySize,
-} from '@graasp/sdk';
+import { ItemVisibilityType, type ResultOf, type ThumbnailsBySize } from '@graasp/sdk';
 
 import type { DBConnection } from '../../drizzle/db.js';
 import type {
@@ -29,9 +25,7 @@ export type PackedItem = Item & {
   thumbnails?: ThumbnailsBySize;
 };
 
-export const getCreator = (
-  creator: MinimalAccount | null,
-): MinimalAccount | null => {
+export const getCreator = (creator: MinimalAccount | null): MinimalAccount | null => {
   if (!creator) {
     return null;
   }
@@ -66,21 +60,15 @@ export class PackedItemDTO {
   packed(): PackedItem {
     // sort visibilities to retrieve the most restrictive (highest) visibility first
     if (this.visibilities) {
-      this.visibilities.sort((a, b) =>
-        a.itemPath.length > b.itemPath.length ? 1 : -1,
-      );
+      this.visibilities.sort((a, b) => (a.itemPath.length > b.itemPath.length ? 1 : -1));
     }
 
     return {
       ...resolveItemType(this.item),
       creator: getCreator(this.item.creator),
       permission: this.actorPermission?.permission ?? null,
-      hidden: this.visibilities?.find(
-        (t) => t.type === ItemVisibilityType.Hidden,
-      ),
-      public: this.visibilities?.find(
-        (t) => t.type === ItemVisibilityType.Public,
-      ),
+      hidden: this.visibilities?.find((t) => t.type === ItemVisibilityType.Hidden),
+      public: this.visibilities?.find((t) => t.type === ItemVisibilityType.Public),
       thumbnails: this.thumbnails,
     };
   }
@@ -123,21 +111,15 @@ export class PackedItemService {
       // sort visibilities to retrieve the most restrictive (highest) visibility first
       const itemVisibilities = visibilities?.data?.[i.id];
       if (itemVisibilities) {
-        itemVisibilities.sort((a, b) =>
-          a.itemPath.length > b.itemPath.length ? 1 : -1,
-        );
+        itemVisibilities.sort((a, b) => (a.itemPath.length > b.itemPath.length ? 1 : -1));
       }
 
       data[i.id] = {
         ...resolveItemType(i),
         creator: getCreator(i),
         permission,
-        hidden: itemVisibilities?.find(
-          (t) => t.type === ItemVisibilityType.Hidden,
-        ),
-        public: itemVisibilities?.find(
-          (t) => t.type === ItemVisibilityType.Public,
-        ),
+        hidden: itemVisibilities?.find((t) => t.type === ItemVisibilityType.Hidden),
+        public: itemVisibilities?.find((t) => t.type === ItemVisibilityType.Public),
         ...(thumbnails ? { thumbnails } : {}),
       };
     }
@@ -156,47 +138,32 @@ export class PackedItemService {
       return [];
     }
 
-    const visibilities = await this.itemVisibilityRepository.getForManyItems(
-      dbConnection,
-      items,
-    );
+    const visibilities = await this.itemVisibilityRepository.getForManyItems(dbConnection, items);
 
     const m =
-      memberships ??
-      (await this.itemMembershipRepository.getForManyItems(
-        dbConnection,
-        items,
-      ));
-    const itemsThumbnails =
-      await this.itemThumbnailService.getUrlsByItems(items);
+      memberships ?? (await this.itemMembershipRepository.getForManyItems(dbConnection, items));
+    const itemsThumbnails = await this.itemThumbnailService.getUrlsByItems(items);
 
     return items.map((item) => {
       // get the permission for the current user
       const itemMemberships = m.data[item.id];
       const permission =
-        itemMemberships.find(
-          (membership) => membership.accountId === currentAccount?.id,
-        )?.permission ?? null;
+        itemMemberships.find((membership) => membership.accountId === currentAccount?.id)
+          ?.permission ?? null;
       const thumbnails = itemsThumbnails[item.id];
 
       // sort visibilities to retrieve the most restrictive (highest) visibility first
       const itemVisibilities = visibilities?.data?.[item.id] ?? [];
       if (itemVisibilities) {
-        itemVisibilities.sort((a, b) =>
-          a.item.path.length > b.item.path.length ? 1 : -1,
-        );
+        itemVisibilities.sort((a, b) => (a.item.path.length > b.item.path.length ? 1 : -1));
       }
 
       return {
         ...resolveItemType(item),
         creator: getCreator(item.creator),
         permission,
-        hidden: itemVisibilities.find(
-          (t) => t.type === ItemVisibilityType.Hidden,
-        ),
-        public: itemVisibilities.find(
-          (t) => t.type === ItemVisibilityType.Public,
-        ),
+        hidden: itemVisibilities.find((t) => t.type === ItemVisibilityType.Hidden),
+        public: itemVisibilities.find((t) => t.type === ItemVisibilityType.Public),
         ...(thumbnails ? { thumbnails } : {}),
       };
     });

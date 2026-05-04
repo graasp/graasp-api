@@ -12,12 +12,7 @@ import {
   isAuthenticated,
   optionalIsAuthenticated,
 } from '../../../auth/plugins/passport/preHandlers.js';
-import {
-  generateToken,
-  getContext,
-  getList,
-  getOwnMostUsedApps,
-} from './app.schemas.js';
+import { generateToken, getContext, getList, getOwnMostUsedApps } from './app.schemas.js';
 import { AppService } from './app.service.js';
 import appActionPlugin from './appAction/appAction.controller.js';
 import appDataPlugin from './appData/appData.controller.js';
@@ -25,10 +20,7 @@ import appSettingPlugin from './appSetting/appSetting.controller.js';
 import chatBotPlugin from './chatBot/chatBot.controller.js';
 import type { AppsPluginOptions } from './types.js';
 
-const plugin: FastifyPluginAsyncTypebox<AppsPluginOptions> = async (
-  fastify,
-  options,
-) => {
+const plugin: FastifyPluginAsyncTypebox<AppsPluginOptions> = async (fastify, options) => {
   const { jwtSecret, publisherId } = options;
 
   if (!jwtSecret) {
@@ -46,8 +38,7 @@ const plugin: FastifyPluginAsyncTypebox<AppsPluginOptions> = async (
     if (corsPluginOptions) {
       const allowedOrigins = await appService.getAllValidAppOrigins(db);
 
-      const graaspAndAppsOrigins =
-        corsPluginOptions.origin.concat(allowedOrigins);
+      const graaspAndAppsOrigins = corsPluginOptions.origin.concat(allowedOrigins);
       fastify.register(
         fastifyCors,
         Object.assign({}, corsPluginOptions, { origin: graaspAndAppsOrigins }),

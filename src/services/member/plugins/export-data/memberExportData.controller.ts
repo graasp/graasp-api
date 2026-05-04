@@ -6,10 +6,7 @@ import { resolveDependency } from '../../../../di/utils.js';
 import { db } from '../../../../drizzle/db.js';
 import { asDefined } from '../../../../utils/assertions.js';
 import { MEMBER_EXPORT_DATA_ROUTE_PREFIX } from '../../../../utils/config.js';
-import {
-  isAuthenticated,
-  matchOne,
-} from '../../../auth/plugins/passport/preHandlers.js';
+import { isAuthenticated, matchOne } from '../../../auth/plugins/passport/preHandlers.js';
 import { assertIsMember } from '../../../authentication.js';
 import { MemberRepository } from '../../member.repository.js';
 import { memberAccountRole } from '../../strategies/memberAccountRole.js';
@@ -40,10 +37,7 @@ const plugin: FastifyPluginAsync = async (fastify) => {
 
           // TODO: add in queue
           await db.transaction(async (tx) => {
-            await exportMemberDataService.createArchiveAndSendByEmail(
-              tx,
-              member.toMemberInfo(),
-            );
+            await exportMemberDataService.createArchiveAndSendByEmail(tx, member.toMemberInfo());
           });
         },
       );

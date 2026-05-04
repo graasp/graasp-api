@@ -6,11 +6,7 @@ import type { FastifyBaseLogger } from 'fastify';
 
 import { Etherpad } from '@graasp/etherpad-api';
 
-import {
-  MAILER_CONFIG_FROM_EMAIL,
-  MAILER_CONNECTION,
-  MAILER_USE_SSL,
-} from '../config/mailer.js';
+import { MAILER_CONFIG_FROM_EMAIL, MAILER_CONNECTION, MAILER_USE_SSL } from '../config/mailer.js';
 import { REDIS_CONNECTION } from '../config/redis.js';
 import { BaseLogger } from '../logger.js';
 import { MailerService } from '../plugins/mailer/mailer.service.js';

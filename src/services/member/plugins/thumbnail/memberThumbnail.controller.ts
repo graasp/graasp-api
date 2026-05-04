@@ -14,10 +14,7 @@ import {
   optionalIsAuthenticated,
 } from '../../../auth/plugins/passport/preHandlers.js';
 import { assertIsMember } from '../../../authentication.js';
-import {
-  UploadEmptyFileError,
-  UploadFileUnexpectedError,
-} from '../../../file/utils/errors.js';
+import { UploadEmptyFileError, UploadFileUnexpectedError } from '../../../file/utils/errors.js';
 import { validatedMemberAccountRole } from '../../strategies/validatedMemberAccountRole.js';
 import { download, upload } from './memberThumbnail.schemas.js';
 import { MemberThumbnailService } from './memberThumbnail.service.js';
@@ -28,10 +25,7 @@ type GraaspThumbnailsOptions = {
   maxFileSize?: number; // max size for an uploaded file in bytes
 };
 
-const plugin: FastifyPluginAsyncTypebox<GraaspThumbnailsOptions> = async (
-  fastify,
-  options,
-) => {
+const plugin: FastifyPluginAsyncTypebox<GraaspThumbnailsOptions> = async (fastify, options) => {
   const { maxFileSize = MAX_THUMBNAIL_SIZE } = options;
   const thumbnailService = resolveDependency(MemberThumbnailService);
 

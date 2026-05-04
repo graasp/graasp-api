@@ -92,9 +92,7 @@ export const getItemsInBox = {
     Type.Composite(
       [
         Type.Pick(getItemsInBoxProps, ['lat1', 'lat2', 'lng1', 'lng2']), // We pick `lat1`, `lat2`, `lng1`, `lng2` to make them required
-        Type.Partial(
-          Type.Omit(getItemsInBoxProps, ['lat1', 'lat2', 'lng1', 'lng2']),
-        ), // Other properties are optional
+        Type.Partial(Type.Omit(getItemsInBoxProps, ['lat1', 'lat2', 'lng1', 'lng2'])), // Other properties are optional
       ],
       {
         additionalProperties: false,

@@ -3,10 +3,7 @@ import type { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox';
 import { resolveDependency } from '../../../../di/utils.js';
 import { db } from '../../../../drizzle/db.js';
 import { asDefined } from '../../../../utils/assertions.js';
-import {
-  isAuthenticated,
-  matchOne,
-} from '../../../auth/plugins/passport/preHandlers.js';
+import { isAuthenticated, matchOne } from '../../../auth/plugins/passport/preHandlers.js';
 import { assertIsMember } from '../../../authentication.js';
 import { validatedMemberAccountRole } from '../../../member/strategies/validatedMemberAccountRole.js';
 import { ItemActionService } from '../action/itemAction.service.js';
@@ -66,12 +63,7 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
       const member = asDefined(user?.account);
       assertIsMember(member);
       return await db.transaction(async (tx) => {
-        const item = await documentService.patchWithOptions(
-          tx,
-          member,
-          id,
-          body,
-        );
+        const item = await documentService.patchWithOptions(tx, member, id, body);
         await itemActionService.postPatchAction(tx, request, item);
         return item;
       });

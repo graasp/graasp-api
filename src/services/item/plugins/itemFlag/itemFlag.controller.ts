@@ -5,10 +5,7 @@ import type { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox';
 import { resolveDependency } from '../../../../di/utils.js';
 import { db } from '../../../../drizzle/db.js';
 import { asDefined } from '../../../../utils/assertions.js';
-import {
-  isAuthenticated,
-  matchOne,
-} from '../../../auth/plugins/passport/preHandlers.js';
+import { isAuthenticated, matchOne } from '../../../auth/plugins/passport/preHandlers.js';
 import { guestAccountRole } from '../../../itemLogin/strategies/guestAccountRole.js';
 import { validatedMemberAccountRole } from '../../../member/strategies/validatedMemberAccountRole.js';
 import { create, getFlagTypes } from './itemFlag.schemas.js';
@@ -27,10 +24,7 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
     '/:itemId/flags',
     {
       schema: create,
-      preHandler: [
-        isAuthenticated,
-        matchOne(validatedMemberAccountRole, guestAccountRole),
-      ],
+      preHandler: [isAuthenticated, matchOne(validatedMemberAccountRole, guestAccountRole)],
     },
     async ({ user, params: { itemId }, body: { type } }, reply) => {
       const account = asDefined(user?.account);

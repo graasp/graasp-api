@@ -32,12 +32,7 @@ export class ItemThumbnailService {
     this.logger = logger;
   }
 
-  async upload(
-    dbConnection: DBConnection,
-    member: MinimalMember,
-    itemId: string,
-    file: Readable,
-  ) {
+  async upload(dbConnection: DBConnection, member: MinimalMember, itemId: string, file: Readable) {
     await this.authorizedItemService.assertAccessForItemId(dbConnection, {
       permission: 'write',
       accountId: member.id,
@@ -108,9 +103,7 @@ export class ItemThumbnailService {
     // Create a flat array of [{itemId, size}] tuple
     const itemsIdWithThumbnail = items
       .filter((i) => Boolean(i.settings.hasThumbnail))
-      .map((i) =>
-        DEFAULT_ITEM_THUMBNAIL_SIZES.map((size) => ({ id: i.id, size })),
-      )
+      .map((i) => DEFAULT_ITEM_THUMBNAIL_SIZES.map((size) => ({ id: i.id, size })))
       .flat();
 
     // fetch all thumbnails
@@ -136,10 +129,7 @@ export class ItemThumbnailService {
         itemsThumbnails[id][size] = result.value;
       } else {
         // log error
-        console.error(
-          `Failed to get thumbnail for ID ${id} and size ${size}:`,
-          result.reason,
-        );
+        console.error(`Failed to get thumbnail for ID ${id} and size ${size}:`, result.reason);
       }
     });
 

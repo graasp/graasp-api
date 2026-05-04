@@ -4,10 +4,7 @@ import { singleton } from 'tsyringe';
 import { type UUID, isPasswordStrong } from '@graasp/sdk';
 
 import { type DBConnection } from '../../../../drizzle/db.js';
-import {
-  type MemberPasswordRaw,
-  memberPasswordsTable,
-} from '../../../../drizzle/schema.js';
+import { type MemberPasswordRaw, memberPasswordsTable } from '../../../../drizzle/schema.js';
 import { MemberNotFound } from '../../../../utils/errors.js';
 import { PasswordNotStrong } from './errors.js';
 import { encryptPassword } from './utils.js';
@@ -24,10 +21,9 @@ export class MemberPasswordRepository {
       throw new MemberNotFound({ id: memberId });
     }
 
-    const memberPassword =
-      await dbConnection.query.memberPasswordsTable.findFirst({
-        where: eq(memberPasswordsTable.memberId, memberId),
-      });
+    const memberPassword = await dbConnection.query.memberPasswordsTable.findFirst({
+      where: eq(memberPasswordsTable.memberId, memberId),
+    });
 
     return memberPassword;
   }
@@ -43,11 +39,7 @@ export class MemberPasswordRepository {
     });
   }
 
-  async put(
-    dbConnection: DBConnection,
-    memberId: UUID,
-    newPassword: string,
-  ): Promise<void> {
+  async put(dbConnection: DBConnection, memberId: UUID, newPassword: string): Promise<void> {
     if (!isPasswordStrong(newPassword)) {
       throw new PasswordNotStrong(newPassword);
     }

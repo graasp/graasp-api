@@ -3,10 +3,7 @@ import { StatusCodes } from 'http-status-codes';
 
 import type { FastifySchema } from 'fastify';
 
-import {
-  customType,
-  registerSchemaAsRef,
-} from '../../../../plugins/typebox.js';
+import { customType, registerSchemaAsRef } from '../../../../plugins/typebox.js';
 import { errorSchemaRef } from '../../../../schemas/global.js';
 import { itemCommonSchema } from '../../common.schemas.js';
 import { geoCoordinateSchemaRef } from '../geolocation/geolocation.schema.js';
@@ -25,11 +22,7 @@ const pageSchema = Type.Composite([
   ),
 ]);
 
-export const pageItemSchemaRef = registerSchemaAsRef(
-  'pageItem',
-  'Page Item',
-  pageSchema,
-);
+export const pageItemSchemaRef = registerSchemaAsRef('pageItem', 'Page Item', pageSchema);
 
 export const createPage = {
   operationId: 'createPage',
@@ -57,8 +50,7 @@ export const pageWebsocketsSchema = {
   operationId: 'pagesWebsockets',
   tags: ['item', 'page', 'websockets'],
   summary: 'Connect to websockets for a page',
-  description:
-    'Connect to websockets for a page and allow collaboration through yjs.',
+  description: 'Connect to websockets for a page and allow collaboration through yjs.',
 
   params: customType.StrictObject({
     id: customType.UUID(),

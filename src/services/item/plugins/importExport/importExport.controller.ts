@@ -28,12 +28,7 @@ import { ZIP_FILE_MIME_TYPES } from './constants.js';
 import { FileIsInvalidArchiveError } from './errors.js';
 import { GraaspExportService } from './graaspExport.service.js';
 import { ImportService } from './import.service.js';
-import {
-  downloadFile,
-  exportZip,
-  graaspZipExport,
-  zipImport,
-} from './importExport.schemas.js';
+import { downloadFile, exportZip, graaspZipExport, zipImport } from './importExport.schemas.js';
 import { ItemExportService } from './itemExport.service.js';
 import { prepareZip } from './utils.js';
 
@@ -141,17 +136,10 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
       await actionService.postMany(db, maybeUser, request, [action]);
 
       // return single file
-      const { stream, mimetype, name } = await itemExportService.fetchItemData(
-        db,
-        maybeUser,
-        item,
-      );
+      const { stream, mimetype, name } = await itemExportService.fetchItemData(db, maybeUser, item);
       // allow browser to access content disposition
       reply.header('Access-Control-Expose-Headers', 'Content-Disposition');
-      reply.raw.setHeader(
-        'Content-Disposition',
-        `attachment; filename="${encodeFilename(name)}"`,
-      );
+      reply.raw.setHeader('Content-Disposition', `attachment; filename="${encodeFilename(name)}"`);
       reply.type(mimetype);
 
       return stream;
@@ -219,17 +207,10 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
       reply.header('Access-Control-Expose-Headers', 'Content-Disposition');
 
       // generate archive stream
-      const archiveStream = await graaspExportService.exportGraasp(
-        db,
-        maybeUser,
-        item,
-      );
+      const archiveStream = await graaspExportService.exportGraasp(db, maybeUser, item);
 
       try {
-        reply.raw.setHeader(
-          'Content-Disposition',
-          `filename="${encodeFilename(item.name)}.zip"`,
-        );
+        reply.raw.setHeader('Content-Disposition', `filename="${encodeFilename(item.name)}.zip"`);
       } catch (e) {
         // TODO: send sentry error
         log?.error(e);

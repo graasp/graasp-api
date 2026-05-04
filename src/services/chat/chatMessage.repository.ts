@@ -18,10 +18,7 @@ export class ChatMessageRepository {
    * Retrieves all the messages related to the given item
    * @param itemId Id of item to retrieve messages for
    */
-  async getByItem(
-    dbConnection: DBConnection,
-    itemId: string,
-  ): Promise<ChatMessageWithCreator[]> {
+  async getByItem(dbConnection: DBConnection, itemId: string): Promise<ChatMessageWithCreator[]> {
     throwsIfParamIsInvalid('itemId', itemId);
 
     return await dbConnection.query.chatMessagesTable.findMany({
@@ -58,10 +55,7 @@ export class ChatMessageRepository {
       body: string;
     },
   ): Promise<ChatMessageRaw> {
-    const res = await dbConnection
-      .insert(chatMessagesTable)
-      .values(message)
-      .returning();
+    const res = await dbConnection.insert(chatMessagesTable).values(message).returning();
     return res[0];
   }
 
@@ -84,25 +78,18 @@ export class ChatMessageRepository {
   }
 
   async deleteOne(dbConnection: DBConnection, id: string): Promise<void> {
-    await dbConnection
-      .delete(chatMessagesTable)
-      .where(eq(chatMessagesTable.id, id));
+    await dbConnection.delete(chatMessagesTable).where(eq(chatMessagesTable.id, id));
   }
 
   /*
    * Remove all messages for the item
    * @param itemId Id of item to clear the chat
    */
-  async deleteByItem(
-    dbConnection: DBConnection,
-    itemId: string,
-  ): Promise<void> {
+  async deleteByItem(dbConnection: DBConnection, itemId: string): Promise<void> {
     throwsIfParamIsInvalid('itemId', itemId);
 
     try {
-      await dbConnection
-        .delete(chatMessagesTable)
-        .where(eq(chatMessagesTable.itemId, itemId));
+      await dbConnection.delete(chatMessagesTable).where(eq(chatMessagesTable.itemId, itemId));
     } catch (e) {
       assertIsError(e);
       throw new DeleteException(e.message);

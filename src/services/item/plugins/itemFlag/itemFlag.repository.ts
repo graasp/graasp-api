@@ -17,8 +17,6 @@ export class ItemFlagRepository {
     dbConnection: DBConnection,
     { flagType, creatorId, itemId }: CreateItemFlagBody,
   ): Promise<void> {
-    await dbConnection
-      .insert(itemFlagsTable)
-      .values({ type: flagType, creatorId, itemId });
+    await dbConnection.insert(itemFlagsTable).values({ type: flagType, creatorId, itemId });
   }
 }

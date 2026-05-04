@@ -26,10 +26,7 @@ type GraaspThumbnailsOptions = {
   maxFileSize?: number; // max size for an uploaded file in bytes
 };
 
-const plugin: FastifyPluginAsyncTypebox<GraaspThumbnailsOptions> = async (
-  fastify,
-  options,
-) => {
+const plugin: FastifyPluginAsyncTypebox<GraaspThumbnailsOptions> = async (fastify, options) => {
   const { maxFileSize = DEFAULT_MAX_FILE_SIZE } = options;
 
   const itemThumbnailService = resolveDependency(ItemThumbnailService);

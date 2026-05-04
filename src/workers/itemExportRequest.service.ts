@@ -71,11 +71,7 @@ export class ItemExportRequestService {
    * @param itemId item to be exported
    * @param memberId member that requested the export
    */
-  async exportFolderZipAndSendByEmail(
-    db: DBConnection,
-    itemId: string,
-    memberId: string,
-  ) {
+  async exportFolderZipAndSendByEmail(db: DBConnection, itemId: string, memberId: string) {
     const item = await this.authorizedItemService.getItemById(db, {
       itemId,
       accountId: memberId,
@@ -85,13 +81,7 @@ export class ItemExportRequestService {
     const member = await this.memberService.get(db, memberId);
     const memberInfo = member.toMemberInfo();
     const archive = await this.exportRaw(db, memberInfo, item);
-    await this.uploadAndSendDownloadLink(
-      db,
-      memberInfo,
-      item,
-      archive,
-      ItemExportRequestType.Raw,
-    );
+    await this.uploadAndSendDownloadLink(db, memberInfo, item, archive, ItemExportRequestType.Raw);
   }
 
   /**
@@ -118,23 +108,12 @@ export class ItemExportRequestService {
     type: ItemExportRequestTypeOptions,
   ) {
     // upload zip
-    const filepath = await this.uploadZip(
-      dbConnection,
-      actor,
-      item,
-      archive,
-      type,
-    );
+    const filepath = await this.uploadZip(dbConnection, actor, item, archive, type);
 
     // send email
     const fullMember = await this.memberService.get(dbConnection, actor.id);
     const memberWithEmail = fullMember.toMemberInfo();
-    await this.sendExportRawLinkInMail(
-      memberWithEmail.email,
-      memberWithEmail.lang,
-      filepath,
-      item,
-    );
+    await this.sendExportRawLinkInMail(memberWithEmail.email, memberWithEmail.lang, filepath, item);
   }
 
   /**
@@ -152,14 +131,11 @@ export class ItemExportRequestService {
     archive: ZipFile,
     type: ItemExportRequestTypeOptions,
   ) {
-    const request = await this.itemExportRequestRepository.create(
-      dbConnection,
-      {
-        memberId: actor.id,
-        itemId: item.id,
-        type,
-      },
-    );
+    const request = await this.itemExportRequestRepository.create(dbConnection, {
+      memberId: actor.id,
+      itemId: item.id,
+      type,
+    });
 
     const filepath = this.buildExportPath(request.id);
     const tmpFolder = path.join(TMP_FOLDER, 'item-export');
@@ -218,11 +194,7 @@ export class ItemExportRequestService {
     if (isFolderItem(item)) {
       // append description
       const folderPath = path.join(archiveRootPath, item.name);
-      const children = await this.itemService.getChildren(
-        dbConnection,
-        actor,
-        item.id,
-      );
+      const children = await this.itemService.getChildren(dbConnection, actor, item.id);
       const result = await Promise.all(
         children.map((child) =>
           this.addItemToZip(dbConnection, actor, {
@@ -240,11 +212,7 @@ export class ItemExportRequestService {
     }
 
     // save single item
-    const { stream, name } = await this.itemExportService.fetchItemData(
-      dbConnection,
-      actor,
-      item,
-    );
+    const { stream, name } = await this.itemExportService.fetchItemData(dbConnection, actor, item);
     return archive.addReadStream(stream, path.join(archiveRootPath, name));
   }
 
@@ -253,11 +221,7 @@ export class ItemExportRequestService {
    * @param item The root item
    * @returns A zip file promise
    */
-  private async exportRaw(
-    dbConnection: DBConnection,
-    actor: MinimalMember,
-    item: ItemRaw,
-  ) {
+  private async exportRaw(dbConnection: DBConnection, actor: MinimalMember, item: ItemRaw) {
     // init archive
     const archive = new ZipFile();
     archive.outputStream.on('error', function (err) {

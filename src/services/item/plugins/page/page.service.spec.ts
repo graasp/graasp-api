@@ -80,9 +80,7 @@ describe('PageItemService', () => {
         // expect doc to have all updates
         const initDoc = await pageItemService.getById(db, item.id);
         expect(initDoc).toBeDefined();
-        expect(Buffer.from(encodeStateAsUpdate(initDoc))).toEqual(
-          Buffer.from(docState),
-        );
+        expect(Buffer.from(encodeStateAsUpdate(initDoc))).toEqual(Buffer.from(docState));
 
         // db should contain less updates
         const updates = await db.query.pageUpdateTable.findMany({

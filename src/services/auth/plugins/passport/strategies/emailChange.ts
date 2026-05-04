@@ -4,17 +4,10 @@ import { Authenticator } from '@fastify/passport';
 
 import { SECRET_KEY } from '../../../../../crypto/jwt.js';
 import { db } from '../../../../../drizzle/db.js';
-import {
-  MemberNotFound,
-  UnauthorizedMember,
-  buildError,
-} from '../../../../../utils/errors.js';
+import { MemberNotFound, UnauthorizedMember, buildError } from '../../../../../utils/errors.js';
 import { MemberRepository } from '../../../../member/member.repository.js';
 import { PassportStrategy } from '../strategies.js';
-import type {
-  CustomStrategyOptions,
-  StrictVerifiedCallback,
-} from '../types.js';
+import type { CustomStrategyOptions, StrictVerifiedCallback } from '../types.js';
 
 export default (
   passport: Authenticator,
@@ -53,18 +46,14 @@ export default (
           } else {
             // Authentication refused
             return done(
-              options?.propagateError
-                ? new MemberNotFound({ id: uuid })
-                : new UnauthorizedMember(),
+              options?.propagateError ? new MemberNotFound({ id: uuid }) : new UnauthorizedMember(),
               false,
             );
           }
         } catch (error: unknown) {
           // Exception occurred while fetching member
           return done(
-            options?.propagateError
-              ? buildError(error)
-              : new UnauthorizedMember(),
+            options?.propagateError ? buildError(error) : new UnauthorizedMember(),
             false,
           );
         }

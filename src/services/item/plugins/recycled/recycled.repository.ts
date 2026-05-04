@@ -6,10 +6,7 @@ import { and, asc, desc, gte, isNotNull, ne } from 'drizzle-orm/sql';
 import { type Paginated, type Pagination } from '@graasp/sdk';
 
 import { type DBConnection } from '../../../../drizzle/db.js';
-import {
-  isAncestorOrSelf,
-  isDescendantOrSelf,
-} from '../../../../drizzle/operations.js';
+import { isAncestorOrSelf, isDescendantOrSelf } from '../../../../drizzle/operations.js';
 import {
   itemMembershipsTable,
   itemsRawTable,
@@ -33,9 +30,7 @@ export class RecycledItemDataRepository {
     dbConnection: DBConnection,
     { itemPath, creatorId }: CreateRecycledItemDataBody,
   ): Promise<void> {
-    await dbConnection
-      .insert(recycledItemDatasTable)
-      .values({ itemPath, creatorId });
+    await dbConnection.insert(recycledItemDatasTable).values({ itemPath, creatorId });
   }
 
   // warning: this call insert in the table
@@ -85,21 +80,12 @@ export class RecycledItemDataRepository {
       .innerJoin(
         recycledItemDatasTable,
         and(
-          isDescendantOrSelf(
-            recycledItemDatasTable.itemPath,
-            ownMemberships.itemPath,
-          ),
-          gte(
-            recycledItemDatasTable.createdAt,
-            autoDeletionDeadline.toISOString(),
-          ),
+          isDescendantOrSelf(recycledItemDatasTable.itemPath, ownMemberships.itemPath),
+          gte(recycledItemDatasTable.createdAt, autoDeletionDeadline.toISOString()),
         ),
       )
       // join with item
-      .innerJoin(
-        itemsRawTable,
-        and(eq(itemsRawTable.path, recycledItemDatasTable.itemPath)),
-      )
+      .innerJoin(itemsRawTable, and(eq(itemsRawTable.path, recycledItemDatasTable.itemPath)))
       // return item's creator
       .leftJoin(membersView, eq(itemsRawTable.creatorId, membersView.id))
       .as('subquery');
@@ -136,10 +122,7 @@ export class RecycledItemDataRepository {
    * @param {string[]} [options.types] filter out the items by type. If undefined or empty, all types are returned.
    * @returns {Item[]}
    */
-  async getDeletedDescendants(
-    dbConnection: DBConnection,
-    item: FolderItem,
-  ): Promise<ItemRaw[]> {
+  async getDeletedDescendants(dbConnection: DBConnection, item: FolderItem): Promise<ItemRaw[]> {
     return await dbConnection
       .select()
       .from(itemsRawTable)
@@ -155,15 +138,9 @@ export class RecycledItemDataRepository {
       .orderBy(asc(itemsRawTable.path));
   }
 
-  async getManyDeletedItemsById(
-    dbConnection: DBConnection,
-    itemIds: string[],
-  ): Promise<ItemRaw[]> {
+  async getManyDeletedItemsById(dbConnection: DBConnection, itemIds: string[]): Promise<ItemRaw[]> {
     return await dbConnection.query.itemsRawTable.findMany({
-      where: and(
-        isNotNull(itemsRawTable.deletedAt),
-        inArray(itemsRawTable.id, itemIds),
-      ),
+      where: and(isNotNull(itemsRawTable.deletedAt), inArray(itemsRawTable.id, itemIds)),
     });
   }
 
@@ -178,10 +155,7 @@ export class RecycledItemDataRepository {
     const trees = await dbConnection
       .select()
       .from(itemsRawTable)
-      .innerJoin(
-        descendants,
-        and(isDescendantOrSelf(descendants.path, itemsRawTable.path)),
-      )
+      .innerJoin(descendants, and(isDescendantOrSelf(descendants.path, itemsRawTable.path)))
       .where(inArray(itemsRawTable.id, ids));
 
     return trees.map(({ descendants }) => descendants);

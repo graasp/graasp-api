@@ -1,9 +1,6 @@
 import { Type } from '@sinclair/typebox';
 
-import {
-  customType,
-  registerSchemaAsRef,
-} from '../../../../plugins/typebox.js';
+import { customType, registerSchemaAsRef } from '../../../../plugins/typebox.js';
 
 export const geoCoordinateSchema = customType.StrictObject(
   {

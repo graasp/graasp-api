@@ -47,22 +47,12 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
           throw new ItemNotFound(itemId);
         }
         // If item is not visible, throw NOT_FOUND
-        const isVisible = await itemLoginService.isItemVisible(
-          tx,
-          user?.account,
-          item.path,
-        );
+        const isVisible = await itemLoginService.isItemVisible(tx, user?.account, item.path);
         if (!isVisible) {
           throw new ItemNotFound(itemId);
         }
-        const itemLoginSchema = await itemLoginService.getByItemPath(
-          tx,
-          item.path,
-        );
-        if (
-          itemLoginSchema &&
-          itemLoginSchema.status !== ItemLoginSchemaStatus.Disabled
-        ) {
+        const itemLoginSchema = await itemLoginService.getByItemPath(tx, item.path);
+        if (itemLoginSchema && itemLoginSchema.status !== ItemLoginSchemaStatus.Disabled) {
           return itemLoginSchema.type;
         }
         return null;
@@ -83,10 +73,7 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
         itemId,
         permission: 'admin',
       });
-      const itemLoginSchema = await itemLoginService.getByItemPath(
-        db,
-        item.path,
-      );
+      const itemLoginSchema = await itemLoginService.getByItemPath(db, item.path);
       if (!itemLoginSchema) {
         reply.status(StatusCodes.NO_CONTENT);
       } else {
@@ -109,11 +96,7 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
         throw new ValidMemberSession(user?.account);
       }
       return db.transaction(async (tx) => {
-        const bondMember = await itemLoginService.logInOrRegister(
-          tx,
-          params.id,
-          body,
-        );
+        const bondMember = await itemLoginService.logInOrRegister(tx, params.id, body);
         // set session
         session.set(SESSION_KEY, bondMember.id);
         return bondMember;

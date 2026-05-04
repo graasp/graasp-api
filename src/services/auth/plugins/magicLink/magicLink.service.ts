@@ -34,19 +34,12 @@ export class MagicLinkService {
     await this.authService.generateRegisterLinkAndEmailIt(member, { url });
   }
 
-  async login(
-    dbConnection: DBConnection,
-    body: { email: string },
-    url?: string,
-  ) {
+  async login(dbConnection: DBConnection, body: { email: string }, url?: string) {
     const { email } = body;
     const member = await this.memberRepository.getByEmail(dbConnection, email);
 
     if (member) {
-      await this.authService.generateLoginLinkAndEmailIt(
-        member.toMemberInfo(),
-        { url },
-      );
+      await this.authService.generateLoginLinkAndEmailIt(member.toMemberInfo(), { url });
       const actions = [
         {
           creatorId: member.id,

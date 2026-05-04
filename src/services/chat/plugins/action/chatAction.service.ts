@@ -39,9 +39,7 @@ export class ActionChatService {
       // view: ??
     };
 
-    await this.actionService.postMany(dbConnection, user?.account, request, [
-      action,
-    ]);
+    await this.actionService.postMany(dbConnection, user?.account, request, [action]);
   }
 
   async postPatchMessageAction(
@@ -60,9 +58,7 @@ export class ActionChatService {
       // FIX: add view from which the action was created
       // view: ??
     };
-    await this.actionService.postMany(dbConnection, user?.account, request, [
-      action,
-    ]);
+    await this.actionService.postMany(dbConnection, user?.account, request, [action]);
   }
 
   async postDeleteMessageAction(
@@ -78,24 +74,16 @@ export class ActionChatService {
       // FIX: add view from which the action was created
       // view: ??
     };
-    await this.actionService.postMany(dbConnection, user?.account, request, [
-      action,
-    ]);
+    await this.actionService.postMany(dbConnection, user?.account, request, [action]);
   }
 
-  async postClearMessageAction(
-    dbConnection: DBConnection,
-    request: FastifyRequest,
-    itemId: UUID,
-  ) {
+  async postClearMessageAction(dbConnection: DBConnection, request: FastifyRequest, itemId: UUID) {
     const { user } = request;
     const action = {
       type: ChatActionType.Clear,
       extra: JSON.stringify({ itemId }),
       view: Context.Builder,
     };
-    await this.actionService.postMany(dbConnection, user?.account, request, [
-      action,
-    ]);
+    await this.actionService.postMany(dbConnection, user?.account, request, [action]);
   }
 }

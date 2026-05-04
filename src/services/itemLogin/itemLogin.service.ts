@@ -60,26 +60,18 @@ export class ItemLoginService {
     this.itemVisibilityRepository = itemVisibilityRepository;
   }
 
-  async getSchemaType(
-    dbConnection: DBConnection,
-    actor: MaybeUser,
-    itemPath: string,
-  ) {
+  async getSchemaType(dbConnection: DBConnection, actor: MaybeUser, itemPath: string) {
     // do not need permission to get item login schema
     // we need to know the schema to display the correct form
-    const itemLoginSchema =
-      await this.itemLoginSchemaRepository.getOneByItemPath(
-        dbConnection,
-        itemPath,
-      );
+    const itemLoginSchema = await this.itemLoginSchemaRepository.getOneByItemPath(
+      dbConnection,
+      itemPath,
+    );
     return itemLoginSchema?.type;
   }
 
   async getByItemPath(dbConnection: DBConnection, itemPath: string) {
-    return await this.itemLoginSchemaRepository.getOneByItemPath(
-      dbConnection,
-      itemPath,
-    );
+    return await this.itemLoginSchemaRepository.getOneByItemPath(dbConnection, itemPath);
   }
 
   async logInOrRegister(
@@ -90,9 +82,7 @@ export class ItemLoginService {
     const { username, password } = credentials;
 
     if (!username) {
-      throw new Error(
-        'It is currently not supported to login without a username',
-      );
+      throw new Error('It is currently not supported to login without a username');
     }
 
     const guest = await this.logInOrRegisterWithUsername(dbConnection, itemId, {
@@ -110,11 +100,10 @@ export class ItemLoginService {
     const item = await this.itemRepository.getOneOrThrow(dbConnection, itemId);
     // initial validation
     // this throws if does not exist
-    const itemLoginSchema =
-      await this.itemLoginSchemaRepository.getOneByItemPath(
-        dbConnection,
-        item.path,
-      );
+    const itemLoginSchema = await this.itemLoginSchemaRepository.getOneByItemPath(
+      dbConnection,
+      item.path,
+    );
     if (!itemLoginSchema) {
       throw new ItemLoginSchemaNotFound(item.path);
     }
@@ -144,11 +133,7 @@ export class ItemLoginService {
         }
       } else {
         // If schema was modified from passwordless to '* + password' - update member with password
-        await this.guestPasswordRepository.put(
-          dbConnection,
-          guestAccount.id,
-          password,
-        );
+        await this.guestPasswordRepository.put(dbConnection, guestAccount.id, password);
       }
     }
     // create a new item login
@@ -173,11 +158,7 @@ export class ItemLoginService {
       assertIsDefined(guestAccount);
       if (loginSchemaRequiresPassword(itemLoginSchema.type)) {
         password = asDefined(password, MissingCredentialsForLoginSchema);
-        await this.guestPasswordRepository.put(
-          dbConnection,
-          guestAccount.id,
-          password,
-        );
+        await this.guestPasswordRepository.put(dbConnection, guestAccount.id, password);
       }
 
       // create membership
@@ -189,11 +170,10 @@ export class ItemLoginService {
       });
     }
 
-    const refreshedMember =
-      await this.guestRepository.refreshLastAuthenticatedAt(
-        dbConnection,
-        guestAccount.id,
-      );
+    const refreshedMember = await this.guestRepository.refreshLastAuthenticatedAt(
+      dbConnection,
+      guestAccount.id,
+    );
     return { id: refreshedMember.id, name: refreshedMember.name };
   }
 
@@ -210,17 +190,11 @@ export class ItemLoginService {
   }
 
   async getOneByItem(dbConnection: DBConnection, itemId: string) {
-    return await this.itemLoginSchemaRepository.getOneByItemId(
-      dbConnection,
-      itemId,
-    );
+    return await this.itemLoginSchemaRepository.getOneByItemId(dbConnection, itemId);
   }
 
   async delete(dbConnection: DBConnection, itemId: string) {
-    return this.itemLoginSchemaRepository.deleteOneByItemId(
-      dbConnection,
-      itemId,
-    );
+    return this.itemLoginSchemaRepository.deleteOneByItemId(dbConnection, itemId);
   }
 
   /**
@@ -244,16 +218,12 @@ export class ItemLoginService {
       }
 
       // Check if the actor has at least write permission
-      const membership =
-        await this.itemMembershipRepository.getByAccountAndItemPath(
-          dbConnection,
-          actor?.id,
-          itemPath,
-        );
-      if (
-        !membership ||
-        PermissionLevelCompare.lt(membership.permission, 'write')
-      ) {
+      const membership = await this.itemMembershipRepository.getByAccountAndItemPath(
+        dbConnection,
+        actor?.id,
+        itemPath,
+      );
+      if (!membership || PermissionLevelCompare.lt(membership.permission, 'write')) {
         return false;
       }
     }

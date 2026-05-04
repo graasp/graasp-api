@@ -3,10 +3,7 @@ import type { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox';
 import { resolveDependency } from '../../../../di/utils.js';
 import { db } from '../../../../drizzle/db.js';
 import { asDefined } from '../../../../utils/assertions.js';
-import {
-  isAuthenticated,
-  matchOne,
-} from '../../../auth/plugins/passport/preHandlers.js';
+import { isAuthenticated, matchOne } from '../../../auth/plugins/passport/preHandlers.js';
 import { assertIsMember } from '../../../authentication.js';
 import { validatedMemberAccountRole } from '../../../member/strategies/validatedMemberAccountRole.js';
 import { ItemActionService } from '../action/itemAction.service.js';
@@ -25,8 +22,7 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
     async ({ query: { link } }) => {
       const url = ensureProtocol(link);
       const metadata = await embeddedLinkService.getLinkMetadata(url);
-      const isEmbeddingAllowed =
-        await embeddedLinkService.checkEmbeddingAllowed(url, log);
+      const isEmbeddingAllowed = await embeddedLinkService.checkEmbeddingAllowed(url, log);
 
       return {
         ...metadata,
@@ -84,12 +80,7 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
       const member = asDefined(user?.account);
       assertIsMember(member);
       return await db.transaction(async (tx) => {
-        const item = await embeddedLinkService.patchWithOptions(
-          tx,
-          member,
-          id,
-          body,
-        );
+        const item = await embeddedLinkService.patchWithOptions(tx, member, id, body);
 
         await itemActionService.postPatchAction(tx, request, item);
         return item;

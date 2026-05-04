@@ -2,8 +2,8 @@ import fetch from 'node-fetch';
 
 import { forwarded } from '@fastify/forwarded';
 import type { FastifyReply, FastifyRequest } from 'fastify';
-import type { preHandlerHookHandler } from 'fastify/types/hooks';
-import type { RouteShorthandHook } from 'fastify/types/route';
+import type { preHandlerHookHandler } from 'fastify/types/hooks.js';
+import type { RouteShorthandHook } from 'fastify/types/route.js';
 
 import type { RecaptchaActionType } from '@graasp/sdk';
 

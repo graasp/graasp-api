@@ -6,10 +6,7 @@ import fp from 'fastify-plugin';
 import { resolveDependency } from '../../../../di/utils.js';
 import { db } from '../../../../drizzle/db.js';
 import { asDefined } from '../../../../utils/assertions.js';
-import {
-  isAuthenticated,
-  matchOne,
-} from '../../../auth/plugins/passport/preHandlers.js';
+import { isAuthenticated, matchOne } from '../../../auth/plugins/passport/preHandlers.js';
 import { assertIsMember } from '../../../authentication.js';
 import { validatedMemberAccountRole } from '../../../member/strategies/validatedMemberAccountRole.js';
 import { enroll } from './enroll.schema.js';

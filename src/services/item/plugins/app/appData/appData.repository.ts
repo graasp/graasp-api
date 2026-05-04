@@ -90,9 +90,7 @@ export class AppDataRepository {
   ): Promise<AppDataWithItemAndAccountAndCreator[]> {
     const { accountId, type } = filters;
 
-    const andConditions: (SQL | undefined)[] = [
-      eq(appDataTable.itemId, itemId),
-    ];
+    const andConditions: (SQL | undefined)[] = [eq(appDataTable.itemId, itemId)];
 
     // filter app data to only include requested type
     if (type) {

@@ -13,9 +13,7 @@ export type CSVInvite = {
   permission?: PermissionLevel;
 };
 
-export const parseCSV = (
-  stream: Readable,
-): Promise<{ rows: CSVInvite[]; header: string[] }> => {
+export const parseCSV = (stream: Readable): Promise<{ rows: CSVInvite[]; header: string[] }> => {
   return new Promise((resolve, reject) => {
     // the package is ill-configured, so at runtime it is safer to use the default export instead of the named as the named export is not available
     // eslint-disable-next-line import/no-named-as-default-member

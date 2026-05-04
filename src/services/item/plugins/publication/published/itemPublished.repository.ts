@@ -3,11 +3,7 @@ import { singleton } from 'tsyringe';
 
 import type { DBConnection } from '../../../../../drizzle/db.js';
 import { isAncestorOrSelf } from '../../../../../drizzle/operations.js';
-import {
-  items,
-  membersView,
-  publishedItemsTable,
-} from '../../../../../drizzle/schema.js';
+import { items, membersView, publishedItemsTable } from '../../../../../drizzle/schema.js';
 import type {
   ItemPublishedRaw,
   ItemPublishedWithItemWithCreator,
@@ -92,67 +88,48 @@ export class ItemPublishedRepository {
       .innerJoin(membersView, eq(items.creatorId, membersView.id))
       .offset((page - 1) * pageSize)
       .limit(pageSize);
-    const mappedResults = results.map(
-      ({ published_items, item_view, members_view }) => ({
-        ...published_items,
-        item: {
-          ...resolveItemType(item_view),
-          creator: members_view as MemberRaw,
-        },
-      }),
-    );
-    const total = (
-      await dbConnection.select({ count: count() }).from(publishedItemsTable)
-    )[0].count;
+    const mappedResults = results.map(({ published_items, item_view, members_view }) => ({
+      ...published_items,
+      item: {
+        ...resolveItemType(item_view),
+        creator: members_view as MemberRaw,
+      },
+    }));
+    const total = (await dbConnection.select({ count: count() }).from(publishedItemsTable))[0]
+      .count;
 
     return [mappedResults, total];
   }
 
-  async post(
-    dbConnection: DBConnection,
-    creator: MinimalMember,
-    item: ItemRaw,
-  ): Promise<void> {
+  async post(dbConnection: DBConnection, creator: MinimalMember, item: ItemRaw): Promise<void> {
     await dbConnection.insert(publishedItemsTable).values({
       itemPath: item.path,
       creatorId: creator.id,
     });
   }
 
-  async deleteForItem(
-    dbConnection: DBConnection,
-    item: ItemRaw,
-  ): Promise<ItemPublishedRaw> {
+  async deleteForItem(dbConnection: DBConnection, item: ItemRaw): Promise<ItemPublishedRaw> {
     const entry = await this.getForItem(dbConnection, item.path);
 
     if (!entry) {
       throw new ItemPublishedNotFound(item.id);
     }
 
-    await dbConnection
-      .delete(publishedItemsTable)
-      .where(eq(publishedItemsTable.id, entry.id));
+    await dbConnection.delete(publishedItemsTable).where(eq(publishedItemsTable.id, entry.id));
     return entry;
   }
 
-  async getRecentItems(
-    dbConnection: DBConnection,
-    limit: number = 10,
-  ): Promise<ItemRaw[]> {
-    const publishedInfos =
-      await dbConnection.query.publishedItemsTable.findMany({
-        with: { item: true, account: true },
-        orderBy: desc(items.createdAt),
-        limit,
-      });
+  async getRecentItems(dbConnection: DBConnection, limit: number = 10): Promise<ItemRaw[]> {
+    const publishedInfos = await dbConnection.query.publishedItemsTable.findMany({
+      with: { item: true, account: true },
+      orderBy: desc(items.createdAt),
+      limit,
+    });
 
     return publishedInfos.map(({ item }) => item);
   }
 
-  async touchUpdatedAt(
-    dbConnection: DBConnection,
-    path: ItemRaw['path'],
-  ): Promise<string | null> {
+  async touchUpdatedAt(dbConnection: DBConnection, path: ItemRaw['path']): Promise<string | null> {
     if (!path) {
       throw new Error('path is not defined');
     }

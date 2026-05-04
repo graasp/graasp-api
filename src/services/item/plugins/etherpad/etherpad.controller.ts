@@ -7,21 +7,11 @@ import fp from 'fastify-plugin';
 import { resolveDependency } from '../../../../di/utils.js';
 import { db } from '../../../../drizzle/db.js';
 import { asDefined } from '../../../../utils/assertions.js';
-import {
-  isAuthenticated,
-  matchOne,
-} from '../../../auth/plugins/passport/preHandlers.js';
-import {
-  assertIsMember,
-  assertIsMemberOrGuest,
-} from '../../../authentication.js';
+import { isAuthenticated, matchOne } from '../../../auth/plugins/passport/preHandlers.js';
+import { assertIsMember, assertIsMemberOrGuest } from '../../../authentication.js';
 import { validatedMemberAccountRole } from '../../../member/strategies/validatedMemberAccountRole.js';
 import { ItemService } from '../../item.service.js';
-import {
-  createEtherpad,
-  getEtherpadFromItem,
-  updateEtherpad,
-} from './etherpad.schemas.js';
+import { createEtherpad, getEtherpadFromItem, updateEtherpad } from './etherpad.schemas.js';
 import { EtherpadItemService } from './etherpad.service.js';
 
 const endpoints: FastifyPluginAsyncTypebox = async (fastify) => {
@@ -47,12 +37,7 @@ const endpoints: FastifyPluginAsyncTypebox = async (fastify) => {
       assertIsMember(member);
 
       await db.transaction(async (tx) => {
-        await etherpadItemService.createEtherpadItem(
-          tx,
-          member,
-          body,
-          parentId,
-        );
+        await etherpadItemService.createEtherpadItem(tx, member, body, parentId);
       });
 
       reply.status(StatusCodes.NO_CONTENT);
@@ -126,15 +111,12 @@ const endpoints: FastifyPluginAsyncTypebox = async (fastify) => {
   /**
    * Copy etherpad on item copy
    */
-  itemService.hooks.setPreHook(
-    'copy',
-    async (actor, _db, { original: item }) => {
-      if (!actor) {
-        return;
-      }
-      await etherpadItemService.copyEtherpadInMutableItem(item);
-    },
-  );
+  itemService.hooks.setPreHook('copy', async (actor, _db, { original: item }) => {
+    if (!actor) {
+      return;
+    }
+    await etherpadItemService.copyEtherpadInMutableItem(item);
+  });
 };
 
 const plugin: FastifyPluginAsync = async (fastify) => {

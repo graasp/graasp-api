@@ -2,23 +2,12 @@ import { singleton } from 'tsyringe';
 
 import type { MultipartFile } from '@fastify/multipart';
 
-import {
-  AppDataVisibility,
-  PermissionLevelCompare,
-  type UUID,
-} from '@graasp/sdk';
+import { AppDataVisibility, PermissionLevelCompare, type UUID } from '@graasp/sdk';
 
 import { type DBConnection } from '../../../../../drizzle/db.js';
-import type {
-  AppDataRaw,
-  ItemMembershipRaw,
-} from '../../../../../drizzle/types.js';
+import type { AppDataRaw, ItemMembershipRaw } from '../../../../../drizzle/types.js';
 import { BaseLogger } from '../../../../../logger.js';
-import type {
-  AuthenticatedUser,
-  MaybeUser,
-  PermissionLevel,
-} from '../../../../../types.js';
+import type { AuthenticatedUser, MaybeUser, PermissionLevel } from '../../../../../types.js';
 import { AuthorizedItemService } from '../../../../authorizedItem.service.js';
 import FileService from '../../../../file/file.service.js';
 import type { ItemRaw } from '../../../item.js';
@@ -114,20 +103,14 @@ export class AppDataService {
       },
     );
 
-    const { id: appDataId } = await this.appDataRepository.addOne(
-      dbConnection,
-      {
-        appData: completeData,
-        itemId,
-        actorId: account.id,
-      },
-    );
+    const { id: appDataId } = await this.appDataRepository.addOne(dbConnection, {
+      appData: completeData,
+      itemId,
+      actorId: account.id,
+    });
 
     // get relations
-    const appData = await this.appDataRepository.getOne(
-      dbConnection,
-      appDataId,
-    );
+    const appData = await this.appDataRepository.getOne(dbConnection, appDataId);
     if (!appData) {
       throw new AppDataNotFound(appDataId);
     }
@@ -150,10 +133,7 @@ export class AppDataService {
         itemId,
       });
 
-    const currentAppData = await this.appDataRepository.getOne(
-      dbConnection,
-      appDataId,
-    );
+    const currentAppData = await this.appDataRepository.getOne(dbConnection, appDataId);
 
     if (!currentAppData) {
       throw new AppDataNotFound(appDataId);
@@ -178,10 +158,7 @@ export class AppDataService {
     await this.appDataRepository.updateOne(dbConnection, appDataId, body);
 
     // get relations
-    const appData = await this.appDataRepository.getOne(
-      dbConnection,
-      appDataId,
-    );
+    const appData = await this.appDataRepository.getOne(dbConnection, appDataId);
     if (!appData) {
       throw new AppDataNotFound(appDataId);
     }
@@ -204,22 +181,14 @@ export class AppDataService {
         itemId,
       });
 
-    const appData = await this.appDataRepository.getOne(
-      dbConnection,
-      appDataId,
-    );
+    const appData = await this.appDataRepository.getOne(dbConnection, appDataId);
 
     if (!appData) {
       throw new AppDataNotFound(appDataId);
     }
 
     // patch own or is admin
-    await this.validateAppDataPermission(
-      account,
-      appData,
-      'admin',
-      inheritedMembership,
-    );
+    await this.validateAppDataPermission(account, appData, 'admin', inheritedMembership);
 
     await this.appDataRepository.deleteOne(dbConnection, appDataId);
 
@@ -235,25 +204,19 @@ export class AppDataService {
     item: ItemRaw,
     appDataId: UUID,
   ) {
-    const { itemMembership } =
-      await this.authorizedItemService.getPropertiesForItem(dbConnection, {
-        permission: 'read',
-        accountId: account.id,
-        item,
-      });
+    const { itemMembership } = await this.authorizedItemService.getPropertiesForItem(dbConnection, {
+      permission: 'read',
+      accountId: account.id,
+      item,
+    });
 
-    const appData = await this.appDataRepository.getOne(
-      dbConnection,
-      appDataId,
-    );
+    const appData = await this.appDataRepository.getOne(dbConnection, appDataId);
 
     if (!appData) {
       throw new AppDataNotFound(appDataId);
     }
 
-    if (
-      !this.validateAppDataPermission(account, appData, 'read', itemMembership)
-    ) {
+    if (!this.validateAppDataPermission(account, appData, 'read', itemMembership)) {
       throw new AppDataNotAccessible({ appDataId, accountId: account.id });
     }
 
@@ -267,12 +230,14 @@ export class AppDataService {
     type?: string,
   ) {
     // posting an app data is allowed to readers
-    const { itemMembership } =
-      await this.authorizedItemService.getPropertiesForItemById(dbConnection, {
+    const { itemMembership } = await this.authorizedItemService.getPropertiesForItemById(
+      dbConnection,
+      {
         permission: 'read',
         accountId: maybeUser?.id,
         itemId,
-      });
+      },
+    );
 
     return this.appDataRepository.getForItem(
       dbConnection,
@@ -290,11 +255,7 @@ export class AppDataService {
   ) {
     const isValid =
       ownAppDataAbility(appData, actor) ||
-      itemVisibilityAppDataAbility(
-        appData,
-        permission,
-        inheritedMembership?.permission,
-      ) ||
+      itemVisibilityAppDataAbility(appData, permission, inheritedMembership?.permission) ||
       (inheritedMembership &&
         PermissionLevelCompare.gte(inheritedMembership.permission, permission));
 
@@ -307,26 +268,16 @@ export class AppDataService {
     file: MultipartFile,
     item: ItemRaw,
   ) {
-    const appDataValue = await this.appDataFileService.upload(
-      account,
-      file,
-      item,
-    );
+    const appDataValue = await this.appDataFileService.upload(account, file, item);
 
-    const { id: appDataId } = await this.appDataRepository.addOne(
-      dbConnection,
-      {
-        itemId: item.id,
-        actorId: account.id,
-        appData: appDataValue,
-      },
-    );
+    const { id: appDataId } = await this.appDataRepository.addOne(dbConnection, {
+      itemId: item.id,
+      actorId: account.id,
+      appData: appDataValue,
+    });
 
     // get relations
-    const appData = await this.appDataRepository.getOne(
-      dbConnection,
-      appDataId,
-    );
+    const appData = await this.appDataRepository.getOne(dbConnection, appDataId);
     if (!appData) {
       throw new AppDataNotFound(appDataId);
     }

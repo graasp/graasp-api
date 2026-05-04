@@ -10,7 +10,6 @@ import { geoCoordinateSchema } from './plugins/geolocation/geolocation.schema.js
  * Declare compiled validators to be used in manual validation
  */
 const ajv = new Ajv({ allErrors: true });
-export const validateSettings =
-  ajv.compile<ItemRaw['settings']>(settingsSchema);
+export const validateSettings = ajv.compile<ItemRaw['settings']>(settingsSchema);
 export const validateGeolocation =
   ajv.compile<Pick<ItemGeolocation, 'lat' | 'lng'>>(geoCoordinateSchema);

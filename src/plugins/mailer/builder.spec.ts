@@ -2,7 +2,7 @@ import { faker } from '@faker-js/faker';
 import { describe, expect, it } from 'vitest';
 
 import { TRANSLATIONS } from '../../langs/constants.js';
-import enTranslations from '../../langs/en.json.js';
+import enTranslations from '../../langs/en.json' with { type: 'json' };
 import { MailBuilder } from './builder.js';
 
 describe('Mailer', () => {

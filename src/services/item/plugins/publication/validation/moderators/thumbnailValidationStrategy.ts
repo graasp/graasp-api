@@ -1,10 +1,6 @@
 import { inject, injectWithTransform, singleton } from 'tsyringe';
 
-import {
-  ItemValidationProcess,
-  ItemValidationStatus,
-  ThumbnailSize,
-} from '@graasp/sdk';
+import { ItemValidationProcess, ItemValidationStatus, ThumbnailSize } from '@graasp/sdk';
 
 import { IMAGE_CLASSIFIER_API_DI_KEY } from '../../../../../../di/constants.js';
 import {
@@ -24,11 +20,7 @@ export class ThumbnailValidationStrategy implements ValidationStrategy {
   public readonly process = ItemValidationProcess.ImageChecking;
 
   constructor(
-    @injectWithTransform(
-      ThumbnailService,
-      ThumbnailServiceTransformer,
-      ITEM_THUMBNAIL_PREFIX,
-    )
+    @injectWithTransform(ThumbnailService, ThumbnailServiceTransformer, ITEM_THUMBNAIL_PREFIX)
     thumbnailService: ThumbnailService,
     @inject(IMAGE_CLASSIFIER_API_DI_KEY) imageClassifierApi: string,
   ) {
@@ -49,9 +41,7 @@ export class ThumbnailValidationStrategy implements ValidationStrategy {
     const classes = await classifyImage(this.imageClassifierApi, url);
     const isSafe = classes.length === 0;
     const result = classes.map((c) => `${c.class}: ${c.score}`).join(' | ');
-    const status = isSafe
-      ? ItemValidationStatus.Success
-      : ItemValidationStatus.Failure;
+    const status = isSafe ? ItemValidationStatus.Success : ItemValidationStatus.Failure;
     return { status, result };
   }
 }

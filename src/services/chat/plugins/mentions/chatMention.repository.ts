@@ -39,10 +39,7 @@ export class ChatMentionRepository {
    * Retrieves a mention given the mention id
    * @param mentionId Id of the mention to retrieve
    */
-  async get(
-    dbConnection: DBConnection,
-    mentionId: string,
-  ): Promise<ChatMentionRaw> {
+  async get(dbConnection: DBConnection, mentionId: string): Promise<ChatMentionRaw> {
     if (!mentionId) {
       throw new ChatMentionNotFound(mentionId);
     }
@@ -74,10 +71,7 @@ export class ChatMentionRepository {
       messageId: messageId,
       status: MentionStatus.Unread,
     }));
-    return await dbConnection
-      .insert(chatMentionsTable)
-      .values(entries)
-      .returning();
+    return await dbConnection.insert(chatMentionsTable).values(entries).returning();
   }
 
   /**
@@ -106,10 +100,7 @@ export class ChatMentionRepository {
    * Remove a mention
    * @param mentionId Id of chat
    */
-  async deleteOne(
-    dbConnection: DBConnection,
-    mentionId: string,
-  ): Promise<ChatMentionRaw> {
+  async deleteOne(dbConnection: DBConnection, mentionId: string): Promise<ChatMentionRaw> {
     const res = await dbConnection
       .delete(chatMentionsTable)
       .where(eq(chatMentionsTable.id, mentionId))
@@ -124,12 +115,7 @@ export class ChatMentionRepository {
    * Remove all mentions for the given accountId
    * @param accountId Id of the account
    */
-  async deleteAll(
-    dbConnection: DBConnection,
-    accountId: string,
-  ): Promise<void> {
-    await dbConnection
-      .delete(chatMentionsTable)
-      .where(eq(chatMentionsTable.accountId, accountId));
+  async deleteAll(dbConnection: DBConnection, accountId: string): Promise<void> {
+    await dbConnection.delete(chatMentionsTable).where(eq(chatMentionsTable.accountId, accountId));
   }
 }

@@ -17,9 +17,7 @@ export enum Ordering {
   DESC = 'DESC',
 }
 
-export function orderingToUpperCase(
-  ordering: Ordering,
-): Ordering.ASC | Ordering.DESC {
+export function orderingToUpperCase(ordering: Ordering): Ordering.ASC | Ordering.DESC {
   switch (ordering) {
     case Ordering.asc:
       return Ordering.ASC;

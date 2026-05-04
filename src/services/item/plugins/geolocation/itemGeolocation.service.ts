@@ -34,11 +34,7 @@ export class ItemGeolocationService {
     this.geolocationKey = geolocationKey;
   }
 
-  async delete(
-    dbConnection: DBConnection,
-    member: MinimalMember,
-    itemId: ItemRaw['id'],
-  ) {
+  async delete(dbConnection: DBConnection, member: MinimalMember, itemId: ItemRaw['id']) {
     // check item exists and actor has permission
     const item = await this.authorizedItemService.getItemById(dbConnection, {
       accountId: member.id,
@@ -49,21 +45,14 @@ export class ItemGeolocationService {
     return this.itemGeolocationRepository.delete(dbConnection, item);
   }
 
-  async getByItem(
-    dbConnection: DBConnection,
-    maybeUser: MaybeUser,
-    itemId: ItemRaw['id'],
-  ) {
+  async getByItem(dbConnection: DBConnection, maybeUser: MaybeUser, itemId: ItemRaw['id']) {
     // check item exists and actor has permission
     const item = await this.authorizedItemService.getItemById(dbConnection, {
       accountId: maybeUser?.id,
       itemId,
     });
 
-    const geoloc = await this.itemGeolocationRepository.getByItem(
-      dbConnection,
-      item.path,
-    );
+    const geoloc = await this.itemGeolocationRepository.getByItem(dbConnection, item.path);
 
     return geoloc;
   }
@@ -108,8 +97,7 @@ export class ItemGeolocationService {
         items: geoloc.map(({ item }) => item),
       });
 
-    const thumbnailsByItem =
-      await this.itemThumbnailService.getUrlsByItems(itemsWithGeoloc);
+    const thumbnailsByItem = await this.itemThumbnailService.getUrlsByItems(itemsWithGeoloc);
 
     // filter out items without permission
     return geoloc
@@ -117,8 +105,7 @@ export class ItemGeolocationService {
         const itemId = g.item.id;
         // accessible items - permission can be null
         // accept public items within parent item
-        const itemIsAtLeastPublicOrInParent =
-          itemId in itemMemberships.data && query.parentItemId;
+        const itemIsAtLeastPublicOrInParent = itemId in itemMemberships.data && query.parentItemId;
         // otherwise the actor should have at least read permission on root
         const itemIsAtLeastReadable = itemMemberships.data[itemId];
 
@@ -156,11 +143,7 @@ export class ItemGeolocationService {
       permission: 'write',
     });
 
-    return this.itemGeolocationRepository.put(
-      dbConnection,
-      item.path,
-      geolocation,
-    );
+    return this.itemGeolocationRepository.put(dbConnection, item.path, geolocation);
   }
 
   async getAddressFromCoordinates(
@@ -170,10 +153,7 @@ export class ItemGeolocationService {
       throw new MissingGeolocationApiKey();
     }
 
-    return this.itemGeolocationRepository.getAddressFromCoordinates(
-      query,
-      this.geolocationKey,
-    );
+    return this.itemGeolocationRepository.getAddressFromCoordinates(query, this.geolocationKey);
   }
 
   async getSuggestionsForQuery(query: { query: string; lang?: string }) {
@@ -181,9 +161,6 @@ export class ItemGeolocationService {
       throw new MissingGeolocationApiKey();
     }
 
-    return this.itemGeolocationRepository.getSuggestionsForQuery(
-      query,
-      this.geolocationKey,
-    );
+    return this.itemGeolocationRepository.getSuggestionsForQuery(query, this.geolocationKey);
   }
 }

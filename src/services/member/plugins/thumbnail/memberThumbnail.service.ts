@@ -22,11 +22,7 @@ export class MemberThumbnailService {
 
   constructor(
     memberService: MemberService,
-    @injectWithTransform(
-      ThumbnailService,
-      ThumbnailServiceTransformer,
-      AVATAR_THUMBNAIL_PREFIX,
-    )
+    @injectWithTransform(ThumbnailService, ThumbnailServiceTransformer, AVATAR_THUMBNAIL_PREFIX)
     thumbnailService: ThumbnailService,
     accountRepository: AccountRepository,
   ) {
@@ -36,11 +32,7 @@ export class MemberThumbnailService {
   }
 
   // upload self avatar
-  async upload(
-    dbConnection: DBConnection,
-    actor: MinimalMember,
-    file: Readable,
-  ) {
+  async upload(dbConnection: DBConnection, actor: MinimalMember, file: Readable) {
     await this.thumbnailService.upload(actor, actor.id, file);
 
     // update item that should have thumbnail
@@ -60,10 +52,7 @@ export class MemberThumbnailService {
   }
 
   // get member's avatar
-  async getUrl(
-    dbConnection: DBConnection,
-    { size, memberId }: { memberId: string; size: string },
-  ) {
+  async getUrl(dbConnection: DBConnection, { size, memberId }: { memberId: string; size: string }) {
     const account = await this.accountRepository.get(dbConnection, memberId);
 
     if (!account.exists()) {

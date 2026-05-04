@@ -5,10 +5,7 @@ import type { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox';
 import { resolveDependency } from '../../../../di/utils.js';
 import { db } from '../../../../drizzle/db.js';
 import { asDefined } from '../../../../utils/assertions.js';
-import {
-  isAuthenticated,
-  matchOne,
-} from '../../../auth/plugins/passport/preHandlers.js';
+import { isAuthenticated, matchOne } from '../../../auth/plugins/passport/preHandlers.js';
 import { assertIsMember } from '../../../authentication.js';
 import { memberAccountRole } from '../../../member/strategies/memberAccountRole.js';
 import { validatedMemberAccountRole } from '../../../member/strategies/validatedMemberAccountRole.js';
@@ -18,11 +15,7 @@ import {
   ItemOpFeedbackEvent,
   memberItemsTopic,
 } from '../../ws/item.events.js';
-import {
-  getOwnRecycledItems,
-  recycleMany,
-  restoreMany,
-} from './recycled.schemas.js';
+import { getOwnRecycledItems, recycleMany, restoreMany } from './recycled.schemas.js';
 import { RecycledBinService } from './recycled.service.js';
 
 const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
@@ -123,11 +116,7 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
           websockets.publish(
             memberItemsTopic,
             member.id,
-            ItemOpFeedbackEvent(
-              'restore',
-              ids,
-              Object.fromEntries(items.map((i) => [i.id, i])),
-            ),
+            ItemOpFeedbackEvent('restore', ids, Object.fromEntries(items.map((i) => [i.id, i]))),
           );
         })
         .catch((e: Error) => {

@@ -15,10 +15,7 @@ export class TagRepository {
     return name.trim().replace(/ +(?= )/g, '');
   }
 
-  async get(
-    dbConnection: DBConnection,
-    tagId: TagRaw['id'],
-  ): Promise<TagRaw | undefined> {
+  async get(dbConnection: DBConnection, tagId: TagRaw['id']): Promise<TagRaw | undefined> {
     if (!tagId) {
       throw new IllegalArgumentException('tagId is not valid');
     }
@@ -37,9 +34,7 @@ export class TagRepository {
       .values({ name: this.sanitizeName(tag.name), category: tag.category })
       .returning();
     if (createdTag.length != 1) {
-      throw new Error(
-        'Expectation failed: Receiving a single tag back when creating.',
-      );
+      throw new Error('Expectation failed: Receiving a single tag back when creating.');
     }
     return createdTag[0];
   }

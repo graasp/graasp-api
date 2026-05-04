@@ -67,10 +67,7 @@ const redisSerdes = {
 };
 
 // Helper to create a redis client instance
-function createRedisClientInstance(
-  redisConnection: string,
-  log?: FastifyBaseLogger,
-): Redis {
+function createRedisClientInstance(redisConnection: string, log?: FastifyBaseLogger): Redis {
   const redis = new Redis(redisConnection);
 
   redis.on('error', (err) => {
@@ -142,10 +139,7 @@ class MultiInstanceChannelsBroker {
    * @param channel Name of the WS channel to send to, or "broadcast" if it should be sent to all clients across instances
    * @param notif Message to be sent on a given WS channel
    */
-  dispatch(
-    channel: string | 'broadcast',
-    notif: Websocket.ServerMessage,
-  ): void {
+  dispatch(channel: string | 'broadcast', notif: Websocket.ServerMessage): void {
     const msg = createRedisMessage(notif, channel);
     const json = redisSerdes.serialize(msg);
     this.pub.publish(this.notifChannel, json);

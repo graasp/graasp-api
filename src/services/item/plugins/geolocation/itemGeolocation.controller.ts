@@ -37,19 +37,11 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
       },
       async ({ user, params }) => {
         const actor = user?.account;
-        const geoloc = await itemGeolocationService.getByItem(
-          db,
-          actor,
-          params.id,
-        );
+        const geoloc = await itemGeolocationService.getByItem(db, actor, params.id);
 
         if (geoloc) {
           // return packed item of related item (could be parent)
-          const geolocPackedItem = await itemService.getPacked(
-            db,
-            actor,
-            geoloc.item.id,
-          );
+          const geolocPackedItem = await itemService.getPacked(db, actor, geoloc.item.id);
           return { ...geoloc, item: geolocPackedItem };
         }
         return null;
@@ -77,12 +69,7 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
         const member = asDefined(user?.account);
         assertIsMember(member);
         await db.transaction(async (tx) => {
-          await itemGeolocationService.put(
-            tx,
-            member,
-            params.id,
-            body.geolocation,
-          );
+          await itemGeolocationService.put(tx, member, params.id, body.geolocation);
         });
         reply.status(StatusCodes.NO_CONTENT);
       },

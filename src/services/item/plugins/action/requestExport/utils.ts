@@ -5,17 +5,10 @@ import { type ActionRequestExportFormat } from '../../../../../drizzle/types.js'
 type RecursiveObject = { [key: string]: string | number | RecursiveObject };
 type ReturnObject = { [key: string]: string | number };
 // flatten object nested keys to have as item.id, member.id to be used for export csv header
-const flattenObject = (
-  obj: RecursiveObject,
-  prefix: string = '',
-): ReturnObject => {
+const flattenObject = (obj: RecursiveObject, prefix: string = ''): ReturnObject => {
   return Object.keys(obj).reduce((acc, k) => {
     const pre = prefix.length ? prefix + '.' : '';
-    if (
-      typeof obj[k] === 'object' &&
-      obj[k] !== null &&
-      !Array.isArray(obj[k])
-    ) {
+    if (typeof obj[k] === 'object' && obj[k] !== null && !Array.isArray(obj[k])) {
       Object.assign(acc, flattenObject(obj[k] as RecursiveObject, pre + k));
     } else {
       acc[pre + k] = obj[k];
@@ -31,9 +24,7 @@ export const formatData = <T extends object>(
   switch (format) {
     case 'csv': {
       if (Array.isArray(data)) {
-        const newData = data.map((obj) =>
-          flattenObject(obj as RecursiveObject),
-        );
+        const newData = data.map((obj) => flattenObject(obj as RecursiveObject));
         // the package is ill-configured, so at runtime it is safer to use the default export instead of the named as the named export is not available
         // eslint-disable-next-line import/no-named-as-default-member
         const csv = Papaparse.unparse(newData, {

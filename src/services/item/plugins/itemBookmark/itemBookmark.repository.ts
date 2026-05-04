@@ -3,11 +3,7 @@ import { and, desc, eq } from 'drizzle-orm/sql';
 import { singleton } from 'tsyringe';
 
 import { type DBConnection } from '../../../../drizzle/db.js';
-import {
-  itemBookmarksTable,
-  items,
-  membersView,
-} from '../../../../drizzle/schema.js';
+import { itemBookmarksTable, items, membersView } from '../../../../drizzle/schema.js';
 import type {
   ItemBookmarkInsertDTO,
   ItemBookmarkRawWithItemAndAccount,
@@ -120,12 +116,7 @@ export class ItemBookmarkRepository {
   ): Promise<ItemRaw['id']> {
     await dbConnection
       .delete(itemBookmarksTable)
-      .where(
-        and(
-          eq(itemBookmarksTable.itemId, itemId),
-          eq(itemBookmarksTable.memberId, memberId),
-        ),
-      );
+      .where(and(eq(itemBookmarksTable.itemId, itemId), eq(itemBookmarksTable.memberId, memberId)));
 
     return itemId;
   }

@@ -1,6 +1,5 @@
 import { faker } from '@faker-js/faker';
 import { StatusCodes } from 'http-status-codes';
-import { sign, verify } from 'jsonwebtoken';
 import { v4 } from 'uuid';
 
 import type { FastifyInstance, PassportUser } from 'fastify';
@@ -12,9 +11,9 @@ import { seedFromJson } from '../../../../../test/mocks/seed.js';
 import {
   APPS_JWT_SECRET,
   EMAIL_CHANGE_JWT_SECRET,
-  JWT_SECRET,
   PASSWORD_RESET_JWT_SECRET,
 } from '../../../../config/secrets.js';
+import { signAccessToken } from '../../../../crypto/jwt.js';
 import { resolveDependency } from '../../../../di/utils.js';
 import { db } from '../../../../drizzle/db.js';
 import type { MemberRaw } from '../../../../drizzle/types.js';
@@ -52,7 +51,7 @@ const expectUserApp = (
  * @returns set-cookie header
  */
 async function logIn(app: FastifyInstance, member: { id: string }) {
-  const token = sign({ sub: member.id }, JWT_SECRET);
+  const token = await signAccessToken({ sub: member.id }, 'login', '1m');
   const response = await app.inject({
     method: HttpMethod.Get,
     path: '/api/auth',
@@ -99,7 +98,7 @@ describe('Passport Plugin', () => {
     it('Invalid JWT Member', async () => {
       const { actor } = await seedFromJson();
       assertIsDefined(actor);
-      const token = sign({ sub: actor.id }, 'invalid');
+      const token = await signAccessToken({ sub: actor.id }, 'invalid', '1m');
       handler.mockImplementation(shouldBeNull);
       const response = await app.inject({
         path: MOCKED_ROUTE,
@@ -150,7 +149,7 @@ describe('Passport Plugin', () => {
     it('Invalid JWT Member', async () => {
       const { actor } = await seedFromJson();
       assertIsDefined(actor);
-      const token = sign({ sub: actor.id }, 'invalid');
+      const token = await signAccessToken({ sub: actor.id }, 'invalid', '1m');
       handler.mockImplementation(shouldNotBeCalled);
       const response = await app.inject({
         path: MOCKED_ROUTE,

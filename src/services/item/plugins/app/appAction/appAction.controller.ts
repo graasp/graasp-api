@@ -41,16 +41,10 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
         const member = asDefined(user?.account);
         await db
           .transaction(async (tx) => {
-            return addMemberInAppAction(
-              await appActionService.post(tx, member, itemId, body),
-            );
+            return addMemberInAppAction(await appActionService.post(tx, member, itemId, body));
           })
           .then((appAction) => {
-            websockets.publish(
-              appActionsTopic,
-              itemId,
-              AppActionEvent('post', appAction),
-            );
+            websockets.publish(appActionsTopic, itemId, AppActionEvent('post', appAction));
           });
         reply.status(StatusCodes.NO_CONTENT);
       },
@@ -69,14 +63,9 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
           accountId = filters.memberId;
         }
 
-        const appActions = await appActionService.getForItem(
-          db,
-          member,
-          itemId,
-          {
-            accountId,
-          },
-        );
+        const appActions = await appActionService.getForItem(db, member, itemId, {
+          accountId,
+        });
         return appActions.map(addMemberInAppAction);
       },
     );

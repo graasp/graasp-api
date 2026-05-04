@@ -5,10 +5,7 @@ import { singleton } from 'tsyringe';
 import { type UUID } from '@graasp/sdk';
 
 import { type DBConnection } from '../../../../../drizzle/db.js';
-import {
-  isAncestorOrSelf,
-  isDescendantOrSelf,
-} from '../../../../../drizzle/operations.js';
+import { isAncestorOrSelf, isDescendantOrSelf } from '../../../../../drizzle/operations.js';
 import {
   accountsTable,
   actionRequestExportsTable,
@@ -83,9 +80,7 @@ export class ActionRequestExportRepository {
       format: ActionRequestExportFormat;
     },
   ): Promise<ActionRequestExportRaw | undefined> {
-    const lowerLimitDate = new Date(
-      Date.now() - DEFAULT_REQUEST_EXPORT_INTERVAL,
-    );
+    const lowerLimitDate = new Date(Date.now() - DEFAULT_REQUEST_EXPORT_INTERVAL);
     return await dbConnection.query.actionRequestExportsTable.findFirst({
       where: and(
         eq(actionRequestExportsTable.memberId, memberId),
@@ -109,10 +104,7 @@ export class ActionRequestExportRepository {
     return await dbConnection
       .selectDistinct({ id: accountsTable.id, name: accountsTable.name })
       .from(itemMembershipsTable)
-      .innerJoin(
-        accountsTable,
-        eq(accountsTable.id, itemMembershipsTable.accountId),
-      )
+      .innerJoin(accountsTable, eq(accountsTable.id, itemMembershipsTable.accountId))
       .where(
         and(
           isDescendantOrSelf(itemMembershipsTable.itemPath, itemPath),
@@ -127,10 +119,7 @@ export class ActionRequestExportRepository {
    * @param itemPath
    * @returns all items in the tree
    */
-  public async getItemTree(
-    dbConnection: DBConnection,
-    itemPath: string,
-  ): Promise<ItemRaw[]> {
+  public async getItemTree(dbConnection: DBConnection, itemPath: string): Promise<ItemRaw[]> {
     return await dbConnection
       .select()
       .from(itemsRawTable)
@@ -193,12 +182,7 @@ export class ActionRequestExportRepository {
     const appItemsTable = dbConnection
       .select()
       .from(itemsRawTable)
-      .where(
-        and(
-          eq(itemsRawTable.type, 'app'),
-          isDescendantOrSelf(itemsRawTable.path, itemPath),
-        ),
-      )
+      .where(and(eq(itemsRawTable.type, 'app'), isDescendantOrSelf(itemsRawTable.path, itemPath)))
       .as('app_items');
 
     return await dbConnection
@@ -221,12 +205,7 @@ export class ActionRequestExportRepository {
     const appItemsTable = dbConnection
       .select()
       .from(itemsRawTable)
-      .where(
-        and(
-          eq(itemsRawTable.type, 'app'),
-          isDescendantOrSelf(itemsRawTable.path, itemPath),
-        ),
-      )
+      .where(and(eq(itemsRawTable.type, 'app'), isDescendantOrSelf(itemsRawTable.path, itemPath)))
       .as('app_items');
 
     return await dbConnection
@@ -249,12 +228,7 @@ export class ActionRequestExportRepository {
     const appItemsTable = dbConnection
       .select()
       .from(itemsRawTable)
-      .where(
-        and(
-          eq(itemsRawTable.type, 'app'),
-          isDescendantOrSelf(itemsRawTable.path, itemPath),
-        ),
-      )
+      .where(and(eq(itemsRawTable.type, 'app'), isDescendantOrSelf(itemsRawTable.path, itemPath)))
       .as('app_items');
 
     return await dbConnection

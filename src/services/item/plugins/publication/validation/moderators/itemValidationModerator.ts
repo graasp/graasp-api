@@ -35,20 +35,18 @@ export class ItemValidationModerator {
     // execute each process on item
     const results = (
       await Promise.all(
-        this.strategyExecutorFactory
-          .createStrategyExecutors(item)
-          .map(async (strategyExecutor) => {
-            try {
-              return await this.executeValidationProcess(
-                dbConnection,
-                item,
-                itemValidationGroupId,
-                strategyExecutor,
-              );
-            } catch (error) {
-              throw new ProcessExecutionError(strategyExecutor.process, error);
-            }
-          }),
+        this.strategyExecutorFactory.createStrategyExecutors(item).map(async (strategyExecutor) => {
+          try {
+            return await this.executeValidationProcess(
+              dbConnection,
+              item,
+              itemValidationGroupId,
+              strategyExecutor,
+            );
+          } catch (error) {
+            throw new ProcessExecutionError(strategyExecutor.process, error);
+          }
+        }),
       )
     ).filter((r): r is ItemValidationStatus => Boolean(r));
 

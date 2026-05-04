@@ -26,12 +26,7 @@ import {
   reorder,
   updateOne,
 } from './item.schemas.js';
-import {
-  getAccessible,
-  getChildren,
-  getDescendantItems,
-  getOne,
-} from './item.schemas.packed.js';
+import { getAccessible, getChildren, getDescendantItems, getOne } from './item.schemas.packed.js';
 import { ItemService } from './item.service.js';
 import { PackedItemService } from './packedItem.dto.js';
 import { ItemActionService } from './plugins/action/itemAction.service.js';
@@ -180,11 +175,7 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
       );
 
       // remap to discriminated packed items
-      const packedItems = await itemWrapperService.createPackedItems(
-        db,
-        member,
-        result.data,
-      );
+      const packedItems = await itemWrapperService.createPackedItems(db, member, result.data);
       return { ...result, data: packedItems };
     },
   );
@@ -194,15 +185,10 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
     '/:id/children',
     { schema: getChildren, preHandler: optionalIsAuthenticated },
     async ({ user, params: { id }, query: { types, keywords } }) => {
-      const children = await itemService.getPackedChildren(
-        db,
-        user?.account,
-        id,
-        {
-          types,
-          keywords,
-        },
-      );
+      const children = await itemService.getPackedChildren(db, user?.account, id, {
+        types,
+        keywords,
+      });
       return children;
     },
   );
@@ -212,12 +198,7 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
     '/:id/descendants',
     { schema: getDescendantItems, preHandler: optionalIsAuthenticated },
     async ({ user, params: { id }, query }) => {
-      const result = await itemService.getPackedDescendants(
-        db,
-        user?.account,
-        id,
-        query,
-      );
+      const result = await itemService.getPackedDescendants(db, user?.account, id, query);
       return result;
     },
   );
@@ -314,11 +295,7 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
           websockets.publish(
             memberItemsTopic,
             member.id,
-            ItemOpFeedbackEvent(
-              'delete',
-              ids,
-              Object.fromEntries(items.map((i) => [i.id, i])),
-            ),
+            ItemOpFeedbackEvent('delete', ids, Object.fromEntries(items.map((i) => [i.id, i]))),
           );
         })
         .catch((e) => {
@@ -353,17 +330,8 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
 
       await db
         .transaction(async (tsx) => {
-          const results = await itemService.moveMany(
-            tsx,
-            member,
-            ids,
-            parentId,
-          );
-          await itemActionService.postManyMoveAction(
-            tsx,
-            request,
-            results.items,
-          );
+          const results = await itemService.moveMany(tsx, member, ids, parentId);
+          await itemActionService.postManyMoveAction(tsx, request, results.items);
           return results;
         })
         .then(({ items, moved }) => {
@@ -375,11 +343,7 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
         })
         .catch((e) => {
           log.error(e);
-          websockets.publish(
-            memberItemsTopic,
-            member.id,
-            ItemOpFeedbackErrorEvent('move', ids, e),
-          );
+          websockets.publish(memberItemsTopic, member.id, ItemOpFeedbackErrorEvent('move', ids, e));
         });
     },
   );
@@ -418,11 +382,7 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
         })
         .catch((e) => {
           log.error(e);
-          websockets.publish(
-            memberItemsTopic,
-            member.id,
-            ItemOpFeedbackErrorEvent('copy', ids, e),
-          );
+          websockets.publish(memberItemsTopic, member.id, ItemOpFeedbackErrorEvent('copy', ids, e));
         });
     },
   );

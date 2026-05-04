@@ -3,10 +3,7 @@ import { StatusCodes } from 'http-status-codes';
 
 import type { FastifySchema } from 'fastify';
 
-import {
-  customType,
-  registerSchemaAsRef,
-} from '../../../../plugins/typebox.js';
+import { customType, registerSchemaAsRef } from '../../../../plugins/typebox.js';
 import { errorSchemaRef } from '../../../../schemas/global.js';
 import { itemCommonSchema, settingsSchema } from '../../common.schemas.js';
 import { geoCoordinateSchemaRef } from '../geolocation/geolocation.schema.js';
@@ -38,8 +35,7 @@ const linkItemSchema = Type.Composite(
   ],
   {
     title: 'Embedded Link',
-    description:
-      'Item of type embedded link, represents a resource to an external website.',
+    description: 'Item of type embedded link, represents a resource to an external website.',
   },
 );
 
@@ -86,9 +82,7 @@ export const createLink = {
   ),
   body: Type.Composite([
     Type.Pick(linkItemSchema, ['name']),
-    Type.Partial(
-      Type.Pick(linkItemSchema, ['description', 'lang', 'settings']),
-    ),
+    Type.Partial(Type.Pick(linkItemSchema, ['description', 'lang', 'settings'])),
 
     // link flat config
     // uri is stricter than uri-reference

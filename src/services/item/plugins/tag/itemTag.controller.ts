@@ -12,11 +12,7 @@ import {
 } from '../../../auth/plugins/passport/preHandlers.js';
 import { assertIsMember } from '../../../authentication.js';
 import { validatedMemberAccountRole } from '../../../member/strategies/validatedMemberAccountRole.js';
-import {
-  createTagForItem,
-  deleteTagForItem,
-  getTagsForItem,
-} from './itemTag.schemas.js';
+import { createTagForItem, deleteTagForItem, getTagsForItem } from './itemTag.schemas.js';
 import { ItemTagService } from './itemTag.service.js';
 
 const plugin: FastifyPluginAsyncTypebox = async (fastify) => {

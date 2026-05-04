@@ -1,12 +1,6 @@
 import os from 'os';
 
-import {
-  ClientManager,
-  Context,
-  DEFAULT_LANG,
-  GPTVersion,
-  type GPTVersionType,
-} from '@graasp/sdk';
+import { ClientManager, Context, DEFAULT_LANG, GPTVersion, type GPTVersionType } from '@graasp/sdk';
 
 import { requiredEnvVar } from '../config/helpers.js';
 import type {
@@ -31,15 +25,10 @@ export const LIBRARY_HOST = process.env.LIBRARY_CLIENT_HOST ?? CLIENT_HOST;
 export const H5P_INTEGRATION_URL =
   process.env.H5P_INTEGRATION_URL ?? 'http://localhost:3000/h5p-integration';
 
-export const ALLOWED_ORIGINS = [
-  new URL(CLIENT_HOST).origin,
-  new URL(LIBRARY_HOST).origin,
-];
+export const ALLOWED_ORIGINS = [new URL(CLIENT_HOST).origin, new URL(LIBRARY_HOST).origin];
 
 // Add the hosts of the different clients
-ClientManager.getInstance()
-  .setHost(CLIENT_HOST)
-  .addHost(Context.Library, LIBRARY_HOST);
+ClientManager.getInstance().setHost(CLIENT_HOST).addHost(Context.Library, LIBRARY_HOST);
 
 export const PROTOCOL = process.env.PROTOCOL || 'http';
 export const HOSTNAME = process.env.HOSTNAME || 'localhost';
@@ -91,15 +80,12 @@ export const PUBLIC_URL = new URL(process.env.CLIENT_HOST ?? HOST);
 /**
  * GRAASP FILE STORAGE CONFIG
  */
-export const FILE_STORAGE_ROOT_PATH =
-  process.env.FILE_STORAGE_ROOT_PATH || process.env.TMPDIR;
+export const FILE_STORAGE_ROOT_PATH = process.env.FILE_STORAGE_ROOT_PATH || process.env.TMPDIR;
 export const FILE_STORAGE_HOST = process.env.FILE_STORAGE_HOST;
 
 if (
   process.env.FILE_STORAGE_TYPE &&
-  !(Object.values(FileStorage) as string[]).includes(
-    process.env.FILE_STORAGE_TYPE,
-  )
+  !(Object.values(FileStorage) as string[]).includes(process.env.FILE_STORAGE_TYPE)
 ) {
   throw new Error(
     `File Storage type is not handled: '${process.env.FILE_STORAGE_TYPE}'. It should be one of: ${Object.values(FileStorage)}`,
@@ -112,10 +98,8 @@ export const FILE_STORAGE_TYPE =
 // TODO: should this be here?
 export const S3_FILE_ITEM_REGION = process.env.S3_FILE_ITEM_REGION;
 export const S3_FILE_ITEM_BUCKET = process.env.S3_FILE_ITEM_BUCKET;
-export const S3_FILE_ITEM_ACCESS_KEY_ID =
-  process.env.S3_FILE_ITEM_ACCESS_KEY_ID;
-export const S3_FILE_ITEM_SECRET_ACCESS_KEY =
-  process.env.S3_FILE_ITEM_SECRET_ACCESS_KEY;
+export const S3_FILE_ITEM_ACCESS_KEY_ID = process.env.S3_FILE_ITEM_ACCESS_KEY_ID;
+export const S3_FILE_ITEM_SECRET_ACCESS_KEY = process.env.S3_FILE_ITEM_SECRET_ACCESS_KEY;
 export const S3_FILE_ITEM_HOST = process.env.S3_FILE_ITEM_HOST;
 
 const getS3FilePluginConfig = () => {
@@ -160,8 +144,7 @@ if (
 ) {
   throw new Error('Invalid H5P file storage type provided');
 }
-export const H5P_FILE_STORAGE_TYPE = process.env
-  .H5P_FILE_STORAGE_TYPE as FileStorageType;
+export const H5P_FILE_STORAGE_TYPE = process.env.H5P_FILE_STORAGE_TYPE as FileStorageType;
 
 // ugly runtime type checking since typescript cannot infer types
 if (H5P_FILE_STORAGE_TYPE === FileStorage.S3) {
@@ -202,10 +185,7 @@ export const H5P_FILE_STORAGE_CONFIG =
 // Etherpad
 export const ETHERPAD_URL = validateEnv('ETHERPAD_URL', new UrlValidator());
 export const ETHERPAD_PUBLIC_URL = process.env.ETHERPAD_PUBLIC_URL;
-export const ETHERPAD_API_KEY = validateEnv(
-  'ETHERPAD_API_KEY',
-  new RegexValidator(API_KEY_FORMAT),
-);
+export const ETHERPAD_API_KEY = validateEnv('ETHERPAD_API_KEY', new RegexValidator(API_KEY_FORMAT));
 export const ETHERPAD_COOKIE_DOMAIN = process.env.ETHERPAD_COOKIE_DOMAIN;
 
 export const EMBEDDED_LINK_ITEM_IFRAMELY_HREF_ORIGIN = requiredEnvVar(
@@ -228,11 +208,8 @@ export const GRAASPER_CREATOR_ID = requiredEnvVar('GRAASPER_CREATOR_ID');
 
 export const TMP_FOLDER = os.tmpdir();
 
-export const RECAPTCHA_SECRET_ACCESS_KEY = requiredEnvVar(
-  'RECAPTCHA_SECRET_ACCESS_KEY',
-);
-export const RECAPTCHA_VERIFY_LINK =
-  'https://www.google.com/recaptcha/api/siteverify';
+export const RECAPTCHA_SECRET_ACCESS_KEY = requiredEnvVar('RECAPTCHA_SECRET_ACCESS_KEY');
+export const RECAPTCHA_VERIFY_LINK = 'https://www.google.com/recaptcha/api/siteverify';
 export const RECAPTCHA_SCORE_THRESHOLD = 0.5;
 
 export const GET_FEATURED_ITEMS_MAXIMUM = 50;
@@ -242,8 +219,7 @@ export const GET_MOST_RECENT_ITEMS_MAXIMUM = 50;
 // Graasp Search
 export const MEILISEARCH_URL = process.env.MEILISEARCH_URL || '';
 export const MEILISEARCH_MASTER_KEY = process.env.MEILISEARCH_MASTER_KEY;
-export const MEILISEARCH_REBUILD_SECRET =
-  process.env.MEILISEARCH_REBUILD_SECRET;
+export const MEILISEARCH_REBUILD_SECRET = process.env.MEILISEARCH_REBUILD_SECRET;
 export const MEILISEARCH_STORE_LEGACY_PDF_CONTENT: boolean =
   process.env.MEILISEARCH_STORE_LEGACY_PDF_CONTENT === 'true';
 
@@ -290,26 +266,21 @@ export const SENTRY_ENABLE_PERFORMANCE: boolean =
   (process.env.SENTRY_ENABLE_PERFORMANCE ?? 'true') === 'true'; // env var must be literal string "true"
 export const SENTRY_ENABLE_PROFILING: boolean =
   (process.env.SENTRY_ENABLE_PROFILING ?? 'true') === 'true'; // env var must be literal string "true"
-export const SENTRY_PROFILES_SAMPLE_RATE: number =
-  +process.env.SENTRY_PROFILES_SAMPLE_RATE! || 1.0;
-export const SENTRY_TRACES_SAMPLE_RATE: number =
-  +process.env.SENTRY_TRACES_SAMPLE_RATE! || 1.0;
+export const SENTRY_PROFILES_SAMPLE_RATE: number = +process.env.SENTRY_PROFILES_SAMPLE_RATE! || 1.0;
+export const SENTRY_TRACES_SAMPLE_RATE: number = +process.env.SENTRY_TRACES_SAMPLE_RATE! || 1.0;
 
 /////////////////
 // CI and Test //
 /////////////////
 export const JEST_WORKER_ID: number = +process.env.JEST_WORKER_ID! || 1;
 export const CI: boolean = process.env.CI === 'true';
-export const AUTO_RUN_MIGRATIONS: boolean =
-  (process.env.AUTO_RUN_MIGRATIONS ?? 'true') === 'true';
+export const AUTO_RUN_MIGRATIONS: boolean = (process.env.AUTO_RUN_MIGRATIONS ?? 'true') === 'true';
 
 /////////////////////////////////////
 // Database Environement Variables //
 /////////////////////////////////////
 // Can be undefined, so tests can run without setting it. In production, TypeORM will throw an exception if not defined.
-export const DB_CONNECTION_POOL_SIZE: number =
-  +process.env.DB_CONNECTION_POOL_SIZE! || 10;
-export const DB_READ_REPLICA_CONNECTIONS: string[] = process.env
-  .DB_READ_REPLICA_CONNECTIONS
+export const DB_CONNECTION_POOL_SIZE: number = +process.env.DB_CONNECTION_POOL_SIZE! || 10;
+export const DB_READ_REPLICA_CONNECTIONS: string[] = process.env.DB_READ_REPLICA_CONNECTIONS
   ? process.env.DB_READ_REPLICA_CONNECTIONS?.split(',')
   : [];

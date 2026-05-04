@@ -19,9 +19,7 @@ export const sortChildrenForTreeWith = <T extends ItemRaw>(
   descendants: T[],
   parentItem: FolderItem,
 ): T[] => {
-  const directChildren = descendants.filter((child) =>
-    isChildOf(child.path, parentItem.path),
-  );
+  const directChildren = descendants.filter((child) => isChildOf(child.path, parentItem.path));
 
   // order
   directChildren.sort(itemOrderFn);
@@ -110,23 +108,18 @@ export const getPostItemPayloadFromFormData = (
 
   // nested objects that we need to deeply validate
   const settingsRaw = getFieldFromMultipartForm(formData.fields, 'settings');
-  const geolocationRaw = getFieldFromMultipartForm(
-    formData.fields,
-    'geolocation',
-  );
+  const geolocationRaw = getFieldFromMultipartForm(formData.fields, 'geolocation');
   const extraRaw = getFieldFromMultipartForm(formData.fields, 'extra');
 
   // validate nested objects
-  const settings = parseAndValidateField<ItemRaw['settings']>(
-    settingsRaw,
-    validateSettings,
-  );
+  const settings = parseAndValidateField<ItemRaw['settings']>(settingsRaw, validateSettings);
   // const extra = parseAndValidateField<Item['extra']>(extraRaw);
   // TODO: extra is not validated
   const extra = extraRaw ? JSON.parse(extraRaw) : undefined;
-  const geolocation = parseAndValidateField<
-    Pick<ItemGeolocation, 'lat' | 'lng'>
-  >(geolocationRaw, validateGeolocation);
+  const geolocation = parseAndValidateField<Pick<ItemGeolocation, 'lat' | 'lng'>>(
+    geolocationRaw,
+    validateGeolocation,
+  );
 
   if (!formData.file) {
     throw new NoFileProvided();

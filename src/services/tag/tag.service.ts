@@ -12,11 +12,7 @@ export class TagService {
     this.itemTagRepository = itemTagRepository;
   }
 
-  async getCountBy(
-    dbConnection: DBConnection,
-    search: string,
-    category: TagCategoryOptions,
-  ) {
+  async getCountBy(dbConnection: DBConnection, search: string, category: TagCategoryOptions) {
     return await this.itemTagRepository.getCountBy(dbConnection, {
       search,
       category,

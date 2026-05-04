@@ -17,12 +17,7 @@ import type { ItemRaw } from '../../../item.js';
 import { ItemService } from '../../../item.service.js';
 import { AppSettingEvent, appSettingsTopic } from '../ws/events.js';
 import { checkItemIsApp } from '../ws/utils.js';
-import {
-  create,
-  deleteOne,
-  getForOne,
-  updateOne,
-} from './appSetting.schemas.js';
+import { create, deleteOne, getForOne, updateOne } from './appSetting.schemas.js';
 import { AppSettingService } from './appSetting.service.js';
 import appSettingFilePlugin from './plugins/file/appSetting.file.controller.js';
 
@@ -69,11 +64,7 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
         return await appSettingService.post(tx, member, itemId, body);
       });
 
-      websockets.publish(
-        appSettingsTopic,
-        itemId,
-        AppSettingEvent('post', appSetting),
-      );
+      websockets.publish(appSettingsTopic, itemId, AppSettingEvent('post', appSetting));
 
       return appSetting;
     },
@@ -90,20 +81,10 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
       const member = asDefined(user?.account);
       assertIsMember(member);
       const appSetting = await db.transaction(async (tx) => {
-        return await appSettingService.patch(
-          tx,
-          member,
-          itemId,
-          appSettingId,
-          body,
-        );
+        return await appSettingService.patch(tx, member, itemId, appSettingId, body);
       });
 
-      websockets.publish(
-        appSettingsTopic,
-        itemId,
-        AppSettingEvent('patch', appSetting),
-      );
+      websockets.publish(appSettingsTopic, itemId, AppSettingEvent('patch', appSetting));
 
       return appSetting;
     },
@@ -120,19 +101,10 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
       const member = asDefined(user?.account);
       assertIsMember(member);
       const appSetting = await db.transaction(async (tx) => {
-        return await appSettingService.deleteOne(
-          tx,
-          member,
-          itemId,
-          appSettingId,
-        );
+        return await appSettingService.deleteOne(tx, member, itemId, appSettingId);
       });
 
-      websockets.publish(
-        appSettingsTopic,
-        itemId,
-        AppSettingEvent('delete', appSetting),
-      );
+      websockets.publish(appSettingsTopic, itemId, AppSettingEvent('delete', appSetting));
 
       return appSetting.id;
     },

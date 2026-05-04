@@ -4,10 +4,7 @@ import { resolveDependency } from '../../../../di/utils.js';
 import { db } from '../../../../drizzle/db.js';
 import { asDefined } from '../../../../utils/assertions.js';
 import { isAuthenticated } from '../../../auth/plugins/passport/preHandlers.js';
-import {
-  deleteAllById,
-  getMemberFilteredActions,
-} from './memberAction.schemas.js';
+import { deleteAllById, getMemberFilteredActions } from './memberAction.schemas.js';
 import { ActionMemberService } from './memberAction.service.js';
 
 const plugin: FastifyPluginAsyncTypebox = async (fastify) => {

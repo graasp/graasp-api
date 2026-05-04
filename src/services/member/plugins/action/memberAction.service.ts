@@ -63,35 +63,27 @@ export class ActionMemberService {
     );
 
     // filter actions based on permission validity
-    const [actionsWithoutPermission, actionsNeedPermission] = partition(
-      actions,
-      (action) => {
-        return actionTypesWithoutNeedOfPermission.includes(action.type);
-      },
-    );
+    const [actionsWithoutPermission, actionsNeedPermission] = partition(actions, (action) => {
+      return actionTypesWithoutNeedOfPermission.includes(action.type);
+    });
 
     const setOfItemsToCheckPermission = Array.from(
-      new Map(
-        actionsNeedPermission.map(({ item }) => [item?.id, item]),
-      ).values(),
+      new Map(actionsNeedPermission.map(({ item }) => [item?.id, item])).values(),
     ).filter(Boolean);
 
-    const { itemMemberships } =
-      await this.authorizedItemService.getPropertiesForItems(dbConnection, {
+    const { itemMemberships } = await this.authorizedItemService.getPropertiesForItems(
+      dbConnection,
+      {
         permission: 'read',
         accountId: authenticatedUser.id,
         items: setOfItemsToCheckPermission as ItemRaw[],
-      });
-
-    const filteredActionsWithAccessPermission = actionsNeedPermission.filter(
-      (g) => {
-        return g.item && g?.item?.id in itemMemberships.data;
       },
     );
-    return [
-      ...actionsWithoutPermission,
-      ...filteredActionsWithAccessPermission,
-    ];
+
+    const filteredActionsWithAccessPermission = actionsNeedPermission.filter((g) => {
+      return g.item && g?.item?.id in itemMemberships.data;
+    });
+    return [...actionsWithoutPermission, ...filteredActionsWithAccessPermission];
   }
 
   async deleteAllForMember(

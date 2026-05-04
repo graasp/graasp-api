@@ -117,10 +117,7 @@ class FileItemService extends ItemService {
       });
 
       // Add thumbnails if the file is an image or a pdf
-      const thumbnail = await this.itemThumbnailService.generateThumbnail(
-        tmpPath,
-        mimetype,
-      );
+      const thumbnail = await this.itemThumbnailService.generateThumbnail(tmpPath, mimetype);
 
       // Create item from file properties
       return await this.createItemFromFileProperties(dbConnection, actor, {
@@ -235,11 +232,7 @@ class FileItemService extends ItemService {
     return result;
   }
 
-  async copyFile(
-    dbConnection: DBConnection,
-    member: MinimalMember,
-    { copy }: { original; copy },
-  ) {
+  async copyFile(dbConnection: DBConnection, member: MinimalMember, { copy }: { original; copy }) {
     const { id, extra } = copy; // full copy with new `id`
     const { path: originalPath, mimetype, name } = extra['file'];
     const newFilePath = this.buildFilePath(getFileExtension(name));

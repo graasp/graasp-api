@@ -26,10 +26,7 @@ export class StorageService {
     member: MinimalMember,
   ): Promise<MemberStorage> {
     return {
-      current: await this.itemRepository.getItemSumSize(
-        dbConnection,
-        member?.id,
-      ),
+      current: await this.itemRepository.getItemSumSize(dbConnection, member?.id),
       maximum: await this.getMaximumStorageSize(),
     };
   }
@@ -50,17 +47,10 @@ export class StorageService {
   // check the user has enough storage to create a new item given its size
   // get the complete storage
   // todo: include more item types
-  async checkRemainingStorage(
-    dbConnection: DBConnection,
-    member: MinimalMember,
-    size: number = 0,
-  ) {
+  async checkRemainingStorage(dbConnection: DBConnection, member: MinimalMember, size: number = 0) {
     const { id: memberId } = member;
 
-    const currentStorage = await this.itemRepository.getItemSumSize(
-      dbConnection,
-      memberId,
-    );
+    const currentStorage = await this.itemRepository.getItemSumSize(dbConnection, memberId);
 
     const maxStorage = await this.getMaximumStorageSize();
     if (currentStorage + size > maxStorage) {

@@ -37,11 +37,7 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
       preHandler: optionalIsAuthenticated,
     },
     async ({ user, params: { memberId } }) => {
-      return itemPublishedService.getItemsForMember(
-        db,
-        user?.account,
-        memberId,
-      );
+      return itemPublishedService.getItemsForMember(db, user?.account, memberId);
     },
   );
 
@@ -52,11 +48,7 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
       schema: getInformations,
     },
     async ({ params, user }) => {
-      const info = await itemPublishedService.get(
-        db,
-        user?.account,
-        params.itemId,
-      );
+      const info = await itemPublishedService.get(db, user?.account, params.itemId);
       return info;
     },
   );
@@ -77,11 +69,7 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
           permission: 'admin',
         });
 
-        const status = await publicationService.computeStateForItem(
-          tx,
-          member,
-          item.id,
-        );
+        const status = await publicationService.computeStateForItem(tx, member, item.id);
 
         await itemPublishedService.post(tx, member, item, status);
       });

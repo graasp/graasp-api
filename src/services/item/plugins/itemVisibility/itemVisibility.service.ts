@@ -32,12 +32,7 @@ export class ItemVisibilityService {
       itemId,
       permission: 'admin',
     });
-    await this.itemVisibilityRepository.post(
-      dbConnection,
-      member.id,
-      item.path,
-      visibilityType,
-    );
+    await this.itemVisibilityRepository.post(dbConnection, member.id, item.path, visibilityType);
   }
 
   async deleteOne(
@@ -52,11 +47,7 @@ export class ItemVisibilityService {
       permission: 'admin',
     });
 
-    await this.itemVisibilityRepository.deleteOne(
-      dbConnection,
-      item,
-      visibilityType,
-    );
+    await this.itemVisibilityRepository.deleteOne(dbConnection, item, visibilityType);
     return { item: { path: item.path } };
   }
 }

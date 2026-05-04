@@ -2,7 +2,6 @@ import { faker } from '@faker-js/faker';
 import { beforeAll } from '@jest/globals';
 import { eq } from 'drizzle-orm';
 import { StatusCodes } from 'http-status-codes';
-import { sign as jwtSign } from 'jsonwebtoken';
 import waitForExpect from 'wait-for-expect';
 
 import type { FastifyInstance } from 'fastify';

@@ -33,14 +33,7 @@ export class MailerService {
    * @param from Emitter email
    */
   public async send(mail: Mail, to: string, from: string = this.fromEmail) {
-    await this.sendRaw(
-      mail.subject,
-      to,
-      mail.text,
-      mail.html,
-      mail.footer,
-      from,
-    );
+    await this.sendRaw(mail.subject, to, mail.text, mail.html, mail.footer, from);
   }
 
   /**

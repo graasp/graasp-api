@@ -1,7 +1,7 @@
 import { Authenticator } from '@fastify/passport';
 import type { FastifyRequest, RouteGenericInterface } from 'fastify';
-import type { preHandlerHookHandler } from 'fastify/types/hooks';
-import type { RouteShorthandHook } from 'fastify/types/route';
+import type { preHandlerHookHandler } from 'fastify/types/hooks.js';
+import type { RouteShorthandHook } from 'fastify/types/route.js';
 
 import { InsufficientPermission } from '../../../../utils/errors.js';
 import { PassportStrategy } from './strategies.js';

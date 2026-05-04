@@ -29,10 +29,7 @@ import {
 } from './invitation.schema.js';
 import { InvitationService } from './invitation.service.js';
 import { MAX_FILE_SIZE } from './utils/constants.js';
-import {
-  NoFileProvidedForInvitations,
-  NoInvitationReceivedFound,
-} from './utils/errors.js';
+import { NoFileProvidedForInvitations, NoInvitationReceivedFound } from './utils/errors.js';
 
 const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
   const invitationService = resolveDependency(InvitationService);
@@ -151,12 +148,7 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
         const { id: itemId } = params;
         await db.transaction(
           async (tx) =>
-            await invitationService.importUsersWithCSV(
-              tx,
-              member,
-              itemId,
-              uploadedFile,
-            ),
+            await invitationService.importUsersWithCSV(tx, member, itemId, uploadedFile),
         );
         reply.status(StatusCodes.NO_CONTENT);
       },

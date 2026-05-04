@@ -47,15 +47,11 @@ export class StrategyExecutorFactory {
     ];
 
     if (isImage(item)) {
-      validationStrategies.push(
-        buildStrategyExecutor(this.imageValidationStrategy, item),
-      );
+      validationStrategies.push(buildStrategyExecutor(this.imageValidationStrategy, item));
     }
 
     if (item.settings.hasThumbnail) {
-      validationStrategies.push(
-        buildStrategyExecutor(this.thumbnailValidationStrategy, item),
-      );
+      validationStrategies.push(buildStrategyExecutor(this.thumbnailValidationStrategy, item));
     }
 
     return validationStrategies;
