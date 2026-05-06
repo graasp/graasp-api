@@ -1,6 +1,7 @@
 {
   "GREETINGS": "Vielen Dank für Ihre Anmeldung auf unserer Plattform.",
   "SIGN_UP_TEXT": "Registrieren Sie sich vollständig und melden Sie sich an.",
+  "IGNORE_EMAIL_IF_NOT_REQUESTED": "Wenn Sie nicht der Urheber dieser Aktion sind, können Sie diese E-Mail einfach ignorieren.",
   "SIGN_IN_TEXT": "Sie haben uns gebeten, Ihnen einen praktischen Link zum schnellen Anmelden in Ihrem Konto zu senden. Hier ist er:",
   "SIGN_IN_NOT_REQUESTED": "Wenn Sie den Link nicht angefordert haben, ist keine weitere Aktion erforderlich. Er läuft in Kürze ab; keine Sorge, Ihr Konto und Ihre Daten sind sicher.",
   "EXPORT_ACTIONS_TEXT": "Sie haben angefordert, Aktionen des Elements {{itemName}} als {{exportFormat}}-Dateien herunterzuladen. Hier ist der Link zum Herunterladen der Dateien. Sie sind {{days}} Tage lang verfügbar.",
@@ -27,5 +28,6 @@
   "CONFIRM_CHANGE_EMAIL_TITLE": "Ihre E-Mail-Adresse wurde geändert",
   "CONFIRM_CHANGE_EMAIL_TEXT": "Sie haben die Änderung Ihrer E-Mail-Adresse auf {{newEmail}} angefordert. Ihre E-Mail-Adresse wurde erfolgreich aktualisiert.",
   "MEMBERSHIP_REQUEST_TITLE": "{{memberName}} hat Sie um Zugriff auf {{itemName}} gebeten.",
-  "MEMBERSHIP_REQUEST_TEXT": "Sie wurden gebeten, {{memberName}} Zugriff auf {{itemName}} zu gewähren. Klicken Sie auf die folgende Schaltfläche, um die Anfrage anzunehmen oder abzulehnen."
+  "MEMBERSHIP_REQUEST_TEXT": "Sie wurden gebeten, {{memberName}} Zugriff auf {{itemName}} zu gewähren. Klicken Sie auf die folgende Schaltfläche, um die Anfrage anzunehmen oder abzulehnen.",
+  "DEFAULT_SHORTCUT_NAME": "Verknüpfung zu {{name}}"
 }
