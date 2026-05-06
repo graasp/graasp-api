@@ -2,15 +2,19 @@
   "GREETINGS": "شكرا لك على التسجيل في منصتنا.",
   "SIGN_UP_VERIFY_EMAIL": "يرجى التحقق من بريدك الإلكتروني بالضغط على الزر التالي.",
   "SIGN_UP_TEXT": "أكمل التسجيل وتسجيل الدخول.",
+  "IGNORE_EMAIL_IF_NOT_REQUESTED": "إذا لم تكن أنت من قام بهذا الإجراء، فيمكنك ببساطة تجاهل هذه الرسالة الإلكترونية.",
   "SIGN_IN_BUTTON_TEXT": "تسجيل الدخول",
   "SIGN_UP_BUTTON_TEXT": "يسجل",
   "SIGN_IN_TEXT": "لقد طلبت منا أن نرسل إليك رابطًا سحريًا لتسجيل الدخول بسرعة إلى حسابك. هنا تذهب:",
   "SIGN_IN_NOT_REQUESTED": "إذا لم تكن قد طلبت الارتباط، فلا يلزم اتخاذ أي إجراء آخر. ستنتهي صلاحيته قريبًا، لا تقلق، حسابك وبياناتك آمنة.",
   "EXPORT_ACTIONS_TEXT": "لقد طلبت تنزيل الإجراءات من العنصر {{itemName}} كملفات {{exportFormat}}، إليك الرابط لتنزيل الملفات. سيكون متاحًا لمدة {{days}} يوم",
   "EXPORT_ACTIONS_BUTTON_TEXT": "تحميل",
+  "EXPORT_ACTIONS_TITLE": "رابط تنزيل الآثار التحليلية لـ {{itemName}}",
+  "EXPORT_RAW_ITEM_TEXT": "لقد طلبتَ تنزيل ملفات \"{{itemName}}\"، إليك رابط التنزيل. ستكون الملفات متاحة لمدة {{days}} يومًا.",
+  "EXPORT_RAW_ITEM_BUTTON_TEXT": "تحميل",
+  "EXPORT_RAW_ITEM_TITLE": "تنزيل {{itemName}}",
   "SIGN_IN_TITLE": "رابط تسجيل الدخول",
   "SIGN_UP_TITLE": "يسجل",
-  "EXPORT_ACTIONS_TITLE": "رابط تنزيل الآثار التحليلية لـ {{itemName}}",
   "INVITATION_TEXT": "شارك {{creatorName}} {{itemName}} معك على منصة Graasp. انقر على الزر التالي لإكمال التسجيل الخاص بك.",
   "INVITATION_TITLE": "تمت مشاركة العنصر {{itemName}} معك على Graasp",
   "PUBLISH_ITEM_TEXT": "تم نشر العنصر الخاص بك {{itemName}} في مكتبة Graasp. اضغط على الرابط التالي لمشاهدته.",
@@ -40,5 +44,6 @@
   "CONFIRM_CHANGE_EMAIL_TEXT": "لقد طلبت تغيير بريدك الإلكتروني إلى {{newEmail}}. لقد تم تحديث بريدك الإلكتروني بنجاح.",
   "MEMBERSHIP_REQUEST_TITLE": "طلب منك {{memberName}} الوصول إلى {{itemName}}",
   "MEMBERSHIP_REQUEST_TEXT": "لقد تم طلب منك منح حق الوصول إلى {{itemName}} لـ {{memberName}}. انقر على الزر التالي لقبول الطلب أو رفضه.",
-  "MEMBERSHIP_REQUEST_BUTTON_TEXT": "عرض عضويات {{itemName}}"
+  "MEMBERSHIP_REQUEST_BUTTON_TEXT": "عرض عضويات {{itemName}}",
+  "DEFAULT_SHORTCUT_NAME": "اختصار إلى {{name}}"
 }
