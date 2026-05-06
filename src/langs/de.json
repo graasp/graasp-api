@@ -2,15 +2,19 @@
   "GREETINGS": "Vielen Dank, dass Sie sich auf unserer Plattform angemeldet haben.",
   "SIGN_UP_VERIFY_EMAIL": "Bitte bestätigen Sie Ihre E-Mail-Adresse, indem Sie auf den folgenden Link klicken.",
   "SIGN_UP_TEXT": "Registrierung abschließen und sich anmelden.",
+  "IGNORE_EMAIL_IF_NOT_REQUESTED": "Wenn Sie nicht der Urheber dieser Aktion sind, können Sie diese E-Mail einfach ignorieren.",
   "SIGN_IN_BUTTON_TEXT": "Anmelden",
   "SIGN_UP_BUTTON_TEXT": "Registrieren",
   "SIGN_IN_TEXT": "Sie haben uns gebeten, Ihnen einen magischen Link zu senden, damit Sie sich schnell bei Ihrem Konto anmelden können. Los geht's:",
   "SIGN_IN_NOT_REQUESTED": "Wenn Sie den Link nicht angefordert haben, sind keine weiteren Maßnahmen erforderlich. Es läuft bald ab. Machen Sie sich keine Sorgen, Ihr Konto und Ihre Daten sind sicher.",
   "EXPORT_ACTIONS_TEXT": "Sie haben angefordert, Aktionen vom Element {{itemName}} als {{exportFormat}}-Dateien herunterzuladen. Hier ist der Link zum Herunterladen der Dateien. Er wird für {{days}} Tage verfügbar sein.",
   "EXPORT_ACTIONS_BUTTON_TEXT": "Herunterladen",
+  "EXPORT_ACTIONS_TITLE": "Download-Link für Analytic Traces für {{itemName}}",
+  "EXPORT_RAW_ITEM_TEXT": "Sie haben die Dateien von \"{{itemName}}\" angefordert. Hier ist der Download-Link. Die Dateien sind {{days}} Tage lang verfügbar.",
+  "EXPORT_RAW_ITEM_BUTTON_TEXT": "Herunterladen",
+  "EXPORT_RAW_ITEM_TITLE": "Laden Sie {{itemName}} herunter",
   "SIGN_IN_TITLE": "Anmeldelink",
   "SIGN_UP_TITLE": "Registrieren",
-  "EXPORT_ACTIONS_TITLE": "Download-Link für Analytic Traces für {{itemName}}",
   "INVITATION_TEXT": "{{creatorName}} hat {{itemName}} mit Ihnen auf der Graasp-Plattform geteilt. Klicken Sie auf den folgenden Button, um Ihre Registrierung abzuschließen.",
   "INVITATION_TITLE": "Der Artikel {{itemName}} wurde auf Graasp mit Ihnen geteilt",
   "PUBLISH_ITEM_TEXT": "Ihr Artikel {{itemName}} wurde in der Graasp-Bibliothek veröffentlicht. Klicken Sie auf den folgenden Link, um ihn anzuzeigen.",
@@ -40,5 +44,6 @@
   "CONFIRM_CHANGE_EMAIL_TEXT": "Sie haben beantragt, Ihre E-Mail-Adresse in {{newEmail}} zu ändern. Ihre E-Mail-Adresse wurde erfolgreich aktualisiert.",
   "MEMBERSHIP_REQUEST_TITLE": "{{memberName}} hat bei Ihnen einen Zugriff auf {{itemName}} angefordert",
   "MEMBERSHIP_REQUEST_TEXT": "Sie wurden aufgefordert, {{memberName}} Zugriff auf {{itemName}} zu gewähren. Klicken Sie auf die folgende Schaltfläche, um die Anfrage anzunehmen oder abzulehnen.",
-  "MEMBERSHIP_REQUEST_BUTTON_TEXT": "Mitgliedschaften von {{itemName}} anzeigen"
+  "MEMBERSHIP_REQUEST_BUTTON_TEXT": "Mitgliedschaften von {{itemName}} anzeigen",
+  "DEFAULT_SHORTCUT_NAME": "Verknüpfung zu {{name}}"
 }
