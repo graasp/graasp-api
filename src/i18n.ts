@@ -5,6 +5,7 @@ import enTranslations from './langs/en.json';
 import esTranslations from './langs/es.json';
 import frTranslations from './langs/fr.json';
 import itTranslations from './langs/it.json';
+import jaTranslations from './langs/ja.json';
 
 init({
   fallbackLng: 'en',
@@ -23,6 +24,9 @@ init({
     },
     ar: {
       translation: arTranslations,
+    },
+    ja: {
+      translation: jaTranslations,
     },
   },
 });
