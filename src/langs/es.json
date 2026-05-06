@@ -2,6 +2,7 @@
   "GREETINGS": "Gracias por registrarte en nuestra plataforma.",
   "SIGN_UP_VERIFY_EMAIL": "Por favor verifica tu correo electrónico haciendo clic en el siguiente botón.",
   "SIGN_UP_TEXT": "Complete el registro e inicie sesión.",
+  "IGNORE_EMAIL_IF_NOT_REQUESTED": "Si usted no es el autor de esta acción, puede simplemente ignorar este correo electrónico.",
   "SIGN_IN_BUTTON_TEXT": "Iniciar sesión",
   "SIGN_UP_BUTTON_TEXT": "Registro",
   "SIGN_IN_TEXT": "Has solicitado que enviemos un enlace mágico para iniciar sesión rápidamente en tu cuenta. Aquí lo tienes:",
@@ -40,5 +41,6 @@
   "CONFIRM_CHANGE_EMAIL_TEXT": "Solicitó cambiar su correo electrónico a {{newEmail}}. Su correo electrónico se ha actualizado correctamente.",
   "MEMBERSHIP_REQUEST_TITLE": "{{memberName}} le solicitó acceso a {{itemName}}",
   "MEMBERSHIP_REQUEST_TEXT": "Se le ha solicitado que otorgue acceso a {{itemName}} a {{memberName}}. Haga clic en el siguiente botón para aceptar o rechazar la solicitud.",
-  "MEMBERSHIP_REQUEST_BUTTON_TEXT": "Ver membresías de {{itemName}}"
+  "MEMBERSHIP_REQUEST_BUTTON_TEXT": "Ver membresías de {{itemName}}",
+  "DEFAULT_SHORTCUT_NAME": "Acceso directo a {{name}}"
 }
