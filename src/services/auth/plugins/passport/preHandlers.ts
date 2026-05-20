@@ -75,6 +75,15 @@ export const guestAuthenticateAppsJWT = fastifyPassport.authenticate(
 ) as RouteShorthandHook<preHandlerHookHandler>;
 
 /**
+ * Shared secret authentication for machine-to-machine routes.
+ * Requires `Authorization: Bearer <ADMIN_SHARED_SECRET>` header.
+ */
+export const authenticateAdminSharedSecret = fastifyPassport.authenticate(
+  PassportStrategy.AdminSharedSecret,
+  { session: false },
+) as RouteShorthandHook<preHandlerHookHandler>;
+
+/**
  * Pre-handler function that checks if the user meets at least one of the specified access preconditions.
  * @param strategies The array of role strategies to check for access.
  * @throws {InsufficientPermission} If user does not satisfy any of the preconditions.

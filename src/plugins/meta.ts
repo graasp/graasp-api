@@ -10,6 +10,7 @@ import { resolveDependency } from '../di/utils';
 import { db } from '../drizzle/db';
 import { SearchService } from '../services/item/plugins/publication/published/plugins/search/search.service';
 import { assertIsError } from '../utils/assertions';
+import { authenticateAdminSharedSecret } from '../services/auth/plugins/passport/preHandlers';
 import {
   APP_VERSION,
   BUILD_TIMESTAMP,
@@ -110,11 +111,13 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
     };
   });
 
-  fastify.get('/api/version', async (_, reply) => {
-    // allow request cross origin
-    reply.header('Access-Control-Allow-Origin', '*');
-    return `${APP_VERSION} @ ${BUILD_TIMESTAMP}`;
-  });
+  fastify.get(
+    '/api/version',
+    { preHandler: authenticateAdminSharedSecret },
+    async () => {
+      return { version: APP_VERSION, buildTimestamp: BUILD_TIMESTAMP };
+    },
+  );
 };
 
 const getDBStatusCheck = async (_log: FastifyBaseLogger): Promise<ServiceStatus> => {
