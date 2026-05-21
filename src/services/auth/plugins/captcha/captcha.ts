@@ -8,7 +8,7 @@ import type { RouteShorthandHook } from 'fastify/types/route';
 import type { RecaptchaActionType } from '@graasp/sdk';
 
 import { DEV } from '../../../../config/env';
-import { RECAPTCHA_SECRET_ACCESS_KEY } from '../../../../utils/config';
+import { BYPASS_RECAPTCHA, RECAPTCHA_SECRET_ACCESS_KEY } from '../../../../utils/config';
 import { AuthenticationError } from './errors';
 
 export const RECAPTCHA_VERIFY_LINK = 'https://www.google.com/recaptcha/api/siteverify';
@@ -43,7 +43,7 @@ async function validateCaptcha(
 ) {
   const shouldFailIfLowScore = options?.shouldFail ?? true;
   // TODO: find a better solution? to allow dev
-  if (DEV) {
+  if (DEV || BYPASS_RECAPTCHA === true) {
     return;
   }
 
