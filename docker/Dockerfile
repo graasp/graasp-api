@@ -1,8 +1,9 @@
 FROM node:24.12-bookworm AS base
+
 RUN apt-get update  \
-    && apt-get -y --no-install-recommends install  \
-        sudo curl git ca-certificates build-essential dumb-init \
-    && rm -rf /var/lib/apt/lists/*
+  && apt-get -y --no-install-recommends install  \
+  sudo curl git ca-certificates build-essential dumb-init \
+  && rm -rf /var/lib/apt/lists/*
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 ENV MISE_INSTALL_PATH="/usr/local/bin/mise"
