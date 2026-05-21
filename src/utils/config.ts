@@ -2,7 +2,7 @@ import os from 'os';
 
 import { ClientManager, Context, DEFAULT_LANG, GPTVersion, type GPTVersionType } from '@graasp/sdk';
 
-import { requiredEnvVar } from '../config/helpers';
+import { requiredEnvVar, toBoolean } from '../config/helpers';
 import type {
   LocalFileConfiguration,
   S3FileConfiguration,
@@ -195,6 +195,9 @@ export const EMBEDDED_LINK_ITEM_IFRAMELY_HREF_ORIGIN = requiredEnvVar(
 // validation
 export const IMAGE_CLASSIFIER_API =
   process.env.IMAGE_CLASSIFIER_API ?? 'http://localhost:8080/infer';
+
+// allows to bypass captcha validation (for example when running in production)
+export const BYPASS_RECAPTCHA = toBoolean(process.env.BYPASS_RECAPTCHA, { default: false });
 
 export const ITEMS_ROUTE_PREFIX = '/api/items';
 export const APP_ITEMS_PREFIX = '/api/app-items';
