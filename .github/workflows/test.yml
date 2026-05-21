@@ -91,41 +91,25 @@ jobs:
           --health-retries 5
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 24
-
-      - name: Get yarn cache directory
-        id: yarn-cache-dir-path
-        run: |
-          echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
-
-      - uses: actions/cache@v4
-        with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
+      - name: Install Mise
+        uses: jdx/mise-action@v3
 
       - name: yarn install and build
-        run: |
-          yarn
-          yarn build
+        run: mise run build
 
       - name: yarn check
-        run: yarn check
+        run: mise run check
 
       - name: apply migrations on empty database
-        run: yarn migration:run
+        run: mise run migrate
 
       - name: check migrations are up to date
-        run: yarn migration:check
+        run: mise run migration-check
 
       - name: vitest tests
-        run: yarn vitest
+        run: mise run vitest
 
   test-node:
     strategy:
@@ -170,24 +154,10 @@ jobs:
           --health-retries 5
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 24
-
-      - name: Get yarn cache directory
-        id: yarn-cache-dir-path
-        run: |
-          echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
-
-      - uses: actions/cache@v4
-        with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
+      - name: Install Mise
+        uses: jdx/mise-action@v3
 
       - uses: actions/cache@v4
         with:
@@ -196,12 +166,8 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-jest-
 
-      - name: yarn install
-        run: |
-          yarn
-
       - name: apply migrations on empty database
-        run: yarn migration:run
+        run: mise run migrate
 
       - name: yarn test
-        run: yarn test:ci --shard=${{ matrix.shard }}
+        run: mise run e2e --shard=${{ matrix.shard }}
