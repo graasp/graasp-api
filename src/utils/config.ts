@@ -19,18 +19,9 @@ export const BUILD_TIMESTAMP = process.env.BUILD_TIMESTAMP;
 
 export const ADMIN_SHARED_SECRET = process.env.ADMIN_SHARED_SECRET;
 
-export const CLIENT_HOST = process.env.CLIENT_HOST ?? 'http://localhost:3114';
-
-export const LIBRARY_HOST = process.env.LIBRARY_CLIENT_HOST ?? CLIENT_HOST;
-
 // Fallback to the server-provided integration is only available in dev
 export const H5P_INTEGRATION_URL =
   process.env.H5P_INTEGRATION_URL ?? 'http://localhost:3000/h5p-integration';
-
-export const ALLOWED_ORIGINS = [new URL(CLIENT_HOST).origin, new URL(LIBRARY_HOST).origin];
-
-// Add the hosts of the different clients
-ClientManager.getInstance().setHost(CLIENT_HOST).addHost(Context.Library, LIBRARY_HOST);
 
 export const PROTOCOL = process.env.PROTOCOL || 'http';
 export const HOSTNAME = process.env.HOSTNAME || 'localhost';
@@ -77,7 +68,13 @@ export const CORS_ORIGIN_REGEX = process.env.CORS_ORIGIN_REGEX;
  * }
  * >
  */
-export const PUBLIC_URL = new URL(process.env.CLIENT_HOST ?? HOST);
+export const PUBLIC_URL = new URL(HOST);
+export const LIBRARY_HOST = process.env.LIBRARY_CLIENT_HOST || HOST;
+
+export const ALLOWED_ORIGINS = [new URL(HOST).origin, new URL(LIBRARY_HOST).origin];
+
+// Add the hosts of the different clients
+ClientManager.getInstance().setHost(HOST).addHost(Context.Library, LIBRARY_HOST);
 
 /**
  * GRAASP FILE STORAGE CONFIG

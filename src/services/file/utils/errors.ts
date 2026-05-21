@@ -122,26 +122,14 @@ export const UploadFileUnexpectedError = createError(
   StatusCodes.INTERNAL_SERVER_ERROR,
 );
 
-export class DownloadFileUnexpectedError extends GraaspFileError {
-  constructor(data?: unknown) {
-    super(
-      {
-        code: 'GPFERR011',
-        statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
-        // TODO: change message
-        message: FAILURE_MESSAGES.DOWNLOAD_FILE_UNEXPECTED_ERROR,
-      },
-      data,
-    );
-  }
-}
+export const DownloadFileUnexpectedError = createError(
+  'GPFERR011',
+  FAILURE_MESSAGES.DOWNLOAD_FILE_UNEXPECTED_ERROR,
+  StatusCodes.INTERNAL_SERVER_ERROR,
+);
 
-export class MalformedFileConfigError extends GraaspFileError {
-  constructor(message: string) {
-    super({
-      code: 'GPFERR012',
-      statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
-      message,
-    });
-  }
-}
+export const MalformedFileConfigError = createError(
+  'GPFERR012',
+  'Malformed configuration for',
+  StatusCodes.INTERNAL_SERVER_ERROR,
+);

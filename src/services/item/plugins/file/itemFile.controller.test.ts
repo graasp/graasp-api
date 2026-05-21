@@ -567,8 +567,11 @@ describe('File Item routes tests', () => {
             url: `${ITEMS_ROUTE_PREFIX}/${item.id}/download`,
           });
 
+          const res = await response.json();
           // we want the download file to wrap the error
-          expect(response.json()).toMatchObject(new DownloadFileUnexpectedError(expect.anything()));
+          expect(res.message).toEqual(
+            new DownloadFileUnexpectedError({ filepath: item.extra['file'].path }).message,
+          );
         });
         it('Gracefully fails if s3 returns NotFound error', async () => {
           headObjectMock.mockImplementation(() => {

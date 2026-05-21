@@ -12,14 +12,13 @@
   "license": "AGPL-3.0-only",
   "author": "Graasp",
   "type": "commonjs",
+  "packageManager": "pnpm@11.2.1",
   "scripts": {
-    "start": "yarn serve",
-    "build": "yarn lint && yarn build-ts",
-    "serve": "NODE_PATH=./dist node dist/server.js",
+    "start": "NODE_PATH=./dist node dist/server.js",
+    "build": "pnpm lint && pnpm build-ts",
     "watch-node": "NODE_PATH=./dist nodemon dist/server.js",
     "watch-node:worker": "NODE_PATH=./dist nodemon dist/workers/entrypoint.js",
-    "dev": "yarn run watch",
-    "watch": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Server,Worker\" -c \"cyan.bold,green.bold,magenta.bold\" \"yarn watch-ts\" \"yarn watch-node\" \"yarn watch-node:worker\"",
+    "watch": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Server\" -c \"cyan.bold,green.bold\" \"pnpm watch-ts\" \"pnpm watch-node\"",
     "seed": "ts-node -e 'import seed from \"./test/mocks/index\";seed();'",
     "test": "jest --forceExit --verbose --runInBand --detectOpenHandles",
     "test:ci": "jest --forceExit --verbose --coverage --silent --detectOpenHandles --maxWorkers=2",
@@ -43,7 +42,7 @@
     "openapi:report": "vacuum html-report ./openapi.json vacuum-report.html",
     "migration:apply-test": "DB_CONNECTION=postgres://test:test@db:5432/test yarn migration:run",
     "migration:generate": "yarn drizzle-kit generate",
-    "migration:run": "yarn drizzle-kit migrate",
+    "migrate": "drizzle-kit migrate",
     "migration:check": "yarn drizzle-kit generate --name=migrationtest --out=./src/drizzle --schema=./src/drizzle/schema.ts --dialect=postgresql && [ -f '$(find ./src/drizzle | grep migrationtest)' ] && exit 1 || exit 0",
     "db-doc:generate": "npx drizzle-kit export > schema.sql && npx @liam-hq/cli erd build --input schema.sql --format postgres --output-dir db-documentation"
   },
@@ -183,6 +182,5 @@
     "sodium-native": "4.2.0",
     "fastify": "5.8.5",
     "@sinclair/typebox": "0.34.49"
-  },
-  "packageManager": "yarn@4.14.1"
+  }
 }
