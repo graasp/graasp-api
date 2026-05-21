@@ -12,14 +12,14 @@
   "license": "AGPL-3.0-only",
   "author": "Graasp",
   "type": "commonjs",
+  "packageManager": "pnpm@11.2.1",
   "scripts": {
-    "start": "yarn serve",
+    "start": "NODE_PATH=./dist node dist/server.js",
     "build": "yarn lint && yarn build-ts",
-    "serve": "NODE_PATH=./dist node dist/server.js",
     "watch-node": "NODE_PATH=./dist nodemon dist/server.js",
     "watch-node:worker": "NODE_PATH=./dist nodemon dist/workers/entrypoint.js",
     "dev": "yarn run watch",
-    "watch": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Server,Worker\" -c \"cyan.bold,green.bold,magenta.bold\" \"yarn watch-ts\" \"yarn watch-node\" \"yarn watch-node:worker\"",
+    "watch": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Server\" -c \"cyan.bold,green.bold\" \"pnpm watch-ts\" \"pnpm watch-node\"",
     "seed": "ts-node -e 'import seed from \"./test/mocks/index\";seed();'",
     "test": "jest --forceExit --verbose --runInBand --detectOpenHandles",
     "test:ci": "jest --forceExit --verbose --coverage --silent --detectOpenHandles --maxWorkers=2",
@@ -183,6 +183,5 @@
     "sodium-native": "4.2.0",
     "fastify": "5.8.5",
     "@sinclair/typebox": "0.34.49"
-  },
-  "packageManager": "yarn@4.14.1"
+  }
 }

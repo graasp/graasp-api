@@ -1,37 +1,42 @@
 FROM node:24.12-bookworm AS base
+RUN apt-get update  \
+    && apt-get -y --no-install-recommends install  \
+        sudo curl git ca-certificates build-essential dumb-init \
+    && rm -rf /var/lib/apt/lists/*
+
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+ENV MISE_INSTALL_PATH="/usr/local/bin/mise"
+
+# Install mise
+RUN curl https://mise.run | sh
 
 
 ##############################
 ### Build Application Step ###
 ##############################
 # This step will build the application
-FROM base AS tools
+# FROM base AS tools
 
-# update packages and install the minimal init system "dumb-init"
-RUN apt-get update && apt-get install -y --no-install-recommends dumb-init
-
+# # update packages and install the minimal init system "dumb-init"
+# RUN apt-get update \
+#   && apt-get install -y --no-install-recommends dumb-init \
+#   && rm -rf /var/lib/apt/lists/*
 
 # -------------------------------------------------------
 FROM base AS build
 
 WORKDIR /app
-COPY package.json yarn.lock .yarnrc.yml ./
-# We need a specific command because we need to copy the folder with it, not just the content.
-COPY .yarn/releases ./.yarn/releases/
-RUN yarn set version berry && yarn install --immutable
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml mise.toml ./
+
+ENV COREPACK_ENABLE_DOWNLOAD_PROMPT=0
+RUN mise trust && mise install && corepack enable && pnpm install --frozen-lockfile
 
 ENV NODE_ENV=production
 COPY . .
-RUN yarn build-ts
+RUN pnpm build-ts
 
-# -------------------------------------------------------
-FROM base AS deps
-
-WORKDIR /app
-COPY package.json yarn.lock .yarnrc.yml ./
-# We need a specific command because we need to copy the folder with it, not just the content.
-COPY .yarn/releases ./.yarn/releases/
-RUN yarn set version berry && yarn workspaces focus --all --production
+# removes non prod dependencies
+RUN pnpm install --prod --frozen-lockfile
 
 ############################
 ### Run Application Step ###
@@ -54,10 +59,10 @@ EXPOSE 3000
 WORKDIR /app
 
 # Copy the installed dumb-init system from build image
-COPY --from=tools /usr/bin/dumb-init /usr/bin/dumb-init
+COPY --from=base /usr/bin/dumb-init /usr/bin/dumb-init
 
 # Copy the dependencies and compiled server code
-COPY --chown=node:node --from=deps ./app/node_modules ./node_modules
+COPY --chown=node:node --from=build ./app/node_modules ./node_modules
 COPY --chown=node:node --from=build ./app/dist ./dist
 
 # Set user to be non-root node

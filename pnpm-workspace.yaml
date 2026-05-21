@@ -1,0 +1,11 @@
+allowBuilds:
+  '@prisma/engines': true
+  '@quobix/vacuum': true
+  '@swc/core': true
+  bcrypt: true
+  esbuild: true
+  h5p-standalone: true
+  msgpackr-extract: true
+  re2: true
+  sharp: true
+  unrs-resolver: true

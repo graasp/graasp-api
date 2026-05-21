@@ -33,4 +33,10 @@ RUN apt-get update \
 
 USER node
 
+# install mise
+RUN curl https://mise.run | sh
+
+ENV PATH="/home/node/.local/bin:$PATH"
+RUN echo 'eval "$(mise activate bash)"' >> ~/.bashrc
+
 RUN echo "source /usr/share/bash-completion/completions/git" >> ~/.bashrc
