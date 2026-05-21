@@ -63,6 +63,7 @@ run = "vitest"
 
 [tasks.e2e]
 depends = ["pnpm-install"]
+env = { _.file = '.env.test'}
 run = "jest --forceExit --verbose --coverage --silent --detectOpenHandles --maxWorkers=2"
 
 [tasks.test]
