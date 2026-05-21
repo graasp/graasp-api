@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.13.9](https://github.com/graasp/graasp-api/compare/v2.13.8...v2.13.9) (2026-05-21)
+
+
+### Bug Fixes
+
+* add nudenet workflow ([#2000](https://github.com/graasp/graasp-api/issues/2000)) ([bbac7ba](https://github.com/graasp/graasp-api/commit/bbac7baf1a05e597d5546a7362a7b5c3b4b1d079))
+* allow admin to communicate with core ([#2135](https://github.com/graasp/graasp-api/issues/2135)) ([04f2a19](https://github.com/graasp/graasp-api/commit/04f2a197adef6b5a52e1b22f322552c2997d1f4b))
+* allow to bypass recaptcha via env var ([#2133](https://github.com/graasp/graasp-api/issues/2133)) ([b801175](https://github.com/graasp/graasp-api/commit/b801175251a4af00d958b41d70b5959e10b3bb15))
+* **ar:** update translations ([#2129](https://github.com/graasp/graasp-api/issues/2129)) ([b349390](https://github.com/graasp/graasp-api/commit/b3493905b1cc1dff29571f749b5118228f10294c))
+* **deps:** update dependency @sinclair/typebox to v0.34.49 ([#2121](https://github.com/graasp/graasp-api/issues/2121)) ([2f49822](https://github.com/graasp/graasp-api/commit/2f498226eeccd9043293ea6565a81d91111e9470))
+* **deps:** update dependency uuid to v11.1.1 [security] ([#2112](https://github.com/graasp/graasp-api/issues/2112)) ([6cfd01d](https://github.com/graasp/graasp-api/commit/6cfd01d8fed187b2312628797222598c23c59dc8))
+* **deps:** update dependency ws to v8.20.1 [security] ([#2134](https://github.com/graasp/graasp-api/issues/2134)) ([f35e3eb](https://github.com/graasp/graasp-api/commit/f35e3eb934021263d51df89a6c3ba6103ce142cf))
+* **de:** update translations ([#2128](https://github.com/graasp/graasp-api/issues/2128)) ([828fc4c](https://github.com/graasp/graasp-api/commit/828fc4c2e996f345c36fca22e5ded7da163e37de))
+* **es:** update translations ([#2126](https://github.com/graasp/graasp-api/issues/2126)) ([305955d](https://github.com/graasp/graasp-api/commit/305955d8c89755cc9cba2a1f64da7c2b6032dc09))
+* **es:** update translations ([#2130](https://github.com/graasp/graasp-api/issues/2130)) ([7440d42](https://github.com/graasp/graasp-api/commit/7440d42be5da6c600c5c3486a0ec1b5bdccd101e))
+* **it:** update translations ([#2125](https://github.com/graasp/graasp-api/issues/2125)) ([4b096a5](https://github.com/graasp/graasp-api/commit/4b096a5243dbaf32db860d482a03c5a1dc8be3a4))
+* **it:** update translations ([#2131](https://github.com/graasp/graasp-api/issues/2131)) ([3c850fc](https://github.com/graasp/graasp-api/commit/3c850fcc152dd3c56dc7500c1807aca8d38fda00))
+* **ja:** translate to japanese ([#2122](https://github.com/graasp/graasp-api/issues/2122)) ([a00bdd7](https://github.com/graasp/graasp-api/commit/a00bdd7516a02cb712af7e1aa5a2195091a93cb9))
+* **ja:** update translations ([#2132](https://github.com/graasp/graasp-api/issues/2132)) ([9bbac6d](https://github.com/graasp/graasp-api/commit/9bbac6d867e85238d03d5712a959daa27f21baaf))
+* update lang location and add ja in email ([7d086d7](https://github.com/graasp/graasp-api/commit/7d086d7e1507dc28a89806e79e4682a2490127d9))
+
 ## [2.13.8](https://github.com/graasp/graasp-api/compare/v2.13.7...v2.13.8) (2026-05-04)
 
 
