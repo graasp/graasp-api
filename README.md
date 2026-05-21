@@ -201,7 +201,6 @@ GRAASPER_CREATOR_ID=<id>
 # REDIS_CONNECTION=
 
 # Client hosts
-CLIENT_HOST=http://localhost:3114
 LIBRARY_CLIENT_HOST=http://localhost:3005
 
 # Base url used to redirect shortlink aliases
