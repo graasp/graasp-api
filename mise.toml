@@ -48,6 +48,7 @@ description = "Build the application"
 run = "tsc -p tsconfig.build.json"
 
 [tasks.migrate]
+depends = ["pnpm-install"]
 run = "drizzle-kit migrate"
 env = { _.file = '.env.development' }
 
@@ -66,3 +67,8 @@ run = "jest --forceExit --verbose --coverage --silent --detectOpenHandles --maxW
 
 [tasks.test]
 depends = ["vitest", "e2e"]
+
+[tasks.generate-db-docs]
+depends = ["pnpm-install"]
+description = "Generate documentation for the database schemas"
+run = "drizzle-kit export > schema.sql && npx @liam-hq/cli erd build --input schema.sql --format postgres --output-dir db-documentation"
