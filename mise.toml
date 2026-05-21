@@ -9,3 +9,14 @@ postinstall = 'npx corepack enable'
 [settings]
 # This must be enabled to make the hooks work
 experimental = true
+
+[tasks.pnpm-install]
+description = 'Installs dependencies with pnpm'
+run = 'pnpm install'
+sources = ['package.json', 'pnpm-lock.yaml', 'mise.toml']
+outputs = ['node_modules/.pnpm/lock.yaml']
+
+[tasks.dev]
+depends = ["pnpm-install"]
+description = "Run the development server"
+run = "pnpm watch"

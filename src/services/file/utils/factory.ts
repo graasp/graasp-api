@@ -7,15 +7,11 @@ import { MalformedFileConfigError } from './errors';
 
 const verifyLocalConfig = (config?: LocalFileConfiguration) => {
   if (!config?.storageRootPath.startsWith('/')) {
-    throw new MalformedFileConfigError(
-      'graasp-plugin-file: local service storageRootPath is malformed',
-    );
+    throw new MalformedFileConfigError('local service `storageRootPath` is malformed');
   }
 
   if (!config?.localFilesHost) {
-    throw new MalformedFileConfigError(
-      'graasp-plugin-file: local service localFilesHost is not defined',
-    );
+    throw new MalformedFileConfigError('local service `localFilesHost` is not defined');
   }
 
   return config;
@@ -29,7 +25,7 @@ const verifyS3Config = (config?: S3FileConfiguration) => {
     !config?.s3SecretAccessKey
   ) {
     throw new MalformedFileConfigError(
-      'graasp-plugin-file: mandatory options for s3 service missing',
+      's3 service, a mandatory config is missing, check region, bucket accessKey and secretAccessKey are set',
     );
   }
 

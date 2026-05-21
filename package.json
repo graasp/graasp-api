@@ -15,10 +15,9 @@
   "packageManager": "pnpm@11.2.1",
   "scripts": {
     "start": "NODE_PATH=./dist node dist/server.js",
-    "build": "yarn lint && yarn build-ts",
+    "build": "pnpm lint && pnpm build-ts",
     "watch-node": "NODE_PATH=./dist nodemon dist/server.js",
     "watch-node:worker": "NODE_PATH=./dist nodemon dist/workers/entrypoint.js",
-    "dev": "yarn run watch",
     "watch": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Server\" -c \"cyan.bold,green.bold\" \"pnpm watch-ts\" \"pnpm watch-node\"",
     "seed": "ts-node -e 'import seed from \"./test/mocks/index\";seed();'",
     "test": "jest --forceExit --verbose --runInBand --detectOpenHandles",
