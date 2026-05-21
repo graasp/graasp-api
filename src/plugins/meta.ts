@@ -6,11 +6,12 @@ import type { FastifyBaseLogger, FastifySchema } from 'fastify';
 
 import type { UnionOfConst } from '@graasp/sdk';
 
+import { bustFileCache } from '../bustCache';
 import { resolveDependency } from '../di/utils';
 import { db } from '../drizzle/db';
+import { authenticateAdminSharedSecret } from '../services/auth/plugins/passport/preHandlers';
 import { SearchService } from '../services/item/plugins/publication/published/plugins/search/search.service';
 import { assertIsError } from '../utils/assertions';
-import { authenticateAdminSharedSecret } from '../services/auth/plugins/passport/preHandlers';
 import {
   APP_VERSION,
   BUILD_TIMESTAMP,
@@ -111,13 +112,13 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
     };
   });
 
-  fastify.get(
-    '/api/version',
-    { preHandler: authenticateAdminSharedSecret },
-    async () => {
-      return { version: APP_VERSION, buildTimestamp: BUILD_TIMESTAMP };
-    },
-  );
+  fastify.get('/api/version', async () => {
+    return { version: APP_VERSION, buildTimestamp: BUILD_TIMESTAMP };
+  });
+
+  fastify.get('/api/bust-cache', { preHandler: authenticateAdminSharedSecret }, async () => {
+    await bustFileCache();
+  });
 };
 
 const getDBStatusCheck = async (_log: FastifyBaseLogger): Promise<ServiceStatus> => {
