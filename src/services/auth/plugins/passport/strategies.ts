@@ -17,4 +17,7 @@ export enum PassportStrategy {
 
   //-- From Password --//
   Password = 'password',
+
+  //-- Shared Secret (machine-to-machine) --//
+  AdminSharedSecret = 'admin-shared-secret',
 }

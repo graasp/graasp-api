@@ -19,6 +19,7 @@ import { MemberRepository } from '../../../member/member.repository';
 import { MemberPasswordService } from '../password/password.service';
 import { SHORT_TOKEN_PARAM } from './constants';
 import { PassportStrategy } from './strategies';
+import adminSharedSecretStrategy from './strategies/adminSharedSecret';
 import emailChangeStrategy from './strategies/emailChange';
 import jwtAppsStrategy from './strategies/jwtApps';
 import jwtChallengeVerifierStrategy from './strategies/jwtChallengeVerifier';
@@ -56,6 +57,9 @@ const plugin: FastifyPluginAsync = async (fastify: FastifyInstance) => {
 
   //-- Sessions Strategies --//
   strictSessionStrategy(fastifyPassport);
+
+  //-- Shared Secret Strategy (machine-to-machine) --//
+  adminSharedSecretStrategy(fastifyPassport);
 
   //-- Password Strategies --//
   passwordStrategy(fastifyPassport, memberPasswordService, {

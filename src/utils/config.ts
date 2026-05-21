@@ -17,6 +17,8 @@ export const LOG_LEVEL: string | undefined = process.env.LOG_LEVEL;
 export const APP_VERSION = process.env.APP_VERSION;
 export const BUILD_TIMESTAMP = process.env.BUILD_TIMESTAMP;
 
+export const ADMIN_SHARED_SECRET = process.env.ADMIN_SHARED_SECRET;
+
 export const CLIENT_HOST = process.env.CLIENT_HOST ?? 'http://localhost:3114';
 
 export const LIBRARY_HOST = process.env.LIBRARY_CLIENT_HOST ?? CLIENT_HOST;
