@@ -20,14 +20,15 @@ Head over to: [Client](https://github.com/graasp/client), [Library](https://gith
 
 In order to run the Graasp backend, it requires:
 
-- Node version 24
-- NPM version 11
-- Yarn (can be installed through [`nvm`](https://github.com/nvm-sh/nvm))
+- [Mise](https://mise.jdx.dev) (tool manager)
 - [Docker](https://docs.docker.com/get-docker/) or [Podman](https://podman.io/): Docker is not necessary, it is possible to install everything locally. However it is strongly recommended to use the Docker installation guide.
+
+Mise will automatically install the correct version of node and pnpm. You should only have to do:
+`mise install`. You might have to trust the workspace with `mise trust` first.
+Then when you call `pnpm i` it will ask you to download pnpm via corepack. Accept.
 
 ## Recommended Tools
 
-- [NVM](https://github.com/nvm-sh/nvm) or [Volta (recommended)](https://volta.sh/) : CLI to manage multiple versions of NodeJs and NPM.
 - [Postman](https://www.postman.com) : Application to explore and test your APIs.
 - [Starship](https://starship.rs/): A shell prompt enhancer that shows you the current git branch nvm version and package version, very useful for quick look at your environment (works on all shells and is super fast), requires you to use a [NerdFont](https://www.nerdfonts.com/)
 - [VS Code](https://code.visualstudio.com) : IDE to manage the database and make changes to the source code.
@@ -109,6 +110,8 @@ To configure the application, you'll need to change the values in `.env.developm
 
 ```bash
 ### Graasp back-end configuration
+
+LOG_LEVEL=debug
 
 ### Network configuration
 
@@ -222,6 +225,35 @@ OPENAI_API_KEY=<openai-api-key>
 
 # GEOLOCATION API - this can be empty if you don't use geolocation
 GEOLOCATION_API_KEY=
+
+
+### If running outside of the devcontainer where some default vars are set and available for you, un-comment the ones below:
+# MAILER_CONNECTION=smtp://docker:docker@mailer:1025
+#
+# ETHERPAD_URL=http://localhost:9001
+# ETHERPAD_PUBLIC_URL=http://localhost:9001
+# ETHERPAD_COOKIE_DOMAIN=localhost
+# ETHERPAD_API_KEY=0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
+#
+# EMBEDDED_LINK_ITEM_IFRAMELY_HREF_ORIGIN=http://localhost:8061
+#
+# DB_CONNECTION=postgres://graasper:graasper@localhost:5432/graasp
+#
+# H5P_FILE_STORAGE_HOST=http://s3.garage.localhost:3900
+# H5P_INTEGRATION_URL=http://h5p-items.web.garage.localhost:3902/h5p-integration/
+#
+# FILE_STORAGE_TYPE=s3
+# S3_FILE_ITEM_HOST=http://s3.garage.localhost:3900
+# S3_FILE_ITEM_REGION=garage
+# S3_FILE_ITEM_BUCKET=file-items
+#
+# MEILISEARCH_URL=http://localhost:7700
+#
+# REDIS_CONNECTION=redis://localhost:6379
+
+## Optionally override the port so it works with the reverse proxy
+# PORT=3001
+
 ```
 
 ### Garage
