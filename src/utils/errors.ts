@@ -436,33 +436,17 @@ export class InvalidJWTItem extends CoreError {
   }
 }
 
-export class ShortLinkNotFound extends CoreError {
-  constructor(shortLink: string) {
-    super(
-      {
-        code: 'GERR1009',
-        statusCode: StatusCodes.NOT_FOUND,
-        message: FAILURE_MESSAGES.SHORT_LINK_NOT_FOUND,
-      },
-      shortLink,
-    );
-    this.origin = 'shortLink';
-  }
-}
+export const ShortLinkNotFound = createError(
+  'GERR1009',
+  FAILURE_MESSAGES.SHORT_LINK_NOT_FOUND,
+  StatusCodes.NOT_FOUND,
+);
 
-export class ShortLinkDuplication extends CoreError {
-  constructor(shortLink: string) {
-    super(
-      {
-        code: 'GERR1010',
-        statusCode: StatusCodes.CONFLICT,
-        message: FAILURE_MESSAGES.SHORT_LINK_ALREADY_EXISTS,
-      },
-      shortLink,
-    );
-    this.origin = 'shortLink';
-  }
-}
+export const ShortLinkDuplication = createError(
+  'GERR1010',
+  FAILURE_MESSAGES.SHORT_LINK_ALREADY_EXISTS,
+  StatusCodes.CONFLICT,
+);
 
 export class ShortLinkLimitExceed extends CoreError {
   constructor(itemId: string, platform: string) {

@@ -1,4 +1,5 @@
-import { and, asc, count, eq } from 'drizzle-orm';
+import { DrizzleQueryError, and, asc, count, eq } from 'drizzle-orm';
+import { DatabaseError } from 'pg';
 
 import {
   type ShortLink as CreateShortLink,
@@ -48,9 +49,9 @@ export class ShortLinkRepository {
       // can throw on alias conflict
       if (
         err !== null &&
-        typeof err === 'object' &&
-        'code' in err &&
-        err.code === DUPLICATE_ERROR_CODE
+        err instanceof DrizzleQueryError &&
+        err.cause instanceof DatabaseError &&
+        err.cause.code === DUPLICATE_ERROR_CODE
       ) {
         throw new ShortLinkDuplication(alias);
       }
@@ -122,9 +123,9 @@ export class ShortLinkRepository {
     } catch (error: unknown) {
       if (
         error !== null &&
-        typeof error === 'object' &&
-        'code' in error &&
-        error.code === DUPLICATE_ERROR_CODE
+        error instanceof DrizzleQueryError &&
+        error.cause instanceof DatabaseError &&
+        error.cause.code === DUPLICATE_ERROR_CODE
       ) {
         throw new ShortLinkDuplication(entity.alias);
       }
