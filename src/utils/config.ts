@@ -71,11 +71,15 @@ export const CORS_ORIGIN_REGEX = process.env.CORS_ORIGIN_REGEX;
 export const PUBLIC_URL = new URL(process.env.PUBLIC_URL || HOST);
 export const LIBRARY_HOST = process.env.LIBRARY_CLIENT_HOST || HOST;
 
+<<<<<<< HEAD
 export const ALLOWED_ORIGINS = [
   new URL(PUBLIC_URL).origin,
   new URL(HOST).origin,
   new URL(LIBRARY_HOST).origin,
 ];
+=======
+export const ALLOWED_ORIGINS = [new URL(PUBLIC_URL).origin, new URL(LIBRARY_HOST).origin];
+>>>>>>> 8036ca63 (Add thumbnail URL support in BookmarkService and tests)
 
 // Add the hosts of the different clients
 ClientManager.getInstance().setHost(HOST).addHost(Context.Library, LIBRARY_HOST);
