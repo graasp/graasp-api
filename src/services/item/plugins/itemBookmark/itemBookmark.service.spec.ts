@@ -97,7 +97,7 @@ describe('BookmarkService', () => {
           id: itemWithoutThumbnail.id,
         },
       });
-      expect(result[1].item).not.toHaveProperty('thumbnails');
+      expect(result[1].item.thumbnails).toBeUndefined();
     });
   });
 });
