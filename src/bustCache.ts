@@ -12,4 +12,5 @@ export async function bustFileCache() {
     redis.expire(key, 0);
   });
   console.debug('DEV: Done busting cache');
+  return cache_keys.length;
 }

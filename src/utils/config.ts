@@ -68,10 +68,14 @@ export const CORS_ORIGIN_REGEX = process.env.CORS_ORIGIN_REGEX;
  * }
  * >
  */
-export const PUBLIC_URL = new URL(HOST);
+export const PUBLIC_URL = new URL(process.env.PUBLIC_URL || HOST);
 export const LIBRARY_HOST = process.env.LIBRARY_CLIENT_HOST || HOST;
 
-export const ALLOWED_ORIGINS = [new URL(HOST).origin, new URL(LIBRARY_HOST).origin];
+export const ALLOWED_ORIGINS = [
+  new URL(PUBLIC_URL).origin,
+  new URL(HOST).origin,
+  new URL(LIBRARY_HOST).origin,
+];
 
 // Add the hosts of the different clients
 ClientManager.getInstance().setHost(HOST).addHost(Context.Library, LIBRARY_HOST);

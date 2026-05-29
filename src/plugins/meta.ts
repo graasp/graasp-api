@@ -117,7 +117,8 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
   });
 
   fastify.get('/api/bust-cache', { preHandler: authenticateAdminSharedSecret }, async () => {
-    await bustFileCache();
+    const result = await bustFileCache();
+    return result;
   });
 };
 

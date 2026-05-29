@@ -1,4 +1,4 @@
-# Graasp Backend
+# Graasp API
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 
@@ -9,19 +9,23 @@
 [![GitHub Release](https://img.shields.io/github/release/graasp/graasp)](https://github.com/graasp/graasp/releases/latest)
 ![Test CI](https://github.com/graasp/graasp/actions/workflows/test.yml/badge.svg?branch=main)
 ![typescript version](https://img.shields.io/github/package-json/dependency-version/graasp/graasp/dev/typescript)
-[![Translations](https://gitlocalize.com/repo/9284/whole_project/badge.svg)](https://gitlocalize.com/repo/9284?utm_source=badge)
+[![Translations](https://gitlocalize.com/repo/10770/whole_project/badge.svg)](https://gitlocalize.com/repo/10770?utm_source=badge)
 
-This repository contains the source code and configurations for the Graasp backend. Visit the Graasp Platform at [graasp.org](https://graasp.org)
+This repository contains the source code and configurations for the Graasp API backend. Visit the Graasp Platform at [graasp.org](https://graasp.org)
 
 ❓Looking for our client applications/front-ends ?
-Head over to: [Client](https://github.com/graasp/client), [Library](https://github.com/graasp/graasp-library)
+Head over to: [Graasp Web](https://github.com/graasp/graasp-web), [Client](https://github.com/graasp/client), [Library](https://github.com/graasp/graasp-library)
+
+The Graasp API backend is a Node.js server (with fastify) allowing operations to be carried out in the client interface. It persists data to a PostgreSQL database.
+
+If you are interested to hosting Graasp yourself please have a look at the [self-hosting document](./docs/self-hosting.md)
 
 ## Requirements
 
-In order to run the Graasp backend, it requires:
+In order to run the Graasp backend, you will need:
 
 - [Mise](https://mise.jdx.dev) (tool manager)
-- [Docker](https://docs.docker.com/get-docker/) or [Podman](https://podman.io/): Docker is not necessary, it is possible to install everything locally. However it is strongly recommended to use the Docker installation guide.
+- [Docker](https://docs.docker.com/get-docker/) or [Podman](https://podman.io/): We recommend using docker as it makes setup of services much easier. It is however possible to setup all the services natively instead. We will provide guidance in this document for the docker installation.
 
 Mise will automatically install the correct version of node and pnpm. You should only have to do:
 `mise install`. You might have to trust the workspace with `mise trust` first.
@@ -67,7 +71,7 @@ This will create 11 containers :
 
 > **Troubleshoot**
 > If during setup of the devcontainer you get an error like `nudenet Error pull access denied for public.ecr.aws/g...`
-> This can occure if you previously logged in to the public ECR. When you want to pull from the public ECR, you should be unauthenticated. Simply run the following on you host: `docker logout public.ecr.aws`. It will log you out of the public ECR and you should be able to rebuild the containers without issue. If it persissts please [open an issue](https://github.com/graasp/graasp/issues/new?title=NudeNet%20DevContainer%20Docker%20Install%20Issue)
+> This can occur if you previously logged in to the public ECR. When you want to pull from the public ECR, you should be unauthenticated. Simply run the following on you host: `docker logout public.ecr.aws`. It will log you out of the public ECR and you should be able to rebuild the containers without issue. If it persissts please [open an issue](https://github.com/graasp/graasp/issues/new?title=NudeNet%20DevContainer%20Docker%20Install%20Issue)
 
 Then install the required npm packages with `yarn install`. You should run this command in the docker's terminal, because some packages are built depending on the operating system (eg. `bcrypt`).
 
