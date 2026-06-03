@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.14.0](https://github.com/graasp/graasp-api/compare/v2.13.9...v2.14.0) (2026-06-03)
+
+
+### Features
+
+* **tools:** use pnpm ([#2136](https://github.com/graasp/graasp-api/issues/2136)) ([0fb6d41](https://github.com/graasp/graasp-api/commit/0fb6d41c98c9e4679ce644780af389a1611979d5))
+
+
+### Bug Fixes
+
+* add readme instructions for local install ([#2142](https://github.com/graasp/graasp-api/issues/2142)) ([3472729](https://github.com/graasp/graasp-api/commit/3472729cd008f5932ea6d3561cff287127ca6004))
+* add thumbnail URL access to bookmarks ([#2143](https://github.com/graasp/graasp-api/issues/2143)) ([95e404e](https://github.com/graasp/graasp-api/commit/95e404e94fd60c394b78920a1dde8d66f159573f))
+* **deps:** upgrade sanitize-html ([40b886d](https://github.com/graasp/graasp-api/commit/40b886dfa287a7833fbfc89daec822b3bf671798))
+* readme and public_url ([4e9f07d](https://github.com/graasp/graasp-api/commit/4e9f07d85a70925bd0b3ac143f831d31cece7e62))
+* remove yarn lock ([56f0e2f](https://github.com/graasp/graasp-api/commit/56f0e2f82f1feb0242a35f153bfdafdafafdfd11))
+* tests with new wrapping error from drizzle ([#2141](https://github.com/graasp/graasp-api/issues/2141)) ([8f69d2a](https://github.com/graasp/graasp-api/commit/8f69d2ad908271831909e76f645fb4b0cb50bbf2))
+* update workers image ([#2139](https://github.com/graasp/graasp-api/issues/2139)) ([88d61e4](https://github.com/graasp/graasp-api/commit/88d61e4b25cd01ef18a57af0d68baedebf8f5065))
+
 ## [2.13.9](https://github.com/graasp/graasp-api/compare/v2.13.8...v2.13.9) (2026-05-21)
 
 
