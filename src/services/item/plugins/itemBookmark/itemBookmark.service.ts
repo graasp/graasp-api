@@ -8,6 +8,7 @@ import { AuthorizedItemService } from '../../../authorizedItem.service';
 import { ItemMembershipRepository } from '../../../itemMembership/membership.repository';
 import type { PackedItem } from '../../packedItem.dto';
 import { ItemVisibilityRepository } from '../itemVisibility/itemVisibility.repository';
+import { ItemThumbnailService } from '../thumbnail/itemThumbnail.service';
 import { ItemBookmarkRepository } from './itemBookmark.repository';
 
 type PackedBookmarkedItem = ItemBookmarkRaw & { item: PackedItem };
@@ -18,17 +19,20 @@ export class BookmarkService {
   private readonly itemBookmarkRepository: ItemBookmarkRepository;
   private readonly itemMembershipRepository: ItemMembershipRepository;
   private readonly itemVisibilityRepository: ItemVisibilityRepository;
+  private readonly itemThumbnailService: ItemThumbnailService;
 
   constructor(
     authorizedItemService: AuthorizedItemService,
     itemBookmarkRepository: ItemBookmarkRepository,
     itemMembershipRepository: ItemMembershipRepository,
     itemVisibilityRepository: ItemVisibilityRepository,
+    itemThumbnailService: ItemThumbnailService,
   ) {
     this.authorizedItemService = authorizedItemService;
     this.itemBookmarkRepository = itemBookmarkRepository;
     this.itemMembershipRepository = itemMembershipRepository;
     this.itemVisibilityRepository = itemVisibilityRepository;
+    this.itemThumbnailService = itemThumbnailService;
   }
 
   async getOwn(dbConnection: DBConnection, member: MinimalMember): Promise<PackedBookmarkedItem[]> {
@@ -36,6 +40,8 @@ export class BookmarkService {
       dbConnection,
       member.id,
     );
+    const bookmarkedItems = bookmarks.map(({ item }) => item);
+    const thumbnails = await this.itemThumbnailService.getUrlsByItems(bookmarkedItems);
 
     // filter out items user might not have access to
     // and packed item
@@ -46,7 +52,8 @@ export class BookmarkService {
         itemMembershipRepository: this.itemMembershipRepository,
         itemVisibilityRepository: this.itemVisibilityRepository,
       },
-      bookmarks.map(({ item }) => item),
+      bookmarkedItems,
+      thumbnails,
     );
 
     // insert back packed item inside bookmark entities
