@@ -54,6 +54,7 @@ export type FileItem = Omit<ItemRaw, 'type'> & {
       path: string;
       mimetype: string;
       size: number;
+      url?: string;
       altText?: string;
       content?: string;
       /** @deprecated */

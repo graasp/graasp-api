@@ -947,6 +947,63 @@ describe('Item routes tests', () => {
         data.forEach((i) => expectThumbnails(i, MOCK_SIGNED_URL, false));
       });
 
+      it('Returns file URL only for file children', async () => {
+        const {
+          actor,
+          items: [parentItem],
+        } = await seedFromJson({
+          items: [
+            {
+              memberships: [{ account: 'actor', permission: 'admin' }],
+              children: [
+                {
+                  type: 'file',
+                  extra: {
+                    file: {
+                      name: 'file.pdf',
+                      path: 'files/file.pdf',
+                      mimetype: 'application/pdf',
+                      size: 123,
+                      content: '',
+                    },
+                  },
+                },
+                {
+                  type: 'document',
+                  extra: {
+                    document: {
+                      content: 'Some document content',
+                    },
+                  },
+                },
+                {},
+              ],
+            },
+          ],
+        });
+        assertIsDefined(actor);
+        assertIsMemberForTest(actor);
+        mockAuthenticate(actor);
+
+        const response = await app.inject({
+          method: HttpMethod.Get,
+          url: `/api/items/${parentItem.id}/children`,
+        });
+
+        const data = response.json<PackedItem[]>();
+        expect(response.statusCode).toBe(StatusCodes.OK);
+
+        const fileChild = data.find(
+          (item): item is Extract<PackedItem, { type: 'file' }> => item.type === 'file',
+        );
+        const documentChild = data.find((item) => item.type === 'document');
+        const folderChild = data.find((item) => item.type === 'folder');
+
+        expect(fileChild?.extra.file.url).toEqual(MOCK_SIGNED_URL);
+        expect(documentChild?.extra).not.toHaveProperty('file');
+        expect(folderChild?.extra).not.toHaveProperty('file');
+      });
+
       it('Returns a child h5p successfully', async () => {
         const {
           actor,
