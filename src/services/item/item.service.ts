@@ -18,6 +18,7 @@ import {
   getParentFromPath,
 } from '@graasp/sdk';
 
+import { resolveDependency } from '../../di/utils';
 import { type DBConnection } from '../../drizzle/db';
 import {
   type ItemGeolocationRaw,
@@ -45,6 +46,7 @@ import {
   filterOutPackedItems,
 } from '../authorization.utils';
 import { AuthorizedItemService } from '../authorizedItem.service';
+import FileService from '../file/file.service';
 import { ItemMembershipRepository } from '../itemMembership/membership.repository';
 import { ThumbnailService } from '../thumbnail/thumbnail.service';
 import { DEFAULT_ORDER, IS_COPY_REGEX, MAX_COPY_SUFFIX_LENGTH } from './constants';
@@ -540,7 +542,7 @@ export class ItemService {
       children,
       thumbnails,
     );
-    return filteredChildren.map((children) => this.transformItemByType(children));
+    return Promise.all(filteredChildren.map((child) => this.transformItemByType(child)));
   }
 
   async getDescendants(
@@ -1050,7 +1052,8 @@ export class ItemService {
     }
   }
 
-  private transformItemByType(item: PackedItem) {
+  // Add response-only data that depends on the item type
+  private async transformItemByType(item: PackedItem): Promise<PackedItem> {
     switch (item.type) {
       case 'h5p': {
         const { h5p: h5pExtraProperties } = item.extra as H5PItemExtra;
@@ -1064,6 +1067,11 @@ export class ItemService {
           },
         };
         return { ...item, extra: newExtra };
+      }
+      case 'file': {
+        const fileService = resolveDependency(FileService);
+        const url = await fileService.getUrl({ path: item.extra.file.path });
+        return { ...item, extra: { ...item.extra, file: { ...item.extra.file, url } } };
       }
       default:
         return item;
