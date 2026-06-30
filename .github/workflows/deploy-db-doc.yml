@@ -21,6 +21,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
+      - name: Install Mise
+        uses: jdx/mise-action@v4
+
       - name: generate DB docs
         run: mise run generate-db-docs
 
