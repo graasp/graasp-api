@@ -12,7 +12,7 @@
   "license": "AGPL-3.0-only",
   "author": "Graasp",
   "type": "commonjs",
-  "packageManager": "pnpm@11.2.1",
+  "packageManager": "pnpm@11.2.2",
   "scripts": {
     "start": "NODE_PATH=./dist node dist/server.js",
     "build": "pnpm lint && pnpm build-ts",
