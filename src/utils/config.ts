@@ -78,7 +78,7 @@ export const ALLOWED_ORIGINS = [
 ];
 
 // Add the hosts of the different clients
-ClientManager.getInstance().setHost(HOST).addHost(Context.Library, LIBRARY_HOST);
+ClientManager.getInstance().setHost(PUBLIC_URL.toString()).addHost(Context.Library, LIBRARY_HOST);
 
 /**
  * GRAASP FILE STORAGE CONFIG
