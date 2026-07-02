@@ -1,4 +1,4 @@
-FROM node:24.12-bookworm AS base
+FROM node:24.12-trixie AS base
 
 RUN apt-get update  \
   && apt-get -y --no-install-recommends install  \
