@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.14.1](https://github.com/graasp/graasp-api/compare/v2.14.0...v2.14.1) (2026-07-02)
+
+
+### Bug Fixes
+
+* go redirection target with correct host ([#2155](https://github.com/graasp/graasp-api/issues/2155)) ([b86a785](https://github.com/graasp/graasp-api/commit/b86a785914aa3657d862729863ff696529f88530))
+* mise usage in db docs workflow ([#2151](https://github.com/graasp/graasp-api/issues/2151)) ([6d09ce4](https://github.com/graasp/graasp-api/commit/6d09ce4dba96937829eef632ebf5a5ad7c5ad800))
+
 ## [2.14.0](https://github.com/graasp/graasp-api/compare/v2.13.9...v2.14.0) (2026-06-03)
 
 
