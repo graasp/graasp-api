@@ -174,7 +174,7 @@
     "ts-jest": "29.4.9",
     "ts-node": "10.9.2",
     "typescript": "5.9.3",
-    "vitest": "3.2.4",
+    "vitest": "3.2.6",
     "wait-for-expect": "3.0.2",
     "y-websocket": "3.0.0"
   },
