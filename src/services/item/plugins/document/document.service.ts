@@ -66,7 +66,11 @@ export class DocumentItemService extends ItemService {
     itemExtra?: DocumentItemExtraProperties,
   ): DocumentItemExtraProperties {
     return {
-      content: sanitize(content ?? itemExtra?.content ?? ''),
+      content: sanitize(content ?? itemExtra?.content ?? '', {
+        allowedAttributes: {
+          li: ['data-list'],
+        },
+      }),
       isRaw: isRaw ?? itemExtra?.isRaw,
       flavor: flavor ?? itemExtra?.flavor,
     };
