@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.14.2](https://github.com/graasp/graasp-api/compare/v2.14.1...v2.14.2) (2026-07-08)
+
+
+### Bug Fixes
+
+* allow ordered list attributes ([#2156](https://github.com/graasp/graasp-api/issues/2156)) ([f6cfe86](https://github.com/graasp/graasp-api/commit/f6cfe86f6561b199bc5e903d7c11a242ba036952))
+* **deps:** update dependency @graasp/sdk to v5.18.2 ([#2154](https://github.com/graasp/graasp-api/issues/2154)) ([ad97f36](https://github.com/graasp/graasp-api/commit/ad97f36b38afe59e887fa3e4459aa45b2fd70b08))
+* **deps:** update dependency form-data to v4.0.6 [security] ([#2149](https://github.com/graasp/graasp-api/issues/2149)) ([68b5c2b](https://github.com/graasp/graasp-api/commit/68b5c2be1d1060780bb579f7dff77d31b268c3b7))
+* **deps:** update dependency nodemailer to v9 [security] ([#2148](https://github.com/graasp/graasp-api/issues/2148)) ([e18b83e](https://github.com/graasp/graasp-api/commit/e18b83e4693860ff289f1ba3269a950bffb97097))
+* **deps:** update dependency ws to v8.21.0 [security] ([#2150](https://github.com/graasp/graasp-api/issues/2150)) ([78a5859](https://github.com/graasp/graasp-api/commit/78a5859420c8801b149d267f7be2320e4980e68f))
+
 ## [2.14.1](https://github.com/graasp/graasp-api/compare/v2.14.0...v2.14.1) (2026-07-02)
 
 
