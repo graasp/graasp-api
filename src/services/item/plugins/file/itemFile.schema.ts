@@ -16,6 +16,7 @@ const fileItemSchema = Type.Composite(
           path: Type.String(),
           mimetype: Type.String(),
           size: Type.Integer({ minimum: 0 }),
+          url: Type.Optional(Type.String()),
           altText: Type.Optional(
             Type.String({
               description: 'alternative text of the file if it is an image',
