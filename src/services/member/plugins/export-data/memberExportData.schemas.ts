@@ -72,6 +72,24 @@ export const appDataSchema = buildObjectSchema({
 });
 export const appDataArraySchema = buildArraySchema(appDataSchema);
 
+export const learningWorkspaceSchema = buildObjectSchema({
+  id: STRING_TYPE,
+  itemId: STRING_TYPE,
+  accountId: STRING_TYPE,
+  notes: STRING_TYPE,
+  createdAt: DATE_TYPE,
+  updatedAt: DATE_TYPE,
+});
+export const learningWorkspaceArraySchema = buildArraySchema(learningWorkspaceSchema);
+
+export const learningGoalCompletionSchema = buildObjectSchema({
+  goalId: STRING_TYPE,
+  itemId: STRING_TYPE,
+  accountId: STRING_TYPE,
+  completedAt: DATE_TYPE,
+});
+export const learningGoalCompletionArraySchema = buildArraySchema(learningGoalCompletionSchema);
+
 export const appSettingSchema = buildObjectSchema({
   id: STRING_TYPE,
   data: OBJECT_TYPE,
