@@ -542,7 +542,17 @@ export class ItemService {
       children,
       thumbnails,
     );
-    return Promise.all(filteredChildren.map((child) => this.transformItemByType(child)));
+    const transformedChildren = await Promise.allSettled(
+      filteredChildren.map((child) => this.transformItemByType(child)),
+    );
+
+    return transformedChildren.map((result) => {
+      if (result.status === 'rejected') {
+        throw result.reason;
+      }
+
+      return result.value;
+    });
   }
 
   async getDescendants(

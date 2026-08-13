@@ -22,6 +22,7 @@ const copyObjectMock = jest.fn(async () => console.debug('copyObjectMock'));
 const headObjectMock = jest.fn(async () => ({ ContentLength: 10 }));
 const uploadDoneMock = jest.fn(async () => console.debug('aws s3 storage upload'));
 const MOCK_SIGNED_URL = 'signed-url';
+const mockGetSignedUrl = jest.fn(async () => MOCK_SIGNED_URL);
 jest.mock('@aws-sdk/client-s3', () => {
   return {
     GetObjectCommand: jest.fn(),
@@ -35,9 +36,8 @@ jest.mock('@aws-sdk/client-s3', () => {
   };
 });
 jest.mock('@aws-sdk/s3-request-presigner', () => {
-  const getSignedUrl = jest.fn(async () => MOCK_SIGNED_URL);
   return {
-    getSignedUrl,
+    getSignedUrl: mockGetSignedUrl,
   };
 });
 jest.mock('@aws-sdk/lib-storage', () => {
@@ -77,6 +77,7 @@ describe('Item routes tests', () => {
 
   afterEach(async () => {
     jest.clearAllMocks();
+    mockGetSignedUrl.mockReset().mockResolvedValue(MOCK_SIGNED_URL);
     unmockAuthenticate();
   });
 
@@ -1002,6 +1003,44 @@ describe('Item routes tests', () => {
         expect(fileChild?.extra.file.url).toEqual(MOCK_SIGNED_URL);
         expect(documentChild?.extra).not.toHaveProperty('file');
         expect(folderChild?.extra).not.toHaveProperty('file');
+      });
+
+      it('Fails when a file child URL cannot be generated', async () => {
+        const {
+          actor,
+          items: [parentItem],
+        } = await seedFromJson({
+          items: [
+            {
+              memberships: [{ account: 'actor', permission: 'admin' }],
+              children: [
+                {
+                  type: 'file',
+                  extra: {
+                    file: {
+                      name: 'file.pdf',
+                      path: 'files/file.pdf',
+                      mimetype: 'application/pdf',
+                      size: 123,
+                      content: '',
+                    },
+                  },
+                },
+              ],
+            },
+          ],
+        });
+        assertIsDefined(actor);
+        assertIsMemberForTest(actor);
+        mockAuthenticate(actor);
+        mockGetSignedUrl.mockRejectedValueOnce(new Error('Failed to generate signed URL'));
+
+        const response = await app.inject({
+          method: HttpMethod.Get,
+          url: `/api/items/${parentItem.id}/children`,
+        });
+
+        expect(response.statusCode).toBe(StatusCodes.INTERNAL_SERVER_ERROR);
       });
 
       it('Returns a child h5p successfully', async () => {
