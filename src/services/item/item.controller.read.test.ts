@@ -37,7 +37,7 @@ jest.mock('@aws-sdk/client-s3', () => {
 });
 jest.mock('@aws-sdk/s3-request-presigner', () => {
   return {
-    getSignedUrl: mockGetSignedUrl,
+    getSignedUrl: () => mockGetSignedUrl(),
   };
 });
 jest.mock('@aws-sdk/lib-storage', () => {
@@ -1019,7 +1019,7 @@ describe('Item routes tests', () => {
                   extra: {
                     file: {
                       name: 'file.pdf',
-                      path: 'files/file.pdf',
+                      path: 'files/unavailable-file.pdf',
                       mimetype: 'application/pdf',
                       size: 123,
                       content: '',
