@@ -429,6 +429,114 @@ export const appDataTable = pgTable(
   ],
 );
 
+export const learningWorkspacesTable = pgTable(
+  'learning_workspace',
+  {
+    id: uuid().defaultRandom().primaryKey().notNull(),
+    itemId: uuid('item_id').notNull(),
+    accountId: uuid('account_id').notNull(),
+    notes: varchar({ length: 20000 }).default('').notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' })
+      .defaultNow()
+      .notNull(),
+    updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' })
+      .defaultNow()
+      .notNull()
+      .$onUpdate(() => sql.raw('DEFAULT')),
+  },
+  (table) => [
+    foreignKey({
+      columns: [table.itemId],
+      foreignColumns: [itemsRawTable.id],
+      name: 'FK_learning_workspace_item_id',
+    }).onDelete('cascade'),
+    foreignKey({
+      columns: [table.accountId],
+      foreignColumns: [accountsTable.id],
+      name: 'FK_learning_workspace_account_id',
+    }).onDelete('cascade'),
+    index('IDX_learning_workspace_account_id').on(table.accountId),
+    unique('UQ_learning_workspace_item_account').on(table.itemId, table.accountId),
+  ],
+);
+
+export const learningWorkspaceSettingsTable = pgTable(
+  'learning_workspace_setting',
+  {
+    itemId: uuid('item_id').primaryKey().notNull(),
+    instructions: varchar({ length: 5000 }).default('').notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' })
+      .defaultNow()
+      .notNull(),
+    updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' })
+      .defaultNow()
+      .notNull()
+      .$onUpdate(() => sql.raw('DEFAULT')),
+  },
+  (table) => [
+    foreignKey({
+      columns: [table.itemId],
+      foreignColumns: [itemsRawTable.id],
+      name: 'FK_learning_workspace_setting_item_id',
+    }).onDelete('cascade'),
+  ],
+);
+
+export const learningGoalsTable = pgTable(
+  'learning_goal',
+  {
+    id: uuid().defaultRandom().primaryKey().notNull(),
+    itemId: uuid('item_id').notNull(),
+    text: varchar({ length: 200 }).notNull(),
+    position: integer().notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' })
+      .defaultNow()
+      .notNull(),
+    updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' })
+      .defaultNow()
+      .notNull()
+      .$onUpdate(() => sql.raw('DEFAULT')),
+  },
+  (table) => [
+    foreignKey({
+      columns: [table.itemId],
+      foreignColumns: [itemsRawTable.id],
+      name: 'FK_learning_goal_item_id',
+    }).onDelete('cascade'),
+    index('IDX_learning_goal_item_position').on(table.itemId, table.position),
+    check('CHK_learning_goal_text', sql`char_length(btrim(${table.text})) BETWEEN 1 AND 200`),
+    check('CHK_learning_goal_position', sql`${table.position} >= 0`),
+  ],
+);
+
+export const learningGoalCompletionsTable = pgTable(
+  'learning_goal_completion',
+  {
+    goalId: uuid('goal_id').notNull(),
+    accountId: uuid('account_id').notNull(),
+    completedAt: timestamp('completed_at', { withTimezone: true, mode: 'string' })
+      .defaultNow()
+      .notNull(),
+  },
+  (table) => [
+    foreignKey({
+      columns: [table.goalId],
+      foreignColumns: [learningGoalsTable.id],
+      name: 'FK_learning_goal_completion_goal_id',
+    }).onDelete('cascade'),
+    foreignKey({
+      columns: [table.accountId],
+      foreignColumns: [accountsTable.id],
+      name: 'FK_learning_goal_completion_account_id',
+    }).onDelete('cascade'),
+    primaryKey({
+      columns: [table.goalId, table.accountId],
+      name: 'PK_learning_goal_completion',
+    }),
+    index('IDX_learning_goal_completion_account_id').on(table.accountId),
+  ],
+);
+
 export const appActionsTable = pgTable(
   'app_action',
   {
