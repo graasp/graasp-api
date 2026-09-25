@@ -72,7 +72,7 @@ const basePlugin: FastifyPluginAsyncTypebox<GraaspPluginFileOptions> = async (fa
     const isFileSetting = (a) => a.data['file'];
     const toCopy = appSettings.filter(isFileSetting);
     if (toCopy.length) {
-      await appSettingFileService.copyMany(db, actor.id, toCopy);
+      await appSettingFileService.copyMany(dbConnection, actor.id, toCopy);
     }
   };
   appSettingService.hooks.setPostHook('copyMany', hook);
