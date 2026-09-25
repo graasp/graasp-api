@@ -129,7 +129,9 @@ class AppSettingFileService {
       const itemId = appSetting.itemId;
       const newFilePath = this.buildFilePath(itemId, appSetting.id);
       const originalFileExtra = appSetting.data['file'] as AppSettingFileProperties;
+      // keep the other data keys (e.g. metadata derived from the file), only the file props change
       const newFileData = {
+        ...appSetting.data,
         ['file']: {
           path: newFilePath,
           name: originalFileExtra.name,

@@ -21,6 +21,7 @@ import { assertIsDefined } from '../../../../../utils/assertions';
 import { APP_ITEMS_PREFIX } from '../../../../../utils/config';
 import { MemberCannotAdminItem } from '../../../../../utils/errors';
 import { assertIsMemberForTest } from '../../../../authentication';
+import FileService from '../../../../file/file.service';
 import { getAccessToken } from '../test/fixtures';
 
 /**
@@ -812,6 +813,65 @@ describe('Apps Settings Tests', () => {
         });
         expect(copiedAppSettings).toHaveLength(1);
       }, 5000);
+    });
+    it('keeps other data keys of file app settings on item copy', async () => {
+      const copySpy = jest.spyOn(FileService.prototype, 'copy').mockResolvedValue('copied-path');
+      const {
+        actor,
+        items: [item],
+      } = await seedFromJson({
+        items: [
+          {
+            memberships: [{ account: 'actor', permission: 'admin' }],
+            type: 'app',
+            appSettings: [
+              {
+                creator: 'actor',
+                name: 'file-setting',
+                data: {
+                  file: { path: 'some/path', name: 'doc.pdf', mimetype: 'application/pdf' },
+                  text: 'extracted text',
+                  tokens: 4,
+                },
+              },
+            ],
+          },
+        ],
+      });
+      assertIsDefined(actor);
+      mockAuthenticate(actor);
+
+      const response = await app.inject({
+        method: 'POST',
+        url: '/api/items/copy',
+        query: {
+          id: [item.id],
+        },
+        payload: {},
+      });
+      expect(response.statusCode).toBe(StatusCodes.ACCEPTED);
+
+      await waitForExpect(async () => {
+        const copyInDb = await db.query.itemsRawTable.findMany({
+          where: eq(itemsRawTable.name, `${item.name} (2)`),
+        });
+        expect(copyInDb).toHaveLength(1);
+        const [copiedAppSetting] = await db.query.appSettingsTable.findMany({
+          where: eq(appSettingsTable.itemId, copyInDb[0].id),
+        });
+        assertIsDefined(copiedAppSetting);
+        expect(copiedAppSetting.data).toEqual({
+          file: {
+            path: `apps/app-setting/${copyInDb[0].id}/${copiedAppSetting.id}`,
+            name: 'doc.pdf',
+            mimetype: 'application/pdf',
+          },
+          text: 'extracted text',
+          tokens: 4,
+        });
+      }, 5000);
+      expect(copySpy).toHaveBeenCalled();
+      copySpy.mockRestore();
     });
     it('copies app settings on parent item copy', async () => {
       const {
