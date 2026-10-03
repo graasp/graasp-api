@@ -127,7 +127,7 @@
   "devDependencies": {
     "@commitlint/cli": "19.8.1",
     "@commitlint/config-conventional": "19.8.1",
-    "@faker-js/faker": "9.9.0",
+    "@faker-js/faker": "10.5.0",
     "@jest/globals": "29.7.0",
     "@liam-hq/cli": "0.7.24",
     "@quobix/vacuum": "0.26.4",
