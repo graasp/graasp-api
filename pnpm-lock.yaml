@@ -165,8 +165,8 @@ importers:
         specifier: '2'
         version: 2.7.0
       nodemailer:
-        specifier: 9.0.1
-        version: 9.0.1
+        specifier: 10.0.6
+        version: 10.0.6
       openai:
         specifier: 6.3.0
         version: 6.3.0(ws@8.21.0)
@@ -897,11 +897,11 @@ packages:
 
   '@esbuild-kit/core-utils@3.3.2':
     resolution: {integrity: sha512-sPRAnw9CdSsRmEtnsl2WXWdyquogVpB3yZ3dgwJfe8zrOzTsV7cJvmwrKVa+0ma5BoiGJ+BoqkMvawbayKUsqQ==}
-    deprecated: 'Merged into tsx: https://tsx.is'
+    deprecated: 'Merged into tsx: https://tsx.hirok.io'
 
   '@esbuild-kit/esm-loader@2.6.5':
     resolution: {integrity: sha512-FxEMIkJKnodyA1OaCUoEvbYRkoZlLZ4d/eXFu9Fh8CbBBgP5EmZxrfTRyN0qpXZ4vOvqnE5YdRdcrmUUXuU+dA==}
-    deprecated: 'Merged into tsx: https://tsx.is'
+    deprecated: 'Merged into tsx: https://tsx.hirok.io'
 
   '@esbuild/aix-ppc64@0.25.12':
     resolution: {integrity: sha512-Hhmwd6CInZ3dwpuGTF8fJG6yoWmsToE+vYgD4nytZVxcu1ulHpUQRAB1UJ8+N1Am3Mz4+xOByoQoSZf4D+CpkA==}
@@ -3566,6 +3566,7 @@ packages:
   cron-parser@4.9.0:
     resolution: {integrity: sha512-p0SaNjrHOnQeR8/VnfGbmg9te2kfyYSQ7Sc/j/6DtPL3JQvKxmjO9TSjNFpujqV3vEYYBvNNvXSxzyksBWAx1Q==}
     engines: {node: '>=12.0.0'}
+    deprecated: v4 is no longer maintained, upgrade to v5
 
   cross-fetch@3.2.0:
     resolution: {integrity: sha512-Q+xVJLoGOeIMXZmbUK4HYk+69cQH6LudR0Vu/pRm2YlU/hDV9CiS0gKUMaWY5f2NeUH9C1nV3bsTlCo0FsTV1Q==}
@@ -5369,12 +5370,12 @@ packages:
   node-releases@2.0.44:
     resolution: {integrity: sha512-5WUyunoPMsvvEhS8AxHtRzP+oA8UCkJ7YRxatWKjngndhDGLiqEVAQKWjFAiAiuL8zMRGzGSJxFnLetoa43qGQ==}
 
+  nodemailer@10.0.6:
+    resolution: {integrity: sha512-2u7OHvEQVVGvPo9Yhw/eN3xMO2Gnj2U2fGDP0BDpnRwJR//65AfGRQDiJqxix28gFRBvMqi2USA13x6RrfWuGg==}
+    engines: {node: '>=20.0.0'}
+
   nodemailer@6.10.1:
     resolution: {integrity: sha512-Z+iLaBGVaSjbIzQ4pX6XV41HrooLsQ10ZWPUehGmuantvzWoDVBnmsdUcOIDM1t+yPor5pDhVlDESgOMEGxhHA==}
-    engines: {node: '>=6.0.0'}
-
-  nodemailer@9.0.1:
-    resolution: {integrity: sha512-Gwv8SQewT616ZM/URn0H54b8PWo/Wum7md3EW2aWy1lO27+WZCX+Xyak3J+NlmHUjDh5ME+uesJUDRbR3Ye8Bw==}
     engines: {node: '>=6.0.0'}
 
   nodemon@3.1.14:
@@ -12424,9 +12425,9 @@ snapshots:
 
   node-releases@2.0.44: {}
 
-  nodemailer@6.10.1: {}
+  nodemailer@10.0.6: {}
 
-  nodemailer@9.0.1: {}
+  nodemailer@6.10.1: {}
 
   nodemon@3.1.14:
     dependencies:
