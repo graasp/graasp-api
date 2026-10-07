@@ -53,7 +53,7 @@
     "@bull-board/api": "6.10.1",
     "@bull-board/fastify": "6.10.1",
     "@bull-board/ui": "6.10.1",
-    "@fastify/busboy": "3.2.0",
+    "@fastify/busboy": "3.2.2",
     "@fastify/cors": "11.2.0",
     "@fastify/error": "4.2.0",
     "@fastify/forwarded": "3.0.1",
