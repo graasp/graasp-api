@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.15.0](https://github.com/graasp/graasp-api/compare/v2.14.2...v2.15.0) (2026-10-07)
+
+
+### Features
+
+* add optional file URL field to packed file responses ([#2147](https://github.com/graasp/graasp-api/issues/2147)) ([d634a3e](https://github.com/graasp/graasp-api/commit/d634a3e58593ea2dd22c1460937bd94db7dfbd14))
+
+
+### Bug Fixes
+
+* **deps:** update dependency @fastify/busboy to v3.2.2 [security] ([#2167](https://github.com/graasp/graasp-api/issues/2167)) ([4f78582](https://github.com/graasp/graasp-api/commit/4f78582006e3293753d3a14965af73e51559f9be))
+* **deps:** update dependency fastify to v5.12.1 [security] ([#2163](https://github.com/graasp/graasp-api/issues/2163)) ([f0adbcc](https://github.com/graasp/graasp-api/commit/f0adbcc29a87ad5c560a8632915e598492568079))
+* keep app setting data keys when copying file app settings ([#2162](https://github.com/graasp/graasp-api/issues/2162)) ([fa7f6d3](https://github.com/graasp/graasp-api/commit/fa7f6d308961faac3363f3e1900435b49f541b73))
+
 ## [2.14.2](https://github.com/graasp/graasp-api/compare/v2.14.1...v2.14.2) (2026-07-08)
 
 
