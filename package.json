@@ -146,7 +146,6 @@
     "@types/mime": "3.0.4",
     "@types/node": "24.12.2",
     "@types/node-fetch": "2",
-    "@types/nodemailer": "6.4.23",
     "@types/papaparse": "5.5.2",
     "@types/passport-jwt": "4.0.1",
     "@types/passport-local": "^1",

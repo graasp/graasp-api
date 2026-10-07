@@ -23,7 +23,7 @@ export class MailerService {
 
   constructor({ connection, useSSL, fromEmail }: MailerOptions) {
     this.fromEmail = fromEmail;
-    this.transporter = createTransport(connection, { secure: useSSL });
+    this.transporter = createTransport({ url: connection, secure: useSSL });
   }
 
   /**
