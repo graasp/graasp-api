@@ -26,6 +26,10 @@ import {
   itemValidationsTable,
   itemVisibilitiesTable,
   itemsRawTable,
+  learningGoalCompletionsTable,
+  learningGoalsTable,
+  learningWorkspaceSettingsTable,
+  learningWorkspacesTable,
   memberPasswordsTable,
   memberProfilesTable,
   membershipRequestsTable,
@@ -84,6 +88,8 @@ export const accountRelations = relations(accountsTable, ({ one, many }) => ({
   }),
   guestPasswords: many(guestPasswordsTable),
   itemVisibilities: many(itemVisibilitiesTable),
+  learningWorkspaces: many(learningWorkspacesTable),
+  learningGoalCompletions: many(learningGoalCompletionsTable),
 }));
 
 export const itemRelations = relations(itemsRawTable, ({ one, many }) => ({
@@ -113,6 +119,9 @@ export const itemRelations = relations(itemsRawTable, ({ one, many }) => ({
   itemLoginSchemas: many(itemLoginSchemasTable),
   itemVisibilities: many(itemVisibilitiesTable),
   itemTags: many(itemTagsTable),
+  learningWorkspaceSetting: one(learningWorkspaceSettingsTable),
+  learningWorkspaces: many(learningWorkspacesTable),
+  learningGoals: many(learningGoalsTable),
 }));
 
 export const itemMembershipRelations = relations(itemMembershipsTable, ({ one }) => ({
@@ -241,6 +250,49 @@ export const appActionRelations = relations(appActionsTable, ({ one }) => ({
     references: [accountsTable.id],
   }),
 }));
+
+export const learningWorkspaceRelations = relations(learningWorkspacesTable, ({ one }) => ({
+  item: one(itemsRawTable, {
+    fields: [learningWorkspacesTable.itemId],
+    references: [itemsRawTable.id],
+  }),
+  account: one(accountsTable, {
+    fields: [learningWorkspacesTable.accountId],
+    references: [accountsTable.id],
+  }),
+}));
+
+export const learningWorkspaceSettingRelations = relations(
+  learningWorkspaceSettingsTable,
+  ({ one }) => ({
+    item: one(itemsRawTable, {
+      fields: [learningWorkspaceSettingsTable.itemId],
+      references: [itemsRawTable.id],
+    }),
+  }),
+);
+
+export const learningGoalRelations = relations(learningGoalsTable, ({ one, many }) => ({
+  item: one(itemsRawTable, {
+    fields: [learningGoalsTable.itemId],
+    references: [itemsRawTable.id],
+  }),
+  completions: many(learningGoalCompletionsTable),
+}));
+
+export const learningGoalCompletionRelations = relations(
+  learningGoalCompletionsTable,
+  ({ one }) => ({
+    goal: one(learningGoalsTable, {
+      fields: [learningGoalCompletionsTable.goalId],
+      references: [learningGoalsTable.id],
+    }),
+    account: one(accountsTable, {
+      fields: [learningGoalCompletionsTable.accountId],
+      references: [accountsTable.id],
+    }),
+  }),
+);
 
 export const appSettingRelations = relations(appSettingsTable, ({ one }) => ({
   item: one(itemsRawTable, {

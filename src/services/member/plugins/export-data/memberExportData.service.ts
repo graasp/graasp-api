@@ -152,6 +152,18 @@ export class ExportMemberDataService {
     );
     this.addDataToArchive(
       archive,
+      'learningWorkspaces',
+      await this.getLearningWorkspaces(dbConnection, member),
+      datetime,
+    );
+    this.addDataToArchive(
+      archive,
+      'learningGoalCompletions',
+      await this.getLearningGoalCompletions(dbConnection, member),
+      datetime,
+    );
+    this.addDataToArchive(
+      archive,
       'chatMentions',
       await this.getChatMentions(dbConnection, member),
       datetime,
@@ -198,6 +210,14 @@ export class ExportMemberDataService {
   private async getAppSettings(dbConnection: DBConnection, actor: MinimalMember) {
     const results = await this.exportDataRepository.getAppSettings(dbConnection, actor.id);
     return results;
+  }
+
+  private async getLearningWorkspaces(dbConnection: DBConnection, actor: MinimalMember) {
+    return this.exportDataRepository.getLearningWorkspaces(dbConnection, actor.id);
+  }
+
+  private async getLearningGoalCompletions(dbConnection: DBConnection, actor: MinimalMember) {
+    return this.exportDataRepository.getLearningGoalCompletions(dbConnection, actor.id);
   }
 
   private async getChatMentions(dbConnection: DBConnection, actor: MinimalMember) {

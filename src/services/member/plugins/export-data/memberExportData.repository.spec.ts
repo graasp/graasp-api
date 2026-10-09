@@ -1,7 +1,12 @@
-import { afterEach, describe, it, vi } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { seedFromJson } from '../../../../../test/mocks/seed';
 import { db } from '../../../../drizzle/db';
+import {
+  learningGoalCompletionsTable,
+  learningGoalsTable,
+  learningWorkspacesTable,
+} from '../../../../drizzle/schema';
 import { assertIsDefined } from '../../../../utils/assertions';
 import { ExportDataRepository } from './memberExportData.repository';
 import {
@@ -13,6 +18,7 @@ import {
   itemLikeSchema,
   itemMembershipSchema,
   itemSchema,
+  learningWorkspaceSchema,
   messageMentionSchema,
   messageSchema,
 } from './memberExportData.schemas';
@@ -136,6 +142,68 @@ describe('DataMember Export', () => {
 
       const results = await repository.getAppSettings(db, actor.id);
       expectNoLeaksAndEquality(results, [a1, a2], appSettingSchema);
+    });
+  });
+
+  describe('LearningWorkspaces', () => {
+    it('exports only workspaces owned by the member', async () => {
+      const {
+        actor,
+        members: [otherAccount],
+        items: [item],
+      } = await seedFromJson({ members: [{}], items: [{}] });
+      assertIsDefined(actor);
+      assertIsDefined(otherAccount);
+      const [ownWorkspace] = await db
+        .insert(learningWorkspacesTable)
+        .values([
+          {
+            accountId: actor.id,
+            itemId: item.id,
+            notes: 'Private notes',
+          },
+          {
+            accountId: otherAccount.id,
+            itemId: item.id,
+            notes: 'Someone else',
+          },
+        ])
+        .returning();
+
+      const results = await repository.getLearningWorkspaces(db, actor.id);
+
+      expectNoLeaksAndEquality(results, [ownWorkspace], learningWorkspaceSchema);
+    });
+  });
+
+  describe('LearningGoalCompletions', () => {
+    it('exports only completions owned by the member with their item id', async () => {
+      const {
+        actor,
+        members: [otherAccount],
+        items: [item],
+      } = await seedFromJson({ members: [{}], items: [{}] });
+      assertIsDefined(actor);
+      assertIsDefined(otherAccount);
+      const [goal] = await db
+        .insert(learningGoalsTable)
+        .values({ itemId: item.id, text: 'Understand the argument', position: 0 })
+        .returning();
+      assertIsDefined(goal);
+      const [ownCompletion] = await db
+        .insert(learningGoalCompletionsTable)
+        .values([
+          { goalId: goal.id, accountId: actor.id },
+          { goalId: goal.id, accountId: otherAccount.id },
+        ])
+        .returning();
+
+      const results = await repository.getLearningGoalCompletions(db, actor.id);
+
+      expect(results).toEqual([{ ...ownCompletion, itemId: item.id }]);
+      expect(Object.keys(results[0]).sort()).toEqual(
+        ['goalId', 'itemId', 'accountId', 'completedAt'].sort(),
+      );
     });
   });
 
