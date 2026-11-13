@@ -376,36 +376,30 @@ This will ensure your tests run on the second database container. As they will c
 
 ## Database and Migrations
 
-By default, the application will run migrations on start.
+The database schema is owned by the admin app ([graasp/graasp-web](https://github.com/graasp/graasp-web)). It writes and runs every migration, with Ecto. Core does not run migrations: `src/drizzle/schema.ts` is a hand-maintained description of the database admin has migrated. The SQL files in `src/drizzle/` are frozen history from before the switch.
 
 For more information about the structure of the database, see [our database structure documentation](./DATABASE.md) as well as [the interactive database schema explorer](https://graasp.github.io/graasp).
 
-### Create a migration
-
-Migrations are saved in `src/migrations/*.ts`. They are then transformed into js files so typeorm can run them.
-
-Run the generate and run command to create and apply the migration.
+### Migrate your database
 
 ```sh
-yarn migration:generate
-yarn migration:run
+mise run migrate
 ```
 
-If you need to revert
+It checks admin out at the commit pinned as `ADMIN_REF` in `mise.toml` (into `tmp/admin`) and runs its migrations against `DB_CONNECTION`. It needs git and mise, which installs Erlang and Elixir for admin. To use an admin checkout you are working on, run `ADMIN_DIR=../admin mise run migrate`.
 
-```sh
-yarn migration:revert
-```
+### Change the schema
 
-To test your migrations, you can run
+A schema change takes two changes:
 
-```sh
-yarn migration:fake
-```
+1. An Ecto migration in the admin app. Once it is merged, bump `ADMIN_REF` in `mise.toml`.
+2. The matching update to `src/drizzle/schema.ts` in core.
 
-Each migration should have its own test to verify the `up` and `down` procedures in `test/migrations`.
+`mise run schema-drift-check` compares `schema.ts` with the migrated database and fails if they differ. CI runs it on a database migrated by admin.
 
-Up tests start from the previous migration state, insert mock data and apply the up procedure. Then each table should still contain the inserted data with necessary changes. The down tests have a similar approach.
+Deploy order matters: admin deploys and migrates before any core version that relies on a new table or column. Core does not guard against missing schema.
+
+Never run `drizzle-kit push` against a shared database: it would drop the tables only admin knows about.
 
 ## Troubleshooting
 
