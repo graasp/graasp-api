@@ -76,6 +76,7 @@ type Snapshot = {
         }
       >;
       uniqueConstraints: Record<string, { columns: string[] }>;
+      compositePrimaryKeys: Record<string, { columns: string[] }>;
     }
   >;
   views: Record<string, unknown>;
@@ -102,7 +103,9 @@ function canonicalWhere(where: string | undefined, table: string) {
  * - partial index conditions and index expressions are written differently on
  *   each side, and `drizzle-kit pull` marks every column of an expression index
  *   as an expression;
- * - `drizzle-kit pull` does not keep the column order of unique constraints;
+ * - `drizzle-kit pull` does not keep the column order of unique constraints
+ *   and composite primary keys (it reads them from
+ *   information_schema.constraint_column_usage, which has no position);
  * - enums and sequences are not covered by `tablesFilter`;
  * - views are compared as SQL text, which never matches, so they are only
  *   checked for existence.
@@ -142,6 +145,8 @@ function normalize(database: Snapshot, declared: Snapshot) {
     for (const constraint of [
       ...Object.values(table.uniqueConstraints),
       ...Object.values(databaseTable.uniqueConstraints),
+      ...Object.values(table.compositePrimaryKeys),
+      ...Object.values(databaseTable.compositePrimaryKeys),
     ]) {
       constraint.columns.sort();
     }
