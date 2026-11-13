@@ -1,0 +1,42 @@
+name: Migrate with admin
+description: >
+  Migrates the database at DB_CONNECTION with the admin app's migrations, taken
+  from the ADMIN_REF pinned in mise.toml. The admin app (graasp/graasp-web) owns
+  the database schema; core no longer runs drizzle migrations.
+
+runs:
+  using: composite
+  steps:
+    - name: Read the pinned admin ref
+      id: admin
+      shell: bash
+      run: echo "ref=$(sed -n 's/^ADMIN_REF = "\(.*\)"$/\1/p' mise.toml)" >> "$GITHUB_OUTPUT"
+
+    - name: Check out admin
+      uses: actions/checkout@v6
+      with:
+        repository: graasp/graasp-web
+        ref: ${{ steps.admin.outputs.ref }}
+        path: tmp/admin
+
+    - name: Set up Erlang and Elixir
+      uses: erlef/setup-beam@v1
+      with:
+        version-file: tmp/admin/mise.toml
+        version-type: strict
+
+    - name: Cache admin dependencies and build
+      uses: actions/cache@v4
+      with:
+        path: |
+          tmp/admin/deps
+          tmp/admin/_build
+        key: ${{ runner.os }}-admin-${{ steps.admin.outputs.ref }}
+        restore-keys: |
+          ${{ runner.os }}-admin-
+
+    - name: Run admin migrations
+      shell: bash
+      env:
+        ADMIN_DIR: tmp/admin
+      run: scripts/migrate.sh

@@ -12,6 +12,10 @@ experimental = true
 
 [env]
 _.path = ['{{config_root}}/node_modules/.bin']
+# The admin app (graasp/graasp-web) owns the database schema and its migrations.
+# `mise run migrate` takes them from this admin commit or tag. Bump it when core
+# needs a newer migration, once that migration is merged in admin.
+ADMIN_REF = "167dd63c3823b4af27d05990e3dd15f348e43326"
 
 [tasks.pnpm-install]
 description = 'Installs dependencies with pnpm'
@@ -48,14 +52,15 @@ description = "Build the application"
 run = "tsc -p tsconfig.build.json"
 
 [tasks.migrate]
-depends = ["pnpm-install"]
-run = "drizzle-kit migrate"
+description = "Migrate the database with the admin app's migrations (see scripts/migrate.sh)"
+run = "scripts/migrate.sh"
 env = { _.file = '.env.development' }
 
-[tasks.migration-check]
-env = { _.file = '.env.development' }
+[tasks.schema-drift-check]
+description = "Check that src/drizzle/schema.ts matches the migrated database"
 depends = ["pnpm-install"]
-run = "drizzle-kit generate --name=migrationtest --out=./src/drizzle --schema=./src/drizzle/schema.ts --dialect=postgresql && [ -f '$(find ./src/drizzle | grep migrationtest)' ] && exit 1 || exit 0"
+run = "ts-node --transpile-only src/drizzle/schemaDriftCheck.ts"
+env = { _.file = '.env.development' }
 
 [tasks.vitest]
 depends = "pnpm-install"

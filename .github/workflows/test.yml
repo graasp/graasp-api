@@ -102,11 +102,11 @@ jobs:
       - name: yarn check
         run: mise run check
 
-      - name: apply migrations on empty database
-        run: mise run migrate
+      - name: apply admin migrations on empty database
+        uses: ./.github/actions/admin-migrate
 
-      - name: check migrations are up to date
-        run: mise run migration-check
+      - name: check schema.ts matches the migrated database
+        run: mise run schema-drift-check
 
       - name: vitest tests
         run: mise run vitest
@@ -166,8 +166,8 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-jest-
 
-      - name: apply migrations on empty database
-        run: mise run migrate
+      - name: apply admin migrations on empty database
+        uses: ./.github/actions/admin-migrate
 
       - name: yarn test
         run: mise run e2e --shard=${{ matrix.shard }}

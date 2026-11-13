@@ -150,7 +150,7 @@ export const itemMembershipsTable = pgTable(
   (table) => [
     index('IDX_5ac5bdde333fca6bbeaf177ef9').using(
       'btree',
-      table.permission.asc().nullsLast().op('text_ops'),
+      table.permission.asc().nullsLast().op('enum_ops'),
     ),
     index('IDX_d935785e7ecc015ed3ca048ff0').using(
       'btree',
@@ -555,7 +555,7 @@ export const appsTable = pgTable(
     name: varchar({ length: 250 }).notNull(),
     description: varchar({ length: 250 }).notNull(),
     url: varchar({ length: 250 }).notNull(),
-    thumbnail: varchar({ length: 255 }).notNull(),
+    thumbnail: varchar({ length: 255 }).default('').notNull(),
     publisherId: uuid('publisher_id').notNull(),
     createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' })
       .defaultNow()
@@ -896,6 +896,21 @@ export const itemsRawTable = pgTable(
     index('IDX_gist_item_path_deleted_at')
       .using('gist', table.path.asc().nullsLast().op('gist_ltree_ops'))
       .where(isNull(table.deletedAt)),
+    index('idx_item_creator_not_deleted_path')
+      .using('btree', table.creatorId, table.path)
+      .where(isNull(table.deletedAt)),
+    index('idx_item_path_not_deleted').using('btree', table.path).where(isNull(table.deletedAt)),
+    index('idx_item_type_created_at').using(
+      'btree',
+      table.type,
+      table.createdAt.desc().nullsFirst(),
+    ),
+    // h5p integrity checks look items up by their contentId
+    index('idx_item_type_h5p_contentid').using(
+      'btree',
+      table.type,
+      sql`((${table.extra} -> 'h5p'::text) ->> 'contentId'::text)`,
+    ),
     foreignKey({
       columns: [table.creatorId],
       foreignColumns: [accountsTable.id],
@@ -1128,7 +1143,8 @@ export const itemTagsTable = pgTable(
 );
 
 export const maintenanceTable = pgTable('maintenance', {
-  slug: varchar({ length: 100 }).notNull().primaryKey().unique('UQ_maintenance_slug'),
+  // the primary key constraint is named UQ_maintenance_slug in the database
+  slug: varchar({ length: 100 }).notNull().primaryKey(),
   startAt: timestamp('start_at', { withTimezone: true, mode: 'string' }).notNull(),
   endAt: timestamp('end_at', { withTimezone: true, mode: 'string' }).notNull(),
 });
@@ -1152,9 +1168,8 @@ export const pageUpdateTable = pgTable(
 
 /**
  * Migrations table for Phoenix
- * This table stores the migrations that have been run by phoenix.
- * It is currently managed by Drizzle. We manually insert the migration version and timstamp to satisfy Phoenix.
- * We ensure that the changes that Phoenix wants to make to the database are carried out by Drizzle.
+ * This table stores the migrations that have been run by the admin app (Phoenix/Ecto),
+ * which owns the database schema. Core does not write to it.
  */
 export const schemaMigrations = pgTable('schema_migrations', {
   /**
@@ -1177,6 +1192,8 @@ export const adminsTable = pgTable(
     confirmedAt: timestamp('confirmed_at', { withTimezone: false, precision: 0 }),
     createdAt: timestamp('created_at', { withTimezone: false, precision: 0 }).notNull(),
     updatedAt: timestamp('updated_at', { withTimezone: false, precision: 0 }).notNull(),
+    name: varchar({ length: 255 }),
+    language: varchar({ length: 255 }).default('en').notNull(),
   },
   (table) => [index('admins_email_index').using('btree', table.email)],
 );
@@ -1208,10 +1225,16 @@ export const removalNotices = pgTable(
     publicationName: varchar('publication_name', { length: 255 }),
     reason: text('reason'),
     itemId: uuid('item_id').references(() => itemsRawTable.id, { onDelete: 'cascade' }),
-    creatorId: uuid('creator_id').references(() => adminsTable.id, { onDelete: 'set null' }),
+    creatorId: uuid('creator_id'),
     createdAt: timestamp('created_at', { precision: 0 }).notNull(),
   },
   (table) => [
     index('publication_removal_notices_item_id_index').using('btree', table.itemId.op('uuid_ops')),
+    // named before the users table was renamed to admins
+    foreignKey({
+      columns: [table.creatorId],
+      foreignColumns: [adminsTable.id],
+      name: 'publication_removal_notices_creator_id_users_id_fk',
+    }).onDelete('set null'),
   ],
 );

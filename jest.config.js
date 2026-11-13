@@ -14,6 +14,9 @@ module.exports = {
   },
   testTimeout: 20000,
   testMatch: ['**/*.test.(ts|js)'],
+  // tmp/ holds local checkouts, such as the admin app used by `mise run migrate`
+  testPathIgnorePatterns: ['/node_modules/', '<rootDir>/tmp/'],
+  modulePathIgnorePatterns: ['<rootDir>/tmp/'],
   testEnvironment: 'node',
   setupFilesAfterEnv: ['<rootDir>/test/mockSetup.ts'],
   // globalTeardown: '<rootDir>/test/teardown.ts',

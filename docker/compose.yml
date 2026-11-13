@@ -7,6 +7,10 @@
 # The first time you will have to also start the migration container
 #     docker compose -f docker/compose.yml run -e DB_CONNECTION=postgres://graasper:graasper@db:5432/graasp?sslmode=disable migrate
 #
+# The database schema is now owned by the admin app (graasp/graasp-web), which
+# writes and runs the migrations. The `migrate` service below is the last drizzle
+# migration image from core; it does not know about migrations made in admin.
+#
 #
 
 
