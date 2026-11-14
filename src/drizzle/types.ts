@@ -24,6 +24,10 @@ import {
   itemValidationsTable,
   itemVisibilitiesTable,
   itemsRawTable,
+  learningGoalCompletionsTable,
+  learningGoalsTable,
+  learningWorkspaceSettingsTable,
+  learningWorkspacesTable,
   memberProfilesTable,
   membersView,
   membershipRequestsTable,
@@ -213,6 +217,16 @@ export type AppDataWithItemAndAccountAndCreator = AppDataRaw & {
   account: MinimalAccount;
   creator: MinimalAccount | null;
 };
+
+// --- Learning Workspace
+export type LearningWorkspaceInsertDTO = typeof learningWorkspacesTable.$inferInsert;
+export type LearningWorkspaceRaw = typeof learningWorkspacesTable.$inferSelect;
+export type LearningWorkspaceSettingInsertDTO = typeof learningWorkspaceSettingsTable.$inferInsert;
+export type LearningWorkspaceSettingRaw = typeof learningWorkspaceSettingsTable.$inferSelect;
+export type LearningGoalInsertDTO = typeof learningGoalsTable.$inferInsert;
+export type LearningGoalRaw = typeof learningGoalsTable.$inferSelect;
+export type LearningGoalCompletionInsertDTO = typeof learningGoalCompletionsTable.$inferInsert;
+export type LearningGoalCompletionRaw = typeof learningGoalCompletionsTable.$inferSelect;
 
 // --- ShortLink
 export type ShortLinkRaw = typeof shortLinksTable.$inferSelect;
