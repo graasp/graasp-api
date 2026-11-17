@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.16.1](https://github.com/graasp/graasp-api/compare/v2.16.0...v2.16.1) (2026-11-17)
+
+
+### Bug Fixes
+
+* drop the drizzle migrate service from docker compose ([#2176](https://github.com/graasp/graasp-api/issues/2176)) ([92f5d82](https://github.com/graasp/graasp-api/commit/92f5d824e76635d274e20438bf794770766b146f))
+
 ## [2.16.0](https://github.com/graasp/graasp-api/compare/v2.15.0...v2.16.0) (2026-11-13)
 
 
